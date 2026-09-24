@@ -1,0 +1,19 @@
+# Robots.txt for Rani Hyper Market & SNS Marketing Retail OS
+User-agent: *
+Allow: /
+Allow: /store
+Allow: /admin
+Allow: /login
+Allow: /master-login
+Allow: /master
+Allow: /ai-analytics
+Allow: /bill_history
+Allow: /api/pos/status
+Allow: /api/pos/products
+Allow: /api/ai-analytics/overview
+
+# Disallow internal data structures
+Disallow: /*.db$
+
+# Sitemaps
+Sitemap: https://rani-hyper-market.vercel.app/sitemap.xml

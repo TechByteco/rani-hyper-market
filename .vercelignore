@@ -7,6 +7,8 @@
 *.ps1
 *.sql
 *.txt
+!robots.txt
+!public/robots.txt
 
 # Heavy desktop application folders
 app/

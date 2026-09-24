@@ -1,0 +1,581 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NSN SaaS — Enterprise Gateway</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #dbeafe 0%, #dcfce7 25%, #fef9c3 55%, #fce7f3 100%);
+      background-attachment: fixed;
+      overflow-x: hidden;
+      color: #1f2937;
+    }
+    .orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; }
+    .o1 { top: -15%; left: -8%; width: 550px; height: 550px; background: radial-gradient(circle, rgba(16,185,129,0.2) 0%, transparent 70%); animation: o1 9s ease-in-out infinite; }
+    .o2 { bottom: -15%; right: -8%; width: 480px; height: 480px; background: radial-gradient(circle, rgba(245,158,11,0.18) 0%, transparent 70%); animation: o2 11s ease-in-out infinite; }
+    .o3 { top: 40%; left: 55%; width: 350px; height: 350px; background: radial-gradient(circle, rgba(99,102,241,0.13) 0%, transparent 70%); animation: o3 13s ease-in-out infinite; }
+    @keyframes o1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,-35px)} }
+    @keyframes o2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,40px)} }
+    @keyframes o3 { 0%,100%{transform:translate(-50%,-50%)} 50%{transform:translate(-47%,-53%)} }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(28px) saturate(200%);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid rgba(255, 255, 255, 0.92);
+      box-shadow: 0 12px 48px rgba(16,185,129,0.07), 0 4px 20px rgba(0,0,0,0.06);
+    }
+    .glass-tab-bg {
+      background: rgba(255, 255, 255, 0.42);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+    }
+    .glass-input {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(255, 255, 255, 0.88);
+      color: #111827;
+      transition: all 0.22s;
+      width: 100%;
+      padding: 12px 14px 12px 42px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .glass-input:focus {
+      background: rgba(255, 255, 255, 0.95);
+      border-color: rgba(16,185,129,0.48);
+      box-shadow: 0 0 0 3.5px rgba(16,185,129,0.12);
+      outline: none;
+    }
+    .glass-input::placeholder { color: #9ca3af; font-weight: 400; }
+    .glass-input-pr { padding-right: 42px; }
+
+    .rtab {
+      flex: 1; padding: 10px 8px; border-radius: 13px; font-weight: 700;
+      font-size: 13px; display: flex; align-items: center; justify-content: center;
+      gap: 7px; transition: all 0.28s cubic-bezier(.4,0,.2,1);
+      cursor: pointer; border: none; background: transparent;
+    }
+    .rtab-master-on { background: linear-gradient(135deg,#b45309,#d97706,#f59e0b); color: #fff; box-shadow: 0 4px 16px rgba(217,119,6,0.4); }
+    .rtab-admin-on  { background: linear-gradient(135deg,#047857,#059669,#10b981); color: #fff; box-shadow: 0 4px 16px rgba(16,185,129,0.4); }
+    .rtab-off { color: #6b7280; }
+    .rtab-off:hover { color: #374151; background: rgba(255,255,255,0.58); }
+
+    .btn-master {
+      background: linear-gradient(135deg,#b45309,#d97706,#f59e0b);
+      box-shadow: 0 4px 18px rgba(217,119,6,0.4);
+      color: #fff; font-weight: 800; font-size: 14px;
+      padding: 13px; border-radius: 14px; width: 100%;
+      border: none; cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-master:hover { transform: translateY(-1.5px); box-shadow: 0 6px 22px rgba(217,119,6,0.5); }
+    .btn-master:active { transform: translateY(0); }
+
+    .btn-admin {
+      background: linear-gradient(135deg,#047857,#059669,#10b981);
+      box-shadow: 0 4px 18px rgba(16,185,129,0.4);
+      color: #fff; font-weight: 800; font-size: 14px;
+      padding: 13px; border-radius: 14px; width: 100%;
+      border: none; cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-admin:hover { transform: translateY(-1.5px); box-shadow: 0 6px 22px rgba(16,185,129,0.5); }
+    .btn-admin:active { transform: translateY(0); }
+
+    .btn-google {
+      background: rgba(255,255,255,0.85);
+      border: 1.5px solid rgba(255,255,255,0.95);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      color: #374151; font-weight: 600; font-size: 13.5px;
+      padding: 11px; border-radius: 14px; width: 100%;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 9px;
+    }
+    .btn-google:hover { background: rgba(255,255,255,0.98); box-shadow: 0 4px 14px rgba(0,0,0,0.12); transform: translateY(-1px); }
+
+    .divider { display: flex; align-items: center; gap: 12px; margin: 18px 0; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: rgba(156,163,175,0.32); }
+    .divider span { font-size: 11px; color: #9ca3af; font-weight: 600; white-space: nowrap; }
+
+    .fblock { display: block; }
+    .fnone  { display: none; }
+
+    .chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,0.58); border: 1px solid rgba(255,255,255,0.88);
+      border-radius: 999px; padding: 4px 11px; font-size: 11px;
+      font-weight: 600; color: #374151; backdrop-filter: blur(6px);
+    }
+    .mbadge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 8px; font-size: 11px; font-weight: 700; background: linear-gradient(135deg,#fef3c7,#fde68a); color: #92400e; border: 1px solid #fcd34d; }
+    .abadge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 8px; font-size: 11px; font-weight: 700; background: linear-gradient(135deg,#d1fae5,#a7f3d0); color: #065f46; border: 1px solid #6ee7b7; }
+
+    .eyeB { position: absolute; right: 13px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #9ca3af; font-size: 14px; transition: color 0.2s; }
+    .eyeB:hover { color: #374151; }
+    .icoL { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 14px; pointer-events: none; }
+
+    #toast {
+      position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%);
+      min-width: 290px; max-width: 90vw; padding: 13px 22px;
+      border-radius: 18px; font-size: 13px; font-weight: 600;
+      z-index: 9999; backdrop-filter: blur(20px);
+      box-shadow: 0 10px 36px rgba(0,0,0,0.14);
+      transition: all 0.35s cubic-bezier(.4,0,.2,1);
+      opacity: 0; pointer-events: none; text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    #toast.show { opacity: 1; pointer-events: auto; }
+    #toast.success { background: rgba(209,250,229,0.96); border: 1.5px solid #6ee7b7; color: #065f46; }
+    #toast.error   { background: rgba(254,226,226,0.96); border: 1.5px solid #fca5a5; color: #991b1b; }
+    #toast.info    { background: rgba(219,234,254,0.96); border: 1.5px solid #93c5fd; color: #1e40af; }
+
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.25); backdrop-filter: blur(8px); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 16px; }
+    .modal-card { background: rgba(255,255,255,0.88); backdrop-filter: blur(30px); border: 1.5px solid rgba(255,255,255,0.95); border-radius: 28px; padding: 28px; width: 100%; max-width: 400px; box-shadow: 0 16px 48px rgba(0,0,0,0.15); }
+    .spin { width: 17px; height: 17px; border: 2.5px solid rgba(255,255,255,0.38); border-top-color: #fff; border-radius: 50%; animation: s360 0.65s linear infinite; display: inline-block; vertical-align: middle; }
+    @keyframes s360 { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+
+<div style="position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column">
+
+  <!-- TOPBAR -->
+  <header style="max-width:960px;margin:0 auto;width:100%;padding:20px 24px;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,#059669,#10b981);box-shadow:0 4px 14px rgba(16,185,129,0.38);display:flex;align-items:center;justify-content:center">
+        <i class="fa-solid fa-basket-shopping" style="color:white;font-size:18px"></i>
+      </div>
+      <div>
+        <div style="font-size:17px;font-weight:900;color:#111827;line-height:1.1">NSN Market</div>
+        <div style="font-size:11px;color:#6b7280;font-weight:500">SaaS Enterprise Platform</div>
+      </div>
+    </div>
+    <div class="chip"><i class="fa-solid fa-circle" style="color:#22c55e;font-size:8px"></i> All systems operational</div>
+  </header>
+
+  <!-- MAIN -->
+  <main style="flex:1;display:flex;align-items:center;justify-content:center;padding:12px 16px 32px">
+    <div style="width:100%;max-width:440px">
+
+      <div style="text-align:center;margin-bottom:22px">
+        <h2 style="font-size:30px;font-weight:900;color:#111827">Welcome Back 👋</h2>
+        <p style="font-size:14px;color:#6b7280;margin-top:6px">Sign in to your NSN Market enterprise portal</p>
+      </div>
+
+      <!-- GLASS CARD -->
+      <div class="glass-card" style="border-radius:28px;padding:28px">
+
+        <!-- ROLE TABS -->
+        <div class="glass-tab-bg" style="border-radius:18px;padding:5px;display:flex;gap:5px;margin-bottom:24px">
+          <button id="tb-m" class="rtab rtab-master-on" onclick="switchRole('master')">
+            <i class="fa-solid fa-shield-halved"></i> Master Admin
+          </button>
+          <button id="tb-a" class="rtab rtab-off" onclick="switchRole('admin')">
+            <i class="fa-solid fa-user-gear"></i> Store Admin
+          </button>
+        </div>
+
+        <!-- MASTER FORM -->
+        <div id="fm" class="fblock">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+            <div class="mbadge"><i class="fa-solid fa-crown"></i> MASTER</div>
+            <span style="font-size:12px;color:#6b7280">Full license and subscription control</span>
+          </div>
+
+          <form id="mForm" onsubmit="doMaster(event)">
+            <div style="margin-bottom:14px">
+              <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px">Username</label>
+              <div style="position:relative">
+                <i class="fa-solid fa-user icoL"></i>
+                <input type="text" id="mu" class="glass-input" placeholder="master" autocomplete="username">
+              </div>
+            </div>
+
+            <div style="margin-bottom:14px">
+              <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px">Password</label>
+              <div style="position:relative">
+                <i class="fa-solid fa-lock icoL"></i>
+                <input type="password" id="mp" class="glass-input glass-input-pr" placeholder="master@123" autocomplete="current-password">
+                <span class="eyeB" onclick="toggleEye('mp',this)"><i class="fa-regular fa-eye"></i></span>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:18px">
+              <input type="checkbox" id="mr" style="accent-color:#d97706;width:15px;height:15px;cursor:pointer">
+              <label for="mr" style="font-size:12px;color:#6b7280;cursor:pointer;font-weight:500">Remember me</label>
+            </div>
+
+            <button type="submit" id="mb" class="btn-master">
+              <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In as Master Admin
+            </button>
+          </form>
+
+          <div class="divider"><span>or continue with Gmail</span></div>
+          <button class="btn-google" onclick="startGoogleAuth('master')">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px;height:18px" alt="G">
+            Sign in with Google (Gmail)
+          </button>
+        </div>
+
+        <!-- ADMIN FORM -->
+        <div id="fa" class="fnone">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+            <div class="abadge"><i class="fa-solid fa-store"></i> STORE ADMIN</div>
+            <span style="font-size:12px;color:#6b7280">Manage inventory, orders &amp; analytics</span>
+          </div>
+
+          <form id="aForm" onsubmit="doAdmin(event)">
+            <div style="margin-bottom:14px">
+              <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px">Admin Username</label>
+              <div style="position:relative">
+                <i class="fa-solid fa-user-tie icoL"></i>
+                <input type="text" id="au" class="glass-input" placeholder="admin" autocomplete="username">
+              </div>
+            </div>
+
+            <div style="margin-bottom:14px">
+              <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px">Password</label>
+              <div style="position:relative">
+                <i class="fa-solid fa-lock icoL"></i>
+                <input type="password" id="ap" class="glass-input glass-input-pr" placeholder="admin@123" autocomplete="current-password">
+                <span class="eyeB" onclick="toggleEye('ap',this)"><i class="fa-regular fa-eye"></i></span>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <input type="checkbox" id="ar" style="accent-color:#059669;width:15px;height:15px;cursor:pointer">
+                <label for="ar" style="font-size:12px;color:#6b7280;cursor:pointer;font-weight:500">Remember me</label>
+              </div>
+              <button type="button" onclick="openForgot()" style="font-size:12px;color:#059669;font-weight:700;background:none;border:none;cursor:pointer;text-decoration:underline">Forgot password?</button>
+            </div>
+
+            <button type="submit" id="ab" class="btn-admin">
+              <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In to Store Admin
+            </button>
+          </form>
+
+          <div class="divider"><span>or continue with Gmail</span></div>
+          <button class="btn-google" onclick="startGoogleAuth('admin')">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px;height:18px" alt="G">
+            Sign in with Google (Gmail)
+          </button>
+        </div>
+
+      </div>
+
+      <!-- CHIPS -->
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:18px">
+        <span class="chip"><i class="fa-solid fa-lock" style="color:#10b981"></i> SSL Secured</span>
+        <span class="chip"><i class="fa-solid fa-database" style="color:#3b82f6"></i> Supabase Cloud</span>
+        <span class="chip"><i class="fa-brands fa-google" style="color:#ef4444"></i> Gmail OAuth</span>
+        <span class="chip"><i class="fa-solid fa-layer-group" style="color:#f59e0b"></i> 2-Tier Access</span>
+      </div>
+      <p style="text-align:center;font-size:11px;color:#9ca3af;margin-top:14px">&copy; 2026 NSN SaaS Enterprise Platform. All rights reserved.</p>
+    </div>
+  </main>
+</div>
+
+<!-- GOOGLE AUTH REDIRECTING MODAL -->
+<div id="googleRedirectModal" class="modal-bg" style="display:none">
+  <div class="modal-card" style="text-align:center">
+    <div style="width:60px;height:60px;border-radius:20px;background:#d1fae5;color:#059669;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px">
+      <i class="fa-solid fa-circle-check"></i>
+    </div>
+    <h3 style="font-size:18px;font-weight:900;color:#111827;margin-bottom:6px">Google Sign-In Verified!</h3>
+    <p id="gUserEmail" style="font-size:13px;color:#059669;font-weight:700;margin-bottom:12px">user@gmail.com</p>
+    <p id="gRedirectStatus" style="font-size:12px;color:#6b7280;margin-bottom:20px">Redirecting to your dashboard...</p>
+    
+    <div style="display:flex;gap:10px">
+      <button onclick="goTo('master.html')" class="btn-master" style="padding:10px;font-size:12px">
+        <i class="fa-solid fa-crown mr-1"></i> Master Hub
+      </button>
+      <button onclick="goTo('admin.html')" class="btn-admin" style="padding:10px;font-size:12px">
+        <i class="fa-solid fa-store mr-1"></i> Store Admin
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- FORGOT MODAL -->
+<div id="forgotModal" class="modal-bg" style="display:none">
+  <div class="modal-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <h3 style="font-size:16px;font-weight:800;color:#111827">Reset Admin Password</h3>
+      <button onclick="closeForgot()" style="background:rgba(0,0,0,0.06);border:none;width:30px;height:30px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6b7280">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <p style="font-size:12px;color:#6b7280;margin-bottom:16px">Enter your store admin username. Your Master Admin will reset your access.</p>
+    <div style="position:relative;margin-bottom:14px">
+      <i class="fa-solid fa-user icoL"></i>
+      <input type="text" id="fu" class="glass-input" placeholder="Your admin username">
+    </div>
+    <button class="btn-admin" onclick="submitForgot()">Send Reset Request to Master</button>
+  </div>
+</div>
+
+<div id="toast"><span id="t-ico"></span><span id="t-msg"></span></div>
+
+<script>
+  const SB_URL = 'https://xjyuxlslaqpqlzxvxaqn.supabase.co';
+  const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqeXV4bHNsYXFwcWx6eHZ4YXFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMTE0NDcsImV4cCI6MjEwNDc4NzQ0N30.SrrZ4aVJasotXUvJWHoFitodvfNHpt-xlNx9pijpf9s';
+  const sb = window.supabase.createClient(SB_URL, SB_KEY);
+
+  /* ─── INITIALIZATION & GOOGLE AUTH LISTENER ─── */
+  window.addEventListener('load', async () => {
+    // 1. Listen for Supabase auth state change (Google OAuth returns)
+    sb.auth.onAuthStateChange(async (event, session) => {
+      if (session && (event === 'SIGNED_IN' || event === 'INITIAL_SESSION')) {
+        handleOAuthSuccess(session);
+      }
+    });
+
+    // 2. Direct session check
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) {
+      handleOAuthSuccess(session);
+      return;
+    }
+
+    // 3. Restore remembered credentials
+    try {
+      const rm = localStorage.getItem('nsn_rm');
+      if (rm) {
+        const d = JSON.parse(rm);
+        if (d.r === 'master') { switchRole('master'); document.getElementById('mu').value = d.u; document.getElementById('mr').checked = true; }
+        else { switchRole('admin'); document.getElementById('au').value = d.u; document.getElementById('ar').checked = true; }
+      }
+    } catch(e) {}
+  });
+
+  function handleOAuthSuccess(session) {
+    const role = localStorage.getItem('nsn_pending_role') || 'admin';
+    const email = session.user.email || 'Authenticated User';
+
+    document.getElementById('gUserEmail').innerText = email;
+    document.getElementById('gRedirectStatus').innerText = role === 'master' 
+      ? 'Forwarding to Master SaaS Hub in 2 seconds...' 
+      : 'Forwarding to Store Admin Dashboard in 2 seconds...';
+    document.getElementById('googleRedirectModal').style.display = 'flex';
+
+    if (role === 'master') {
+      sessionStorage.setItem('nsn_master_auth', 'true');
+      sessionStorage.setItem('nsn_master_email', email);
+      setTimeout(() => goTo('master.html'), 1800);
+    } else {
+      sessionStorage.setItem('nsn_admin_auth', 'true');
+      sessionStorage.setItem('nsn_admin_user', email);
+      setTimeout(() => goTo('admin.html'), 1800);
+    }
+  }
+
+  function goTo(page) {
+    window.location.href = page;
+  }
+
+  /* ─── ROLE SWITCHER ─── */
+  function switchRole(role) {
+    const tbm = document.getElementById('tb-m'), tba = document.getElementById('tb-a');
+    const fm  = document.getElementById('fm'), fa  = document.getElementById('fa');
+
+    if (role === 'master') {
+      tbm.className = 'rtab rtab-master-on';
+      tba.className = 'rtab rtab-off';
+      fm.className = 'fblock';
+      fa.className = 'fnone';
+    } else {
+      tba.className = 'rtab rtab-admin-on';
+      tbm.className = 'rtab rtab-off';
+      fa.className = 'fblock';
+      fm.className = 'fnone';
+    }
+  }
+
+  /* ─── MASTER LOGIN SUBMISSION ─── */
+  async function doMaster(e) {
+    e.preventDefault();
+    const u = document.getElementById('mu').value.trim();
+    const p = document.getElementById('mp').value.trim();
+    if (!u || !p) { toast('Please fill in all fields.', 'error'); return; }
+
+    setBusy('mb', true);
+
+    // Hard-coded Master check
+    if (u === 'master' && p === 'master@123') {
+      saveRemember('master', u, document.getElementById('mr').checked);
+      sessionStorage.setItem('nsn_master_auth', 'true');
+      toast('Master authenticated! Entering Master Hub...', 'success');
+      setTimeout(() => goTo('master.html'), 700);
+      return;
+    }
+
+    // Fallback Supabase email auth
+    const { data, error } = await sb.auth.signInWithPassword({ email: u, password: p });
+    if (!error && data.session) {
+      sessionStorage.setItem('nsn_master_auth', 'true');
+      toast('Authenticated via Supabase! Entering Master Hub...', 'success');
+      setTimeout(() => goTo('master.html'), 700);
+    } else {
+      toast('Invalid Master username or password!', 'error');
+      setBusy('mb', false, '<i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In as Master Admin');
+    }
+  }
+
+  /* ─── ADMIN LOGIN SUBMISSION ─── */
+  async function doAdmin(e) {
+    e.preventDefault();
+    const u = document.getElementById('au').value.trim();
+    const p = document.getElementById('ap').value.trim();
+    if (!u || !p) { toast('Please fill in all fields.', 'error'); return; }
+
+    setBusy('ab', true);
+
+    // 1. Check in store_admins database table
+    const { data: adm } = await sb
+      .from('store_admins')
+      .select('id, tenant_id, username')
+      .eq('username', u)
+      .eq('password_hash', p)
+      .maybeSingle();
+
+    if (adm) {
+      saveRemember('admin', u, document.getElementById('ar').checked);
+      sessionStorage.setItem('nsn_admin_auth', 'true');
+      sessionStorage.setItem('nsn_admin_user', u);
+      if (adm.tenant_id) sessionStorage.setItem('nsn_tenant_id', adm.tenant_id);
+      toast('Admin authenticated! Entering Store Dashboard...', 'success');
+      setTimeout(() => goTo('admin.html'), 700);
+      return;
+    }
+
+    // 2. Default store admin credentials
+    if (u === 'rani' && (p === 'anwar' || p === 'anwar@123')) {
+      saveRemember('admin', u, document.getElementById('ar').checked);
+      sessionStorage.setItem('nsn_admin_auth', 'true');
+      sessionStorage.setItem('nsn_admin_user', 'rani');
+      sessionStorage.setItem('nsn_tenant_id', '37a64e83-514d-4b00-b90a-9af172dacdd6');
+
+      const raniCustom = {
+        name: 'RANI HYPER MARKET',
+        tagline: 'Fresh Farm Groceries & Everyday Supermarket',
+        announcement: '🎉 Welcome to RANI HYPER MARKET! Free Delivery in Bodinayakanur & Best Wholesale Rates!',
+        phone: '77088 34547, 88073 34547',
+        email: 'rani.hypermarket@gmail.com',
+        address: '93, Sundara pandian street, Anwar complex, Near Kottai Karuppasamy Kovil, Bodinayakanur',
+        hours: 'Mon - Sun: 7:00 AM - 10:00 PM',
+        aboutUs: 'Welcome to RANI HYPER MARKET! Located at Anwar Complex, Sundara Pandian Street, Bodinayakanur. We provide top quality grocery, dairy, provisions, and household essentials with free delivery.',
+        heroImg: 'https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=800'
+      };
+      localStorage.setItem('nsn_store_custom_37a64e83-514d-4b00-b90a-9af172dacdd6', JSON.stringify(raniCustom));
+      localStorage.setItem('nsn_store_custom_active', JSON.stringify(raniCustom));
+
+      toast('Admin Rani authenticated! Entering Store Dashboard...', 'success');
+      setTimeout(() => goTo('admin.html'), 700);
+      return;
+    }
+
+    if (u === 'admin' && (p === 'admin@123' || p === 'NSNADMIN2026')) {
+      saveRemember('admin', u, document.getElementById('ar').checked);
+      sessionStorage.setItem('nsn_admin_auth', 'true');
+      sessionStorage.setItem('nsn_admin_user', u);
+      sessionStorage.setItem('nsn_tenant_id', '11111111-1111-1111-1111-111111111111');
+      toast('Admin authenticated! Entering Store Dashboard...', 'success');
+      setTimeout(() => goTo('admin.html'), 700);
+      return;
+    }
+
+    // 3. Supabase email login
+    const { data: sd, error: se } = await sb.auth.signInWithPassword({ email: u, password: p });
+    if (!se && sd.session) {
+      sessionStorage.setItem('nsn_admin_auth', 'true');
+      sessionStorage.setItem('nsn_admin_user', sd.session.user.email);
+      toast('Authenticated via Supabase! Entering Store Dashboard...', 'success');
+      setTimeout(() => goTo('admin.html'), 700);
+      return;
+    }
+
+    toast('Invalid Admin username or password!', 'error');
+    setBusy('ab', false, '<i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In to Store Admin');
+  }
+
+  /* ─── GOOGLE OAUTH START ─── */
+  async function startGoogleAuth(role) {
+    localStorage.setItem('nsn_pending_role', role);
+
+    // Calculate redirect URL
+    let redirectUrl = window.location.href.split('#')[0].split('?')[0];
+    if (window.location.protocol === 'file:') {
+      redirectUrl = 'http://localhost:5500/login.html';
+      toast('Starting Google Auth via http://localhost:5500...', 'info');
+    }
+
+    const { error } = await sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: redirectUrl,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'select_account'
+        }
+      }
+    });
+
+    if (error) {
+      toast('Google Auth error: ' + error.message, 'error');
+    }
+  }
+
+  /* ─── UTILITIES ─── */
+  function saveRemember(role, u, checked) {
+    if (checked) localStorage.setItem('nsn_rm', JSON.stringify({ r: role, u }));
+    else localStorage.removeItem('nsn_rm');
+  }
+
+  function toggleEye(id, el) {
+    const inp = document.getElementById(id);
+    const ic  = el.querySelector('i');
+    if (inp.type === 'password') { inp.type = 'text'; ic.className = 'fa-regular fa-eye-slash'; }
+    else { inp.type = 'password'; ic.className = 'fa-regular fa-eye'; }
+  }
+
+  function setBusy(btnId, busy, resetHtml) {
+    const btn = document.getElementById(btnId);
+    btn.disabled = busy;
+    if (busy) btn.innerHTML = '<span class="spin"></span>&nbsp; Verifying...';
+    else if (resetHtml) btn.innerHTML = resetHtml;
+    btn.style.opacity = busy ? '0.8' : '1';
+  }
+
+  let _tt;
+  function toast(msg, type = 'info') {
+    clearTimeout(_tt);
+    const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+    document.getElementById('t-ico').textContent = icons[type] || 'ℹ️';
+    document.getElementById('t-msg').textContent = msg;
+    const el = document.getElementById('toast');
+    el.className = 'show ' + type;
+    _tt = setTimeout(() => { el.className = type; }, 4500);
+  }
+
+  function openForgot()  { document.getElementById('forgotModal').style.display = 'flex'; }
+  function closeForgot() { document.getElementById('forgotModal').style.display = 'none'; }
+  function submitForgot() {
+    const u = document.getElementById('fu').value.trim();
+    if (!u) { toast('Please enter your username.', 'error'); return; }
+    toast('Reset request sent for "' + u + '". Contact your Master Admin.', 'info');
+    closeForgot();
+  }
+</script>
+</body>
+</html>
+

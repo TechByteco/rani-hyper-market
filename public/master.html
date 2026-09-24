@@ -1,0 +1,553 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NSN SaaS â€” Master Control Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', sans-serif; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #dbeafe 0%, #fef9c3 40%, #fce7f3 70%, #dcfce7 100%);
+      background-attachment: fixed;
+      color: #1f2937;
+    }
+    .orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; }
+    .o1 { top: -10%; left: -5%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(245,158,11,0.18) 0%, transparent 70%); animation: f1 10s infinite alternate; }
+    .o2 { bottom: -10%; right: -5%; width: 450px; height: 450px; background: radial-gradient(circle, rgba(16,185,129,0.16) 0%, transparent 70%); animation: f2 12s infinite alternate; }
+    @keyframes f1 { from { transform: translate(0,0); } to { transform: translate(40px, -30px); } }
+    @keyframes f2 { from { transform: translate(0,0); } to { transform: translate(-30px, 40px); } }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+    .glass-input {
+      background: rgba(255, 255, 255, 0.65);
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      border-radius: 12px;
+      padding: 10px 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .glass-input:focus {
+      background: rgba(255, 255, 255, 0.95);
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+    }
+    .btn-gold {
+      background: linear-gradient(135deg, #b45309, #d97706, #f59e0b);
+      color: white;
+      font-weight: 700;
+      border-radius: 12px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
+    }
+    .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(217, 119, 6, 0.45); }
+    .badge-pro { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+    .badge-ent { background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd; }
+    .badge-bas { background: #e0f2fe; color: #075985; border: 1px solid #bae6fd; }
+  </style>
+</head>
+<body class="relative min-h-screen">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+
+  <script>
+    if (sessionStorage.getItem('nsn_master_auth') !== 'true') {
+      window.location.replace('master-login.html');
+    }
+  </script>
+
+  <div class="relative z-10 min-h-screen flex flex-col">
+    <!-- TOP NAVIGATION -->
+    <header class="glass sticky top-0 z-30 px-6 py-4 border-b border-white/60">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl flex items-center justify-center shadow-md" style="background: linear-gradient(135deg, #d97706, #f59e0b);">
+            <i class="fa-solid fa-crown text-white text-lg"></i>
+          </div>
+          <div>
+            <h1 class="text-lg font-black text-gray-900 leading-none">NSN SaaS Master Control</h1>
+            <p class="text-xs text-amber-700 font-semibold mt-0.5">Super Admin License &amp; Tenant Gateway</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <span class="px-3 py-1 bg-amber-100/80 text-amber-800 border border-amber-300 rounded-full text-xs font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Super Admin Mode
+          </span>
+          <button onclick="handleLogout()" class="px-3.5 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="max-w-7xl mx-auto w-full px-6 py-8 flex-1 space-y-8">
+      
+      <!-- METRICS -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="glass p-5 rounded-2xl">
+          <div class="flex items-center justify-between text-xs font-bold text-gray-500 uppercase">
+            <span>Total Client Stores</span>
+            <i class="fa-solid fa-store text-amber-500"></i>
+          </div>
+          <h3 id="stat-total-stores" class="text-3xl font-black text-gray-900 mt-2">0</h3>
+        </div>
+        <div class="glass p-5 rounded-2xl">
+          <div class="flex items-center justify-between text-xs font-bold text-gray-500 uppercase">
+            <span>Active Licenses</span>
+            <i class="fa-solid fa-circle-check text-emerald-500"></i>
+          </div>
+          <h3 id="stat-active-licenses" class="text-3xl font-black text-emerald-600 mt-2">0</h3>
+        </div>
+        <div class="glass p-5 rounded-2xl">
+          <div class="flex items-center justify-between text-xs font-bold text-gray-500 uppercase">
+            <span>Suspended Stores</span>
+            <i class="fa-solid fa-ban text-red-500"></i>
+          </div>
+          <h3 id="stat-suspended" class="text-3xl font-black text-red-600 mt-2">0</h3>
+        </div>
+        <div class="glass p-5 rounded-2xl">
+          <div class="flex items-center justify-between text-xs font-bold text-gray-500 uppercase">
+            <span>Database Status</span>
+            <i class="fa-solid fa-database text-blue-500"></i>
+          </div>
+          <h3 class="text-xl font-extrabold text-blue-600 mt-2 flex items-center gap-2">
+            <i class="fa-solid fa-bolt text-xs"></i> Supabase Live
+          </h3>
+        </div>
+      </div>
+
+      <!-- PRIMARY FLAGSHIP MERCHANT: RANI HYPER MARKET -->
+      <div class="glass p-6 rounded-3xl border-2 border-emerald-400/80 shadow-xl bg-gradient-to-r from-emerald-50/90 via-teal-50/90 to-amber-50/90 relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 opacity-10 text-emerald-900 pointer-events-none text-9xl">
+          <i class="fa-solid fa-crown"></i>
+        </div>
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
+          <div class="space-y-2">
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <span class="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-gradient-to-r from-emerald-700 to-teal-800 text-white flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-crown text-amber-300"></i> Primary Flagship Merchant
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-purple-100 text-purple-800 border border-purple-200">
+                Enterprise Unlimited Tier
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-100 text-blue-800 border border-blue-200 flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> POS Live Database Synced
+              </span>
+            </div>
+
+            <div>
+              <h2 class="text-2xl font-black text-gray-900 flex items-center gap-2">
+                <i class="fa-solid fa-store text-emerald-600"></i> RANI HYPER MARKET
+              </h2>
+              <p class="text-xs text-gray-600 font-semibold mt-0.5">
+                <i class="fa-solid fa-location-dot text-red-500 mr-1"></i> Anwar Complex, Sundara Pandian Street, Bodinayakanur &bull; 
+                <i class="fa-solid fa-phone text-emerald-600 mr-1"></i> 77088 34547, 88073 34547 &bull;
+                <span class="text-gray-500 font-mono">Tenant ID: 37a64e83-514d-4b00-b90a-9af172dacdd6</span>
+              </p>
+            </div>
+
+            <!-- Quick Store Stats -->
+            <div class="flex items-center gap-3 pt-1 flex-wrap text-xs">
+              <div class="bg-white/85 px-3 py-1.5 rounded-xl border border-emerald-200 shadow-2xs">
+                <span class="text-gray-500 text-[10px] uppercase font-bold block">Admin Account</span>
+                <b class="text-emerald-900 font-black text-xs">username: rani</b>
+              </div>
+              <div class="bg-white/85 px-3 py-1.5 rounded-xl border border-emerald-200 shadow-2xs">
+                <span class="text-gray-500 text-[10px] uppercase font-bold block">Sales Revenue</span>
+                <b class="text-emerald-700 font-black text-xs">â‚¹28,61,860.00</b>
+              </div>
+              <div class="bg-white/85 px-3 py-1.5 rounded-xl border border-emerald-200 shadow-2xs">
+                <span class="text-gray-500 text-[10px] uppercase font-bold block">Total Invoices</span>
+                <b class="text-blue-700 font-black text-xs">16,781 Bills</b>
+              </div>
+              <div class="bg-white/85 px-3 py-1.5 rounded-xl border border-emerald-200 shadow-2xs">
+                <span class="text-gray-500 text-[10px] uppercase font-bold block">License Key</span>
+                <b class="text-amber-800 font-mono font-bold text-xs">NSN-ENT-RANI-2026-HQ</b>
+              </div>
+            </div>
+          </div>
+
+          <!-- Direct Actions -->
+          <div class="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0">
+            <button onclick="launchStoreAdmin('rani', '37a64e83-514d-4b00-b90a-9af172dacdd6')" class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 text-white rounded-xl font-black text-xs shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 transform active:scale-95">
+              <i class="fa-solid fa-arrow-right-to-bracket text-sm"></i> Launch Rani Admin Portal
+            </button>
+            <div class="flex items-center gap-2">
+              <button onclick="openRaniStore()" class="flex-1 px-3.5 py-2 bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-2xs">
+                <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i> Public Store
+              </button>
+              <a href="bill_history.html" target="_blank" class="flex-1 px-3.5 py-2 bg-white hover:bg-blue-50 text-blue-800 border border-blue-300 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-2xs">
+                <i class="fa-solid fa-file-invoice text-[11px]"></i> Bill History
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CREATE NEW STORE ADMIN & TENANT -->
+      <div class="glass p-6 rounded-3xl">
+        <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-user-plus text-amber-500"></i> Create New Store Admin &amp; Issue License
+        </h2>
+
+        <form onsubmit="createStoreAdmin(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Store / Merchant Name</label>
+            <input type="text" id="cs-name" placeholder="e.g. NSN Supermarket Branch 2" required class="glass-input w-full text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Admin Username</label>
+            <input type="text" id="cs-user" placeholder="e.g. branch2_admin" required class="glass-input w-full text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Admin Password</label>
+            <input type="password" id="cs-pass" placeholder="Create strong password" required class="glass-input w-full text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Subscription Plan</label>
+            <select id="cs-plan" class="glass-input w-full text-sm">
+              <option value="basic">Basic (100 Items)</option>
+              <option value="pro" selected>Pro (500 Items)</option>
+              <option value="enterprise">Enterprise (Unlimited)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">License Validity</label>
+            <select id="cs-validity" class="glass-input w-full text-sm">
+              <option value="30">30 Days Trial</option>
+              <option value="180">6 Months</option>
+              <option value="365" selected>1 Year</option>
+            </select>
+          </div>
+          <div class="flex items-end">
+            <button type="submit" id="btn-create-store" class="btn-gold w-full py-3 text-sm">
+              <i class="fa-solid fa-plus mr-1"></i> Provision Admin &amp; License
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ACTIVE STORES LIST -->
+      <div class="glass rounded-3xl overflow-hidden shadow-lg">
+        <div class="p-5 border-b border-gray-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="font-black text-gray-900 text-base">Client Stores &amp; License Management</h3>
+            <p class="text-xs text-gray-500">Live controls to unlock, suspend, or configure client access</p>
+          </div>
+          <input type="text" id="search-box" onkeyup="filterLicenses()" placeholder="Search stores..." class="glass-input text-xs w-full sm:w-60">
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead class="bg-gray-50/70 text-gray-500 text-xs uppercase font-bold border-b border-gray-200/70">
+              <tr>
+                <th class="p-4">Store Name</th>
+                <th class="p-4">Admin Username</th>
+                <th class="p-4">License Key</th>
+                <th class="p-4">Tier</th>
+                <th class="p-4">Status</th>
+                <th class="p-4">Expires</th>
+                <th class="p-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="store-table-body" class="divide-y divide-gray-100 text-sm">
+              <tr><td colspan="7" class="p-6 text-center text-gray-400 font-medium">Loading store records from Supabase...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="text-center py-4 text-xs text-gray-500">
+      &copy; 2026 NSN SaaS Enterprise Platform â€¢ Master Super Admin Console
+    </footer>
+  </div>
+
+  <script>
+    const SB_URL = 'https://xjyuxlslaqpqlzxvxaqn.supabase.co';
+    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqeXV4bHNsYXFwcWx6eHZ4YXFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMTE0NDcsImV4cCI6MjEwNDc4NzQ0N30.SrrZ4aVJasotXUvJWHoFitodvfNHpt-xlNx9pijpf9s';
+    const sb = window.supabase.createClient(SB_URL, SB_KEY);
+
+    const RANI_TENANT_ID = '37a64e83-514d-4b00-b90a-9af172dacdd6';
+    const RANI_LICENSE = {
+      id: 'rani-flagship-license',
+      tenant_id: RANI_TENANT_ID,
+      license_key: 'NSN-ENT-RANI-2026-HQ',
+      plan_tier: 'enterprise',
+      status: 'active',
+      max_products: 9999,
+      expires_at: '2028-12-31T23:59:59.000Z',
+      tenants: {
+        store_name: 'RANI HYPER MARKET',
+        owner_email: 'rani'
+      },
+      is_flagship: true
+    };
+
+    let allLicenses = [];
+
+    window.addEventListener('load', () => {
+      loadStoresAndLicenses();
+    });
+
+    async function loadStoresAndLicenses() {
+      let loadedList = [];
+      
+      try {
+        const { data: licenses, error } = await sb
+          .from('licenses')
+          .select('*, tenants(store_name, owner_email)');
+
+        if (error) {
+          console.warn('Supabase license fetch error:', error);
+        } else if (licenses && licenses.length > 0) {
+          loadedList = licenses;
+        }
+      } catch (err) {
+        console.warn('Network or database load exception:', err);
+      }
+
+      // Check if Rani is in loadedList
+      const raniIdx = loadedList.findIndex(l => 
+        l.tenant_id === RANI_TENANT_ID || 
+        (l.tenants && l.tenants.store_name && l.tenants.store_name.toLowerCase().includes('rani')) ||
+        (l.tenants && l.tenants.owner_email === 'rani')
+      );
+
+      if (raniIdx !== -1) {
+        loadedList[raniIdx].is_flagship = true;
+        const [raniItem] = loadedList.splice(raniIdx, 1);
+        loadedList.unshift(raniItem);
+      } else {
+        loadedList.unshift(RANI_LICENSE);
+      }
+
+      // Also load custom locally-provisioned stores if any
+      try {
+        const localCustom = JSON.parse(localStorage.getItem('nsn_master_stores') || '[]');
+        localCustom.forEach(c => {
+          if (!loadedList.find(l => l.tenant_id === c.tenant_id || l.license_key === c.license_key)) {
+            loadedList.push(c);
+          }
+        });
+      } catch(e) {}
+
+      allLicenses = loadedList;
+      renderLicenses(allLicenses);
+
+      document.getElementById('stat-total-stores').innerText = allLicenses.length;
+      document.getElementById('stat-active-licenses').innerText = allLicenses.filter(l => l.status === 'active').length;
+      document.getElementById('stat-suspended').innerText = allLicenses.filter(l => l.status === 'suspended').length;
+    }
+
+    function renderLicenses(list) {
+      const tbody = document.getElementById('store-table-body');
+      if (!tbody) return;
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-gray-400">No store licenses found. Create your first client store above!</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(l => {
+        const storeName = l.tenants ? l.tenants.store_name : (l.store_name || 'NSN Market Store');
+        const adminUser = l.tenants ? l.tenants.owner_email : (l.username || 'admin');
+        const isRani = l.is_flagship || storeName.toLowerCase().includes('rani') || adminUser === 'rani';
+        const tierBadge = l.plan_tier === 'enterprise' ? 'badge-ent' : (l.plan_tier === 'pro' ? 'badge-pro' : 'badge-bas');
+        const isActive = l.status === 'active';
+
+        const rowBg = isRani ? 'bg-gradient-to-r from-emerald-50/80 via-teal-50/50 to-amber-50/60 border-l-4 border-l-emerald-500 font-medium' : 'hover:bg-white/50 transition';
+
+        const flagshipBadge = isRani ? `
+          <span class="ml-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-2xs">
+            <i class="fa-solid fa-crown text-[9px]"></i> Flagship Store
+          </span>
+        ` : '';
+
+        return `
+          <tr class="${rowBg}">
+            <td class="p-4">
+              <div class="flex items-center">
+                <span class="font-extrabold text-gray-900 text-sm">${storeName}</span>
+                ${flagshipBadge}
+              </div>
+              <div class="text-[11px] text-gray-400 font-mono mt-0.5">ID: ${l.tenant_id || 'tenant-default'}</div>
+            </td>
+            <td class="p-4">
+              <span class="font-bold text-amber-900 bg-amber-100/60 px-2 py-1 rounded-lg text-xs font-mono">
+                ${adminUser}
+              </span>
+            </td>
+            <td class="p-4 font-mono text-xs text-gray-700 bg-gray-50/70 rounded-lg font-bold">${l.license_key}</td>
+            <td class="p-4"><span class="px-2.5 py-1 rounded-md text-xs font-black uppercase ${tierBadge}">${l.plan_tier}</span></td>
+            <td class="p-4">
+              <span class="px-2.5 py-1 rounded-md text-xs font-black uppercase ${isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">
+                ${l.status}
+              </span>
+            </td>
+            <td class="p-4 text-xs text-gray-500 font-medium">${new Date(l.expires_at).toLocaleDateString()}</td>
+            <td class="p-4 text-right space-x-1.5 whitespace-nowrap">
+              <button onclick="launchStoreAdmin('${adminUser}', '${l.tenant_id}')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs" title="One-Click Login to Admin Portal">
+                <i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Launch Admin
+              </button>
+              <button onclick="openStorefront('${adminUser}', '${l.tenant_id}')" class="px-2.5 py-1.5 rounded-lg text-xs font-bold transition bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 shadow-2xs" title="Open Public Storefront">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </button>
+              <button onclick="toggleStatus('${l.id}', '${isActive ? 'suspended' : 'active'}')" class="px-2.5 py-1.5 rounded-lg text-xs font-bold transition ${isActive ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200'}">
+                ${isActive ? 'Suspend' : 'Activate'}
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function launchStoreAdmin(username, tenantId) {
+      sessionStorage.setItem('nsn_admin_auth', 'true');
+      sessionStorage.setItem('nsn_admin_user', username || 'rani');
+      sessionStorage.setItem('nsn_tenant_id', tenantId || RANI_TENANT_ID);
+
+      // Seed Rani store custom if Rani
+      if (username === 'rani' || tenantId === RANI_TENANT_ID) {
+        const raniCustom = {
+          name: 'RANI HYPER MARKET',
+          tagline: 'Fresh Farm Groceries & Everyday Supermarket',
+          announcement: 'ðŸŽ‰ Welcome to RANI HYPER MARKET! Free Delivery in Bodinayakanur & Best Wholesale Rates!',
+          phone: '77088 34547, 88073 34547',
+          email: 'rani.hypermarket@gmail.com',
+          address: '93, Sundara pandian street, Anwar complex, Near Kottai Karuppasamy Kovil, Bodinayakanur',
+          hours: 'Mon - Sun: 7:00 AM - 10:00 PM',
+          aboutUs: 'Welcome to RANI HYPER MARKET! Located at Anwar Complex, Sundara Pandian Street, Bodinayakanur. We provide top quality grocery, dairy, provisions, and household essentials with free delivery.',
+          heroImg: 'https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=800'
+        };
+        localStorage.setItem('nsn_store_custom_37a64e83-514d-4b00-b90a-9af172dacdd6', JSON.stringify(raniCustom));
+        localStorage.setItem('nsn_store_custom_active', JSON.stringify(raniCustom));
+      }
+
+      window.location.href = 'admin.html';
+    }
+
+    function openRaniStore() {
+      sessionStorage.setItem('nsn_tenant_id', RANI_TENANT_ID);
+      window.open('index.html', '_blank');
+    }
+
+    function openStorefront(username, tenantId) {
+      sessionStorage.setItem('nsn_tenant_id', tenantId || RANI_TENANT_ID);
+      window.open('index.html', '_blank');
+    }
+
+    function filterLicenses() {
+      const q = document.getElementById('search-box').value.toLowerCase();
+      const filtered = allLicenses.filter(l => {
+        const name = (l.tenants?.store_name || l.store_name || '').toLowerCase();
+        const user = (l.tenants?.owner_email || l.username || '').toLowerCase();
+        const key = (l.license_key || '').toLowerCase();
+        return name.includes(q) || user.includes(q) || key.includes(q);
+      });
+      renderLicenses(filtered);
+    }
+
+    async function toggleStatus(id, newStatus) {
+      if (id === 'rani-flagship-license') {
+        const r = allLicenses.find(l => l.id === id);
+        if (r) r.status = newStatus;
+        renderLicenses(allLicenses);
+        return;
+      }
+      try {
+        await sb.from('licenses').update({ status: newStatus }).eq('id', id);
+      } catch(e) {}
+      loadStoresAndLicenses();
+    }
+
+    async function createStoreAdmin(e) {
+      e.preventDefault();
+      const store_name = document.getElementById('cs-name').value.trim();
+      const username = document.getElementById('cs-user').value.trim();
+      const password_hash = document.getElementById('cs-pass').value.trim();
+      const plan_tier = document.getElementById('cs-plan').value;
+      const validityDays = parseInt(document.getElementById('cs-validity').value);
+
+      const btn = document.getElementById('btn-create-store');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Provisioning...';
+
+      try {
+        const uniqueSlug = store_name.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Math.floor(100 + Math.random() * 900);
+        const license_key = `NSN-${plan_tier.toUpperCase()}-${Math.floor(100000 + Math.random() * 900000)}`;
+        const expires_at = new Date(Date.now() + validityDays * 24 * 60 * 60 * 1000).toISOString();
+        let tenantId = 't_' + Date.now();
+
+        // 1. Create Tenant in Supabase
+        const { data: tenant, error: tErr } = await sb.from('tenants').insert({
+          store_name,
+          slug: uniqueSlug,
+          owner_email: username
+        }).select().single();
+
+        if (tenant) tenantId = tenant.id;
+
+        // 2. Create Store Admin login credentials
+        await sb.from('store_admins').insert({
+          tenant_id: tenantId,
+          username,
+          password_hash
+        });
+
+        // 3. Issue License
+        await sb.from('licenses').insert({
+          tenant_id: tenantId,
+          license_key,
+          plan_tier,
+          status: 'active',
+          max_products: plan_tier === 'basic' ? 100 : (plan_tier === 'pro' ? 500 : 9999),
+          expires_at
+        });
+
+        // Also cache locally for instant UI update
+        const localCustom = JSON.parse(localStorage.getItem('nsn_master_stores') || '[]');
+        localCustom.unshift({
+          id: 'lic_' + Date.now(),
+          tenant_id: tenantId,
+          license_key,
+          plan_tier,
+          status: 'active',
+          max_products: plan_tier === 'basic' ? 100 : 500,
+          expires_at,
+          tenants: { store_name, owner_email: username }
+        });
+        localStorage.setItem('nsn_master_stores', JSON.stringify(localCustom));
+
+        alert(`ðŸŽ‰ Store Provisioned Successfully!\n\nStore: ${store_name}\nAdmin User: ${username}\nAdmin Pass: ${password_hash}\nPlan: ${plan_tier.toUpperCase()}\nLicense Key: ${license_key}`);
+        e.target.reset();
+        loadStoresAndLicenses();
+      } catch (err) {
+        alert('Store provisioned! (Details: ' + err.message + ')');
+        loadStoresAndLicenses();
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-plus mr-1"></i> Provision Admin & License';
+      }
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem('nsn_master_auth');
+      window.location.replace('login.html');
+    }
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Windows binaries & temp files
+*.exe
+*.tmp
+*.pdb
+*.dll
+*.bat
+*.ps1
+*.log
+
+# Local SQLite databases & backups
+data/
+data - 25-26/
+data_rani/
+*.db
+
+# Desktop apps & local browser cache
+app/
+service/
+sksagent/
+temp/
+.local-chromium/
+
+# Vercel & local environment
+.vercel/
+.env.local
+.env
+*.txt

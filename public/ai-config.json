@@ -1,0 +1,9 @@
+{
+  "geminiApiKey": "",
+  "model": "gemini-3.1-flash-lite",
+  "enabled": true,
+  "storeName": "SNS Market (Rani Hyper Market)",
+  "ownerName": "Rani",
+  "location": "Bodinayakanur, Theni District, Tamil Nadu",
+  "useCloudIfAvailable": true
+}

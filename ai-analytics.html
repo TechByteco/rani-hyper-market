@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SNS Market - AI Business Assistant</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b'
+            },
+            accent: {
+              500: '#6366f1',
+              600: '#4f46e5'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass {
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(12px);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #1f2937;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-gray-950 text-gray-100 min-h-screen custom-scrollbar antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- Top Navigation -->
+  <header class="sticky top-0 z-40 border-b border-gray-800 glass px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-brand-500 to-accent-500 flex items-center justify-center shadow-lg shadow-brand-500/20">
+          <i data-lucide="bot" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-black text-white tracking-tight">SNS MARKET</h1>
+            <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">AI ASSISTANT</span>
+            <span id="live-pulse-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5 shadow-sm shadow-emerald-500/10">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span id="live-pulse-text">● Live Admin & POS Stream</span>
+            </span>
+          </div>
+          
+          <div class="flex items-center gap-2.5 mt-1 flex-wrap">
+            <p class="text-xs text-gray-400" id="header-store-subtext">RANI HYPER MARKET • Store Intelligence</p>
+            <div class="flex items-center gap-1.5 bg-gray-900 border border-brand-500/40 rounded-xl px-2.5 py-1 shadow-sm">
+              <i data-lucide="calendar" class="w-3.5 h-3.5 text-brand-400"></i>
+              <select id="fy-selector" onchange="onFinancialYearChange(this.value)" class="bg-transparent text-xs font-bold text-brand-300 focus:outline-none cursor-pointer">
+                <option value="2026-2027" selected>FY 2026–2027 (Current Active)</option>
+                <option value="2025-2026">FY 2025–2026 (₹58.05 L • 31.5K Bills)</option>
+                <option value="2024-2025">FY 2024–2025 (₹60.43 L • 31.3K Bills)</option>
+                <option value="2023-2024">FY 2023–2024 (₹72.14 L • 37.7K Bills)</option>
+                <option value="2022-2023">FY 2022–2023 (₹33.63 L • 19.0K Bills)</option>
+                <option value="all">🌐 All Financial Years Combined (₹2.55 Cr)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- OPEN SNS MARKET OPTION (DESKTOP + WEB POS) -->
+        <div class="relative group">
+          <div class="flex items-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow transition duration-150 overflow-hidden">
+            <button onclick="launchSnsMarketPos('counter')" class="px-3.5 py-2 text-sm font-semibold text-white flex items-center gap-2 cursor-pointer" title="Open SNS Market Counter Billing POS">
+              <i data-lucide="monitor" class="w-4 h-4"></i>
+              <span>Open SNS Market</span>
+            </button>
+            <button type="button" onclick="toggleSnsMarketMenu(event)" class="px-2 py-2 text-white/80 hover:text-white border-l border-white/20 cursor-pointer" title="More Launch Options">
+              <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+
+          <!-- Quick Launch Menu -->
+          <div id="sns-market-dropdown" class="absolute right-0 mt-1.5 w-64 rounded-2xl bg-gray-900/95 backdrop-blur-xl border border-gray-700/80 shadow-2xl p-1.5 hidden z-50 transition-all duration-150">
+            <a href="rani.html?page=counterSale" target="_blank" onclick="closeSnsMarketMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-gray-800 text-xs font-semibold text-gray-200 transition">
+              <span class="w-8 h-8 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center text-sm shadow-xs">🧾</span>
+              <div>
+                <div class="text-white font-bold flex items-center gap-1.5">
+                  <span>Counter Billing POS</span>
+                  <span class="px-1.5 py-0.5 rounded text-[9px] font-black bg-teal-500/20 text-teal-300">Live</span>
+                </div>
+                <div class="text-[10px] text-gray-400 font-normal">Direct barcode &amp; cashier screen</div>
+              </div>
+            </a>
+            <button type="button" onclick="launchSnsMarketPos('desktop'); closeSnsMarketMenu();" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-gray-800 text-xs font-semibold text-gray-200 transition text-left cursor-pointer">
+              <span class="w-8 h-8 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-sm shadow-xs">💻</span>
+              <div>
+                <div class="text-white font-bold">Launch Desktop App</div>
+                <div class="text-[10px] text-gray-400 font-normal">SNS Market.exe (Flutter Terminal)</div>
+              </div>
+            </button>
+            <a href="admin.html" target="_blank" onclick="closeSnsMarketMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-gray-800 text-xs font-semibold text-gray-200 transition">
+              <span class="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-sm shadow-xs">⚙️</span>
+              <div>
+                <div class="text-white font-bold">Store Admin Console</div>
+                <div class="text-[10px] text-gray-400 font-normal">Inventory, OCR bills &amp; Khata</div>
+              </div>
+            </a>
+            <div class="border-t border-gray-800 my-1"></div>
+            <a href="store.html" target="_blank" onclick="closeSnsMarketMenu()" class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-gray-800 text-xs text-gray-300 transition">
+              <span class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm">🛒</span>
+              <div>
+                <div class="text-white font-bold">Online Grocery Store</div>
+                <div class="text-[10px] text-gray-400 font-normal">Customer-facing web store</div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <button onclick="openWhatsAppModal()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-sm font-semibold text-white shadow flex items-center gap-2 transition duration-150" title="Connect to WhatsApp and message automated briefing to shop owner">
+          <i data-lucide="message-circle" class="w-4 h-4 text-white"></i>
+          <span>WhatsApp Briefing</span>
+        </button>
+        <button onclick="loadAllAnalytics()" class="p-2 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 transition" title="Refresh Data">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        </button>
+        <div class="flex items-center gap-2 pl-3 border-l border-gray-800">
+          <div class="w-8 h-8 rounded-lg bg-brand-500/20 text-brand-400 flex items-center justify-center font-bold text-sm">R</div>
+          <span class="text-sm font-medium text-gray-300">Rani (Owner)</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-8 space-y-8">
+
+    <!-- KPI Metrics Row -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" id="kpi-container">
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 relative overflow-hidden shadow-sm">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-medium uppercase tracking-wider text-gray-400">Total Turnover</p>
+            <h3 class="text-2xl font-extrabold text-white mt-1" id="kpi-turnover">₹0</h3>
+          </div>
+          <div class="p-2.5 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20">
+            <i data-lucide="indian-rupee" class="w-5 h-5"></i>
+          </div>
+        </div>
+        <div class="mt-3 text-xs text-brand-400 font-medium flex items-center gap-1">
+          <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+          <span id="kpi-turnover-sub">Selected Financial Year Turnover</span>
+        </div>
+      </div>
+
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 relative overflow-hidden shadow-sm">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-medium uppercase tracking-wider text-gray-400">Sales Transactions</p>
+            <h3 class="text-2xl font-extrabold text-white mt-1" id="kpi-bills">0</h3>
+          </div>
+          <div class="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            <i data-lucide="receipt" class="w-5 h-5"></i>
+          </div>
+        </div>
+        <div class="mt-3 text-xs text-blue-400 font-medium flex items-center gap-1">
+          <i data-lucide="users" class="w-3.5 h-3.5"></i>
+          <span>Customer checkouts</span>
+        </div>
+      </div>
+
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 relative overflow-hidden shadow-sm">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-medium uppercase tracking-wider text-gray-400">Avg Basket Value</p>
+            <h3 class="text-2xl font-extrabold text-white mt-1" id="kpi-basket">₹0</h3>
+          </div>
+          <div class="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+          </div>
+        </div>
+        <div class="mt-3 text-xs text-purple-400 font-medium flex items-center gap-1">
+          <i data-lucide="target" class="w-3.5 h-3.5"></i>
+          <span>Target: ₹200 / customer</span>
+        </div>
+      </div>
+
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 relative overflow-hidden shadow-sm">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-medium uppercase tracking-wider text-gray-400">Active Products</p>
+            <h3 class="text-2xl font-extrabold text-white mt-1" id="kpi-products">7,201</h3>
+          </div>
+          <div class="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <i data-lucide="box" class="w-5 h-5"></i>
+          </div>
+        </div>
+        <div class="mt-3 text-xs text-amber-400 font-medium flex items-center gap-1">
+          <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+          <span>Restored Master Catalog</span>
+        </div>
+      </div>
+
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 relative overflow-hidden shadow-sm">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-medium uppercase tracking-wider text-gray-400">Est. Gross Margin</p>
+            <h3 class="text-2xl font-extrabold text-brand-400 mt-1" id="kpi-margin">18.5%</h3>
+          </div>
+          <div class="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <i data-lucide="pie-chart" class="w-5 h-5"></i>
+          </div>
+        </div>
+        <div class="mt-3 text-xs text-emerald-400 font-medium flex items-center gap-1">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+          <span>Healthy retail range</span>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- Real-Time Sync & Intelligence Banner -->
+    <div class="bg-gradient-to-r from-emerald-950/40 via-gray-900 to-indigo-950/40 border border-emerald-500/20 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg backdrop-blur">
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30 shrink-0">
+          <i data-lucide="radio" class="w-5 h-5 animate-pulse"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h4 class="text-sm font-bold text-white">Live Retail Data Pipeline Active</h4>
+            <span class="px-2 py-0.2 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">REALTIME</span>
+          </div>
+          <p class="text-xs text-gray-400 mt-0.5" id="live-pipeline-subtext">Directly synced to SNS Market Desktop POS & SQLite DB (9bcfb0b0..._2026-2027.db). Auto-refreshes on every checkout.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="text-right hidden sm:block">
+          <p class="text-[11px] text-gray-400">Latest Sync Time</p>
+          <p class="text-xs font-mono font-bold text-emerald-300" id="live-last-sync">Just now</p>
+        </div>
+        <button onclick="checkLivePulse(true)" class="px-3 py-1.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-gray-300 border border-gray-700 transition flex items-center gap-1.5">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+          <span>Check Pulse</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- LOCAL FESTIVAL DEMAND FORECASTER & EVENT PULSE -->
+    <div class="bg-gray-900 border border-purple-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+      <div class="absolute -top-12 -right-12 w-48 h-48 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center gap-1">
+              <i data-lucide="sparkles" class="w-3 h-3"></i> AI Event Intelligence
+            </span>
+            <span class="text-xs text-gray-400">Tamil Nadu & Regional Calendar</span>
+          </div>
+          <h3 class="text-lg font-black text-white mt-1 flex items-center gap-2">
+            <span>🎪 Local Festival Demand Forecaster & Event Pulse</span>
+          </h3>
+          <p class="text-xs text-gray-400 mt-0.5">Surge multipliers, procurement countdowns, and high-demand SKU checklists mapped to your store's active inventory</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="sendQuickPrompt('Give me a complete festival stock checklist for the upcoming festivals')" class="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white shadow-md shadow-purple-600/20 flex items-center gap-1.5 transition">
+            <i data-lucide="clipboard-list" class="w-3.5 h-3.5"></i>
+            <span>Festival Stock Checklist</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Festival Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="festivals-grid-container">
+        <div class="col-span-full py-8 text-center text-gray-500 text-xs flex items-center justify-center gap-2">
+          <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>
+          <span>Loading festival predictions and SKU mappings...</span>
+        </div>
+      </div>
+
+      <!-- DEDICATED PREVIOUS YEARS FESTIVAL SALES & RECOMMENDED STOCK NEED LIST -->
+      <div class="mt-8 pt-6 border-t border-gray-800/80">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                <i data-lucide="history" class="w-3 h-3"></i> 3-Year Historical Sales Mining (2023, 2024, 2025)
+              </span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center gap-1">
+                <i data-lucide="calendar" class="w-3 h-3"></i> Lunisolar Shifting Dates
+              </span>
+              <button onclick="openFestivalCalendarModal()" class="text-[11px] font-bold text-cyan-400 hover:text-cyan-300 underline flex items-center gap-1 transition ml-auto">
+                <i data-lucide="calendar-days" class="w-3.5 h-3.5"></i>
+                <span>View Full Multi-Year Calendar Matrix (2023–2027)</span>
+              </button>
+            </div>
+            <h4 class="text-base font-black text-white mt-1 flex items-center gap-2">
+              <span>📦 Past Years Festival Sales & Recommended Stock Need Lists</span>
+            </h4>
+            <p class="text-xs text-gray-400 mt-0.5">Mined across genuine checkout transactions on exact lunisolar dates that change every year</p>
+          </div>
+
+          <!-- Festival Selector Tabs -->
+          <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1">
+            <button onclick="switchFestivalTab('deepavali', this)" class="fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition bg-amber-500/20 text-amber-300 border border-amber-500/40">🪔 Deepavali</button>
+            <button onclick="switchFestivalTab('pongal_harvest', this)" class="fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-800/60 border border-gray-700/60 transition">🌾 Pongal</button>
+            <button onclick="switchFestivalTab('ayudha_pooja', this)" class="fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-800/60 border border-gray-700/60 transition">🛠️ Ayudha Pooja</button>
+            <button onclick="switchFestivalTab('vinayakar_chaturthi', this)" class="fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-800/60 border border-gray-700/60 transition">🐘 Vinayakar</button>
+            <button onclick="switchFestivalTab('karthigai_deepam', this)" class="fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-800/60 border border-gray-700/60 transition">🕯️ Karthigai</button>
+          </div>
+        </div>
+
+        <!-- Festival Summary KPI Bar -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3 bg-gray-950/60 border border-gray-800/80 rounded-2xl p-4" id="fest-stock-kpi-bar">
+          <div>
+            <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Festival Event</p>
+            <h5 class="text-sm font-black text-white mt-0.5" id="fest-stock-name">Deepavali Mega Week</h5>
+          </div>
+          <div>
+            <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Reorder Budget</p>
+            <h5 class="text-sm font-black text-amber-400 mt-0.5" id="fest-stock-budget">₹34,661</h5>
+          </div>
+          <div>
+            <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Projected Revenue</p>
+            <h5 class="text-sm font-black text-emerald-400 mt-0.5" id="fest-stock-revenue">₹41,890</h5>
+          </div>
+          <div>
+            <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Procure Cutoff</p>
+            <h5 class="text-sm font-black text-rose-400 mt-0.5" id="fest-stock-cutoff">2026-10-28</h5>
+          </div>
+        </div>
+
+        <!-- Shifting Dates Multi-Year Timeline Tracker -->
+        <div class="p-3.5 mb-4 rounded-xl bg-purple-950/30 border border-purple-500/25 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-2">
+            <i data-lucide="info" class="w-4 h-4 text-purple-400 shrink-0"></i>
+            <div>
+              <span class="font-bold text-purple-200" id="fest-calendar-rule-title">Astronomical Date Shift:</span>
+              <span class="text-gray-300 ml-1" id="fest-calendar-rule-desc">Aipasi Amavasya (Lunisolar calendar shifts October–November)</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap font-mono text-[11px]" id="fest-multi-year-dates-container">
+            <span class="px-2 py-0.5 rounded bg-gray-900 border border-gray-700 text-gray-400">2023: <b class="text-gray-200" id="date-pill-2023">Nov 12</b></span>
+            <span class="px-2 py-0.5 rounded bg-gray-900 border border-gray-700 text-gray-400">2024: <b class="text-gray-200" id="date-pill-2024">Oct 31</b></span>
+            <span class="px-2 py-0.5 rounded bg-gray-900 border border-gray-700 text-gray-400">2025: <b class="text-gray-200" id="date-pill-2025">Oct 20</b></span>
+            <span class="px-2 py-0.5 rounded bg-amber-500/20 border border-amber-500/40 text-amber-300">2026: <b class="text-white" id="date-pill-2026">Nov 08 (Active)</b></span>
+            <span class="px-2 py-0.5 rounded bg-gray-900 border border-gray-700 text-gray-400">2027: <b class="text-gray-200" id="date-pill-2027">Oct 29</b></span>
+          </div>
+        </div>
+
+        <!-- Stock Need Table -->
+        <div class="overflow-x-auto rounded-2xl border border-gray-800/80 bg-gray-950/40">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="border-b border-gray-800 text-gray-400 text-[11px] font-semibold uppercase bg-gray-900/80">
+                <th class="py-3 pl-3">#</th>
+                <th class="py-3">Highly Selled Festival Product</th>
+                <th class="py-3 text-center text-indigo-300">2023 Sold</th>
+                <th class="py-3 text-center text-blue-300">2024 Sold</th>
+                <th class="py-3 text-center text-cyan-300">2025 Sold</th>
+                <th class="py-3 text-center">Current Stock</th>
+                <th class="py-3 text-center text-amber-300 font-black">Recommended Need</th>
+                <th class="py-3 text-right">Est. Budget (₹)</th>
+                <th class="py-3 text-center pr-3">Priority</th>
+              </tr>
+            </thead>
+            <tbody id="fest-stock-table-tbody" class="divide-y divide-gray-800/50 font-medium text-gray-200">
+              <tr>
+                <td colspan="8" class="py-8 text-center text-gray-500">Loading historical stock need analysis...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap items-center justify-between gap-3 mt-4">
+          <div class="flex items-center gap-2">
+            <button onclick="askAiToDraftPo()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md shadow-purple-600/20 flex items-center gap-1.5 transition">
+              <i data-lucide="bot" class="w-3.5 h-3.5"></i>
+              <span>Ask AI to Draft Wholesale PO</span>
+            </button>
+            <button onclick="copyStockNeedList()" class="px-3.5 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-200 text-xs font-semibold flex items-center gap-1.5 transition">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copy Stock List</span>
+            </button>
+          </div>
+          <p class="text-[11px] text-gray-400 italic">Historical sales mined from 100,622 genuine checkout bills across 2023, 2024, and 2025 databases on shifting festival dates</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- GLOBAL COMMODITY & WORLD TRADE MARKET BAROMETER -->
+    <div class="bg-gray-900 border border-cyan-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+      <div class="absolute -top-12 -right-12 w-48 h-48 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 flex items-center gap-1">
+              <i data-lucide="globe" class="w-3 h-3"></i> World Trade Barometer
+            </span>
+            <span class="text-xs text-gray-400">Macro Trade & Commodity Inflation Tracker</span>
+          </div>
+          <h3 class="text-lg font-black text-white mt-1 flex items-center gap-2">
+            <span>🌐 Global Commodity & World Trade Market Barometer</span>
+          </h3>
+          <p class="text-xs text-gray-400 mt-0.5">International supply chain trends (Edible Oils, Pulses, Sugar, Dairy & Freight) translated into retail margin strategies</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="sendQuickPrompt('What is the world trade outlook and edible oil price trend?')" class="px-3.5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-xs font-bold text-white shadow-md shadow-cyan-600/20 flex items-center gap-1.5 transition">
+            <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+            <span>Commodity Price Advice</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Commodity Indicator Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4" id="trade-grid-container">
+        <div class="col-span-full py-8 text-center text-gray-500 text-xs flex items-center justify-center gap-2">
+          <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>
+          <span>Loading international commodity forecasts...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Grid: Sales Velocity & Peak Hours -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="line-chart" class="w-4 h-4 text-brand-400"></i>
+              <span id="chart-main-title">Sales & Financial Performance Trends</span>
+            </h3>
+            <p class="text-xs text-gray-400 mt-0.5" id="chart-sub-title">Showing FY 2026–2027 • Day-Wise Turnover (₹)</p>
+          </div>
+
+          <!-- Interactive Chart Controls: Granularity & Metric -->
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- Granularity Buttons: Day-wise, Monthly, Yearly -->
+            <div class="flex items-center bg-gray-950 p-1 rounded-xl border border-gray-800 text-[11px] font-bold">
+              <button type="button" onclick="setTrendGranularity('daily', this)" id="gran-daily-btn" class="gran-btn px-2.5 py-1 rounded-lg bg-brand-600 text-white transition shadow-sm">Day-Wise</button>
+              <button type="button" onclick="setTrendGranularity('monthly', this)" id="gran-monthly-btn" class="gran-btn px-2.5 py-1 rounded-lg text-gray-400 hover:text-white transition">Monthly</button>
+              <button type="button" onclick="setTrendGranularity('yearly', this)" id="gran-yearly-btn" class="gran-btn px-2.5 py-1 rounded-lg text-gray-400 hover:text-white transition">Yearly</button>
+            </div>
+
+            <!-- Metric Buttons: Turnover, Profit, Bills -->
+            <div class="flex items-center bg-gray-950 p-1 rounded-xl border border-gray-800 text-[11px] font-bold">
+              <button type="button" onclick="setTrendMetric('sales', this)" id="metric-sales-btn" class="metric-btn px-2.5 py-1 rounded-lg bg-emerald-600 text-white transition shadow-sm">Turnover (₹)</button>
+              <button type="button" onclick="setTrendMetric('profit', this)" id="metric-profit-btn" class="metric-btn px-2.5 py-1 rounded-lg text-gray-400 hover:text-white transition">Gross Profit (₹)</button>
+              <button type="button" onclick="setTrendMetric('bills', this)" id="metric-bills-btn" class="metric-btn px-2.5 py-1 rounded-lg text-gray-400 hover:text-white transition">Bills Count</button>
+            </div>
+          </div>
+        </div>
+        <div class="h-64">
+          <canvas id="salesVelocityChart"></canvas>
+        </div>
+      </div>
+
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="clock" class="w-4 h-4 text-purple-400"></i>
+              <span>Peak Shopping Hours (IST)</span>
+            </h3>
+            <p class="text-xs text-gray-400 mt-0.5">Customer rush distribution for cashier shift planning</p>
+          </div>
+        </div>
+        <div class="h-64">
+          <canvas id="peakHoursChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Middle Section: Top Products & AI Copilot Chat -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Top Bestsellers (7 cols) -->
+      <div class="lg:col-span-7 bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-base font-bold text-white flex items-center gap-2">
+            <i data-lucide="award" class="w-4 h-4 text-amber-400"></i>
+            <span>Top 10 Revenue Generators</span>
+          </h3>
+          <span class="text-xs text-gray-400">Volume & Revenue Ranking</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr class="border-b border-gray-800 text-gray-400 text-xs font-semibold uppercase">
+                <th class="pb-3 pl-2">#</th>
+                <th class="pb-3">Product Name</th>
+                <th class="pb-3 text-right">Units Sold</th>
+                <th class="pb-3 text-right pr-2">Total Revenue</th>
+              </tr>
+            </thead>
+            <tbody id="top-products-tbody" class="divide-y divide-gray-800/60 font-medium">
+              <tr>
+                <td colspan="4" class="py-6 text-center text-gray-500">Loading top products...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Rani AI Copilot (5 cols) -->
+      <div class="lg:col-span-5 bg-gradient-to-b from-gray-900 to-gray-950 border border-brand-500/30 rounded-2xl p-6 shadow-xl relative flex flex-col h-[520px]">
+        <div class="flex items-center justify-between pb-3 border-b border-gray-800">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-500 to-brand-500 text-white flex items-center justify-center shadow-md shadow-purple-500/20">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <h3 class="text-sm font-bold text-white">SNS AI Retail Advisor</h3>
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1"><i data-lucide="cpu" class="w-3 h-3"></i> GEMINI 3.5 FLASH</span>
+              </div>
+              <p class="text-[11px] text-gray-400">Live Business Analytics + Custom Retail Consulting</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="openAiSettingsModal()" class="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-purple-300 transition" title="AI Configuration & Gemini API Key">
+              <i data-lucide="settings" class="w-3.5 h-3.5"></i>
+            </button>
+            <button onclick="clearChat()" class="text-xs text-gray-500 hover:text-gray-300 transition">Clear</button>
+          </div>
+        </div>
+
+        <!-- Chat History -->
+        <div id="chat-messages" class="flex-1 overflow-y-auto custom-scrollbar my-3 space-y-3 pr-1">
+          <!-- Initial greeting -->
+          <div class="flex items-start gap-2.5">
+            <div class="w-6 h-6 rounded-md bg-brand-600 text-white flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold">AI</div>
+            <div class="bg-gray-800/80 border border-gray-700/60 rounded-xl rounded-tl-none p-3 text-xs text-gray-200 leading-relaxed shadow-sm">
+              Vanakkam Rani! I am your <b>Executive Generative AI Store Advisor</b>. I am grounded in your store's 5-year checkout history (<b>137,205 bills, ₹2.55 Crore revenue</b>) and current active catalog.<br><br>💡 Ask me <b>any business analytics question</b> (turnover, profit, festivals, stock) or <b>custom questions</b> (pricing strategy, supplier negotiations, cashier speed, customer complaints, marketing drafts)!
+            </div>
+          </div>
+        </div>
+
+        <!-- Suggestion Chips: Generative Strategies & Analytics -->
+        <div class="flex flex-wrap gap-1.5 pt-2 pb-3 overflow-x-auto max-h-24 custom-scrollbar">
+          <button onclick="sendQuickPrompt('What is our current daily sales run rate and peak rush hours?')" class="text-[11px] px-2.5 py-1 rounded-full bg-blue-900/50 hover:bg-blue-800 border border-blue-500/50 text-blue-200 font-bold transition shrink-0">⚡ Today\'s Sales & Peak Hours</button>
+          <!-- Custom Generative Strategies -->
+          <button onclick="sendQuickPrompt('How can I increase our average basket value from ₹172 to ₹220?')" class="text-[11px] px-2.5 py-1 rounded-full bg-purple-900/40 hover:bg-purple-800/60 border border-purple-500/40 text-purple-300 font-bold transition shrink-0">🎯 Basket Size Growth (₹172 ➔ ₹220)</button>
+          <button onclick="sendQuickPrompt('How can we increase our gross profit margin from 12.8% to 15.5%?')" class="text-[11px] px-2.5 py-1 rounded-full bg-emerald-900/40 hover:bg-emerald-800/60 border border-emerald-500/40 text-emerald-300 font-bold transition shrink-0">💎 Margin Expansion Strategy</button>
+          <button onclick="sendQuickPrompt('How should I negotiate credit terms and trade schemes with wholesale suppliers in Madurai and Theni?')" class="text-[11px] px-2.5 py-1 rounded-full bg-blue-900/40 hover:bg-blue-800/60 border border-blue-500/40 text-blue-300 font-bold transition shrink-0">🤝 Supplier Negotiation Playbook</button>
+          <button onclick="sendQuickPrompt('How to train cashier staff to scan barcodes faster and eliminate evening queues?')" class="text-[11px] px-2.5 py-1 rounded-full bg-indigo-900/40 hover:bg-indigo-800/60 border border-indigo-500/40 text-indigo-300 font-bold transition shrink-0">⚡ Cashier Speed & Queue Busting</button>
+          <button onclick="sendQuickPrompt('How should I handle a customer who received an expired product or returned an item?')" class="text-[11px] px-2.5 py-1 rounded-full bg-rose-900/40 hover:bg-rose-800/60 border border-rose-500/40 text-rose-300 font-medium transition shrink-0">🛡️ Customer Dispute & Expiry SOP</button>
+          <button onclick="sendQuickPrompt('Draft a festival promotional WhatsApp broadcast message in Tamil and English with special discounts')" class="text-[11px] px-2.5 py-1 rounded-full bg-amber-900/40 hover:bg-amber-800/60 border border-amber-500/40 text-amber-300 font-medium transition shrink-0">✍️ Draft WhatsApp Promo (Tamil & Eng)</button>
+          <button onclick="sendQuickPrompt('How to arrange our store layout and gondola shelves to boost sales?')" class="text-[11px] px-2.5 py-1 rounded-full bg-cyan-900/40 hover:bg-cyan-800/60 border border-cyan-500/40 text-cyan-300 font-medium transition shrink-0">🏪 Store Layout & Planogram</button>
+          
+          <!-- Analytics & Festival Grounding -->
+          <button onclick="sendQuickPrompt('Analyse the products that were highly selled during Deepavali in previous years and give recommended stock need list')" class="text-[11px] px-2.5 py-1 rounded-full bg-amber-950/60 hover:bg-amber-900/80 border border-amber-500/50 text-amber-300 font-semibold transition shrink-0">🪔 Deepavali Stock Need List</button>
+          <button onclick="sendQuickPrompt('Analyse the products that were highly selled during Pongal in previous years and give recommended stock need list')" class="text-[11px] px-2.5 py-1 rounded-full bg-emerald-950/60 hover:bg-emerald-900/80 border border-emerald-500/50 text-emerald-300 font-semibold transition shrink-0">🌾 Pongal Stock Need List</button>
+          <button onclick="sendQuickPrompt('What is the world trade outlook and edible oil price trend?')" class="text-[11px] px-2.5 py-1 rounded-full bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-500/50 text-cyan-300 font-semibold transition shrink-0">🌐 World Trade & Oil</button>
+          <button onclick="sendQuickPrompt('What are my top 5 bestsellers?')" class="text-[11px] px-2.5 py-1 rounded-full bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 transition shrink-0">🏆 Top Bestsellers</button>
+          <button onclick="sendQuickPrompt('Who are our top VIP customers?')" class="text-[11px] px-2.5 py-1 rounded-full bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 transition shrink-0">👑 Top VIP Customers</button>
+          <button onclick="sendQuickPrompt('Show me our highest profit margin products')" class="text-[11px] px-2.5 py-1 rounded-full bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 transition shrink-0">💎 High Margin Items</button>
+          <button onclick="sendQuickPrompt('Which day of the week is our best selling day?')" class="text-[11px] px-2.5 py-1 rounded-full bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 transition shrink-0">🗓️ Day-of-Week</button>
+          <button onclick="sendQuickPrompt('What is our peak rush hour?')" class="text-[11px] px-2.5 py-1 rounded-full bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 transition shrink-0">⏰ Rush Hours</button>
+          <button onclick="sendQuickPrompt('Which items are dead stock?')" class="text-[11px] px-2.5 py-1 rounded-full bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 transition shrink-0">📦 Dead Stock</button>
+        </div>
+
+        <!-- Input Bar -->
+        <div class="flex gap-2 items-center">
+          <button type="button" id="btn-ai-voice-lang" onclick="toggleVoiceLang()" class="px-2.5 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300 border border-gray-700 transition shrink-0 cursor-pointer" title="Toggle Voice Input Language (English / தமிழ்)">
+            <span id="voice-lang-label">🇮🇳 EN</span>
+          </button>
+          <button type="button" id="btn-ai-voice" onclick="toggleVoiceInput()" class="p-2 rounded-xl bg-purple-900/40 hover:bg-purple-800 text-purple-300 border border-purple-500/30 transition shrink-0 shadow-sm cursor-pointer" title="Speak question in English or தமிழ்">
+            <i data-lucide="mic" class="w-4 h-4" id="ai-voice-icon"></i>
+          </button>
+          <input type="text" id="chat-input" placeholder="Ask your AI advisor (or speak via microphone)..." 
+            onkeydown="if(event.key==='Enter') sendChatMessage()"
+            class="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3.5 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 transition">
+          <button onclick="sendChatMessage()" class="p-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white transition shadow-sm">
+            <i data-lucide="send" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Row: Dead Stock & Capital Recovery Matrix -->
+    <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="text-base font-bold text-white flex items-center gap-2">
+            <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i>
+            <span>Dead Stock & Capital Liquidation Opportunities</span>
+          </h3>
+          <p class="text-xs text-gray-400 mt-0.5">High-ticket items with 0 sales in the last 60 days — bundle or discount to free up operating cash</p>
+        </div>
+        <span class="text-xs px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">Action Required</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3" id="dead-stock-container">
+        <div class="col-span-full text-center text-gray-500 py-4 text-xs">Loading dead stock items...</div>
+      </div>
+    </div>
+
+  <!-- WhatsApp Automated Briefing Modal -->
+  <div id="wa-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-gray-900 border border-gray-800 rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30">
+            <i data-lucide="message-circle" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white">Send WhatsApp AI Briefing</h3>
+            <p class="text-xs text-gray-400">Automated store intelligence report for shop owner</p>
+          </div>
+        </div>
+        <button onclick="closeWhatsAppModal()" class="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Recipient Selector -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between">
+          <label class="text-xs font-semibold text-gray-300">Shop Owner WhatsApp Number:</label>
+          <span class="text-emerald-400 font-medium text-xs">● Verified SNS Contact</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" onclick="selectWaPhone('917708834547', this)" id="wa-btn-77088" class="wa-phone-chip px-3 py-2 rounded-xl border text-xs font-semibold text-left transition flex items-center justify-between bg-emerald-500/10 border-emerald-500/40 text-emerald-300">
+            <span>+91 77088 34547 (Primary)</span>
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+          </button>
+          <button type="button" onclick="selectWaPhone('918807334547', this)" id="wa-btn-88073" class="wa-phone-chip px-3 py-2 rounded-xl border border-gray-700/70 bg-gray-800 text-gray-400 text-xs font-medium text-left transition hover:border-gray-600 flex items-center justify-between">
+            <span>+91 88073 34547 (Secondary)</span>
+          </button>
+        </div>
+        <div class="mt-2">
+          <input type="text" id="wa-custom-phone" value="+91 77088 34547" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 transition" placeholder="Enter custom mobile number (e.g. 917708834547)">
+        </div>
+      </div>
+
+      <!-- Message Preview Box -->
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-gray-300">Automated Briefing Message Preview:</span>
+          <button onclick="copyBriefingText()" class="text-xs text-brand-400 hover:text-brand-300 flex items-center gap-1">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span>Copy Text</span>
+          </button>
+        </div>
+        <div id="wa-briefing-preview" class="bg-gray-950 border border-gray-800/80 rounded-2xl p-4 text-xs font-mono text-gray-200 leading-relaxed max-h-56 overflow-y-auto whitespace-pre-wrap select-all custom-scrollbar">
+Loading live briefing...
+        </div>
+      </div>
+
+      <!-- Automated Delivery Status Banner -->
+      <div id="wa-dispatch-status" class="hidden p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs flex items-center gap-2">
+        <i data-lucide="check-check" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+        <span id="wa-dispatch-msg">Connected to WhatsApp! Message ready.</span>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row items-center gap-2.5 pt-2">
+        <button onclick="sendAutomatedWhatsApp()" id="wa-send-btn" class="w-full sm:flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2 transition duration-150">
+          <i data-lucide="send" class="w-4 h-4"></i>
+          <span>Send to Shop Owner (WhatsApp)</span>
+        </button>
+        <button onclick="openWhatsAppWeb()" class="w-full sm:w-auto py-3 px-4 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700 text-xs font-semibold flex items-center justify-center gap-2 transition">
+          <i data-lucide="external-link" class="w-4 h-4"></i>
+          <span>Open Web</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-brand-600 text-white px-4 py-2.5 rounded-xl shadow-xl text-xs font-semibold flex items-center gap-2 transform translate-y-20 opacity-0 transition duration-300 pointer-events-none z-50">
+    <i data-lucide="check" class="w-4 h-4"></i>
+    <span id="toast-text">Summary copied to clipboard!</span>
+  </div>
+
+  <script>
+    let velocityChartInstance = null;
+    let peakHoursChartInstance = null;
+    let globalOverview = null;
+
+    let lastKnownBillsCount = 0;
+    let livePulseTimer = null;
+
+    async function checkLivePulse(manual = false) {
+      try {
+        const pulse = await fetch('/api/ai/live-pulse').then(r => r.json());
+        if (!pulse) return;
+
+        const syncEl = document.getElementById('live-last-sync');
+        if (syncEl) syncEl.innerText = pulse.lastSyncFormatted || new Date().toLocaleTimeString('en-IN');
+
+        const pulseBadgeText = document.getElementById('live-pulse-text');
+        if (pulseBadgeText) {
+          pulseBadgeText.innerText = pulse.processes?.posRunning ? '● Live POS Stream Active' : '● Connected to Database';
+        }
+
+        // Detect newly billed transactions
+        if (lastKnownBillsCount > 0 && pulse.totalBills > lastKnownBillsCount) {
+          const delta = pulse.totalBills - lastKnownBillsCount;
+          showToast(`🔔 Real-time Pulse: ${delta} new bill(s) recorded! Total: ₹${pulse.totalSales.toLocaleString('en-IN')}`);
+          // Silently refresh metrics
+          loadAllAnalytics(true);
+        }
+        lastKnownBillsCount = pulse.totalBills;
+
+        if (manual) showToast('Live pulse checked — connection healthy!');
+      } catch (err) {
+        console.warn('Live pulse check error:', err);
+      }
+    }
+
+    async function loadAllAnalytics(silent = false) {
+      try {
+        const fyParam = currentFinancialYear;
+        const [overviewRes, dailyRes, monthlyRes, yearlyRes, hourlyRes, forecastRes, deadRes, festivalRes, tradeRes] = await Promise.all([
+          fetch('/api/ai-analytics/overview?fy=' + fyParam).then(r => r.json()),
+          fetch('/api/ai-analytics/daily?limit=45&fy=' + fyParam).then(r => r.json()),
+          fetch('/api/ai-analytics/monthly?fy=' + fyParam).then(r => r.json()),
+          fetch('/api/ai-analytics/yearly').then(r => r.json()),
+          fetch('/api/ai-analytics/hourly').then(r => r.json()),
+          fetch('/api/ai-analytics/forecast?days=14').then(r => r.json()),
+          fetch('/api/ai-analytics/dead-stock').then(r => r.json()),
+          fetch('/api/ai/festival-predictions').then(r => r.json()),
+          fetch('/api/ai/world-trade-predictions').then(r => r.json())
+        ]);
+
+        cachedDailyData = dailyRes || [];
+        cachedMonthlyData = monthlyRes || [];
+        cachedYearlyData = yearlyRes || [];
+        cachedForecastData = forecastRes || [];
+
+        lastKnownBillsCount = overviewRes.totalBills || 17547;
+
+        globalOverview = overviewRes;
+
+        // Populate KPIs
+        document.getElementById('kpi-turnover').innerText = '₹' + (overviewRes.totalSales || 0).toLocaleString('en-IN');
+        document.getElementById('kpi-bills').innerText = (overviewRes.totalBills || 0).toLocaleString('en-IN');
+        document.getElementById('kpi-basket').innerText = '₹' + (overviewRes.avgBasket || 0);
+        document.getElementById('kpi-products').innerText = (overviewRes.totalProducts || 7201).toLocaleString('en-IN');
+
+        const kpiMargin = document.getElementById('kpi-margin');
+        if (kpiMargin) {
+          const profitAmt = overviewRes.totalProfit ? '₹' + (overviewRes.totalProfit >= 100000 ? (overviewRes.totalProfit / 100000).toFixed(2) + 'L' : overviewRes.totalProfit.toLocaleString('en-IN')) : '';
+          kpiMargin.innerText = (overviewRes.marginPct || 12.8) + '% ' + (profitAmt ? '(' + profitAmt + ')' : '');
+        }
+
+        const headerSubtext = document.getElementById('header-store-subtext');
+        if (headerSubtext) {
+          const fyTxt = overviewRes.fiscalYear || currentFinancialYear;
+          headerSubtext.innerText = 'RANI HYPER MARKET • ' + (fyTxt === 'all' ? 'All Financial Years' : 'FY ' + fyTxt) + ' (' + (overviewRes.totalBills || 0).toLocaleString('en-IN') + ' Bills • ₹' + (overviewRes.totalSales || 0).toLocaleString('en-IN') + ')';
+        }
+
+        const kpiTurnoverSub = document.getElementById('kpi-turnover-sub');
+        if (kpiTurnoverSub) {
+          kpiTurnoverSub.innerText = currentFinancialYear === 'all' ? 'All 5 Financial Years Combined' : 'Genuine ' + currentFinancialYear + ' POS Bills';
+        }
+
+        // Populate Top Products Table
+        const tbody = document.getElementById('top-products-tbody');
+        tbody.innerHTML = '';
+        (overviewRes.topProducts || []).forEach((p, index) => {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-gray-800/40 transition';
+          tr.innerHTML = `
+            <td class="py-2.5 pl-2 text-gray-500 text-xs">${index + 1}</td>
+            <td class="py-2.5 font-semibold text-white text-xs">${p.Name.trim()}</td>
+            <td class="py-2.5 text-right text-gray-300 text-xs">${p.total_qty.toLocaleString('en-IN')}</td>
+            <td class="py-2.5 text-right font-bold text-brand-400 text-xs pr-2">₹${p.total_revenue.toLocaleString('en-IN')}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        // Populate Dead Stock Grid
+        const deadContainer = document.getElementById('dead-stock-container');
+        deadContainer.innerHTML = '';
+        (deadRes || []).slice(0, 5).forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'p-3 rounded-xl bg-gray-800/50 border border-gray-700/60 flex flex-col justify-between';
+          card.innerHTML = `
+            <div>
+              <p class="text-xs font-semibold text-gray-200 line-clamp-1" title="${item.Name}">${item.Name}</p>
+              <p class="text-[11px] text-gray-400 mt-1">MRP: ₹${item.Mrp || item.SalesRate} | Rate: ₹${item.SalesRate}</p>
+            </div>
+            <div class="mt-2.5 flex items-center justify-between">
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-500/10 text-red-400 border border-red-500/20 font-medium">0 Sold (60d)</span>
+              <span class="text-[11px] font-bold text-brand-400">Offer 15% off</span>
+            </div>
+          `;
+          deadContainer.appendChild(card);
+        });
+
+        // Render Festival Predictions
+        renderFestivalCards(festivalRes);
+
+        // Render World Trade Barometer
+        renderWorldTradeCards(tradeRes);
+
+        // Load Initial Historical Festival Stock Need List (Deepavali)
+        loadFestivalStockNeeds('deepavali');
+
+        // Render Multi-FY Performance Chart
+        updatePerformanceChart();
+
+        // Render Peak Hours Chart
+        renderPeakHoursChart(hourlyRes);
+
+        lucide.createIcons();
+      } catch (err) {
+        console.error('Failed to load analytics:', err);
+      }
+    }
+
+    let currentFestivalAnalysis = null;
+    let selectedFestivalId = 'deepavali';
+
+    async function loadFestivalStockNeeds(festId = 'deepavali') {
+      selectedFestivalId = festId;
+      const tbody = document.getElementById('fest-stock-table-tbody');
+      if (tbody) {
+        tbody.innerHTML = '<tr><td colspan="8" class="py-6 text-center text-gray-500">Mining historical database records for ' + festId + '...</td></tr>';
+      }
+
+      try {
+        const res = await fetch('/api/ai/festival-stock-needs?festivalId=' + festId);
+        const data = await res.json();
+        currentFestivalAnalysis = data;
+
+        // Update KPI bar
+        document.getElementById('fest-stock-name').innerText = data.name + ' (' + data.surgeExpected + ')';
+        document.getElementById('fest-stock-budget').innerText = '₹' + (data.totalRecommendedBudget || 0).toLocaleString('en-IN');
+        document.getElementById('fest-stock-revenue').innerText = '₹' + (data.totalProjectedRevenue || 0).toLocaleString('en-IN');
+        document.getElementById('fest-stock-cutoff').innerText = data.cutoff2026 || 'Order 7 days ahead';
+
+        // Update Shifting Dates Timeline
+        const ruleDesc = document.getElementById('fest-calendar-rule-desc');
+        if (ruleDesc) ruleDesc.innerText = data.calendarRule || 'Lunisolar astronomical calendar shift';
+
+        const dByYear = data.datesByYear || {};
+        const p23 = document.getElementById('date-pill-2023');
+        const p24 = document.getElementById('date-pill-2024');
+        const p25 = document.getElementById('date-pill-2025');
+        const p26 = document.getElementById('date-pill-2026');
+        const p27 = document.getElementById('date-pill-2027');
+        if (p23) p23.innerText = dByYear['2023'] || '-';
+        if (p24) p24.innerText = dByYear['2024'] || '-';
+        if (p25) p25.innerText = dByYear['2025'] || '-';
+        if (p26) p26.innerText = (dByYear['2026'] || '-') + ' (Active)';
+        if (p27) p27.innerText = dByYear['2027'] || '-';
+
+        // Render Table with 2023, 2024, 2025 empirical data
+        if (tbody) {
+          tbody.innerHTML = '';
+          (data.stockNeedList || []).forEach((item, idx) => {
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-gray-800/40 transition';
+            
+            let priorityBadge = '<span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-gray-700/50 text-gray-300 border border-gray-600/50">NORMAL</span>';
+            if (item.priority === 'CRITICAL') priorityBadge = '<span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">CRITICAL</span>';
+            else if (item.priority === 'HIGH') priorityBadge = '<span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">HIGH</span>';
+
+            tr.innerHTML = `
+              <td class="py-2.5 pl-3 text-gray-500 text-[11px]">${idx + 1}</td>
+              <td class="py-2.5">
+                <p class="font-bold text-white text-xs line-clamp-1" title="${item.name}">${item.name}</p>
+                <p class="text-[10px] text-gray-400">Unit: ${item.unit} • Selling: ₹${item.price}</p>
+              </td>
+              <td class="py-2.5 text-center text-gray-300 font-mono text-[11px]">${item.qty2023 > 0 ? item.qty2023 : '-'}</td>
+              <td class="py-2.5 text-center text-gray-300 font-mono text-[11px]">${item.qty2024 > 0 ? item.qty2024 : '-'}</td>
+              <td class="py-2.5 text-center text-gray-300 font-mono text-[11px]">${item.qty2025 > 0 ? item.qty2025 : '-'}</td>
+              <td class="py-2.5 text-center font-mono text-[11px] ${item.currentStock > 0 ? 'text-emerald-400' : 'text-gray-500'}">${item.currentStock}</td>
+              <td class="py-2.5 text-center">
+                <span class="font-black text-amber-300 text-xs px-2 py-0.5 rounded-lg bg-amber-500/10 border border-amber-500/20">${item.recommendedOrderQty} ${item.unit}</span>
+              </td>
+              <td class="py-2.5 text-right font-bold text-white font-mono text-xs">₹${(item.estPurchaseBudget || 0).toLocaleString('en-IN')}</td>
+              <td class="py-2.5 text-center pr-3">${priorityBadge}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+        lucide.createIcons();
+      } catch (e) {
+        console.error('Failed to load festival stock needs:', e);
+      }
+    }
+
+    function switchFestivalTab(festId, btn) {
+      document.querySelectorAll('.fest-tab-btn').forEach(el => {
+        el.className = 'fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-800/60 border border-gray-700/60 transition';
+      });
+      btn.className = 'fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition bg-amber-500/20 text-amber-300 border border-amber-500/40';
+      loadFestivalStockNeeds(festId);
+    }
+
+    function askAiToDraftPo() {
+      if (!currentFestivalAnalysis) return;
+      const festName = currentFestivalAnalysis.name;
+      sendQuickPrompt('Analyse the products that were highly selled during ' + festName + ' in previous years and give recommended stock need list');
+    }
+
+    function copyStockNeedList() {
+      if (!currentFestivalAnalysis || !currentFestivalAnalysis.stockNeedList) return;
+      let text = '📦 SNS MARKET - ' + currentFestivalAnalysis.fullName.toUpperCase() + ' RECOMMENDED STOCK NEED LIST\n';
+      text += 'Cutoff Date: ' + currentFestivalAnalysis.cutoff2026 + ' | Total Reorder Budget: ₹' + currentFestivalAnalysis.totalRecommendedBudget.toLocaleString('en-IN') + '\n\n';
+      currentFestivalAnalysis.stockNeedList.forEach((item, idx) => {
+        text += (idx + 1) + '. ' + item.name + ' - Order: ' + item.recommendedOrderQty + ' ' + item.unit + ' (Est: ₹' + item.estPurchaseBudget + ') [' + item.priority + ']\n';
+      });
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Stock need list copied to clipboard!');
+      });
+    }
+
+    function renderFestivalCards(festData) {
+      const container = document.getElementById('festivals-grid-container');
+      if (!container || !festData || !festData.festivals) return;
+      container.innerHTML = '';
+
+      festData.festivals.forEach((f, idx) => {
+        const isNext = idx === 0;
+        const card = document.createElement('div');
+        card.className = `rounded-2xl p-5 border flex flex-col justify-between transition hover:border-purple-500/60 shadow-sm ${
+          isNext ? 'bg-gradient-to-br from-purple-950/40 via-gray-900 to-gray-900 border-purple-500/50 ring-1 ring-purple-500/30' : 'bg-gray-800/40 border-gray-800'
+        }`;
+
+        let skuPills = '';
+        (f.sampleSkus || []).slice(0, 3).forEach(sku => {
+          skuPills += `<span class="text-[10px] px-2 py-0.5 rounded-lg bg-gray-900/80 border border-gray-700/60 text-gray-300 line-clamp-1" title="${sku.name} • ₹${sku.rate}">${sku.name} (₹${sku.rate})</span>`;
+        });
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                  f.tier.includes('Peak') ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                }">${f.tier}</span>
+                <h4 class="text-sm font-black text-white mt-1.5 line-clamp-1">${f.name}</h4>
+                <p class="text-[11px] text-gray-400 mt-0.5">${f.date} • <span class="text-purple-300 font-semibold">${f.daysRemaining !== null ? f.daysRemaining + ' days left' : 'Monthly Cycle'}</span></p>
+              </div>
+              <div class="text-right">
+                <span class="text-base font-black text-emerald-400">${f.surgePercent}</span>
+                <p class="text-[9px] text-gray-400 font-medium">Surge</p>
+              </div>
+            </div>
+
+            <p class="text-xs text-gray-300 mt-3 leading-relaxed line-clamp-2">${f.description}</p>
+
+            <div class="mt-3 pt-3 border-t border-gray-800/80 space-y-1.5">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="text-gray-400">Est. Daily Turnover:</span>
+                <span class="font-bold text-white">₹${(f.projectedDailySales || 0).toLocaleString('en-IN')}</span>
+              </div>
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="text-gray-400">Procure Cutoff:</span>
+                <span class="font-semibold text-amber-300">${f.procurementCutoff}</span>
+              </div>
+            </div>
+
+            <!-- Matched Inventory SKUs -->
+            <div class="mt-3">
+              <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">High Demand Store SKUs:</p>
+              <div class="flex flex-wrap gap-1.5">
+                ${skuPills}
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-gray-800/80 flex items-center justify-between">
+            <button onclick="sendQuickPrompt('Give me a detailed checklist and stocking plan for ${f.name}')" class="text-xs text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1 transition">
+              <i data-lucide="bot" class="w-3.5 h-3.5"></i>
+              <span>Get AI Checklist</span>
+            </button>
+            <span class="text-[10px] text-gray-500 font-mono">${f.id}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+      lucide.createIcons();
+    }
+
+    function renderWorldTradeCards(tradeData) {
+      const container = document.getElementById('trade-grid-container');
+      if (!container || !tradeData || !tradeData.indicators) return;
+      container.innerHTML = '';
+
+      tradeData.indicators.forEach(ind => {
+        const card = document.createElement('div');
+        const isUp = ind.trend === 'up';
+        const isDown = ind.trend === 'down';
+        
+        let badgeColor = 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30';
+        if (ind.status === 'RISK_ALERT') badgeColor = 'bg-rose-500/20 text-rose-300 border-rose-500/30';
+        if (ind.status === 'OPPORTUNITY') badgeColor = 'bg-purple-500/20 text-purple-300 border-purple-500/30';
+        if (ind.status === 'PRE_ORDER') badgeColor = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
+        if (ind.status === 'STABLE') badgeColor = 'bg-blue-500/20 text-blue-300 border-blue-500/30';
+
+        card.className = 'rounded-2xl p-4 bg-gray-800/40 border border-gray-800 flex flex-col justify-between hover:border-cyan-500/40 transition shadow-sm';
+        card.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between gap-1">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${badgeColor} border">${ind.statusText}</span>
+              <span class="text-xs font-bold ${isUp ? 'text-rose-400' : isDown ? 'text-emerald-400' : 'text-blue-400'}">${ind.globalIndex}</span>
+            </div>
+
+            <h4 class="text-xs font-black text-white mt-2.5 line-clamp-1" title="${ind.commodity}">${ind.commodity.split('(')[0].trim()}</h4>
+            <p class="text-[11px] text-gray-400 mt-0.5 line-clamp-1">${ind.commodity.includes('(') ? ind.commodity.match(/\((.*?)\)/)[1] : ''}</p>
+
+            <div class="mt-2.5 p-2.5 rounded-xl bg-gray-900/90 border border-gray-700/60">
+              <p class="text-[10px] font-semibold text-gray-300">${ind.retailPriceImpact}</p>
+            </div>
+
+            <p class="text-[11px] text-gray-300 mt-2.5 leading-relaxed line-clamp-3">
+              <b class="text-white">Strategy:</b> ${ind.recommendedAction}
+            </p>
+          </div>
+
+          <div class="mt-3 pt-2.5 border-t border-gray-800/80">
+            <button onclick="sendQuickPrompt('Explain trade impact and retail profit strategy for ${ind.commodity.split('(')[0].trim()}')" class="text-[11px] text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1 transition">
+              <i data-lucide="help-circle" class="w-3 h-3"></i>
+              <span>Retail Margin Advice</span>
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+      lucide.createIcons();
+    }
+
+    let currentFinancialYear = '2026-2027';
+    let currentGranularity = 'daily'; // 'daily' | 'monthly' | 'yearly'
+    let currentMetric = 'sales'; // 'sales' | 'profit' | 'bills'
+
+    let cachedDailyData = [];
+    let cachedMonthlyData = [];
+    let cachedYearlyData = [];
+    let cachedForecastData = [];
+
+    async function onFinancialYearChange(selectedFy) {
+      currentFinancialYear = selectedFy;
+      showToast('Switched to ' + (selectedFy === 'all' ? 'All Financial Years Combined' : 'FY ' + selectedFy) + '!');
+      await loadAllAnalytics();
+    }
+
+    function setTrendGranularity(gran, btn) {
+      currentGranularity = gran;
+      document.querySelectorAll('.gran-btn').forEach(el => {
+        el.className = 'gran-btn px-2.5 py-1 rounded-lg text-gray-400 hover:text-white transition';
+      });
+      btn.className = 'gran-btn px-2.5 py-1 rounded-lg bg-brand-600 text-white transition shadow-sm';
+      updatePerformanceChart();
+    }
+
+    function setTrendMetric(metric, btn) {
+      currentMetric = metric;
+      document.querySelectorAll('.metric-btn').forEach(el => {
+        el.className = 'metric-btn px-2.5 py-1 rounded-lg text-gray-400 hover:text-white transition';
+      });
+      const activeColor = metric === 'sales' ? 'bg-emerald-600' : (metric === 'profit' ? 'bg-purple-600' : 'bg-blue-600');
+      btn.className = 'metric-btn px-2.5 py-1 rounded-lg ' + activeColor + ' text-white transition shadow-sm';
+      updatePerformanceChart();
+    }
+
+    function updatePerformanceChart() {
+      const ctx = document.getElementById('salesVelocityChart').getContext('2d');
+      if (velocityChartInstance) velocityChartInstance.destroy();
+
+      const subTitle = document.getElementById('chart-sub-title');
+      const fyLabel = currentFinancialYear === 'all' ? 'All Financial Years' : 'FY ' + currentFinancialYear;
+      const metricLabel = currentMetric === 'sales' ? 'Turnover (₹)' : (currentMetric === 'profit' ? 'Gross Profit (₹)' : 'Bills Count');
+      const granLabel = currentGranularity === 'daily' ? 'Day-Wise' : (currentGranularity === 'monthly' ? 'Monthly' : 'Yearly (All 5 Years)');
+      
+      if (subTitle) {
+        subTitle.innerText = 'Showing ' + fyLabel + ' • ' + granLabel + ' • ' + metricLabel;
+      }
+
+      let labels = [];
+      let datasets = [];
+      let chartType = 'line';
+
+      const isCurrency = currentMetric === 'sales' || currentMetric === 'profit';
+      const metricKey = currentMetric; // 'sales', 'profit', 'bills'
+
+      if (currentGranularity === 'yearly') {
+        chartType = 'bar';
+        labels = cachedYearlyData.map(y => y.label);
+        const values = cachedYearlyData.map(y => y[metricKey] || 0);
+        
+        let barColor = currentMetric === 'sales' ? '#10b981' : (currentMetric === 'profit' ? '#a855f7' : '#38bdf8');
+
+        datasets = [{
+          label: metricLabel,
+          data: values,
+          backgroundColor: barColor,
+          borderRadius: 8
+        }];
+
+      } else if (currentGranularity === 'monthly') {
+        chartType = 'bar';
+        labels = cachedMonthlyData.map(m => m.label);
+        const values = cachedMonthlyData.map(m => m[metricKey] || 0);
+
+        let barColor = currentMetric === 'sales' ? '#10b981' : (currentMetric === 'profit' ? '#a855f7' : '#38bdf8');
+
+        datasets = [{
+          label: metricLabel + ' (' + fyLabel + ')',
+          data: values,
+          backgroundColor: barColor,
+          borderRadius: 8
+        }];
+
+      } else {
+        // Daily
+        chartType = 'line';
+        const isCurrentFy = currentFinancialYear === '2026-2027';
+
+        if (isCurrentFy && currentMetric === 'sales' && cachedForecastData.length > 0) {
+          labels = cachedDailyData.map(d => d.date.slice(5)).concat(cachedForecastData.map(f => f.date.slice(5) + (f.eventName ? ' 🎪' : '')));
+          const historicalValues = cachedDailyData.map(d => d.sales);
+          
+          const baselineForecast = new Array(cachedDailyData.length).fill(null).concat(cachedForecastData.map(f => f.baselineSales || f.projectedSales));
+          const eventForecast = new Array(cachedDailyData.length).fill(null).concat(cachedForecastData.map(f => f.projectedSales));
+
+          const lastHist = historicalValues[historicalValues.length - 1];
+          baselineForecast[cachedDailyData.length - 1] = lastHist;
+          eventForecast[cachedDailyData.length - 1] = lastHist;
+
+          datasets = [
+            {
+              label: 'Actual Sales (₹)',
+              data: historicalValues.concat(new Array(cachedForecastData.length).fill(null)),
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.12)',
+              borderWidth: 2.5,
+              tension: 0.3,
+              fill: true,
+              pointRadius: 2
+            },
+            {
+              label: 'Moving Avg Baseline (₹)',
+              data: baselineForecast,
+              borderColor: '#6b7280',
+              borderDash: [4, 4],
+              borderWidth: 1.8,
+              tension: 0.3,
+              fill: false,
+              pointRadius: 2
+            },
+            {
+              label: 'Festival & Trade Surge (₹)',
+              data: eventForecast,
+              borderColor: '#a855f7',
+              backgroundColor: 'rgba(168, 85, 247, 0.1)',
+              borderWidth: 2.5,
+              tension: 0.3,
+              fill: true,
+              pointRadius: 3,
+              pointBackgroundColor: '#c084fc'
+            }
+          ];
+
+        } else {
+          labels = cachedDailyData.map(d => d.date.slice(5));
+          const values = cachedDailyData.map(d => d[metricKey] || 0);
+          let lineColor = currentMetric === 'sales' ? '#10b981' : (currentMetric === 'profit' ? '#a855f7' : '#38bdf8');
+          let bgColor = currentMetric === 'sales' ? 'rgba(16, 185, 129, 0.12)' : (currentMetric === 'profit' ? 'rgba(168, 85, 247, 0.12)' : 'rgba(56, 189, 248, 0.12)');
+
+          datasets = [{
+            label: metricLabel,
+            data: values,
+            borderColor: lineColor,
+            backgroundColor: bgColor,
+            borderWidth: 2.5,
+            tension: 0.3,
+            fill: true,
+            pointRadius: 2
+          }];
+        }
+      }
+
+      velocityChartInstance = new Chart(ctx, {
+        type: chartType,
+        data: {
+          labels,
+          datasets
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { 
+              labels: { 
+                color: '#9ca3af', 
+                font: { size: 10 },
+                boxWidth: 12
+              } 
+            },
+            tooltip: {
+              callbacks: {
+                label: (c) => {
+                  const val = c.raw || 0;
+                  return isCurrency ? ` ${c.dataset.label}: ₹${val.toLocaleString('en-IN')}` : ` ${c.dataset.label}: ${val.toLocaleString('en-IN')} bills`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: { grid: { color: '#1f2937' }, ticks: { color: '#9ca3af', font: { size: 9 } } },
+            y: { grid: { color: '#1f2937' }, ticks: { color: '#9ca3af', font: { size: 10 } } }
+          }
+        }
+      });
+    }
+
+    function renderPeakHoursChart(hourlyData) {
+      const ctx = document.getElementById('peakHoursChart').getContext('2d');
+      if (peakHoursChartInstance) peakHoursChartInstance.destroy();
+
+      const labels = hourlyData.map(h => h.displayTime);
+      const bills = hourlyData.map(h => h.bills);
+
+      peakHoursChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Customer Bills',
+            data: bills,
+            backgroundColor: (context) => {
+              const val = context.raw || 0;
+              return val > 1800 ? '#ec4899' : val > 1200 ? '#8b5cf6' : '#3b82f6';
+            },
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (c) => ` ${c.raw} bills checkout`
+              }
+            }
+          },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 9 }, maxRotation: 45 } },
+            y: { grid: { color: '#1f2937' }, ticks: { color: '#9ca3af', font: { size: 10 } } }
+          }
+        }
+      });
+    }
+
+    
+    let aiVoiceLang = 'en-IN';
+    let isVoiceListening = false;
+    let voiceRecognition = null;
+
+    function toggleVoiceLang() {
+      const label = document.getElementById('voice-lang-label');
+      const input = document.getElementById('chat-input');
+      if (aiVoiceLang === 'en-IN') {
+        aiVoiceLang = 'ta-IN';
+        if (label) label.innerText = 'தமிழ் TA';
+        if (input) input.placeholder = 'தமிழில் கேளுங்கள்... (எ.கா: இன்றைய விற்பனை)';
+      } else {
+        aiVoiceLang = 'en-IN';
+        if (label) label.innerText = '🇮🇳 EN';
+        if (input) input.placeholder = 'Ask your AI advisor (or speak via microphone)...';
+      }
+    }
+
+    function toggleVoiceInput() {
+      const btn = document.getElementById('btn-ai-voice');
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (!SpeechRecognition) {
+        alert('Voice speech recognition is not supported in this browser. Please use Google Chrome or Microsoft Edge.');
+        return;
+      }
+
+      if (isVoiceListening) {
+        if (voiceRecognition) {
+          try { voiceRecognition.stop(); } catch(e) {}
+        }
+        isVoiceListening = false;
+        if (btn) {
+          btn.classList.remove('bg-red-600', 'text-white', 'animate-pulse');
+          btn.classList.add('bg-purple-900/40', 'text-purple-300');
+        }
+        return;
+      }
+
+      try {
+        voiceRecognition = new SpeechRecognition();
+        voiceRecognition.lang = aiVoiceLang || 'en-IN';
+        voiceRecognition.interimResults = false;
+        voiceRecognition.maxAlternatives = 1;
+
+        voiceRecognition.onstart = () => {
+          isVoiceListening = true;
+          if (btn) {
+            btn.classList.remove('bg-purple-900/40', 'text-purple-300');
+            btn.classList.add('bg-red-600', 'text-white', 'animate-pulse');
+          }
+          const input = document.getElementById('chat-input');
+          if (input) input.placeholder = aiVoiceLang === 'ta-IN' ? 'கவனித்துக் கொண்டிருக்கிறது... பேசுங்கள்!' : 'Listening... Speak your question!';
+        };
+
+        voiceRecognition.onresult = async (event) => {
+          const transcript = event.results[0][0].transcript;
+          const input = document.getElementById('chat-input');
+          if (input) input.value = transcript;
+          await sendChatMessage();
+        };
+
+        voiceRecognition.onerror = (event) => {
+          console.error('Speech recognition error:', event.error);
+          isVoiceListening = false;
+          if (btn) {
+            btn.classList.remove('bg-red-600', 'text-white', 'animate-pulse');
+            btn.classList.add('bg-purple-900/40', 'text-purple-300');
+          }
+          const input = document.getElementById('chat-input');
+          if (input) input.placeholder = 'Ask your AI advisor (or speak via microphone)...';
+        };
+
+        voiceRecognition.onend = () => {
+          isVoiceListening = false;
+          if (btn) {
+            btn.classList.remove('bg-red-600', 'text-white', 'animate-pulse');
+            btn.classList.add('bg-purple-900/40', 'text-purple-300');
+          }
+          const input = document.getElementById('chat-input');
+          if (input) input.placeholder = 'Ask your AI advisor (or speak via microphone)...';
+        };
+
+        voiceRecognition.start();
+      } catch (err) {
+        console.error('Failed to start voice recognition:', err);
+      }
+    }
+
+
+    async function sendQuickPrompt(promptText) {
+      document.getElementById('chat-input').value = promptText;
+      await sendChatMessage();
+    }
+
+    async function sendChatMessage() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+
+      const container = document.getElementById('chat-messages');
+
+      // User message
+      const userBubble = document.createElement('div');
+      userBubble.className = 'flex items-start justify-end gap-2';
+      userBubble.innerHTML = `
+        <div class="bg-gradient-to-r from-brand-600 to-emerald-600 text-white rounded-xl rounded-tr-none p-3 text-xs leading-relaxed max-w-[85%] shadow-sm">
+          ${text}
+        </div>
+      `;
+      container.appendChild(userBubble);
+      container.scrollTop = container.scrollHeight;
+
+      // Loading bubble
+      const loadingBubble = document.createElement('div');
+      loadingBubble.className = 'flex items-start gap-2.5';
+      loadingBubble.innerHTML = `
+        <div class="w-6 h-6 rounded-md bg-gradient-to-tr from-purple-600 to-brand-600 text-white flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold">AI</div>
+        <div class="bg-gray-800/80 border border-gray-700/60 rounded-xl rounded-tl-none p-3 text-xs text-purple-300 italic flex items-center gap-2">
+          <i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin text-purple-400"></i>
+          <span>Synthesizing retail business intelligence...</span>
+        </div>
+      `;
+      container.appendChild(loadingBubble);
+      container.scrollTop = container.scrollHeight;
+      lucide.createIcons();
+
+      try {
+        const res = await fetch('/api/ai-analytics/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            question: text,
+            fy: currentFinancialYear,
+            history: (typeof conversationHistory !== 'undefined' ? conversationHistory.slice(-8) : [])
+          })
+        });
+        const data = await res.json();
+        container.removeChild(loadingBubble);
+
+        if (data.answer && typeof conversationHistory !== 'undefined') {
+          conversationHistory.push({ role: 'user', text: text });
+          conversationHistory.push({ role: 'model', text: data.answer });
+          if (conversationHistory.length > 16) conversationHistory = conversationHistory.slice(-16);
+        }
+
+        const sourceLabel = data.source || 'SNS AI Generative Engine';
+
+        const aiBubble = document.createElement('div');
+        aiBubble.className = 'flex items-start gap-2.5';
+        aiBubble.innerHTML = `
+          <div class="w-6 h-6 rounded-md bg-gradient-to-tr from-purple-600 to-brand-600 text-white flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold">AI</div>
+          <div class="bg-gray-800/95 border border-purple-500/20 rounded-xl rounded-tl-none p-3.5 text-xs text-gray-200 leading-relaxed max-w-[95%] shadow-lg">
+            ${formatRichMarkdown(data.answer)}
+            <div class="mt-3 pt-2 border-t border-gray-700/50 flex items-center justify-between text-[10px] text-gray-400">
+              <span class="flex items-center gap-1 text-purple-300 font-medium">
+                <i data-lucide="sparkles" class="w-3 h-3 text-purple-400"></i> ${sourceLabel}
+              </span>
+              <span class="text-gray-500 font-mono">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(aiBubble);
+        container.scrollTop = container.scrollHeight;
+        lucide.createIcons();
+      } catch (err) {
+        container.removeChild(loadingBubble);
+      }
+    }
+
+    function formatRichMarkdown(text) {
+      if (!text) return '';
+      const lines = text.split('\n');
+      let inTable = false;
+      let tableHtml = '';
+      let processed = [];
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (line.startsWith('|') && line.endsWith('|')) {
+          if (!inTable) {
+            inTable = true;
+            tableHtml = '<div class="overflow-x-auto my-2.5 rounded-xl border border-gray-700/80 bg-gray-950/60 shadow-inner"><table class="w-full text-left text-[11px] border-collapse">';
+          }
+          const cells = line.split('|').slice(1, -1).map(c => c.trim());
+          if (cells.every(c => c.match(/^:?-+:?$/))) {
+            continue;
+          }
+          const isHeader = !tableHtml.includes('<tbody');
+          if (isHeader && !tableHtml.includes('<thead')) {
+            tableHtml += '<thead class="bg-gray-800/90 text-brand-300 font-bold border-b border-gray-700"><tr>';
+            cells.forEach(c => { tableHtml += `<th class="py-2 px-3 text-[10px] font-black uppercase tracking-wider">${c}</th>`; });
+            tableHtml += '</tr></thead><tbody>';
+          } else {
+            tableHtml += '<tr class="border-b border-gray-800/70 hover:bg-gray-800/50 transition">';
+            cells.forEach(c => { tableHtml += `<td class="py-1.5 px-3 text-gray-200">${c}</td>`; });
+            tableHtml += '</tr>';
+          }
+        } else {
+          if (inTable) {
+            inTable = false;
+            tableHtml += '</tbody></table></div>';
+            processed.push(tableHtml);
+            tableHtml = '';
+          }
+          processed.push(line);
+        }
+      }
+      if (inTable) {
+        tableHtml += '</tbody></table></div>';
+        processed.push(tableHtml);
+      }
+
+      let html = processed.join('<br>');
+      html = html.replace(/\*\*(.*?)\*\*/g, '<b class="text-white font-bold">$1</b>');
+      return html;
+    }
+
+    
+    async function openAiSettingsModal() {
+      try {
+        const res = await fetch('/api/ai/config');
+        const cfg = await res.json();
+        const input = document.getElementById('gemini-api-key-input');
+        const select = document.getElementById('gemini-model-select');
+        const label = document.getElementById('ai-active-engine-label');
+        if (input && cfg.keyMasked) input.placeholder = cfg.keyMasked;
+        if (select && cfg.model) select.value = cfg.model;
+        if (label && cfg.activeEngine) {
+          label.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> ' + cfg.activeEngine;
+        }
+      } catch (e) {}
+      document.getElementById('ai-settings-modal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    
+    async function openFestivalCalendarModal() {
+      const modal = document.getElementById('festival-calendar-modal');
+      const tbody = document.getElementById('festival-matrix-tbody');
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+
+      try {
+        const res = await fetch('/api/ai/festival-calendar-matrix');
+        const matrix = await res.json();
+        if (tbody && Array.isArray(matrix)) {
+          tbody.innerHTML = '';
+          matrix.forEach(f => {
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-gray-800/40 transition text-xs';
+            tr.innerHTML = `
+              <td class="py-3 px-3">
+                <p class="font-bold text-white">${f.fullName}</p>
+                <span class="text-[10px] text-amber-400 font-medium">${f.surgeExpected} surge</span>
+              </td>
+              <td class="py-3 px-2 text-gray-400 text-[11px] max-w-[180px]">${f.calendarRule}</td>
+              <td class="py-3 px-2 text-center font-mono text-[11px] text-gray-300">${f.dates['2023']}</td>
+              <td class="py-3 px-2 text-center font-mono text-[11px] text-gray-300">${f.dates['2024']}</td>
+              <td class="py-3 px-2 text-center font-mono text-[11px] text-gray-300">${f.dates['2025']}</td>
+              <td class="py-3 px-2 text-center font-mono font-bold text-amber-300 bg-amber-500/10 rounded-lg">${f.dates['2026']}</td>
+              <td class="py-3 px-2 text-center font-mono text-[11px] text-purple-300">${f.dates['2027']}</td>
+              <td class="py-3 px-3 text-right font-mono font-bold text-rose-400">${f.cutoff2026}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+      } catch (e) {
+        console.error('Failed to load festival calendar matrix:', e);
+      }
+    }
+
+    function closeFestivalCalendarModal() {
+      document.getElementById('festival-calendar-modal').classList.add('hidden');
+    }
+
+    function closeAiSettingsModal() {
+      document.getElementById('ai-settings-modal').classList.add('hidden');
+    }
+
+    async function saveAiSettings() {
+      const keyVal = document.getElementById('gemini-api-key-input').value.trim();
+      const modelVal = document.getElementById('gemini-model-select').value;
+      const payload = { model: modelVal };
+      if (keyVal) payload.geminiApiKey = keyVal;
+
+      try {
+        const res = await fetch('/api/ai/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        showToast('AI Settings Updated! Active: ' + (data.activeEngine || 'Local Engine'));
+        closeAiSettingsModal();
+      } catch (e) {
+        showToast('Failed to update AI settings.');
+      }
+    }
+
+    let conversationHistory = [];
+
+    function clearChat() {
+      conversationHistory = [];
+      const container = document.getElementById('chat-messages');
+      container.innerHTML = `
+        <div class="flex items-start gap-2.5">
+          <div class="w-6 h-6 rounded-md bg-brand-600 text-white flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold">AI</div>
+          <div class="bg-gray-800/80 border border-gray-700/60 rounded-xl rounded-tl-none p-3 text-xs text-gray-200 leading-relaxed shadow-sm">
+            Chat cleared. Ask me any question about your store's sales or inventory!
+          </div>
+        </div>
+      `;
+    }
+
+    let currentWaBriefingText = '';
+    let selectedWaPhone = '917708834547';
+
+    async function openWhatsAppModal() {
+      const modal = document.getElementById('wa-modal');
+      modal.classList.remove('hidden');
+      document.getElementById('wa-dispatch-status').classList.add('hidden');
+      const preview = document.getElementById('wa-briefing-preview');
+      preview.innerText = 'Connecting to database and generating automated briefing...';
+
+      try {
+        const res = await fetch('/api/ai/whatsapp-briefing');
+        const data = await res.json();
+        currentWaBriefingText = data.text;
+        preview.innerText = currentWaBriefingText;
+      } catch (err) {
+        console.error('Failed to load briefing:', err);
+        currentWaBriefingText = generateFallbackBriefing();
+        preview.innerText = currentWaBriefingText;
+      }
+      lucide.createIcons();
+    }
+
+    function closeWhatsAppModal() {
+      document.getElementById('wa-modal').classList.add('hidden');
+    }
+
+    function selectWaPhone(phone, btn) {
+      selectedWaPhone = phone;
+      document.getElementById('wa-custom-phone').value = phone === '917708834547' ? '+91 77088 34547' : '+91 88073 34547';
+      
+      document.querySelectorAll('.wa-phone-chip').forEach(el => {
+        el.className = 'wa-phone-chip px-3 py-2 rounded-xl border border-gray-700/70 bg-gray-800 text-gray-400 text-xs font-medium text-left transition hover:border-gray-600 flex items-center justify-between';
+        const icon = el.querySelector('i');
+        if (icon) icon.remove();
+      });
+
+      btn.className = 'wa-phone-chip px-3 py-2 rounded-xl border text-xs font-semibold text-left transition flex items-center justify-between bg-emerald-500/10 border-emerald-500/40 text-emerald-300';
+      btn.innerHTML = `<span>${phone === '917708834547' ? '+91 77088 34547 (Primary)' : '+91 88073 34547 (Secondary)'}</span><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>`;
+      lucide.createIcons();
+    }
+
+    function getSelectedPhone() {
+      const custom = document.getElementById('wa-custom-phone').value.trim();
+      let clean = custom.replace(/[^0-9]/g, '');
+      if (clean.length === 10) clean = '91' + clean;
+      return clean || selectedWaPhone;
+    }
+
+    function copyBriefingText() {
+      const text = currentWaBriefingText || document.getElementById('wa-briefing-preview').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Briefing text copied to clipboard!');
+      });
+    }
+
+    async function sendAutomatedWhatsApp() {
+      const phone = getSelectedPhone();
+      const message = currentWaBriefingText || document.getElementById('wa-briefing-preview').innerText;
+      const sendBtn = document.getElementById('wa-send-btn');
+      const origHtml = sendBtn.innerHTML;
+
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Connecting to WhatsApp...</span>`;
+      lucide.createIcons();
+
+      try {
+        // 1. Call Backend Auto-Dispatcher
+        const res = await fetch('/api/ai/send-whatsapp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone, message })
+        });
+        const data = await res.json();
+
+        // 2. Also trigger direct protocol URL on client (ensures instant window focus)
+        const encoded = encodeURIComponent(message);
+        const waUri = `whatsapp://send?phone=${phone}&text=${encoded}`;
+        window.location.href = waUri;
+
+        const statusBanner = document.getElementById('wa-dispatch-status');
+        const statusMsg = document.getElementById('wa-dispatch-msg');
+        statusBanner.classList.remove('hidden');
+        statusMsg.innerText = `Automated briefing message dispatched to WhatsApp (+${phone})!`;
+        showToast(`Dispatched to WhatsApp for Rani (+${phone})!`);
+
+      } catch (err) {
+        console.error('Error dispatching WhatsApp:', err);
+        // Fallback to web link
+        const encoded = encodeURIComponent(message);
+        window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${encoded}`, '_blank');
+      } finally {
+        setTimeout(() => {
+          sendBtn.disabled = false;
+          sendBtn.innerHTML = origHtml;
+          lucide.createIcons();
+        }, 1500);
+      }
+    }
+
+    function openWhatsAppWeb() {
+      const phone = getSelectedPhone();
+      const message = currentWaBriefingText || document.getElementById('wa-briefing-preview').innerText;
+      const encoded = encodeURIComponent(message);
+      window.open(`https://web.whatsapp.com/send?phone=${phone}&text=${encoded}`, '_blank');
+    }
+
+    function generateFallbackBriefing() {
+      if (!globalOverview) return '';
+      return `📊 *RANI HYPER MARKET - DAILY AI BRIEFING* 📊\n` +
+        `📅 Date: ${new Date().toLocaleDateString('en-IN')} | ⏰ ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}\n` +
+        `👤 *Owner:* Rani | *Software:* SNS Market Desktop POS\n\n` +
+        `💰 *Turnover (FY 2026–2027):* ₹${(globalOverview.totalSales || 0).toLocaleString('en-IN')}\n` +
+        `🧾 *Total Sales Bills:* ${(globalOverview.totalBills || 0).toLocaleString('en-IN')}\n` +
+        `🛒 *Average Basket Size:* ₹${globalOverview.avgBasket}\n` +
+        `📦 *Active Products:* ${(globalOverview.totalProducts || 7179).toLocaleString('en-IN')} SKUs\n` +
+        `🏆 *Top Seller:* ${globalOverview.topProducts[0]?.Name?.trim()} (₹${(globalOverview.topProducts[0]?.total_revenue || 0).toLocaleString('en-IN')})\n` +
+        `⏰ *Peak Rush Window:* 7:30 PM - 8:30 PM\n\n` +
+        `🤖 _Generated automatically by SNS Market AI Retail Assistant_`;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-text').innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    function toggleSnsMarketMenu(e) {
+      if (e) e.stopPropagation();
+      const dd = document.getElementById('sns-market-dropdown');
+      if (dd) dd.classList.toggle('hidden');
+    }
+
+    function closeSnsMarketMenu() {
+      const dd = document.getElementById('sns-market-dropdown');
+      if (dd) dd.classList.add('hidden');
+    }
+
+    document.addEventListener('click', (e) => {
+      const dd = document.getElementById('sns-market-dropdown');
+      if (dd && !e.target.closest('.group')) {
+        dd.classList.add('hidden');
+      }
+    });
+
+    function launchSnsMarketPos(mode) {
+      // 1. Notify server to launch or focus desktop Flutter executable
+      fetch('/api/pos/launch')
+        .then(res => res.json())
+        .then(data => {
+          showToast(mode === 'desktop' ? 'Launching SNS Market desktop app...' : 'Opening SNS Market Counter POS...');
+        })
+        .catch(err => {
+          console.warn('POS launch background ping:', err);
+        });
+
+      // 2. Open the billing screen in browser unless desktop-only was requested
+      if (mode !== 'desktop') {
+        const targetUrl = 'rani.html?page=counterSale';
+        const win = window.open(targetUrl, '_blank');
+        if (!win || win.closed || typeof win.closed === 'undefined') {
+          window.location.href = targetUrl;
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAllAnalytics();
+      lucide.createIcons();
+      // Start background real-time sync pulse every 10 seconds
+      livePulseTimer = setInterval(() => {
+        checkLivePulse(false);
+      }, 10000);
+    });
+  </script>
+
+  <!-- AI ENGINE CONFIGURATION MODAL -->
+  <div id="ai-settings-modal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-purple-500/30 rounded-2xl w-full max-w-lg p-6 shadow-2xl relative overflow-hidden">
+      <div class="flex items-center justify-between pb-4 border-b border-gray-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center">
+            <i data-lucide="cpu" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white">AI Engine Configuration</h3>
+            <p class="text-xs text-gray-400">Configure Cloud AI (Gemini) or Local Autonomous Engine</p>
+          </div>
+        </div>
+        <button onclick="closeAiSettingsModal()" class="p-1 rounded-lg hover:bg-gray-800 text-gray-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 py-4 text-xs">
+        <div class="p-3 rounded-xl bg-purple-950/40 border border-purple-500/30 flex items-start gap-2.5 text-purple-200">
+          <i data-lucide="info" class="w-4 h-4 text-purple-400 shrink-0 mt-0.5"></i>
+          <span>
+            <b>Hybrid AI Architecture:</b> By default, SNS Market runs on its built-in <b>Autonomous Domain Reasoning Engine</b> (instant, zero-latency, full database context). You can optionally connect a <b>Google Gemini API Key</b> for cloud LLM reasoning.
+          </span>
+        </div>
+
+        <div>
+          <label class="block text-gray-300 font-semibold mb-1">Active Engine Status</label>
+          <div class="p-2.5 rounded-xl bg-gray-950 border border-gray-800 flex items-center justify-between">
+            <span id="ai-active-engine-label" class="font-bold text-emerald-400 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              SNS Autonomous Retail Engine (Local)
+            </span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-gray-800 text-gray-300 font-mono">100% Operational</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-gray-300 font-semibold mb-1">Google Gemini API Key (Optional)</label>
+          <input type="password" id="gemini-api-key-input" placeholder="AIzaSy... (Leave empty to use built-in local engine)" 
+            class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-white font-mono placeholder-gray-600 focus:outline-none focus:border-purple-500 transition">
+          <p class="text-[11px] text-gray-500 mt-1">Key is stored locally in your store's private <code class="text-purple-300">ai-config.json</code>.</p>
+        </div>
+
+        <div>
+          <label class="block text-gray-300 font-semibold mb-1">Cloud Model</label>
+          <select id="gemini-model-select" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+            <option value="gemini-1.5-flash" selected>Google Gemini 1.5 Flash (Recommended - Ultra Fast)</option>
+            <option value="gemini-2.0-flash">Google Gemini 2.0 Flash</option>
+            <option value="gemini-1.5-pro">Google Gemini 1.5 Pro (Deep Reasoning)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2.5 pt-4 border-t border-gray-800">
+        <button onclick="closeAiSettingsModal()" class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-gray-300 transition">Cancel</button>
+        <button onclick="saveAiSettings()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white shadow-md shadow-purple-600/20 transition flex items-center gap-1.5">
+          <i data-lucide="check" class="w-4 h-4"></i>
+          <span>Save Configuration</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- MULTI-YEAR FESTIVAL CALENDAR MATRIX MODAL -->
+  <div id="festival-calendar-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-purple-500/40 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col p-6 shadow-2xl relative overflow-hidden">
+      <div class="flex items-center justify-between pb-4 border-b border-gray-800 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center">
+            <i data-lucide="calendar-days" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <span>Tamil & Indian Festival Calendar Matrix (2023–2027)</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">Panchangam Astronomical Shifts</span>
+            </h3>
+            <p class="text-xs text-gray-400">Verifying the exact dates each festival falls on across 5 financial years</p>
+          </div>
+        </div>
+        <button onclick="closeFestivalCalendarModal()" class="p-1 rounded-lg hover:bg-gray-800 text-gray-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto custom-scrollbar my-4">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-gray-950 text-gray-400 font-bold border-b border-gray-800 text-[11px]">
+              <th class="py-3 px-3">Festival Event</th>
+              <th class="py-3 px-2">Lunisolar Rule</th>
+              <th class="py-3 px-2 text-center text-gray-300">2023</th>
+              <th class="py-3 px-2 text-center text-gray-300">2024</th>
+              <th class="py-3 px-2 text-center text-gray-300">2025</th>
+              <th class="py-3 px-2 text-center text-amber-300 font-black">2026 (Active)</th>
+              <th class="py-3 px-2 text-center text-purple-300 font-bold">2027</th>
+              <th class="py-3 px-3 text-right">Order Cutoff</th>
+            </tr>
+          </thead>
+          <tbody id="festival-matrix-tbody" class="divide-y divide-gray-800/60 text-gray-200">
+            <tr>
+              <td colspan="8" class="py-8 text-center text-gray-500">Loading festival matrix...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex items-center justify-between pt-3 border-t border-gray-800 text-xs text-gray-400 shrink-0">
+        <p>💡 Tamil/Hindu festivals follow the lunisolar calendar, moving by 10 to 25 days each solar year.</p>
+        <button onclick="closeFestivalCalendarModal()" class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-white transition">Close</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

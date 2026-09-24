@@ -1,0 +1,28 @@
+# Desktop binaries and installer files
+*.exe
+*.tmp
+*.pdb
+*.dll
+*.bat
+*.ps1
+*.sql
+*.txt
+
+# Heavy desktop application folders
+app/
+service/
+sksagent/
+temp/
+.local-chromium/
+
+# Local databases (large SQLite files not supported in serverless)
+data/
+data - 25-26/
+data_rani/
+*.db
+
+# Node dependencies (Vercel installs cleanly)
+node_modules/
+
+# Logs and development scratch
+*.log

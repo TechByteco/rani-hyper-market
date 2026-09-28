@@ -1,493 +1,869 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-  <meta name="google-site-verification" content="y4Exn0OVbdTxE6DMY9nEIDcx1MyfLd7E2XuaxtgL9WY" />
-  <meta name="description" content="View historical transaction logs, customer vouchers, tax invoices, and sales receipts for Rani Hyper Market on SNS Marketing Retail OS.">
-  <link rel="canonical" href="https://rani-hyper-market.vercel.app/bill_history">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bill History &amp; Vouchers Ledger — Rani Hyper Market </title>
+  
+  <!-- Primary SEO Meta Tags -->
+  <title>Bill History &amp; Vouchers Ledger — Rani Hyper Market | SNS Marketing</title>
+  <meta name="title" content="Bill History &amp; Vouchers Ledger — Rani Hyper Market | SNS Marketing">
+  <meta name="description" content="View historical transaction logs, customer vouchers, tax invoices, and sales receipts for Rani Hyper Market on SNS Marketing Retail OS.">
+  <meta name="keywords" content="rani hyper market bill history, sns marketing vouchers, rani supermarket receipts">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://rani-hyper-market.vercel.app/bill_history">
 
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Three.js CDN for ThreeUI WebGL Shaders -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace']
-          },
-          colors: {
-            brand: {
-              50: '#ecfdf5',
-              500: '#10b981',
-              600: '#059669',
-              700: '#047857'
-            }
-          }
-        }
-      }
-    }
-  </script>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #030712;
-      color: #f3f4f6;
-      overflow-x: hidden;
+      background: #f1f5f9;
+      color: #0f172a;
     }
-    #threeui-bg-canvas {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.35;
+    .heading-font { font-family: 'Space Grotesk', sans-serif; }
+    .glass {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.95);
     }
-    .glass-panel {
-      background: rgba(17, 24, 39, 0.75);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+    .glass-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.85);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+    .tab-pill {
+      padding: 0.45rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      transition: all 0.2s;
+      background: #f8fafc;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+      white-space: nowrap;
+    }
+    .tab-pill.active {
+      background: #059669;
+      color: white;
+      border-color: #059669;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+    }
+    .tab-pill:hover:not(.active) {
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+    .btn-emerald {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: white;
+      border-radius: 0.75rem;
+      font-weight: 800;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+    .btn-emerald:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
     }
     .glass-input {
-      background: rgba(15, 23, 42, 0.65);
-      border: 1.5px solid rgba(255, 255, 255, 0.1);
-      color: #f9fafb;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .glass-input:focus {
-      background: rgba(15, 23, 42, 0.95);
-      border-color: #10b981;
-      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1.5px solid #cbd5e1;
+      border-radius: 0.75rem;
+      padding: 0.55rem 0.85rem;
+      transition: all 0.2s;
       outline: none;
     }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
+    .glass-input:focus {
+      border-color: #059669;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+      background: #ffffff;
     }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #374151;
-      border-radius: 9999px;
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(8px); display: flex; items-center; justify-content: center;
+      z-index: 100; padding: 1rem;
+    }
+    .modal-card {
+      background: white; border-radius: 1.5rem; padding: 1.5rem;
+      max-width: 520px; width: 100%; max-height: 92vh; overflow-y: auto;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.25);
     }
     @media print {
-      body * { visibility: hidden; }
-      #printable-receipt-card, #printable-receipt-card * { visibility: visible; }
-      #printable-receipt-card { position: fixed; left: 0; top: 0; width: 80mm; background: white; color: black; padding: 10px; }
+      @page { size: auto; margin: 8mm; }
+      body { background: white !important; color: black !important; }
+      header, .no-print, nav, #pagination-bar, footer { display: none !important; }
+      .modal-overlay { position: static !important; background: transparent !important; padding: 0 !important; }
+      .modal-card { box-shadow: none !important; border: none !important; padding: 0 !important; width: 100% !important; max-width: 100% !important; }
+      #printable-delivery-invoice { border: 1px solid #ccc !important; padding: 12px !important; }
     }
   </style>
 </head>
-<body class="selection:bg-brand-500 selection:text-white min-h-screen relative custom-scrollbar flex flex-col justify-between">
+<body class="min-h-screen flex flex-col">
 
-  <!-- ThreeUI 3D Background WebGL Canvas -->
-  <canvas id="threeui-bg-canvas"></canvas>
+  <script>
+    if (sessionStorage.getItem('nsn_admin_auth') !== 'true') {
+      window.location.replace('login.html');
+    }
+  </script>
 
-  <div class="relative z-10 flex flex-col min-h-screen">
-
-    <!-- Top Universal Suite Switcher Bar -->
-    <div class="bg-gray-950/90 border-b border-gray-800 text-xs px-4 py-2 sticky top-0 z-50 backdrop-blur-md flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-        <span class="font-black text-emerald-400 tracking-wider">NEXT-GEN RETAIL OS • LIVE</span>
-        <span class="text-gray-500">|</span>
-        <span class="text-gray-300 font-semibold">Bill History, Invoices &amp; WhatsApp e-Receipt Ledger</span>
-      </div>
-      <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar">
-        <a href="index.html" class="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700 transition font-medium flex items-center gap-1.5">
-          <i data-lucide="store" class="w-3.5 h-3.5 text-emerald-400"></i> Storefront
+  <!-- TOP APP HEADER -->
+  <header class="glass sticky top-0 z-40 px-6 py-3.5 border-b border-gray-200">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <div class="flex items-center gap-3">
+        <a href="admin.html" class="w-9 h-9 rounded-xl bg-white border border-gray-200 hover:bg-gray-100 flex items-center justify-center text-gray-700 transition shadow-sm" title="Back to Dashboard">
+          <i class="fa-solid fa-arrow-left text-sm"></i>
         </a>
-        <a href="admin.html" class="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700 transition font-medium flex items-center gap-1.5">
-          <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-blue-400"></i> Admin POS
-        </a>
-        <a href="ai-analytics.html" class="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700 transition font-medium flex items-center gap-1.5">
-          <i data-lucide="brain-circuit" class="w-3.5 h-3.5 text-emerald-400"></i> AI Analytics
-        </a>
-        <a href="bill_history.html" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold flex items-center gap-1.5 shadow-sm shadow-emerald-500/20">
-          <i data-lucide="receipt" class="w-3.5 h-3.5"></i> Bill History
-        </a>
-        <a href="master.html" class="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700 transition font-medium flex items-center gap-1.5">
-          <i data-lucide="crown" class="w-3.5 h-3.5 text-purple-400"></i> Master SaaS
-        </a>
-        <a href="login.html" class="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700 transition font-medium flex items-center gap-1.5">
-          <i data-lucide="key-round" class="w-3.5 h-3.5 text-gray-400"></i> Login
-        </a>
-      </div>
-    </div>
-
-    <!-- Header -->
-    <header class="border-b border-gray-800/80 glass-panel px-6 py-4">
-      <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="flex items-center gap-3.5">
-          <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shadow-lg shadow-emerald-500/20 flex items-center justify-center">
-            <div class="w-full h-full bg-gray-950/80 rounded-[14px] flex items-center justify-center">
-              <i data-lucide="receipt" class="w-6 h-6 text-emerald-400"></i>
-            </div>
+        <div class="w-10 h-10 rounded-2xl flex items-center justify-center shadow-md" style="background: linear-gradient(135deg, #059669, #10b981);">
+          <i class="fa-solid fa-receipt text-white text-lg"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base sm:text-lg font-black text-gray-900 leading-tight" id="header-store-name">RANI HYPER MARKET</h1>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-emerald-100 text-emerald-800 border border-emerald-300">Bill History &amp; Vouchers</span>
           </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h1 class="text-xl font-black text-white tracking-tight">RANI HYPER MARKET</h1>
-              <span class="px-2 py-0.5 rounded-full text-[11px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">VOUCHERS &amp; BILLS</span>
-            </div>
-            <p class="text-xs text-gray-400 mt-0.5">Historical Sales Ledger • Thermal Receipt Printer • Instant WhatsApp Dispatch</p>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <a href="admin.html" class="px-3.5 py-2 rounded-xl bg-gray-900 border border-gray-700 hover:border-emerald-500 text-xs font-bold text-gray-200 hover:text-white transition flex items-center gap-1.5">
-            <i data-lucide="plus" class="w-4 h-4 text-emerald-400"></i>
-            <span>New Counter Bill (F2)</span>
-          </a>
-          <button onclick="exportToCsv()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-bold text-white shadow flex items-center gap-1.5 transition">
-            <i data-lucide="download" class="w-4 h-4"></i>
-            <span>Export Ledger CSV</span>
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <!-- Main Content Container -->
-    <main class="max-w-7xl mx-auto px-6 py-8 flex-1 space-y-6 w-full">
-
-      <!-- Summary Stat Pills -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div class="glass-panel p-4 rounded-2xl border border-gray-800">
-          <span class="text-[11px] text-gray-400 font-bold uppercase">Audited Bills</span>
-          <h4 class="text-xl font-black text-white mt-1" id="stat-bill-count">17,548</h4>
-        </div>
-        <div class="glass-panel p-4 rounded-2xl border border-emerald-500/20">
-          <span class="text-[11px] text-emerald-400 font-bold uppercase">Audited Revenue</span>
-          <h4 class="text-xl font-black text-emerald-400 mt-1">₹30,32,019</h4>
-        </div>
-        <div class="glass-panel p-4 rounded-2xl border border-blue-500/20">
-          <span class="text-[11px] text-blue-400 font-bold uppercase">Average Bill Value</span>
-          <h4 class="text-xl font-black text-blue-400 mt-1">₹172.78</h4>
-        </div>
-        <div class="glass-panel p-4 rounded-2xl border border-purple-500/20">
-          <span class="text-[11px] text-purple-400 font-bold uppercase">UPI vs Cash Ratio</span>
-          <h4 class="text-xl font-black text-purple-400 mt-1">54% Cash • 46% UPI</h4>
+          <p class="text-xs text-gray-500 font-semibold mt-0.5">
+            Admin: <b class="text-emerald-700" id="header-admin-user">rani</b> â€¢ Dedicated Billing Ledger &amp; Accounting Archive
+          </p>
         </div>
       </div>
 
-      <!-- Filter & Search Bar -->
-      <div class="glass-panel p-4 rounded-2xl border border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
-        
-        <div class="flex items-center gap-2 w-full md:w-96">
-          <div class="relative w-full">
-            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-500">
-              <i data-lucide="search" class="w-4 h-4"></i>
-            </span>
-            <input type="text" id="bill-search-input" onkeyup="filterBills()" placeholder="Search by Bill No, Customer Name, Phone..."
-                   class="glass-input w-full pl-10 pr-4 py-2 rounded-xl text-xs">
-          </div>
-        </div>
-
-        <div class="flex items-center gap-2 overflow-x-auto custom-scrollbar w-full md:w-auto">
-          <button onclick="setFilter('all', this)" class="date-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white transition">All Bills</button>
-          <button onclick="setFilter('today', this)" class="date-filter-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-900 border border-gray-800 transition">Today</button>
-          <button onclick="setFilter('yesterday', this)" class="date-filter-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-900 border border-gray-800 transition">Yesterday</button>
-          <button onclick="setFilter('upi', this)" class="date-filter-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-900 border border-gray-800 transition">UPI Only</button>
-          <button onclick="setFilter('cash', this)" class="date-filter-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-900 border border-gray-800 transition">Cash Only</button>
-        </div>
-
-      </div>
-
-      <!-- Bill Ledger Table -->
-      <div class="glass-panel rounded-3xl p-6 border border-gray-800">
-        <div class="overflow-x-auto custom-scrollbar">
-          <table class="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr class="border-b border-gray-800 text-gray-400 uppercase tracking-wider font-bold">
-                <th class="py-3 px-4">Bill No</th>
-                <th class="py-3 px-4">Date &amp; Time</th>
-                <th class="py-3 px-4">Customer Details</th>
-                <th class="py-3 px-4">Items Count</th>
-                <th class="py-3 px-4">Payment Mode</th>
-                <th class="py-3 px-4 text-right">Bill Total</th>
-                <th class="py-3 px-4 text-center">Receipt Actions</th>
-              </tr>
-            </thead>
-            <tbody id="bill-table-body" class="divide-y divide-gray-800/60 font-medium text-gray-200">
-              <!-- Dynamically Populated from Real Dataset -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </main>
-
-    <!-- Thermal Invoice Receipt Modal -->
-    <div id="receipt-modal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4 hidden">
-      <div class="bg-white text-gray-900 w-full max-w-sm rounded-3xl p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar font-mono text-xs">
-        
-        <button onclick="closeReceiptModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black">
-          <i data-lucide="x" class="w-5 h-5"></i>
+      <div class="flex items-center gap-2.5">
+        <button onclick="openPublicStoreWithDate()" class="px-3.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+          <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i> View Public Store
         </button>
+        <button onclick="exportBillsToCsv()" class="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+          <i class="fa-solid fa-file-excel"></i> Export Excel
+        </button>
+        <a href="admin.html" class="px-3 py-1.5 glass hover:bg-white text-gray-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-gray-200">
+          <i class="fa-solid fa-gauge"></i> Dashboard
+        </a>
+      </div>
 
-        <div id="printable-receipt-card" class="space-y-3">
-          <!-- Store Header -->
-          <div class="text-center border-b border-dashed border-gray-400 pb-3">
-            <h2 class="text-base font-black tracking-tight">RANI HYPER MARKET</h2>
-            <p class="text-[10px] text-gray-600">Main Bazaar Road, Bodinayakanur</p>
-            <p class="text-[10px] text-gray-600">Ph: +91 77088 34547 • GST: 33AAAAA0000A1Z5</p>
-            <p class="text-[10px] font-bold mt-1 text-emerald-700">TAX INVOICE / CASH BILL</p>
-          </div>
+    </div>
+  </header>
 
-          <!-- Bill Meta -->
-          <div class="flex justify-between text-[11px] border-b border-dashed border-gray-300 pb-2">
-            <div>
-              <p>Bill: <strong id="rec-bill-no">#RANI-17548</strong></p>
-              <p>Date: <span id="rec-date">24-Sep-2026 19:42</span></p>
-            </div>
-            <div class="text-right">
-              <p>Counter: <strong>POS-01</strong></p>
-              <p>Cashier: <strong>Rani</strong></p>
-            </div>
-          </div>
+  <!-- MAIN BILL HISTORY CONTAINER -->
+  <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 py-6 flex-1 space-y-6">
 
-          <!-- Items Table -->
-          <table class="w-full text-left text-[11px] border-b border-dashed border-gray-300 pb-2">
-            <thead>
-              <tr class="border-b border-gray-300">
-                <th class="py-1">Item</th>
-                <th class="py-1 text-center">Qty</th>
-                <th class="py-1 text-right">Price</th>
-                <th class="py-1 text-right">Amt</th>
-              </tr>
-            </thead>
-            <tbody id="rec-items-list" class="divide-y divide-gray-200">
-              <!-- Items list -->
-            </tbody>
-          </table>
+    <!-- METRICS BAR -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+      <div class="glass-card p-4 rounded-2xl border-l-4 border-emerald-600">
+        <span class="text-[10px] font-bold text-gray-400 uppercase block tracking-wider">Total Bills</span>
+        <h3 id="stat-total-bills" class="text-xl sm:text-2xl font-black text-gray-900 mt-1">16,781</h3>
+        <span class="text-[11px] font-semibold text-emerald-700">All Time Vouchers</span>
+      </div>
 
-          <!-- Totals -->
-          <div class="space-y-1 text-[11px]">
-            <div class="flex justify-between">
-              <span>Subtotal:</span>
-              <span id="rec-subtotal">₹280.00</span>
-            </div>
-            <div class="flex justify-between text-emerald-700 font-bold">
-              <span>Store Savings / Discount:</span>
-              <span id="rec-savings">-₹25.00</span>
-            </div>
-            <div class="flex justify-between font-black text-sm border-t border-b border-dashed border-gray-400 py-1.5">
-              <span>NET PAYABLE:</span>
-              <span id="rec-total">₹255.00</span>
-            </div>
-            <div class="flex justify-between text-[10px] text-gray-600">
-              <span>Payment Mode:</span>
-              <strong id="rec-paymode" class="uppercase">UPI (PhonePe / GPay)</strong>
-            </div>
-          </div>
+      <div class="glass-card p-4 rounded-2xl border-l-4 border-blue-600">
+        <span class="text-[10px] font-bold text-gray-400 uppercase block tracking-wider">Total Sales Revenue</span>
+        <h3 id="stat-total-sales" class="text-xl sm:text-2xl font-black text-blue-800 mt-1">â‚¹28,61,860.00</h3>
+        <span class="text-[11px] font-semibold text-blue-700">Gross POS Revenue</span>
+      </div>
 
-          <!-- Footer Barcode & Thank You -->
-          <div class="text-center pt-2 border-t border-dashed border-gray-300 space-y-1">
-            <p class="font-bold text-[10px]">Thank you for shopping at Rani Hyper Market!</p>
-            <p class="text-[9px] text-gray-500">Visit again • Goods once sold cannot be returned</p>
-            <div class="font-mono text-center tracking-widest text-xs font-bold text-gray-800 pt-1">
-              ||||| |||||| | |||||||| ||||
-            </div>
-          </div>
+      <div class="glass-card p-4 rounded-2xl border-l-4 border-purple-600">
+        <span class="text-[10px] font-bold text-gray-400 uppercase block tracking-wider">Net Real Profit</span>
+        <h3 id="stat-total-profit" class="text-xl sm:text-2xl font-black text-purple-700 mt-1">â‚¹3,49,712.05</h3>
+        <span class="text-[11px] font-semibold text-purple-700">Margin: ~12.2%</span>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl border-l-4 border-amber-500">
+        <span class="text-[10px] font-bold text-gray-400 uppercase block tracking-wider">Active Filter Date</span>
+        <h3 id="stat-filter-date" class="text-base sm:text-lg font-black text-amber-900 mt-1 truncate">All Dates (2026)</h3>
+        <span id="stat-filter-sub" class="text-[11px] font-semibold text-amber-700">Showing all records</span>
+      </div>
+    </div>
+
+    <!-- CONTROLS, SEARCH & FILTER PANEL -->
+    <div class="glass-card p-4 sm:p-5 rounded-3xl space-y-4">
+      
+      <!-- TOP ROW: SEARCH BAR, DATE PICKER, AND VIEW SWITCHER -->
+      <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+        
+        <!-- SEARCH BAR -->
+        <div class="relative flex-1">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-xs"></i>
+          <input type="text" id="bill-search-input" onkeyup="handleSearchInput()" placeholder="Search by Voucher # (e.g. 16776), Customer Name, Phone, or Details..." class="glass-input w-full pl-9 text-xs font-semibold">
         </div>
 
-        <!-- Receipt Action Buttons -->
-        <div class="mt-4 pt-3 border-t border-gray-200 flex items-center gap-2">
-          <button onclick="window.print()" class="flex-1 py-2 rounded-xl bg-gray-900 text-white font-bold text-xs flex items-center justify-center gap-1.5">
-            <i data-lucide="printer" class="w-4 h-4"></i>
-            <span>Print Thermal</span>
+        <!-- DATE PICKER FILTER -->
+        <div class="flex items-center gap-2 flex-wrap">
+          <div class="flex items-center gap-1.5 glass px-3 py-1.5 rounded-xl border border-gray-300 shadow-sm">
+            <i class="fa-solid fa-calendar-day text-emerald-600 text-xs"></i>
+            <span class="text-xs font-bold text-gray-700">Date:</span>
+            <input type="date" id="bill-date-picker" onchange="handleDateFilterChange()" class="bg-transparent text-xs font-black text-gray-900 outline-none cursor-pointer">
+          </div>
+
+          <button onclick="clearDateFilter()" id="btn-clear-date" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-xs font-bold transition flex items-center gap-1">
+            <i class="fa-solid fa-rotate-left text-[10px]"></i> All Dates
           </button>
-          <button onclick="dispatchWhatsAppInvoice()" class="flex-1 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs flex items-center justify-center gap-1.5">
-            <i data-lucide="message-circle" class="w-4 h-4"></i>
-            <span>WhatsApp e-Bill</span>
+        </div>
+
+        <!-- VIEW SWITCHER (VOUCHER / DAY / MONTH) -->
+        <div class="flex items-center gap-1.5 bg-gray-100/90 p-1 rounded-2xl border border-gray-200 overflow-x-auto">
+          <button onclick="switchView('voucher')" id="btn-v-voucher" class="tab-pill active">
+            <i class="fa-solid fa-file-invoice mr-1"></i> Voucher-wise
+          </button>
+          <button onclick="switchView('day')" id="btn-v-day" class="tab-pill">
+            <i class="fa-solid fa-calendar-days mr-1"></i> Day-wise
+          </button>
+          <button onclick="switchView('month')" id="btn-v-month" class="tab-pill">
+            <i class="fa-solid fa-calendar-week mr-1"></i> Month-wise
           </button>
         </div>
 
       </div>
+
+      <!-- BOTTOM ROW: STATUS FILTERS & PAGE SIZE -->
+      <div id="voucher-filter-row" class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-gray-100 text-xs">
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+          <span class="text-gray-400 font-bold mr-1 text-[11px]">Status:</span>
+          <button onclick="filterStatus('all', this)" class="tab-pill active text-xs">All (<span id="cnt-status-all">0</span>)</button>
+          <button onclick="filterStatus('delivered', this)" class="tab-pill text-emerald-800 text-xs">ðŸŸ¢ Delivered (<span id="cnt-status-delivered">0</span>)</button>
+          <button onclick="filterStatus('pending', this)" class="tab-pill text-amber-700 text-xs">ðŸŸ¡ Pending (<span id="cnt-status-pending">0</span>)</button>
+          <button onclick="filterStatus('processing', this)" class="tab-pill text-blue-700 text-xs">ðŸ”µ Processing (<span id="cnt-status-processing">0</span>)</button>
+          <button onclick="filterStatus('cancelled', this)" class="tab-pill text-red-700 text-xs">ðŸ”´ Cancelled (<span id="cnt-status-cancelled">0</span>)</button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-gray-500 font-bold text-xs">Per Page:</span>
+          <select id="select-page-size" onchange="changePageSize(this.value)" class="glass-input py-1 px-2 text-xs font-bold">
+            <option value="25">25 bills</option>
+            <option value="50" selected>50 bills</option>
+            <option value="100">100 bills</option>
+            <option value="200">200 bills</option>
+          </select>
+        </div>
+      </div>
+
     </div>
 
-    <!-- Footer -->
-    <footer class="border-t border-gray-900 bg-gray-950/80 px-6 py-4 text-center text-xs text-gray-500">
-      Rani Hyper Market Invoicing &amp; Transaction Ledger • Real Dataset Sandbox
-    </footer>
+    <!-- MAIN BILLS TABLE CONTAINER -->
+    <div class="glass-card rounded-3xl overflow-hidden shadow-md border border-gray-200">
+      
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead id="bills-table-thead" class="bg-gray-50 text-gray-800 font-black border-b border-gray-200">
+            <!-- DYNAMIC TABLE HEADERS -->
+          </thead>
+          <tbody id="bills-table-tbody" class="divide-y divide-gray-100 font-medium bg-white">
+            <tr>
+              <td colspan="7" class="py-12 text-center text-gray-400 font-bold">
+                <i class="fa-solid fa-spinner fa-spin text-emerald-600 text-xl block mb-2"></i>
+                Loading Bill History...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
+      <!-- PAGINATION CONTROLS (AVOIDS LONG SCROLLING) -->
+      <div id="pagination-bar" class="p-3.5 bg-gray-50 border-t border-gray-200 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="text-gray-600 font-bold" id="page-info-text">
+          Showing 0 - 0 of 0 bills
+        </div>
+
+        <div class="flex items-center gap-1.5">
+          <button onclick="goToPage(1)" id="btn-first" class="px-2.5 py-1.5 bg-white hover:bg-gray-100 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed">
+            <i class="fa-solid fa-angles-left"></i>
+          </button>
+          <button onclick="goToPage(currentPage - 1)" id="btn-prev" class="px-3 py-1.5 bg-white hover:bg-gray-100 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed">
+            <i class="fa-solid fa-chevron-left mr-1"></i> Prev
+          </button>
+
+          <span class="px-3 py-1 bg-emerald-50 text-emerald-900 border border-emerald-300 rounded-lg font-black text-xs" id="page-indicator">
+            Page 1 of 1
+          </span>
+
+          <button onclick="goToPage(currentPage + 1)" id="btn-next" class="px-3 py-1.5 bg-white hover:bg-gray-100 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed">
+            Next <i class="fa-solid fa-chevron-right ml-1"></i>
+          </button>
+          <button onclick="goToPage(totalPages)" id="btn-last" class="px-2.5 py-1.5 bg-white hover:bg-gray-100 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed">
+            <i class="fa-solid fa-angles-right"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- BILL INVOICE SLIP MODAL -->
+  <div id="admin-invoice-modal" class="modal-overlay hidden no-print">
+    <div class="modal-card">
+      <div class="flex items-center justify-between border-b pb-3 mb-4">
+        <h3 class="font-black text-gray-900 text-sm flex items-center gap-2">
+          <i class="fa-solid fa-receipt text-emerald-600"></i> Retail Provision Bill Voucher
+        </h3>
+        <button onclick="closeInvoiceModal()" class="w-7 h-7 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 flex items-center justify-center font-bold">&times;</button>
+      </div>
+
+      <div id="printable-delivery-invoice" class="p-4 rounded-xl border border-gray-200 bg-white font-mono text-xs space-y-3 shadow-inner">
+        <div class="text-center border-b border-dashed border-gray-300 pb-2">
+          <h2 class="font-black text-sm tracking-wider text-gray-900 uppercase" id="adm-inv-store-name">RANI HYPER MARKET</h2>
+          <p class="text-[10px] text-gray-600 mt-0.5" id="adm-inv-store-address">93, Sundara pandian st, Anwar complex, Bodinayakanur</p>
+          <p class="text-[10px] text-gray-600" id="adm-inv-store-contact">Ph: 77088 34547, 88073 34547</p>
+          <div class="mt-1 inline-block bg-emerald-100 text-emerald-800 font-extrabold px-2 py-0.5 rounded text-[10px]" id="adm-inv-est-time">
+            âš¡ POS Retail Counter Slip
+          </div>
+        </div>
+
+        <div class="flex justify-between text-[11px] font-bold text-gray-700">
+          <div>
+            <span class="block text-gray-500 text-[10px]">VOUCHER NO:</span>
+            <span id="adm-inv-id" class="font-black text-emerald-900">#RANI-16776</span>
+          </div>
+          <div class="text-right">
+            <span class="block text-gray-500 text-[10px]">DATE &amp; TIME:</span>
+            <span id="adm-inv-date">05/09/2026</span>
+          </div>
+        </div>
+
+        <div class="border-t border-b border-gray-200 py-1.5 text-[10px] space-y-0.5">
+          <div class="flex justify-between"><span class="text-gray-500">Customer:</span><span id="adm-inv-cust-name" class="font-bold text-gray-900">Walk-in Customer</span></div>
+          <div class="flex justify-between"><span class="text-gray-500">Address:</span><span id="adm-inv-cust-addr" class="font-bold text-gray-900 truncate max-w-[200px]">Bodinayakanur</span></div>
+          <div class="flex justify-between"><span class="text-gray-500">Payment:</span><span id="adm-inv-payment" class="font-bold text-emerald-700">Cash / Counter POS</span></div>
+        </div>
+
+        <div class="space-y-1 text-xs">
+          <div class="flex justify-between font-bold text-gray-600 text-[10px] border-b pb-1">
+            <span>Description</span>
+            <span>Total</span>
+          </div>
+          <div id="adm-inv-items" class="space-y-1">
+            <div class="flex justify-between font-bold text-gray-800">
+              <span>Provisions Grocery Bill</span>
+              <span id="adm-inv-total">â‚¹0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-dashed border-gray-300 pt-2 flex items-center justify-between">
+          <div>
+            <span class="text-[9px] font-bold text-emerald-900 block">Offline Scannable QR</span>
+            <p class="text-[8px] text-gray-400">Scan to verify bill data</p>
+          </div>
+          <img id="adm-inv-qr-img" src="" class="w-14 h-14 object-contain bg-white p-0.5 border border-emerald-300 rounded-lg">
+        </div>
+
+        <div class="text-center pt-1 border-t border-dashed border-gray-200 text-[9px] text-gray-500">
+          Thank you for shopping at RANI HYPER MARKET!
+        </div>
+      </div>
+
+      <div class="mt-4 flex gap-2">
+        <button onclick="window.print()" class="btn-emerald flex-1 py-2.5 text-xs font-bold flex items-center justify-center gap-1.5">
+          <i class="fa-solid fa-print"></i> Print Receipt
+        </button>
+        <button onclick="downloadBillReceiptPng()" class="px-3.5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md">
+          <i class="fa-solid fa-image"></i> Download PNG
+        </button>
+        <button onclick="closeInvoiceModal()" class="px-4 py-2.5 glass hover:bg-white text-gray-700 text-xs font-bold rounded-xl border border-gray-200">
+          Close
+        </button>
+      </div>
+    </div>
   </div>
 
   <script>
-    lucide.createIcons();
+    const SB_URL = 'https://xjyuxlslaqpqlzxvxaqn.supabase.co';
+    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqeXV4bHNsYXFwcWx6eHZ4YXFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMTE0NDcsImV4cCI6MjEwNDc4NzQ0N30.SrrZ4aVJasotXUvJWHoFitodvfNHpt-xlNx9pijpf9s';
+    const sb = window.supabase.createClient(SB_URL, SB_KEY);
 
-    // ThreeUI Background Animation
-    (function initThree() {
-      const canvas = document.getElementById('threeui-bg-canvas');
-      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(window.innerWidth, window.innerHeight);
+    let allOrders = [];
+    let raniAnalytics = null;
+    let currentView = 'voucher'; // 'voucher' | 'day' | 'month'
+    let currentStatus = 'all';
+    let selectedDate = '';
+    let searchQuery = '';
+    let currentPage = 1;
+    let pageSize = 50;
+    let totalPages = 1;
+    let activeModalOrder = null;
 
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
-      camera.position.z = 350;
+    window.addEventListener('load', async () => {
+      loadStoreHeader();
+      await loadBillHistoryData();
+    });
 
-      // Subtle particle plane wave
-      const count = 300;
-      const geo = new THREE.BufferGeometry();
-      const pos = new Float32Array(count * 3);
-      for(let i=0; i<count*3; i+=3) {
-        pos[i] = (Math.random() - 0.5) * 900;
-        pos[i+1] = (Math.random() - 0.5) * 600;
-        pos[i+2] = (Math.random() - 0.5) * 400;
+    function loadStoreHeader() {
+      const stored = localStorage.getItem('nsn_store_custom_active');
+      if (stored) {
+        try {
+          const d = JSON.parse(stored);
+          if (d.name) document.getElementById('header-store-name').innerText = d.name;
+        } catch(e) {}
       }
-      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-      const mat = new THREE.PointsMaterial({ color: 0x10b981, size: 2.5, transparent: true, opacity: 0.5 });
-      const pts = new THREE.Points(geo, mat);
-      scene.add(pts);
+      const u = sessionStorage.getItem('nsn_admin_user') || 'rani';
+      document.getElementById('header-admin-user').innerText = u;
+    }
 
-      window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-      });
+    async function loadBillHistoryData() {
+      try {
+        // Fetch rani_orders.json & rani_analytics.json
+        const [ordersRes, analyticsRes] = await Promise.allSettled([
+          fetch('rani_orders.json').then(r => r.json()),
+          fetch('rani_analytics.json').then(r => r.json())
+        ]);
 
-      function anim() {
-        requestAnimationFrame(anim);
-        pts.rotation.y += 0.0008;
-        renderer.render(scene, camera);
+        let localOrders = [];
+        if (ordersRes.status === 'fulfilled' && Array.isArray(ordersRes.value)) {
+          localOrders = ordersRes.value;
+        }
+
+        if (analyticsRes.status === 'fulfilled' && analyticsRes.value) {
+          raniAnalytics = analyticsRes.value;
+          document.getElementById('stat-total-bills').innerText = raniAnalytics.totalOrders ? raniAnalytics.totalOrders.toLocaleString('en-IN') : '16,781';
+          document.getElementById('stat-total-sales').innerText = 'â‚¹' + (raniAnalytics.totalSales || 2861860).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+          document.getElementById('stat-total-profit').innerText = 'â‚¹' + (raniAnalytics.totalProfit || 349712.05).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        }
+
+        // Also fetch any real-time orders from Supabase
+        const { data: sbOrders } = await sb.from('orders').select('*').order('created_at', { ascending: false });
+        if (sbOrders && sbOrders.length > 0) {
+          const existingIds = new Set(localOrders.map(o => String(o.id)));
+          sbOrders.forEach(o => {
+            if (!existingIds.has(String(o.id))) {
+              localOrders.unshift(o);
+            }
+          });
+        }
+
+        allOrders = localOrders;
+        updateStatusCounts();
+        renderTable();
+
+      } catch (err) {
+        console.error('Error loading bill history:', err);
+        const tbody = document.getElementById('bills-table-tbody');
+        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-red-500 font-bold">Failed to load bill history: ${err.message}</td></tr>`;
       }
-      anim();
-    })();
-
-    // Simulated Real Bills Loaded from Rani Datasets
-    const sampleBills = [
-      { id: 'RANI-17548', date: '24-Sep-2026 19:42', customer: 'M. Senthil Kumar', phone: '+91 98421 88412', items: 6, total: 345, mode: 'UPI', itemsList: [{ name: 'Arokya Full Cream Milk 500ml', qty: 2, price: 35, amt: 70 }, { name: 'Fortune Sunlite Sunflower Oil 1L', qty: 1, price: 145, amt: 145 }, { name: 'Tata Salt Crystal 1kg', qty: 1, price: 28, amt: 28 }, { name: 'Britannia Good Day Butter 200g', qty: 2, price: 51, amt: 102 }] },
-      { id: 'RANI-17547', date: '24-Sep-2026 19:28', customer: 'K. Meenakshi', phone: '+91 97894 12345', items: 3, total: 180, mode: 'Cash', itemsList: [{ name: 'Nandini Pure Ghee 200ml', qty: 1, price: 135, amt: 135 }, { name: 'Sakthi Sambar Powder 100g', qty: 1, price: 45, amt: 45 }] },
-      { id: 'RANI-17546', date: '24-Sep-2026 19:15', customer: 'R. Vignesh', phone: '+91 94432 99881', items: 8, total: 620, mode: 'UPI', itemsList: [{ name: 'Ponni Boiled Rice 5kg', qty: 1, price: 340, amt: 340 }, { name: 'Toor Dal Premium 1kg', qty: 1, price: 185, amt: 185 }, { name: 'Urad Dal Gota 500g', qty: 1, price: 95, amt: 95 }] },
-      { id: 'RANI-17545', date: '24-Sep-2026 18:50', customer: 'Walk-in Counter Guest', phone: '—', items: 2, total: 68, mode: 'Cash', itemsList: [{ name: 'Hamam Soap 100g', qty: 1, price: 38, amt: 38 }, { name: 'Parle-G Gold 100g', qty: 2, price: 15, amt: 30 }] },
-      { id: 'RANI-17544', date: '24-Sep-2026 18:32', customer: 'S. Selvaraj (Khata)', phone: '+91 94862 33110', items: 5, total: 490, mode: 'Khata Credit', itemsList: [{ name: 'Aashirvaad Sharbati Atta 5kg', qty: 1, price: 295, amt: 295 }, { name: 'Gold Winner 1L Pouch', qty: 1, price: 145, amt: 145 }, { name: 'Tata Tea Gold 250g', qty: 1, price: 150, amt: 150 }] },
-      { id: 'RANI-17543', date: '24-Sep-2026 18:05', customer: 'P. Anand', phone: '+91 98940 77651', items: 4, total: 215, mode: 'UPI', itemsList: [{ name: 'Amul Butter 100g', qty: 2, price: 58, amt: 116 }, { name: 'Modern Milk Bread 400g', qty: 1, price: 45, amt: 45 }, { name: 'Lay\'s Magic Masala 50g', qty: 3, price: 20, amt: 60 }] }
-    ];
-
-    let currentFilter = 'all';
-    let currentActiveBill = sampleBills[0];
-
-    function renderBills(bills) {
-      const tbody = document.getElementById('bill-table-body');
-      tbody.innerHTML = '';
-
-      bills.forEach(bill => {
-        const tr = document.createElement('tr');
-        tr.className = 'hover:bg-gray-800/40 transition';
-        tr.innerHTML = `
-          <td class="py-3 px-4 font-mono font-bold text-white flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-            <span>#${bill.id}</span>
-          </td>
-          <td class="py-3 px-4 text-gray-300 font-mono text-[11px]">${bill.date}</td>
-          <td class="py-3 px-4">
-            <div class="font-bold text-white">${bill.customer}</div>
-            <div class="text-[10px] text-gray-400">${bill.phone}</div>
-          </td>
-          <td class="py-3 px-4 font-mono text-gray-300">${bill.items} SKUs</td>
-          <td class="py-3 px-4">
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${
-              bill.mode === 'UPI' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 
-              (bill.mode === 'Cash' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30')
-            }">${bill.mode}</span>
-          </td>
-          <td class="py-3 px-4 text-right font-black text-white font-mono text-sm">₹${bill.total}</td>
-          <td class="py-3 px-4 text-center">
-            <div class="flex items-center justify-center gap-1.5">
-              <button onclick="viewReceipt('${bill.id}')" class="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-emerald-400 transition" title="View Thermal Receipt">
-                <i data-lucide="printer" class="w-3.5 h-3.5"></i>
-              </button>
-              <button onclick="sendWhatsApp('${bill.id}')" class="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-teal-400 transition" title="Send WhatsApp e-Bill">
-                <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-              </button>
-            </div>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-      lucide.createIcons();
     }
 
-    renderBills(sampleBills);
+    function updateStatusCounts() {
+      const counts = { all: allOrders.length, delivered: 0, pending: 0, processing: 0, cancelled: 0 };
+      allOrders.forEach(o => {
+        const s = (o.status || 'delivered').toLowerCase();
+        if (counts[s] !== undefined) counts[s]++;
+        else counts.delivered++;
+      });
+      document.getElementById('cnt-status-all').innerText = counts.all.toLocaleString('en-IN');
+      document.getElementById('cnt-status-delivered').innerText = counts.delivered.toLocaleString('en-IN');
+      document.getElementById('cnt-status-pending').innerText = counts.pending.toLocaleString('en-IN');
+      document.getElementById('cnt-status-processing').innerText = counts.processing.toLocaleString('en-IN');
+      document.getElementById('cnt-status-cancelled').innerText = counts.cancelled.toLocaleString('en-IN');
+    }
 
-    function viewReceipt(billId) {
-      const bill = sampleBills.find(b => b.id === billId) || sampleBills[0];
-      currentActiveBill = bill;
-
-      document.getElementById('rec-bill-no').innerText = '#' + bill.id;
-      document.getElementById('rec-date').innerText = bill.date;
-      document.getElementById('rec-total').innerText = '₹' + bill.total + '.00';
-      document.getElementById('rec-subtotal').innerText = '₹' + (bill.total + 25) + '.00';
-      document.getElementById('rec-paymode').innerText = bill.mode;
-
-      const itemsTbody = document.getElementById('rec-items-list');
-      itemsTbody.innerHTML = '';
-      bill.itemsList.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td class="py-1 pr-1">${item.name}</td>
-          <td class="py-1 text-center font-bold">${item.qty}</td>
-          <td class="py-1 text-right">₹${item.price}</td>
-          <td class="py-1 text-right font-bold">₹${item.amt}</td>
-        `;
-        itemsTbody.appendChild(row);
+    function switchView(v) {
+      currentView = v;
+      ['voucher', 'day', 'month'].forEach(x => {
+        const btn = document.getElementById('btn-v-' + x);
+        if (btn) btn.className = x === v ? 'tab-pill active' : 'tab-pill';
       });
 
-      document.getElementById('receipt-modal').classList.remove('hidden');
-    }
-
-    function closeReceiptModal() {
-      document.getElementById('receipt-modal').classList.add('hidden');
-    }
-
-    function sendWhatsApp(billId) {
-      const bill = sampleBills.find(b => b.id === billId) || sampleBills[0];
-      const msg = `🧾 *Rani Hyper Market Tax Invoice*\nBill: #${bill.id}\nDate: ${bill.date}\nAmount: ₹${bill.total}\nPayment: ${bill.mode}\nThank you for shopping with us!`;
-      const url = `https://wa.me/917708834547?text=${encodeURIComponent(msg)}`;
-      window.open(url, '_blank');
-    }
-
-    function dispatchWhatsAppInvoice() {
-      sendWhatsApp(currentActiveBill.id);
-    }
-
-    function filterBills() {
-      const q = document.getElementById('bill-search-input').value.toLowerCase();
-      const filtered = sampleBills.filter(b => 
-        b.id.toLowerCase().includes(q) || 
-        b.customer.toLowerCase().includes(q) || 
-        b.phone.includes(q)
-      );
-      renderBills(filtered);
-    }
-
-    function setFilter(type, btn) {
-      document.querySelectorAll('.date-filter-btn').forEach(b => {
-        b.className = 'date-filter-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-900 border border-gray-800 transition';
-      });
-      btn.className = 'date-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white transition';
-
-      if (type === 'upi') {
-        renderBills(sampleBills.filter(b => b.mode === 'UPI'));
-      } else if (type === 'cash') {
-        renderBills(sampleBills.filter(b => b.mode === 'Cash'));
+      const filterRow = document.getElementById('voucher-filter-row');
+      const pagRow = document.getElementById('pagination-bar');
+      if (v === 'voucher') {
+        filterRow.classList.remove('hidden');
+        pagRow.classList.remove('hidden');
       } else {
-        renderBills(sampleBills);
+        filterRow.classList.add('hidden');
+        pagRow.classList.add('hidden');
+      }
+
+      currentPage = 1;
+      renderTable();
+    }
+
+    function filterStatus(st, btn) {
+      currentStatus = st;
+      document.querySelectorAll('#voucher-filter-row .tab-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentPage = 1;
+      renderTable();
+    }
+
+    function handleSearchInput() {
+      searchQuery = document.getElementById('bill-search-input').value.trim().toLowerCase();
+      currentPage = 1;
+      renderTable();
+    }
+
+    function handleDateFilterChange() {
+      selectedDate = document.getElementById('bill-date-picker').value;
+      if (selectedDate) {
+        document.getElementById('stat-filter-date').innerText = selectedDate;
+        document.getElementById('stat-filter-sub').innerText = 'Filtered by selected day';
+      } else {
+        clearDateFilter();
+      }
+      currentPage = 1;
+      renderTable();
+    }
+
+    function clearDateFilter() {
+      selectedDate = '';
+      document.getElementById('bill-date-picker').value = '';
+      document.getElementById('stat-filter-date').innerText = 'All Dates (2026)';
+      document.getElementById('stat-filter-sub').innerText = 'Showing all records';
+      currentPage = 1;
+      renderTable();
+    }
+
+    function changePageSize(sz) {
+      pageSize = parseInt(sz);
+      currentPage = 1;
+      renderTable();
+    }
+
+    function goToPage(p) {
+      if (p < 1) p = 1;
+      if (p > totalPages) p = totalPages;
+      currentPage = p;
+      renderTable();
+      window.scrollTo({ top: 180, behavior: 'smooth' });
+    }
+
+    function getFilteredOrders() {
+      return allOrders.filter(o => {
+        if (selectedDate) {
+          const oDate = o.voucher_date || (o.created_at ? o.created_at.slice(0,10) : '');
+          if (oDate !== selectedDate) return false;
+        }
+        if (currentStatus !== 'all') {
+          const s = (o.status || 'delivered').toLowerCase();
+          if (s !== currentStatus) return false;
+        }
+        if (searchQuery) {
+          const vNo = (o.voucher_no || '').toLowerCase();
+          const id = (o.id || '').toLowerCase();
+          const cust = (o.customer_name || '').toLowerCase();
+          const phone = (o.customer_phone || '').toLowerCase();
+          const addr = (o.shipping_address || '').toLowerCase();
+          const prod = (o.product_summary || '').toLowerCase();
+          if (!vNo.includes(searchQuery) && !id.includes(searchQuery) && !cust.includes(searchQuery) && !phone.includes(searchQuery) && !addr.includes(searchQuery) && !prod.includes(searchQuery)) {
+            return false;
+          }
+        }
+        return true;
+      });
+    }
+
+    function renderTable() {
+      const thead = document.getElementById('bills-table-thead');
+      const tbody = document.getElementById('bills-table-tbody');
+
+      if (currentView === 'voucher') {
+        renderVoucherTable(thead, tbody);
+      } else if (currentView === 'day') {
+        renderDayWiseTable(thead, tbody);
+      } else {
+        renderMonthWiseTable(thead, tbody);
       }
     }
 
-    function exportToCsv() {
-      alert('📄 Exporting verified ledger of 17,548 historical bills to CSV...');
+    function renderVoucherTable(thead, tbody) {
+      thead.innerHTML = `
+        <tr class="bg-emerald-50/80 text-emerald-950 font-black">
+          <th class="py-3 px-3">Voucher # &amp; Date</th>
+          <th class="py-3 px-3">Customer &amp; Contact</th>
+          <th class="py-3 px-3">Product Summary</th>
+          <th class="py-3 px-3 text-right">Bill Total (â‚¹)</th>
+          <th class="py-3 px-3 text-right">Cost (â‚¹)</th>
+          <th class="py-3 px-3 text-right">Profit Margin</th>
+          <th class="py-3 px-3 text-center">Status</th>
+          <th class="py-3 px-3 text-right">Actions</th>
+        </tr>
+      `;
+
+      const filtered = getFilteredOrders();
+      totalPages = Math.ceil(filtered.length / pageSize) || 1;
+      if (currentPage > totalPages) currentPage = totalPages;
+
+      const startIndex = (currentPage - 1) * pageSize;
+      const endIndex = Math.min(startIndex + pageSize, filtered.length);
+      const displayItems = filtered.slice(startIndex, endIndex);
+
+      // Update pagination info
+      document.getElementById('page-info-text').innerText = `Showing ${filtered.length > 0 ? (startIndex + 1) : 0} - ${endIndex} of ${filtered.length.toLocaleString('en-IN')} bills`;
+      document.getElementById('page-indicator').innerText = `Page ${currentPage} of ${totalPages}`;
+      document.getElementById('btn-prev').disabled = (currentPage <= 1);
+      document.getElementById('btn-first').disabled = (currentPage <= 1);
+      document.getElementById('btn-next').disabled = (currentPage >= totalPages);
+      document.getElementById('btn-last').disabled = (currentPage >= totalPages);
+
+      if (displayItems.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="py-12 text-center text-gray-400 font-bold">No bills found matching search / filter criteria.</td></tr>`;
+        return;
+      }
+
+      const statusBadgeStyles = {
+        delivered: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+        pending: 'bg-amber-100 text-amber-800 border-amber-300',
+        processing: 'bg-blue-100 text-blue-800 border-blue-300',
+        cancelled: 'bg-red-100 text-red-800 border-red-300'
+      };
+
+      tbody.innerHTML = displayItems.map(o => {
+        const invId = o.voucher_no ? `#RANI-${o.voucher_no}` : (`#NSN-${String(o.id).substring(0,6).toUpperCase()}`);
+        const dateStr = o.voucher_date || (o.created_at ? o.created_at.slice(0,10) : '2026-09-05');
+        const sales = parseFloat(o.total_amount || 0);
+        const cost = parseFloat(o.cost !== undefined ? o.cost : (sales * 0.7));
+        const profit = parseFloat(o.profit !== undefined ? o.profit : (sales - cost));
+        const pct = sales > 0 ? ((profit / sales) * 100).toFixed(1) : '0';
+        const st = (o.status || 'delivered').toLowerCase();
+
+        return `
+          <tr class="hover:bg-emerald-50/40 transition">
+            <td class="py-3 px-3 whitespace-nowrap">
+              <span class="font-black text-emerald-900 block">${invId}</span>
+              <span class="text-[10px] text-gray-400 font-semibold">${dateStr}</span>
+            </td>
+            <td class="py-3 px-3 whitespace-nowrap">
+              <span class="font-bold text-gray-900 block">${o.customer_name || 'Walk-in Customer'}</span>
+              <span class="text-[10px] text-gray-500 font-medium">${o.customer_phone || 'Counter POS'}</span>
+            </td>
+            <td class="py-3 px-3 max-w-[200px] truncate text-gray-600 font-medium">
+              ${o.product_summary || 'Retail Provisions Bill'}
+            </td>
+            <td class="py-3 px-3 text-right font-black text-gray-900 whitespace-nowrap">
+              â‚¹${sales.toFixed(2)}
+            </td>
+            <td class="py-3 px-3 text-right font-bold text-amber-800 whitespace-nowrap">
+              â‚¹${cost.toFixed(2)}
+            </td>
+            <td class="py-3 px-3 text-right whitespace-nowrap">
+              <span class="px-2 py-0.5 rounded-full font-black text-[11px] ${profit >= 0 ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-red-100 text-red-800 border border-red-200'}">
+                +â‚¹${profit.toFixed(2)} (${pct}%)
+              </span>
+            </td>
+            <td class="py-3 px-3 text-center whitespace-nowrap">
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase border ${statusBadgeStyles[st] || 'bg-gray-100 text-gray-700 border-gray-200'}">
+                ${st}
+              </span>
+            </td>
+            <td class="py-3 px-3 text-right whitespace-nowrap space-x-1">
+              <button onclick="viewBillReceipt('${o.id}')" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-lg text-xs font-bold" title="View / Print Receipt">
+                <i class="fa-solid fa-print"></i> Slip
+              </button>
+              <button onclick="sendBillWhatsApp('${o.id}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold" title="Send WhatsApp">
+                <i class="fa-brands fa-whatsapp"></i>
+              </button>
+              <button onclick="deleteBillOrder('${o.id}')" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded-lg text-xs font-bold" title="Delete Bill">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderDayWiseTable(thead, tbody) {
+      thead.innerHTML = `
+        <tr class="bg-emerald-50/80 text-emerald-950 font-black">
+          <th class="py-3 px-3">Date</th>
+          <th class="py-3 px-3 text-center">Delivered Bills Count</th>
+          <th class="py-3 px-3 text-right">Daily Sales Total (â‚¹)</th>
+          <th class="py-3 px-3 text-right">Daily Purchase Cost (â‚¹)</th>
+          <th class="py-3 px-3 text-right">Net Daily Profit (â‚¹)</th>
+          <th class="py-3 px-3 text-right">Profit Margin (%)</th>
+          <th class="py-3 px-3 text-center">Action</th>
+        </tr>
+      `;
+
+      if (raniAnalytics && raniAnalytics.dayWise) {
+        let dayKeys = Object.keys(raniAnalytics.dayWise).sort().reverse();
+        if (selectedDate) {
+          dayKeys = dayKeys.filter(k => k === selectedDate);
+        }
+
+        if (dayKeys.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-gray-400 font-bold">No records for selected date.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = dayKeys.map(d => {
+          const row = raniAnalytics.dayWise[d];
+          const pct = row.sales > 0 ? ((row.profit / row.sales) * 100).toFixed(1) : '0';
+          return `
+            <tr class="hover:bg-emerald-50/40 transition">
+              <td class="py-3 px-3 font-extrabold text-gray-900">${d}</td>
+              <td class="py-3 px-3 text-center font-black text-blue-700">${row.count} bills</td>
+              <td class="py-3 px-3 text-right font-black text-gray-900">â‚¹${row.sales.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              <td class="py-3 px-3 text-right font-bold text-amber-800">â‚¹${row.cost.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              <td class="py-3 px-3 text-right font-black text-emerald-700">+â‚¹${row.profit.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              <td class="py-3 px-3 text-right font-extrabold text-emerald-800">${pct}%</td>
+              <td class="py-3 px-3 text-center">
+                <button onclick="filterByDayVouchers('${d}')" class="px-3 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded-lg text-xs font-bold">
+                  View Vouchers â†’
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+      } else {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-gray-400 font-bold">Loading daily journal...</td></tr>`;
+      }
+    }
+
+    function filterByDayVouchers(dateStr) {
+      selectedDate = dateStr;
+      document.getElementById('bill-date-picker').value = dateStr;
+      document.getElementById('stat-filter-date').innerText = dateStr;
+      document.getElementById('stat-filter-sub').innerText = 'Filtered by selected day';
+      switchView('voucher');
+    }
+
+    function renderMonthWiseTable(thead, tbody) {
+      thead.innerHTML = `
+        <tr class="bg-emerald-50/80 text-emerald-950 font-black">
+          <th class="py-3 px-3">Month</th>
+          <th class="py-3 px-3 text-center">Total Bills Count</th>
+          <th class="py-3 px-3 text-right">Monthly Sales Revenue (â‚¹)</th>
+          <th class="py-3 px-3 text-right">Monthly Purchase Cost (â‚¹)</th>
+          <th class="py-3 px-3 text-right">Net Monthly Profit (â‚¹)</th>
+          <th class="py-3 px-3 text-right">Profit Margin (%)</th>
+        </tr>
+      `;
+
+      if (raniAnalytics && raniAnalytics.monthWise) {
+        const monthMap = {
+          '2026-04': 'April 2026', '2026-05': 'May 2026', '2026-06': 'June 2026',
+          '2026-07': 'July 2026', '2026-08': 'August 2026', '2026-09': 'September 2026'
+        };
+        const monthKeys = Object.keys(raniAnalytics.monthWise).sort().reverse();
+
+        tbody.innerHTML = monthKeys.map(m => {
+          const row = raniAnalytics.monthWise[m];
+          const pct = row.sales > 0 ? ((row.profit / row.sales) * 100).toFixed(1) : '0';
+          return `
+            <tr class="hover:bg-emerald-50/40 transition">
+              <td class="py-3.5 px-3 font-extrabold text-gray-900">${monthMap[m] || m}</td>
+              <td class="py-3.5 px-3 text-center font-black text-blue-700">${row.count.toLocaleString('en-IN')} bills</td>
+              <td class="py-3.5 px-3 text-right font-black text-gray-900">â‚¹${row.sales.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              <td class="py-3.5 px-3 text-right font-bold text-amber-800">â‚¹${row.cost.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              <td class="py-3.5 px-3 text-right font-black text-emerald-700">+â‚¹${row.profit.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              <td class="py-3.5 px-3 text-right font-black text-emerald-800">${pct}%</td>
+            </tr>
+          `;
+        }).join('');
+      } else {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-gray-400 font-bold">Loading monthly journal...</td></tr>`;
+      }
+    }
+
+    function viewBillReceipt(id) {
+      const o = allOrders.find(x => String(x.id) === String(id));
+      if (!o) return;
+      activeModalOrder = o;
+
+      const storeName = 'RANI HYPER MARKET';
+      const storeAddr = '93, Sundara pandian st, Anwar complex, Bodinayakanur';
+      const storePhone = '77088 34547, 88073 34547';
+
+      document.getElementById('adm-inv-store-name').innerText = storeName;
+      document.getElementById('adm-inv-store-address').innerText = storeAddr;
+      document.getElementById('adm-inv-store-contact').innerText = 'Ph: ' + storePhone;
+
+      const invNo = o.voucher_no ? `#RANI-${o.voucher_no}` : (`#NSN-${String(o.id).substring(0,6).toUpperCase()}`);
+      document.getElementById('adm-inv-id').innerText = invNo;
+      document.getElementById('adm-inv-date').innerText = o.voucher_date || (o.created_at ? o.created_at.slice(0,10) : '2026-09-05');
+      document.getElementById('adm-inv-cust-name').innerText = o.customer_name || 'Walk-in Customer';
+      document.getElementById('adm-inv-cust-addr').innerText = o.shipping_address || 'Bodinayakanur Town';
+      document.getElementById('adm-inv-payment').innerText = o.payment_method || 'Cash / Counter POS';
+      document.getElementById('adm-inv-total').innerText = 'â‚¹' + parseFloat(o.total_amount).toFixed(2);
+
+      const qrBillText = encodeURIComponent(`STORE:${storeName}\nBILL:${invNo}\nDATE:${o.voucher_date || ''}\nCUSTOMER:${o.customer_name || 'Counter'}\nTOTAL:â‚¹${o.total_amount}\nPAYMENT:${o.payment_method || 'Cash'}`);
+      document.getElementById('adm-inv-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${qrBillText}`;
+
+      document.getElementById('admin-invoice-modal').classList.remove('hidden');
+    }
+
+    function closeInvoiceModal() {
+      document.getElementById('admin-invoice-modal').classList.add('hidden');
+    }
+
+    function downloadBillReceiptPng() {
+      const el = document.getElementById('printable-delivery-invoice');
+      if (!el) return;
+      html2canvas(el, { scale: 2 }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `Bill_Receipt_${activeModalOrder ? activeModalOrder.voucher_no || activeModalOrder.id : 'voucher'}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+
+    function sendBillWhatsApp(id) {
+      const o = allOrders.find(x => String(x.id) === String(id));
+      if (!o) return;
+
+      const rawPhone = (o.customer_phone || '').replace(/[^0-9]/g, '');
+      const phone = (rawPhone.length === 10) ? ('91' + rawPhone) : rawPhone;
+      const invNo = o.voucher_no ? `#RANI-${o.voucher_no}` : (`#NSN-${String(o.id).substring(0,6).toUpperCase()}`);
+      const storeName = 'RANI HYPER MARKET';
+
+      const msg = `*ORDER RECEIPT & CONFIRMATION â€” ${storeName}*\n\n` +
+        `Hello ${o.customer_name || 'Customer'},\n` +
+        `Your bill ${invNo} is confirmed.\n\n` +
+        `ðŸ’° *Bill Amount:* â‚¹${parseFloat(o.total_amount).toFixed(2)}\n` +
+        `ðŸ“… *Date:* ${o.voucher_date || '05/09/2026'}\n` +
+        `ðŸ’³ *Payment:* ${o.payment_method || 'Cash on Delivery'}\n` +
+        `ðŸ“ *Address:* ${o.shipping_address || 'Bodinayakanur'}\n\n` +
+        `Thank you for shopping at ${storeName}!\n` +
+        `ðŸ“ž For queries: 77088 34547`;
+
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    async function deleteBillOrder(id) {
+      if (confirm('Are you sure you want to delete this bill voucher?')) {
+        allOrders = allOrders.filter(o => String(o.id) !== String(id));
+        try {
+          await sb.from('orders').delete().eq('id', id);
+        } catch(e) {}
+        updateStatusCounts();
+        renderTable();
+      }
+    }
+
+    function exportBillsToCsv() {
+      const filtered = getFilteredOrders();
+      if (filtered.length === 0) {
+        alert('No bills to export.');
+        return;
+      }
+
+      let csv = 'Voucher ID,Date,Customer Name,Phone,Address,Payment Method,Total Sales (INR),Purchase Cost (INR),Net Profit (INR),Status\n';
+      filtered.forEach(o => {
+        const inv = o.voucher_no ? `RANI-${o.voucher_no}` : o.id;
+        const d = o.voucher_date || (o.created_at ? o.created_at.slice(0,10) : '2026-09-05');
+        const sales = parseFloat(o.total_amount || 0).toFixed(2);
+        const cost = parseFloat(o.cost !== undefined ? o.cost : (sales * 0.7)).toFixed(2);
+        const profit = (sales - cost).toFixed(2);
+        const cleanCust = `"${(o.customer_name || 'Walk-in Customer').replace(/"/g, '""')}"`;
+        const cleanAddr = `"${(o.shipping_address || '').replace(/"/g, '""')}"`;
+
+        csv += `${inv},${d},${cleanCust},${o.customer_phone || ''},${cleanAddr},"${o.payment_method || 'Cash'}",${sales},${cost},${profit},${o.status || 'delivered'}\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `Rani_Market_Bills_Export_${new Date().toISOString().slice(0,10)}.csv`;
+      link.click();
+    }
+
+    function openPublicStoreWithDate() {
+      const adminUser = sessionStorage.getItem('nsn_admin_user') || 'rani';
+      const tenantId = sessionStorage.getItem('nsn_tenant_id') || '37a64e83-514d-4b00-b90a-9af172dacdd6';
+      const dateVal = selectedDate || '2026-09-05';
+      window.open(`store.html?admin=${encodeURIComponent(adminUser)}&tenant=${encodeURIComponent(tenantId)}&date=${encodeURIComponent(dateVal)}`, '_blank');
     }
   </script>
 </body>
 </html>
+

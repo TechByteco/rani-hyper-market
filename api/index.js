@@ -303,6 +303,36 @@ module.exports = async (req, res) => {
       });
     }
 
+    // 11. AI Product Image Analysis & Resolution Engine
+    if (reqPath === '/api/ai/analyze-product-image' || reqPath === '/api/ai/analyze-image') {
+      const title = queryParams.get('title') || queryParams.get('q') || '';
+      const barcode = queryParams.get('barcode') || '';
+      let bodyData = {};
+      if (req.method === 'POST') {
+        try { bodyData = await getBody(); } catch {}
+      }
+      const productTitle = title || bodyData.title || bodyData.name || '';
+      if (!productTitle) {
+        return sendJson(400, { error: 'Product title is required' });
+      }
+
+      let aiEngine = null;
+      try {
+        aiEngine = require('../aiProductImageEngine');
+      } catch (e) {
+        try {
+          aiEngine = require('./aiProductImageEngine');
+        } catch {}
+      }
+
+      if (aiEngine && typeof aiEngine.analyzeAndResolveProductImage === 'function') {
+        const result = await aiEngine.analyzeAndResolveProductImage(productTitle, barcode || bodyData.barcode || '');
+        return sendJson(200, result);
+      }
+
+      return sendJson(500, { error: 'AI Image Engine not available' });
+    }
+
     // Default: 404 for unknown API routes
     return sendJson(404, { error: 'API route not found', path: reqPath });
   } catch (error) {

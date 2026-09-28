@@ -308,6 +308,45 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // AI Product Image Analysis & Resolution Engine
+  if (reqPath === '/api/ai/analyze-product-image' || reqPath === '/api/ai/analyze-image') {
+    const title = queryParams.get('title') || queryParams.get('q') || '';
+    const barcode = queryParams.get('barcode') || '';
+
+    const handleAnalysis = async (productTitle, bc) => {
+      if (!productTitle) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Product title is required' }));
+        return;
+      }
+      try {
+        const aiEngine = require('./aiProductImageEngine');
+        const result = await aiEngine.analyzeAndResolveProductImage(productTitle, bc);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: err.message }));
+      }
+    };
+
+    if (req.method === 'POST') {
+      let body = '';
+      req.on('data', chunk => { body += chunk; });
+      req.on('end', () => {
+        try {
+          const parsed = JSON.parse(body || '{}');
+          handleAnalysis(title || parsed.title || parsed.name || '', barcode || parsed.barcode || '');
+        } catch {
+          handleAnalysis(title, barcode);
+        }
+      });
+    } else {
+      handleAnalysis(title, barcode);
+    }
+    return;
+  }
+
   if (reqPath === '/api/rani/backup-info') {
     const fetchDir = 'G:/dell intel core i7 pc data/SKS new fetchable';
     const zipName = 'Full Backup RANI HYPER MARKET on 12-Sep-2026.zip';

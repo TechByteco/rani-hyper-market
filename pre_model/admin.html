@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
+  <meta name="google-site-verification" content="y4Exn0OVbdTxE6DMY9nEIDcx1MyfLd7E2XuaxtgL9WY" />
+  <meta name="description" content="Official SNS Marketing administrative portal for Rani Hyper Market. Comprehensive POS counter terminal, 7,000+ SKU inventory control, live sales velocity, and cloud cashier management.">
+  <link rel="canonical" href="https://rani-hyper-market.vercel.app/admin">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SNS Marketing &amp; Rani Hyper Market — Store Admin &amp; POS Dashboard | Pre-Model 2.0</title>
+  <title>SNS Marketing &amp; Rani Hyper Market — Store Admin &amp; POS Dashboard | Enterprise 2.0</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -744,10 +747,12 @@
       const tbody = document.getElementById('admin-inventory-tbody');
       if (!tbody) return;
 
-      tbody.innerHTML = items.map((p, i) => `
+      tbody.innerHTML = items.map((p, i) => {
+        const title = p.display_title || p.title || p.name || 'SKU Item';
+        return `
         <tr class="hover:bg-white/5 transition">
           <td class="p-3 text-emerald-400 font-bold">${p.id || 'SKU-' + (i+1)}</td>
-          <td class="p-3 font-sans font-semibold text-white truncate max-w-xs">${p.name}</td>
+          <td class="p-3 font-sans font-semibold text-white truncate max-w-xs" title="${title}">${title}</td>
           <td class="p-3 text-gray-400">${p.category || 'Grocery'}</td>
           <td class="p-3 text-right font-bold text-white inr-val">₹${Number(p.price || 50).toFixed(0)}</td>
           <td class="p-3 text-right text-gray-500 inr-val">₹${Number(p.mrp || p.price * 1.2).toFixed(0)}</td>
@@ -755,17 +760,22 @@
             <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">In Stock</span>
           </td>
           <td class="p-3 text-right">
-            <button onclick="alert('Editing SKU: ${p.name}')" class="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold">
+            <button onclick="alert('Editing SKU: ${title.replace(/'/g, "\\'")}')" class="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold">
               Edit
             </button>
           </td>
         </tr>
-      `).join('');
+      `;
+      }).join('');
     }
 
     function filterAdminInventory() {
       const q = (document.getElementById('admin-inv-search')?.value || '').toLowerCase().trim();
-      const filtered = productsList.filter(p => !q || p.name.toLowerCase().includes(q) || String(p.id).toLowerCase().includes(q));
+      const filtered = productsList.filter(p => {
+        if (!q) return true;
+        const name = (p.display_title || p.title || p.name || '').toLowerCase();
+        return name.includes(q) || String(p.id).toLowerCase().includes(q) || String(p.barcode || '').includes(q);
+      });
       renderAdminInventoryTable(filtered.slice(0, 30));
     }
 

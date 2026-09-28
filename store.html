@@ -534,7 +534,7 @@
       }
 
       allProducts = rawData.map((p, idx) => {
-        const prodName = p.title || p.name || 'Grocery Item';
+        const prodName = p.display_title || p.title || p.name || 'Grocery Item';
         const prodCat = p.category || detectCategory(prodName);
         return {
           id: p.id || `P-${idx+1}`,
@@ -543,7 +543,7 @@
           price: parseFloat(p.price || 50),
           mrp: parseFloat(p.mrp || (p.price * 1.25)),
           image: p.image_url || p.image || getDefaultImage(prodName, prodCat),
-          unit: p.unit || '1 unit'
+          unit: p.pack_size || p.unit || 'Standard Pack'
         };
       });
 
@@ -634,8 +634,8 @@
 
         return `
           <div class="glass-card p-3 sm:p-4 flex flex-col justify-between group">
-            <div class="relative overflow-hidden rounded-xl mb-2.5 bg-black/40 aspect-square flex items-center justify-center">
-              <img src="${p.image}" alt="${p.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=300'">
+            <div class="relative overflow-hidden rounded-xl mb-2.5 bg-black/60 aspect-square flex items-center justify-center p-2">
+              <img src="${p.image}" alt="${p.name}" loading="lazy" class="w-full h-full object-contain group-hover:scale-105 transition duration-300" onerror="this.src='https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=300'">
               ${discount > 0 ? `
                 <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-emerald-500 text-gray-950 font-black text-[10px] uppercase shadow">
                   ${discount}% OFF

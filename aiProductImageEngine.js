@@ -355,6 +355,37 @@ function evaluateImageSuitability(entities, candidateKey, candidateUrl) {
     }
   }
 
+  // E. Semantic Disambiguation & Cross-Category Conflict Prevention
+  // 1. Skincare face cream vs Pain relief balm
+  if ((t.includes('fairness') || t.includes('face') || t.includes('glow')) && (k.includes('moov') || k.includes('iodex') || k.includes('pain') || k.includes('balm') || k.includes('zandu'))) {
+    score -= 60;
+    reasoning.push(`Negative guardrail: cosmetic face cream must not match pain relief balm (-60 pts)`);
+  }
+  // 2. Cooking oil vs Cosmetic hair oil
+  if ((t.includes('cooking') || t.includes('sunflower') || t.includes('gingelly') || t.includes('groundnut') || t.includes('lamp') || t.includes('pooja')) && (k.includes('hair') || k.includes('amla') || k.includes('almond') || k.includes('parachute'))) {
+    score -= 60;
+    reasoning.push(`Negative guardrail: cooking/pooja oil must not match cosmetic hair oil (-60 pts)`);
+  }
+  // 3. Laundry detergent bar vs Luxury bath soap
+  if ((t.includes('detergent') || t.includes('cloth') || t.includes('wash bar') || t.includes('power active') || t.includes('arasan')) && (k.includes('lux') || k.includes('dove') || k.includes('pears') || k.includes('medimix') || k.includes('hamam') || k.includes('santoor'))) {
+    score -= 60;
+    reasoning.push(`Negative guardrail: laundry detergent cake must not match cosmetic bath soap (-60 pts)`);
+  }
+  // 4. Tea vs Coffee
+  if (t.includes('tea') && (k.includes('coffee') || k.includes('bru') || k.includes('nescafe'))) {
+    score -= 60;
+    reasoning.push(`Negative guardrail: tea must not match coffee (-60 pts)`);
+  }
+  if (t.includes('coffee') && (k.includes('tea') || k.includes('red_label') || k.includes('taj_mahal'))) {
+    score -= 60;
+    reasoning.push(`Negative guardrail: coffee must not match tea (-60 pts)`);
+  }
+  // 5. Face wash vs Toothpaste
+  if ((t.includes('facewash') || t.includes('face wash')) && (k.includes('paste') || k.includes('brush') || k.includes('oral') || k.includes('colgate') || k.includes('sensodyne'))) {
+    score -= 60;
+    reasoning.push(`Negative guardrail: face wash must not match oral care toothpaste (-60 pts)`);
+  }
+
   return { candidateKey, candidateUrl, score, reasoning };
 }
 
@@ -374,7 +405,7 @@ async function analyzeAndResolveProductImage(rawTitle, barcode = '') {
     }
   }
 
-  // Filter out candidates with very weak scores (< 30) if they are just single accidental word matches
+  // Filter out candidates with weak scores (< 30) if they are just single accidental word matches
   const viableCandidates = evaluations.filter(e => e.score >= 30);
   viableCandidates.sort((a, b) => b.score - a.score);
 
@@ -393,47 +424,48 @@ async function analyzeAndResolveProductImage(rawTitle, barcode = '') {
     }
   }
 
-  // Authentic commercial packshot fallback if no specific brand candidate matched or reachable
+  // Authentic commercial studio packshot fallback (Apollo / Official Brand CDNs)
+  // Never uses barcode, user phone snapshots, or AI generated imagery
   if (!winningCandidate) {
-    let fallbackCategoryImg = 'https://images.openfoodfacts.org/images/products/890/172/501/6838/front_en.7.400.jpg';
-    let fallbackKey = 'authentic_pouch_packshot';
+    let fallbackCategoryImg = 'https://images.apollo247.in/pub/media/catalog/product/a/a/aas0010_1.jpg';
+    let fallbackKey = 'authentic_commercial_pouch';
     if (entities.formFactor === 'bottle') {
       fallbackCategoryImg = 'https://images.apollo247.in/pub/media/catalog/product/p/a/pan0150_hfc_front-image.jpg';
-      fallbackKey = 'authentic_bottle_packshot';
+      fallbackKey = 'authentic_commercial_bottle';
     } else if (entities.formFactor === 'bar') {
       fallbackCategoryImg = 'https://static.wixstatic.com/media/052b2d_8d909e1a623a47208ff0ad9e780527cf~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg';
-      fallbackKey = 'authentic_bar_packshot';
+      fallbackKey = 'authentic_commercial_bar';
     } else if (entities.formFactor === 'tube') {
       fallbackCategoryImg = 'https://images.apollo247.in/pub/media/catalog/product/s/e/sen0020_1.jpg';
-      fallbackKey = 'authentic_tube_packshot';
+      fallbackKey = 'authentic_commercial_tube';
     } else if (entities.formFactor === 'jar') {
       fallbackCategoryImg = 'https://images.apollo247.in/pub/media/catalog/product/d/a/dab0080_1.jpg';
-      fallbackKey = 'authentic_jar_packshot';
+      fallbackKey = 'authentic_commercial_jar';
     } else if (entities.formFactor === 'talc_tin') {
       fallbackCategoryImg = 'https://images.apollo247.in/pub/media/catalog/product/g/o/gok0010_1.jpg';
-      fallbackKey = 'authentic_talc_packshot';
+      fallbackKey = 'authentic_commercial_talc';
     } else if (entities.formFactor === 'spray_can') {
       fallbackCategoryImg = 'https://images.apollo247.in/pub/media/catalog/product/f/o/fog0010_1.jpg';
-      fallbackKey = 'authentic_spray_packshot';
+      fallbackKey = 'authentic_commercial_spray';
     } else if (entities.formFactor === 'diaper_pack') {
       fallbackCategoryImg = 'https://images.apollo247.in/pub/media/catalog/product/p/a/pam0010_1.jpg';
-      fallbackKey = 'authentic_diaper_packshot';
+      fallbackKey = 'authentic_commercial_diaper';
     } else if (entities.formFactor === 'stationery') {
       fallbackCategoryImg = 'https://images.apollo247.in/pub/media/catalog/product/d/o/dom0010_1.jpg';
-      fallbackKey = 'authentic_stationery_packshot';
+      fallbackKey = 'authentic_commercial_stationery';
     } else if (entities.formFactor === 'pooja') {
       fallbackCategoryImg = 'https://images.apollo247.in/pub/media/catalog/product/c/y/cyc0010_1.jpg';
-      fallbackKey = 'authentic_pooja_packshot';
+      fallbackKey = 'authentic_commercial_pooja';
     } else if (entities.formFactor === 'box_or_pouch') {
-      fallbackCategoryImg = 'https://images.openfoodfacts.org/images/products/890/106/300/4061/front_en.5.400.jpg';
-      fallbackKey = 'authentic_box_packshot';
+      fallbackCategoryImg = 'https://images.apollo247.in/pub/media/catalog/product/b/r/bri0010_1.jpg';
+      fallbackKey = 'authentic_commercial_box';
     }
 
     winningCandidate = {
       candidateKey: fallbackKey,
       candidateUrl: fallbackCategoryImg,
       score: 40,
-      reasoning: [`Applied verified authentic e-commerce packshot aligned with packaging form factor '${entities.formFactor}'.`],
+      reasoning: [`Assigned authentic commercial studio packshot aligned with packaging form factor '${entities.formFactor}'.`],
       httpStatus: 200
     };
   }
@@ -470,8 +502,11 @@ async function auditAndEnrichCatalog() {
     p.pack_size = parsed.packSize;
     p.display_title = parsed.displayTitle;
 
-    // Check if image is unspecified or generic Unsplash fallback
-    const isUnspecified = !p.image_url || p.image_url.includes('unsplash') || p.image_url.includes('photo-1542838132-92c53300491e');
+    // Check if image is unspecified, generic Unsplash, or crowd-sourced Open Food Facts (barcode risk)
+    const isUnspecified = !p.image_url ||
+                          p.image_url.includes('unsplash') ||
+                          p.image_url.includes('photo-1542838132-92c53300491e') ||
+                          p.image_url.includes('openfoodfacts.org');
 
     if (isUnspecified) {
       const result = await analyzeAndResolveProductImage(p.title, p.barcode);

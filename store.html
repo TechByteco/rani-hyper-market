@@ -533,15 +533,19 @@
         rawData = generateCuratedSample();
       }
 
-      allProducts = rawData.map((p, idx) => ({
-        id: p.id || `P-${idx+1}`,
-        name: p.name || 'Grocery Item',
-        category: p.category || detectCategory(p.name),
-        price: parseFloat(p.price || 50),
-        mrp: parseFloat(p.mrp || (p.price * 1.25)),
-        image: p.image_url || p.image || getDefaultImage(p.name, p.category),
-        unit: p.unit || '1 unit'
-      }));
+      allProducts = rawData.map((p, idx) => {
+        const prodName = p.title || p.name || 'Grocery Item';
+        const prodCat = p.category || detectCategory(prodName);
+        return {
+          id: p.id || `P-${idx+1}`,
+          name: prodName,
+          category: prodCat,
+          price: parseFloat(p.price || 50),
+          mrp: parseFloat(p.mrp || (p.price * 1.25)),
+          image: p.image_url || p.image || getDefaultImage(prodName, prodCat),
+          unit: p.unit || '1 unit'
+        };
+      });
 
       filteredProducts = allProducts;
       document.getElementById('catalog-count-badge').textContent = `${allProducts.length.toLocaleString()} Items`;
@@ -552,14 +556,15 @@
 
     function detectCategory(name) {
       const n = (name || '').toLowerCase();
-      if (n.includes('milk') || n.includes('curd') || n.includes('paneer') || n.includes('ghee') || n.includes('butter') || n.includes('arokya') || n.includes('hatsun')) return 'Dairy';
-      if (n.includes('tomato') || n.includes('onion') || n.includes('potato') || n.includes('chilli') || n.includes('banana') || n.includes('apple') || n.includes('vegetable')) return 'Vegetables';
-      if (n.includes('rice') || n.includes('ponni') || n.includes('basmati') || n.includes('wheat') || n.includes('atta') || n.includes('flour') || n.includes('rava')) return 'Rice';
-      if (n.includes('biscuit') || n.includes('cookie') || n.includes('snack') || n.includes('lays') || n.includes('chips') || n.includes('chocolate') || n.includes('cadbury')) return 'Snacks';
-      if (n.includes('tea') || n.includes('coffee') || n.includes('juice') || n.includes('coke') || n.includes('pepsi') || n.includes('bovonto')) return 'Beverages';
-      if (n.includes('soap') || n.includes('shampoo') || n.includes('surf') || n.includes('detergent') || n.includes('rin') || n.includes('cleaner') || n.includes('colgate')) return 'Household';
+      if (n.includes('milk') || n.includes('curd') || n.includes('paneer') || n.includes('ghee') || n.includes('butter') || n.includes('arokya') || n.includes('hatsun') || n.includes('cavins') || n.includes('dairy')) return 'Dairy';
+      if (n.includes('tomato') || n.includes('onion') || n.includes('potato') || n.includes('chilli') || n.includes('banana') || n.includes('apple') || n.includes('vegetable') || n.includes('garlic') || n.includes('ginger')) return 'Vegetables';
+      if (n.includes('rice') || n.includes('ponni') || n.includes('basmati') || n.includes('wheat') || n.includes('atta') || n.includes('flour') || n.includes('rava') || n.includes('maida') || n.includes('mavu') || n.includes('dhall') || n.includes('paruppu') || n.includes('dhal')) return 'Rice';
+      if (n.includes('biscuit') || n.includes('cookie') || n.includes('snack') || n.includes('lays') || n.includes('chips') || n.includes('chocolate') || n.includes('cadbury') || n.includes('bourbon') || n.includes('good day') || n.includes('cake') || n.includes('murukku')) return 'Snacks';
+      if (n.includes('tea') || n.includes('coffee') || n.includes('juice') || n.includes('coke') || n.includes('pepsi') || n.includes('bovonto') || n.includes('drink') || n.includes('bru') || n.includes('sunrise') || n.includes('chakra gold')) return 'Beverages';
+      if (n.includes('soap') || n.includes('shampoo') || n.includes('surf') || n.includes('detergent') || n.includes('rin') || n.includes('cleaner') || n.includes('colgate') || n.includes('paste') || n.includes('brush') || n.includes('harpic') || n.includes('lizol') || n.includes('cinthol') || n.includes('hamam') || n.includes('dettol')) return 'Household';
       return 'Provisions';
     }
+
 
     function getDefaultImage(name, cat) {
       const c = cat || detectCategory(name);

@@ -303,8 +303,8 @@ module.exports = async (req, res) => {
       });
     }
 
-    // 11. AI Product Image Analysis & Resolution Engine
-    if (reqPath === '/api/ai/analyze-product-image' || reqPath === '/api/ai/analyze-image') {
+    // 11. AI Product Image Analysis & Resolution Engine (VPIA)
+    if (reqPath === '/api/ai/analyze-product-image' || reqPath === '/api/ai/analyze-image' || reqPath === '/api/ai/reconcile-product-image') {
       const title = queryParams.get('title') || queryParams.get('q') || '';
       const barcode = queryParams.get('barcode') || '';
       let bodyData = {};
@@ -325,9 +325,15 @@ module.exports = async (req, res) => {
         } catch {}
       }
 
-      if (aiEngine && typeof aiEngine.analyzeAndResolveProductImage === 'function') {
-        const result = await aiEngine.analyzeAndResolveProductImage(productTitle, barcode || bodyData.barcode || '');
-        return sendJson(200, result);
+      if (aiEngine) {
+        if (reqPath === '/api/ai/reconcile-product-image' && typeof aiEngine.reconcileProductImage === 'function') {
+          const result = await aiEngine.reconcileProductImage(productTitle, barcode || bodyData.barcode || '');
+          return sendJson(200, result);
+        }
+        if (typeof aiEngine.analyzeAndResolveProductImage === 'function') {
+          const result = await aiEngine.analyzeAndResolveProductImage(productTitle, barcode || bodyData.barcode || '');
+          return sendJson(200, result);
+        }
       }
 
       return sendJson(500, { error: 'AI Image Engine not available' });

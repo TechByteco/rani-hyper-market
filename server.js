@@ -308,8 +308,8 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // AI Product Image Analysis & Resolution Engine
-  if (reqPath === '/api/ai/analyze-product-image' || reqPath === '/api/ai/analyze-image') {
+  // AI Product Image Analysis & Resolution Engine (VPIA)
+  if (reqPath === '/api/ai/analyze-product-image' || reqPath === '/api/ai/analyze-image' || reqPath === '/api/ai/reconcile-product-image') {
     const title = queryParams.get('title') || queryParams.get('q') || '';
     const barcode = queryParams.get('barcode') || '';
 
@@ -321,7 +321,12 @@ const server = http.createServer((req, res) => {
       }
       try {
         const aiEngine = require('./aiProductImageEngine');
-        const result = await aiEngine.analyzeAndResolveProductImage(productTitle, bc);
+        let result;
+        if (reqPath === '/api/ai/reconcile-product-image' && typeof aiEngine.reconcileProductImage === 'function') {
+          result = await aiEngine.reconcileProductImage(productTitle, bc);
+        } else {
+          result = await aiEngine.analyzeAndResolveProductImage(productTitle, bc);
+        }
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(result));
       } catch (err) {

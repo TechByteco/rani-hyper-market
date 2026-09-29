@@ -1057,53 +1057,96 @@ async function resolveByStructuredAttributes(canonicalRecord) {
  * Never uses barcodes, user snapshots, or AI generated imagery.
  */
 function getFormFactorFallback(canonicalRecord) {
-  let fallbackUrl = 'https://images.apollo247.in/pub/media/catalog/product/a/a/aas0010_1.jpg';
-  let fallbackKey = 'authentic_commercial_pouch';
+  const t = ((canonicalRecord.raw_title || '') + ' ' + (canonicalRecord.core_product_name || '') + ' ' + (canonicalRecord.category || '')).toLowerCase();
+  let fallbackUrl = 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&q=80';
+  let fallbackKey = 'authentic_commercial_supermarket';
 
-  switch (canonicalRecord.formFactor) {
-    case 'bottle':
-      fallbackUrl = 'https://images.apollo247.in/pub/media/catalog/product/p/a/pan0150_hfc_front-image.jpg';
-      fallbackKey = 'authentic_commercial_bottle';
-      break;
-    case 'bar':
-      fallbackUrl = 'https://static.wixstatic.com/media/052b2d_8d909e1a623a47208ff0ad9e780527cf~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg';
-      fallbackKey = 'authentic_commercial_bar';
-      break;
-    case 'tube':
-      fallbackUrl = 'https://images.apollo247.in/pub/media/catalog/product/s/e/sen0020_1.jpg';
-      fallbackKey = 'authentic_commercial_tube';
-      break;
-    case 'jar':
-      fallbackUrl = 'https://images.apollo247.in/pub/media/catalog/product/d/a/dab0080_1.jpg';
-      fallbackKey = 'authentic_commercial_jar';
-      break;
-    case 'talc_tin':
-      fallbackUrl = 'https://images.apollo247.in/pub/media/catalog/product/g/o/gok0010_1.jpg';
-      fallbackKey = 'authentic_commercial_talc';
-      break;
-    case 'spray_can':
-      fallbackUrl = 'https://images.apollo247.in/pub/media/catalog/product/f/o/fog0010_1.jpg';
-      fallbackKey = 'authentic_commercial_spray';
-      break;
-    case 'diaper_pack':
-      fallbackUrl = 'https://images.apollo247.in/pub/media/catalog/product/p/a/pam0010_1.jpg';
-      fallbackKey = 'authentic_commercial_diaper';
-      break;
-    case 'stationery':
-      fallbackUrl = 'https://images.apollo247.in/pub/media/catalog/product/d/o/dom0010_1.jpg';
-      fallbackKey = 'authentic_commercial_stationery';
-      break;
-    case 'pooja':
-      fallbackUrl = 'https://images.apollo247.in/pub/media/catalog/product/c/y/cyc0010_1.jpg';
-      fallbackKey = 'authentic_commercial_pooja';
-      break;
-    case 'box_or_pouch':
-      fallbackUrl = 'https://images.apollo247.in/pub/media/catalog/product/b/r/bri0010_1.jpg';
-      fallbackKey = 'authentic_commercial_box';
-      break;
-    default:
-      fallbackUrl = 'https://images.apollo247.in/pub/media/catalog/product/a/a/aas0010_1.jpg';
-      fallbackKey = 'authentic_commercial_pouch';
+  // Rice & Grains
+  if (t.includes('basmati')) {
+    fallbackUrl = 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_basmati_rice';
+  } else if (t.includes('rice') || t.includes('ponni') || t.includes('arisi') || t.includes('samba') || t.includes('millet')) {
+    fallbackUrl = 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_ponni_rice';
+  }
+  // Dhals & Pulses
+  else if (t.includes('toor') || t.includes('thuvaram') || t.includes('paruppu') || t.includes('dhal') || t.includes('dhall') || t.includes('moong') || t.includes('urad') || t.includes('chana') || t.includes('gram')) {
+    fallbackUrl = 'https://images.unsplash.com/photo-1546833998-877b37c2e5c6?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_pulses_dhal';
+  }
+  // Sugar & Sweeteners
+  else if (t.includes('jaggery') || t.includes('vellam') || t.includes('karupatti')) {
+    fallbackUrl = 'https://images.unsplash.com/photo-1589367920969-ab8e050bbb04?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_jaggery_vellam';
+  } else if (t.includes('sugar') || t.includes('sakkarai') || t.includes('salt') || t.includes('uppu')) {
+    fallbackUrl = 'https://images.unsplash.com/photo-1589367920969-ab8e050bbb04?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_sugar_salt';
+  }
+  // Spices & Masalas
+  else if (t.includes('turmeric') || t.includes('manjal')) {
+    fallbackUrl = 'https://images.openfoodfacts.org/images/products/890/600/208/0014/front_en.3.400.jpg';
+    fallbackKey = 'authentic_turmeric_powder';
+  } else if (t.includes('masala') || t.includes('sambar') || t.includes('rasam') || t.includes('chilli') || t.includes('powder') || t.includes('curry') || t.includes('biryani') || t.includes('kadugu') || t.includes('jeera') || t.includes('pepper') || t.includes('clove') || t.includes('cinnamon')) {
+    fallbackUrl = 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_spices_masala';
+  }
+  // Oils & Ghee
+  else if (t.includes('oil') || t.includes('ennai') || t.includes('ghee') || t.includes('sunflower') || t.includes('gingelly')) {
+    fallbackUrl = 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_cooking_oil';
+  }
+  // Flours, Atta & Vermicelli
+  else if (t.includes('atta') || t.includes('wheat') || t.includes('flour') || t.includes('mavu')) {
+    fallbackUrl = 'https://images.openfoodfacts.org/images/products/890/172/501/6838/front_en.7.400.jpg';
+    fallbackKey = 'authentic_atta_flour';
+  } else if (t.includes('semia') || t.includes('vermicelli') || t.includes('noodle') || t.includes('maggi') || t.includes('pasta')) {
+    fallbackUrl = 'https://images.unsplash.com/photo-1612927601601-6638404737ce?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_vermicelli_noodles';
+  }
+  // Biscuits & Snacks
+  else if (t.includes('biscuit') || t.includes('cookie') || t.includes('rusk') || t.includes('good day') || t.includes('marie') || t.includes('bourbon')) {
+    fallbackUrl = 'https://images.openfoodfacts.org/images/products/890/106/309/3409/front_en.4.400.jpg';
+    fallbackKey = 'authentic_biscuit_pack';
+  } else if (t.includes('snack') || t.includes('chips') || t.includes('lays') || t.includes('kurkure') || t.includes('mixture') || t.includes('popcorn') || t.includes('murukku')) {
+    fallbackUrl = 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_snack_pack';
+  }
+  // Dairy & Ice Cream
+  else if (t.includes('ice cream') || t.includes('kulfi') || t.includes('cone') || t.includes('sundae')) {
+    fallbackUrl = 'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_ice_cream';
+  } else if (t.includes('milk') || t.includes('curd') || t.includes('paneer') || t.includes('butter') || t.includes('cheese')) {
+    fallbackUrl = 'https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_dairy_pack';
+  }
+  // Soaps & Shampoos
+  else if (t.includes('soap') || t.includes('bath') || canonicalRecord.formFactor === 'bar') {
+    fallbackUrl = 'https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_soap_bar';
+  } else if (t.includes('shampoo') || t.includes('hair') || canonicalRecord.formFactor === 'bottle') {
+    fallbackUrl = 'https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_shampoo_bottle';
+  }
+  // Oral Care
+  else if (t.includes('paste') || t.includes('brush') || canonicalRecord.formFactor === 'tube') {
+    fallbackUrl = 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_oral_care';
+  }
+  // Laundry & Cleaning
+  else if (t.includes('detergent') || t.includes('surf') || t.includes('rin') || t.includes('ariel') || t.includes('tide') || t.includes('wash')) {
+    fallbackUrl = 'https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_laundry_detergent';
+  } else if (t.includes('vim') || t.includes('harpic') || t.includes('lizol') || t.includes('cleaner') || t.includes('dish')) {
+    fallbackUrl = 'https://images.unsplash.com/photo-1585421514738-01798e348b17?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_home_cleaner';
+  }
+  // Pooja & Stationery
+  else if (t.includes('agarbatti') || t.includes('pooja') || t.includes('camphor') || canonicalRecord.formFactor === 'pooja') {
+    fallbackUrl = 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_pooja_pack';
+  } else if (t.includes('pen') || t.includes('pencil') || t.includes('note') || canonicalRecord.formFactor === 'stationery') {
+    fallbackUrl = 'https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?auto=format&fit=crop&w=400&q=80';
+    fallbackKey = 'authentic_stationery_pack';
   }
 
   return {

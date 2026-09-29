@@ -1271,14 +1271,14 @@
     }
 
     function getRelevantProductImage(title, existingUrl) {
-      if (existingUrl && !existingUrl.includes('photo-1542838132-92c53300491e')) {
+      if (existingUrl && !existingUrl.includes('photo-1542838132-92c53300491e') && !existingUrl.includes('apollo247') && !existingUrl.includes('aas0010_1')) {
         return existingUrl;
       }
       const t = (title || '').toLowerCase();
 
       // Oral Care
       if (t.includes('brush') || t.includes('toothbrush')) return 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('sensodyne') || t.includes('colgate') || t.includes('paste') || t.includes('pepsodent') || t.includes('close up') || t.includes('oral') || t.includes('dant kanti')) return 'https://images.unsplash.com/photo-1559591937-e105342a9833?auto=format&fit=crop&w=400&q=80';
+      if (t.includes('sensodyne') || t.includes('colgate') || t.includes('paste') || t.includes('pepsodent') || t.includes('close up') || t.includes('oral') || t.includes('dant kanti')) return 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?auto=format&fit=crop&w=400&q=80';
 
       // Health & Relief
       if (t.includes('iodex') || t.includes('vicks') || t.includes('balm') || t.includes('amrutanjan') || t.includes('amurutanjan') || t.includes('pain') || t.includes('ointment') || t.includes('moov') || t.includes('volini')) return 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80';

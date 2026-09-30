@@ -1200,7 +1200,7 @@
       let products = [];
 
       try {
-        const raniList = await fetch('rani_products.json').then(r => r.json());
+        const raniList = await fetch('rani_products.json?v=' + Date.now()).then(r => r.json());
         if (raniList && raniList.length > 0) {
           products = raniList; // Load all 7,129 items
         }
@@ -1271,7 +1271,7 @@
     }
 
     function getRelevantProductImage(title, existingUrl) {
-      if (existingUrl && !existingUrl.includes('photo-1542838132-92c53300491e') && !existingUrl.includes('apollo247') && !existingUrl.includes('aas0010_1')) {
+      if (existingUrl && !existingUrl.includes('apollo247') && !existingUrl.includes('aas0010_1')) {
         return existingUrl;
       }
       const t = (title || '').toLowerCase();

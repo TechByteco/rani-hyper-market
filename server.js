@@ -431,9 +431,15 @@ const server = http.createServer((req, res) => {
       res.end('404 Not Found: ' + reqPath);
     } else {
       const ext = path.extname(filePath).toLowerCase();
-      res.writeHead(200, { 
+      const headers = { 
         'Content-Type': MIME[ext] || 'text/plain'
-      });
+      };
+      if (ext === '.html' || ext === '.json') {
+        headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+        headers['Pragma'] = 'no-cache';
+        headers['Expires'] = '0';
+      }
+      res.writeHead(200, headers);
       res.end(content);
     }
   });

@@ -93,7 +93,7 @@ module.exports = async (req, res) => {
 
       // Cloud Fallback
       const analytics = readLocalJson('rani_analytics.json', {});
-      const products = readLocalJson('rani_products.json', []);
+      const products = readLocalJson('products_catalog.json', readLocalJson('rani_products.json', []));
       return sendJson(200, {
         connected: true,
         storeName: 'RANI HYPER MARKET',
@@ -143,7 +143,7 @@ module.exports = async (req, res) => {
     if (reqPath === '/api/pos/products') {
       const search = (queryParams.get('search') || '').toLowerCase().trim();
       const limit = parseInt(queryParams.get('limit') || '100', 10);
-      const rawProducts = readLocalJson('rani_products.json', []);
+      const rawProducts = readLocalJson('products_catalog.json', readLocalJson('rani_products.json', []));
 
       let filtered = rawProducts;
       if (search) {

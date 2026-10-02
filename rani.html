@@ -1815,9 +1815,11 @@ function playScanBeep() {
 // ============================================================
 async function initRealData() {
   try {
-    // 1. Fetch real products from rani_products.json
-    const prodRes = await fetch('rani_products.json');
-    if (prodRes.ok) {
+    // 1. Fetch real products from products_catalog.json or rani_products.json
+    let prodRes = await fetch('/products_catalog.json').catch(() => null);
+    if (!prodRes || !prodRes.ok) prodRes = await fetch('/rani_products.json').catch(() => null);
+    if (!prodRes || !prodRes.ok) prodRes = await fetch('rani_products.json').catch(() => null);
+    if (prodRes && prodRes.ok) {
       const prods = await prodRes.json();
       if (Array.isArray(prods) && prods.length > 0) {
         DB.products = prods.map(p => ({

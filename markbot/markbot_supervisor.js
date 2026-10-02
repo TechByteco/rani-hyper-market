@@ -60,7 +60,7 @@ class MarkbotSupervisor {
   // 2. Audit file synchronization across root, public, and pre_model
   auditFileSynchronization() {
     const result = { name: 'File Sync Audit', passed: true, details: [] };
-    const syncFiles = ['rani_products.json', 'index.html', 'store.html', 'admin.html'];
+    const syncFiles = ['rani_products.json', 'products_catalog.json', 'initial_products.json', 'initial_products.js', 'index.html', 'store.html', 'admin.html'];
 
     syncFiles.forEach(file => {
       const rootPath = path.join(ROOT_DIR, file);
@@ -82,6 +82,16 @@ class MarkbotSupervisor {
             result.details.push(`Auto-repair failed for ${file}: ${err.message}`);
           }
         }
+      }
+
+      // Also synchronize to pre_model folder
+      const preModelPath = path.join(ROOT_DIR, 'pre_model', file);
+      if (fs.existsSync(rootPath) && fs.existsSync(path.dirname(preModelPath))) {
+        try {
+          if (!fs.existsSync(preModelPath) || fs.statSync(rootPath).size !== fs.statSync(preModelPath).size) {
+            fs.copyFileSync(rootPath, preModelPath);
+          }
+        } catch(e) {}
       }
     });
 

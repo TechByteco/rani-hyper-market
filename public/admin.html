@@ -2619,7 +2619,7 @@ let allProducts = [];
           fetch('rani_store_profile.json').then(r => r.json()).catch(() => null),
           fetch('rani_analytics.json').then(r => r.json()).catch(() => null),
           fetch('rani_orders.json').then(r => r.json()).catch(() => null),
-          fetch('rani_products.json?v=' + Date.now()).then(r => r.json()).catch(() => null),
+          fetch('/products_catalog.json?v=' + Date.now()).then(r => r.json()).catch(() => fetch('/rani_products.json?v=' + Date.now()).then(r => r.json())).catch(() => null),
           fetch('rani_customers.json').then(r => r.json()).catch(() => null)
         ]);
 

@@ -30,3 +30,6 @@ temp/
 *.txt
 !robots.txt
 !public/robots.txt
+
+.vercel
+.env*

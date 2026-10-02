@@ -20,14 +20,14 @@
   <meta property="og:site_name" content="SNS Marketing">
   <meta property="og:title" content="SNS Marketing &amp; Rani Hyper Market — Store Admin Dashboard">
   <meta property="og:description" content="Official SNS Marketing administration portal for Rani Hyper Market store managers, POS counter billing, and inventory control.">
-  <meta property="og:image" content="https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=1200&q=80">
+  <meta property="og:image" content="https://5.imimg.com/data5/SELLER/Default/2021/6/YQ/ZB/VC/52481281/ponni-boiled-rice-500x500.jpg">
 
   <!-- Twitter Card -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://rani-hyper-market.vercel.app/admin">
   <meta property="twitter:title" content="SNS Marketing &amp; Rani Hyper Market — Admin Dashboard">
   <meta property="twitter:description" content="SNS Marketing retail management and POS counter billing platform for Rani Hyper Market.">
-  <meta property="twitter:image" content="https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=1200&q=80">
+  <meta property="twitter:image" content="https://5.imimg.com/data5/SELLER/Default/2021/6/YQ/ZB/VC/52481281/ponni-boiled-rice-500x500.jpg">
 
   <!-- Schema.org WebApplication Markup -->
   <script type="application/ld+json">
@@ -1467,7 +1467,7 @@
 
           <div>
             <label class="block font-bold text-gray-700 mb-1">Hero Banner Image URL</label>
-            <input type="text" id="cust-hero-img" placeholder="https://images.unsplash.com/..." class="glass-input text-xs">
+            <input type="text" id="cust-hero-img" placeholder="https://example.com/product-image.jpg" class="glass-input text-xs">
           </div>
 
           <div class="md:col-span-3">
@@ -1806,7 +1806,7 @@
             </div>
             <!-- OR paste URL -->
             <div class="cam-divider">or paste URL</div>
-            <input type="text" id="edit-p-image" placeholder="https://images.unsplash.com/..." class="glass-input cam-url-input" oninput="onCamUrlInput('edit', this.value)">
+            <input type="text" id="edit-p-image" placeholder="https://example.com/product-image.jpg" class="glass-input cam-url-input" oninput="onCamUrlInput('edit', this.value)">
           </div>
         </div>
 
@@ -2831,32 +2831,7 @@ let allProducts = [];
         address: '93, Sundara pandian street, Anwar complex, Near Kottai Karuppasamy Kovil, Bodinayakanur',
         hours: 'Mon - Sun: 7:00 AM - 10:00 PM',
         aboutUs: 'Welcome to RANI HYPER MARKET! Located at Anwar Complex, Sundara Pandian Street, Bodinayakanur. We provide top quality grocery, provisions, dairy, and household essentials with free delivery.',
-        heroImg: 'https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=800'
-      };
-
-      const d = stored ? { ...defaultData, ...JSON.parse(stored) } : defaultData;
-
-      document.getElementById('cust-name').value = d.name;
-      document.getElementById('cust-tagline').value = d.tagline;
-      document.getElementById('cust-announcement').value = d.announcement;
-      document.getElementById('cust-phone').value = d.phone;
-      document.getElementById('cust-email').value = d.email;
-      document.getElementById('cust-hours').value = d.hours;
-      document.getElementById('cust-address').value = d.address;
-      document.getElementById('cust-hero-img').value = d.heroImg || '';
-      document.getElementById('cust-about').value = d.aboutUs;
-
-      document.getElementById('admin-store-heading').innerText = d.name + ' Admin';
-    }
-
-    function autoDetectStoreGps() {
-      const btn = document.getElementById('btn-store-gps');
-      if (!navigator.geolocation) {
-        alert('Geolocation is not supported by your browser.');
-        return;
-      }
-
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Locating...';
+        heroImg: 'https://5.imimg.com/data5/SELLER/Default/2021/6/YQ/ZB/VC/52481281/ponni-boiled-rice-500x500.jpg"fa-solid fa-spinner fa-spin"></i> Locating...';
 
       navigator.geolocation.getCurrentPosition(
         (pos) => {
@@ -3496,87 +3471,82 @@ let allProducts = [];
     }
 
     function getRelevantProductImage(title, existingUrl) {
-      if (existingUrl && !existingUrl.includes('apollo247') && !existingUrl.includes('aas0010_1')) {
+      if (existingUrl && !existingUrl.includes('apollo247') && !existingUrl.includes('aas0010_1') && !existingUrl.includes('unsplash.com')) {
         return existingUrl;
       }
       const t = (title || '').toLowerCase();
 
       // Oral Care
-      if (t.includes('brush') || t.includes('toothbrush')) return 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('sensodyne') || t.includes('colgate') || t.includes('paste') || t.includes('pepsodent') || t.includes('close up') || t.includes('oral') || t.includes('dant kanti')) return 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?auto=format&fit=crop&w=400&q=80';
+      if (t.includes('brush') || t.includes('toothbrush')) return 'https://5.imimg.com/data5/SELLER/Default/2023/8/337181517/XG/TU/XW/5251707/colgate-strong-teeth-toothpaste-800g-500x500.jpg';
+      if (t.includes('sensodyne') || t.includes('colgate') || t.includes('paste') || t.includes('pepsodent') || t.includes('close up') || t.includes('oral') || t.includes('dant kanti')) return 'https://5.imimg.com/data5/SELLER/Default/2023/8/337181517/XG/TU/XW/5251707/colgate-strong-teeth-toothpaste-800g-500x500.jpg';
 
       // Health & Relief
-      if (t.includes('iodex') || t.includes('vicks') || t.includes('balm') || t.includes('amrutanjan') || t.includes('amurutanjan') || t.includes('pain') || t.includes('ointment') || t.includes('moov') || t.includes('volini')) return 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('eno') || t.includes('digestive') || t.includes('glucose') || t.includes('band aid') || t.includes('dettol') || t.includes('cotton') || t.includes('antiseptic')) return 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=400&q=80';
+      if (t.includes('iodex') || t.includes('vicks') || t.includes('balm') || t.includes('amrutanjan') || t.includes('amurutanjan') || t.includes('pain') || t.includes('ointment') || t.includes('moov') || t.includes('volini')) return 'https://images.openfoodfacts.org/images/products/000/008/900/0014/front_en.3.400.jpg';
+      if (t.includes('eno') || t.includes('digestive') || t.includes('glucose') || t.includes('band aid') || t.includes('dettol') || t.includes('cotton') || t.includes('antiseptic')) return 'https://images.openfoodfacts.org/images/products/000/008/900/0014/front_en.3.400.jpg';
 
       // Dairy
-      if (t.includes('ice cream') || t.includes('icecream') || t.includes('kulfi')) return 'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('paneer')) return 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('ghee')) return 'https://images.unsplash.com/photo-1628088062854-d1870b4553da?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('butter') || t.includes('cheese')) return 'https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('milk') || t.includes('curd') || t.includes('dairy') || t.includes('arokya') || t.includes('amul') || t.includes('cavin') || t.includes('yogurt')) return 'https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=400&q=80';
+      if (t.includes('ice cream') || t.includes('icecream') || t.includes('kulfi')) return 'https://images.openfoodfacts.org/images/products/890/126/201/0024/front_en.16.400.jpg';
+      if (t.includes('paneer')) return 'https://images.openfoodfacts.org/images/products/890/126/201/0024/front_en.16.400.jpg';
+      if (t.includes('ghee')) return 'https://images.openfoodfacts.org/images/products/890/601/036/0382/front_en.11.400.jpg';
+      if (t.includes('butter') || t.includes('cheese')) return 'https://images.openfoodfacts.org/images/products/890/126/201/0024/front_en.16.400.jpg';
+      if (t.includes('milk') || t.includes('curd') || t.includes('dairy') || t.includes('arokya') || t.includes('amul') || t.includes('cavin') || t.includes('yogurt')) return 'https://images.openfoodfacts.org/images/products/890/126/201/0024/front_en.16.400.jpg';
 
       // Tea & Coffee
-      if (/\b(coffee|bru|nescafe|sunrise|filter coffee)\b/.test(t)) return 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=400&q=80';
-      if (/\b(tea|chai|dustea|chakra gold|avt|taj mahal|red label|3 roses)\b/.test(t) || t.includes('dust tea') || t.includes('tea bag')) return 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=400&q=80';
+      if (/\b(coffee|bru|nescafe|sunrise|filter coffee)\b/.test(t)) return 'https://5.imimg.com/data5/SELLER/Default/2023/1/VR/WP/QG/192043398/teadust1-500x500.jpg';
+      if (/\b(tea|chai|dustea|chakra gold|avt|taj mahal|red label|3 roses)\b/.test(t) || t.includes('dust tea') || t.includes('tea bag')) return 'https://5.imimg.com/data5/SELLER/Default/2023/1/VR/WP/QG/192043398/teadust1-500x500.jpg';
 
       // Beverages & Drinks
-      if (t.includes('juice') || t.includes('maaza') || t.includes('frooti') || t.includes('slice') || t.includes('mango') || t.includes('orange') || t.includes('lemon') || t.includes('squash')) return 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('coke') || t.includes('pepsi') || t.includes('soda') || t.includes('7up') || t.includes('bovonto') || t.includes('mirinda') || t.includes('fanta') || t.includes('sprite') || t.includes('drink') || t.includes('beverage')) return 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=400&q=80';
+      if (t.includes('juice') || t.includes('maaza') || t.includes('frooti') || t.includes('slice') || t.includes('mango') || t.includes('orange') || t.includes('lemon') || t.includes('squash')) return 'https://5.imimg.com/data5/SELLER/Default/2023/9/344161864/TQ/EU/TY/38768188/product-jpeg-500x500.png';
+      if (t.includes('coke') || t.includes('pepsi') || t.includes('soda') || t.includes('7up') || t.includes('bovonto') || t.includes('mirinda') || t.includes('fanta') || t.includes('sprite') || t.includes('drink') || t.includes('beverage')) return 'https://5.imimg.com/data5/SELLER/Default/2023/9/344161864/TQ/EU/TY/38768188/product-jpeg-500x500.png';
 
       // Rice, Pulses & Grains
-      if (t.includes('rice') || t.includes('ponni') || t.includes('basmati') || t.includes('arisi') || t.includes('seeraga')) return 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('paruppu') || t.includes('parupu') || t.includes('dhall') || t.includes('dhal') || t.includes('uluthu') || t.includes('ulundhu') || t.includes('thuvaram') || t.includes('moong') || t.includes('toor') || t.includes('urad') || t.includes('payaru') || t.includes('gram') || t.includes('lentil')) return 'https://images.unsplash.com/photo-1546833998-877b37c2e5c6?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('sundal') || t.includes('channa') || t.includes('chana') || t.includes('pattani') || t.includes('kadalai') || t.includes('peas') || t.includes('chickpea')) return 'https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=400&q=80';
+      if (t.includes('rice') || t.includes('ponni') || t.includes('basmati') || t.includes('arisi') || t.includes('seeraga')) return 'https://5.imimg.com/data5/SELLER/Default/2021/6/YQ/ZB/VC/52481281/ponni-boiled-rice-500x500.jpg';
+      if (t.includes('paruppu') || t.includes('parupu') || t.includes('dhall') || t.includes('dhal') || t.includes('uluthu') || t.includes('ulundhu') || t.includes('thuvaram') || t.includes('moong') || t.includes('toor') || t.includes('urad') || t.includes('payaru') || t.includes('gram') || t.includes('lentil')) return 'https://5.imimg.com/data5/SELLER/Default/2023/11/363842183/LM/TL/WW/175405/bopp-toor-dal-bag-500x500.jpg';
+      if (t.includes('sundal') || t.includes('channa') || t.includes('chana') || t.includes('pattani') || t.includes('kadalai') || t.includes('peas') || t.includes('chickpea')) return 'https://5.imimg.com/data5/SELLER/Default/2023/11/363842183/LM/TL/WW/175405/bopp-toor-dal-bag-500x500.jpg';
 
       // Flours & Vermicelli
-      if (t.includes('semia') || t.includes('semiya') || t.includes('vermicelli') || t.includes('noodle') || t.includes('maggi') || t.includes('pasta') || t.includes('macaroni') || t.includes('chowmein')) return 'https://images.unsplash.com/photo-1612927601601-6638404737ce?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('oats') || t.includes('quaker') || t.includes('muesli') || t.includes('cornflakes')) return 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('flour') || t.includes('mavu') || t.includes('rava') || t.includes('maida') || t.includes('atta') || t.includes('sooji') || t.includes('wheat') || t.includes('puttu') || t.includes('puttupodi') || t.includes('appam') || t.includes('idli') || t.includes('dosa') || t.includes('besan')) return 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=400&q=80';
+      if (t.includes('semia') || t.includes('semiya') || t.includes('vermicelli') || t.includes('noodle') || t.includes('maggi') || t.includes('pasta') || t.includes('macaroni') || t.includes('chowmein')) return 'https://images.openfoodfacts.org/images/products/890/604/215/0029/front_en.3.400.jpg';
+      if (t.includes('oats') || t.includes('quaker') || t.includes('muesli') || t.includes('cornflakes')) return 'https://images.openfoodfacts.org/images/products/890/601/183/0068/front_en.5.400.jpg';
+      if (t.includes('flour') || t.includes('mavu') || t.includes('rava') || t.includes('maida') || t.includes('atta') || t.includes('sooji') || t.includes('wheat') || t.includes('puttu') || t.includes('puttupodi') || t.includes('appam') || t.includes('idli') || t.includes('dosa') || t.includes('besan')) return 'https://images.openfoodfacts.org/images/products/890/601/183/0068/front_en.5.400.jpg';
 
       // Spices, Masalas & Seasonings
-      if (t.includes('chilli') || t.includes('pepper') || t.includes('milagai') || t.includes('milagu') || t.includes('paprika')) return 'https://images.unsplash.com/photo-1588252303782-cb80119abd6d?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('turmeric') || t.includes('manjal')) return 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('masala') || t.includes('sambar') || t.includes('rasam') || t.includes('sakthi') || t.includes('aachi') || t.includes('gravy') || t.includes('powder') || t.includes('jeera') || t.includes('cumin') || t.includes('coriander') || t.includes('mustard') || t.includes('kadugu') || t.includes('garam') || t.includes('curry') || t.includes('biryani') || t.includes('garlic paste') || t.includes('ginger paste')) return 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('salt') || t.includes('sugar') || t.includes('jaggery') || t.includes('vellam') || t.includes('panagkarkandu') || t.includes('kalkandu') || t.includes('sakkarai')) return 'https://images.unsplash.com/photo-1589367920969-ab8e050bbb04?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('honey') || t.includes('thean') || t.includes('jam') || t.includes('kissan')) return 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('pickle') || t.includes('urugai') || t.includes('achar') || t.includes('thokku')) return 'https://images.unsplash.com/photo-1625937329388-3e4e94b293d0?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('appalam') || t.includes('papad') || t.includes('vadam')) return 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=400&q=80';
+      if (t.includes('chilli') || t.includes('pepper') || t.includes('milagai') || t.includes('milagu') || t.includes('paprika')) return 'https://images.openfoodfacts.org/images/products/890/600/208/0137/front_en.3.400.jpg';
+      if (t.includes('turmeric') || t.includes('manjal') || t.includes('kumkum')) return 'https://images.openfoodfacts.org/images/products/890/600/208/0014/front_en.3.400.jpg';
+      if (t.includes('sakthi')) return 'https://images.openfoodfacts.org/images/products/890/600/208/0014/front_en.3.400.jpg';
+      if (t.includes('aachi') || t.includes('masala') || t.includes('sambar') || t.includes('rasam') || t.includes('gravy') || t.includes('powder') || t.includes('jeera') || t.includes('cumin') || t.includes('coriander') || t.includes('mustard') || t.includes('kadugu') || t.includes('garam') || t.includes('curry') || t.includes('biryani') || t.includes('garlic paste') || t.includes('ginger paste')) return 'https://images.openfoodfacts.org/images/products/890/602/112/0418/front_en.5.400.jpg';
+      if (t.includes('salt') || t.includes('sugar') || t.includes('jaggery') || t.includes('vellam') || t.includes('panagkarkandu') || t.includes('kalkandu') || t.includes('sakkarai')) return 'https://upload.wikimedia.org/wikipedia/commons/4/4f/Open_and_close_Jaggery.jpg';
+      if (t.includes('honey') || t.includes('thean') || t.includes('jam') || t.includes('kissan')) return 'https://images.openfoodfacts.org/images/products/890/120/702/5372/front_en.3.400.jpg';
+      if (t.includes('pickle') || t.includes('urugai') || t.includes('achar') || t.includes('thokku')) return 'https://images.openfoodfacts.org/images/products/890/602/112/0418/front_en.5.400.jpg';
+      if (t.includes('appalam') || t.includes('papad') || t.includes('vadam')) return 'https://5.imimg.com/data5/SELLER/Default/2021/6/YQ/ZB/VC/52481281/ponni-boiled-rice-500x500.jpg';
 
       // Oils
-      if (t.includes('coconut oil') || (t.includes('coconut') && !t.includes('biscuit'))) return 'https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('oil') || t.includes('deepam') || t.includes('gingelly') || t.includes('sunflower') || t.includes('vanaspati') || t.includes('dalda') || t.includes('groundnut') || t.includes('sesame') || t.includes('mustard oil')) return 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=400&q=80';
+      if (t.includes('coconut oil') || (t.includes('coconut') && !t.includes('biscuit'))) return 'https://images.openfoodfacts.org/images/products/890/108/800/1014/front_en.11.400.jpg';
+      if (t.includes('oil') || t.includes('deepam') || t.includes('gingelly') || t.includes('sunflower') || t.includes('vanaspati') || t.includes('dalda') || t.includes('groundnut') || t.includes('sesame') || t.includes('mustard oil')) return 'https://images.openfoodfacts.org/images/products/890/400/180/0237/front_en.3.400.jpg';
 
       // Personal Care & Soaps
-      if (t.includes('shampoo') || t.includes('karthicka') || t.includes('meera') || t.includes('clinic') || t.includes('head & shoulders') || t.includes('sunsilk') || t.includes('dove shampoo') || t.includes('pantene') || t.includes('conditioner')) return 'https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('soap') || t.includes('bath') || t.includes('hamam') || t.includes('lifebuoy') || t.includes('medimix') || t.includes('lux') || t.includes('cinthol') || t.includes('sandal') || t.includes('pears') || t.includes('mysore sandal') || t.includes('dettol soap')) return 'https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('hair') || t.includes('thailam') || t.includes('amla') || t.includes('vatika') || t.includes('parachute') || t.includes('bajaj almond')) return 'https://images.unsplash.com/photo-1608248597359-bb3f2f81cf8a?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('cream') || t.includes('glow') || t.includes('fair') || t.includes('lotion') || t.includes('vaseline') || t.includes('talc') || t.includes('ponds') || t.includes('facewash') || t.includes('face wash') || t.includes('garnier') || t.includes('rose water') || t.includes('nivea') || t.includes('moisturizer')) return 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('spray') || t.includes('fogg') || t.includes('deo') || t.includes('deodorant') || t.includes('perfume') || t.includes('scent') || t.includes('axe') || t.includes('wild stone')) return 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('baby') || t.includes('himalaya') || t.includes('johnson') || t.includes('diaper') || t.includes('pampers')) return 'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=400&q=80';
+      if (t.includes('shampoo') || t.includes('karthicka') || t.includes('meera') || t.includes('clinic') || t.includes('head & shoulders') || t.includes('sunsilk') || t.includes('dove shampoo') || t.includes('pantene') || t.includes('conditioner')) return 'https://5.imimg.com/data5/SELLER/Default/2022/9/TU/VG/WT/63187278/clinic-plus-shampoo-500x500.png';
+      if (t.includes('soap') || t.includes('bath') || t.includes('hamam') || t.includes('lifebuoy') || t.includes('medimix') || t.includes('lux') || t.includes('cinthol') || t.includes('sandal') || t.includes('pears') || t.includes('mysore sandal') || t.includes('dettol soap')) return 'https://5.imimg.com/data5/SELLER/Default/2024/5/417140327/QR/DA/QI/128348662/61pcvibnvgl-250x250.jpg';
+      if (t.includes('hair') || t.includes('thailam') || t.includes('amla') || t.includes('vatika') || t.includes('parachute') || t.includes('bajaj almond')) return 'https://images.openfoodfacts.org/images/products/890/108/800/1014/front_en.11.400.jpg';
+      if (t.includes('cream') || t.includes('glow') || t.includes('fair') || t.includes('lotion') || t.includes('vaseline') || t.includes('talc') || t.includes('ponds') || t.includes('facewash') || t.includes('face wash') || t.includes('garnier') || t.includes('rose water') || t.includes('nivea') || t.includes('moisturizer')) return 'https://images.openfoodfacts.org/images/products/000/008/900/0014/front_en.3.400.jpg';
+      if (t.includes('spray') || t.includes('fogg') || t.includes('deo') || t.includes('deodorant') || t.includes('perfume') || t.includes('scent') || t.includes('axe') || t.includes('wild stone')) return 'https://images.openfoodfacts.org/images/products/000/008/900/0014/front_en.3.400.jpg';
+      if (t.includes('baby') || t.includes('himalaya') || t.includes('johnson') || t.includes('diaper') || t.includes('pampers')) return 'https://images.openfoodfacts.org/images/products/000/008/900/0014/front_en.3.400.jpg';
 
       // Snacks, Biscuits & Confectionery
-      if (t.includes('biscuit') || t.includes('cookie') || t.includes('britannia') || t.includes('parle') || t.includes('marie') || t.includes('rusk') || t.includes('good day') || t.includes('bourbon') || t.includes('50-50') || t.includes('oreo')) return 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('choco') || t.includes('chocolate') || t.includes('cadbury') || t.includes('kitkat') || t.includes('dairy milk') || t.includes('5 star') || t.includes('munch') || t.includes('perk') || t.includes('candy') || t.includes('toffee')) return 'https://images.unsplash.com/photo-1511381939415-e44015466834?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('cake') || t.includes('muffin') || t.includes('pastry') || t.includes('pie') || t.includes('plum cake')) return 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('chips') || t.includes('crisps') || t.includes('mixture') || t.includes('murukku') || t.includes('snack') || t.includes('lays') || t.includes('kurkure') || t.includes('bingo') || t.includes('sev') || t.includes('namkeen')) return 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('dates') || t.includes('lion dates') || t.includes('badam') || t.includes('cashew') || t.includes('nut') || t.includes('pista') || t.includes('almond') || t.includes('walnut') || t.includes('raisin') || t.includes('kishmish')) return 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=400&q=80';
+      if (t.includes('biscuit') || t.includes('cookie') || t.includes('britannia') || t.includes('parle') || t.includes('marie') || t.includes('rusk') || t.includes('good day') || t.includes('bourbon') || t.includes('50-50') || t.includes('oreo')) return 'https://images.openfoodfacts.org/images/products/890/106/301/2141/front_en.5.400.jpg';
+      if (t.includes('choco') || t.includes('chocolate') || t.includes('cadbury') || t.includes('kitkat') || t.includes('dairy milk') || t.includes('5 star') || t.includes('munch') || t.includes('perk') || t.includes('candy') || t.includes('toffee')) return 'https://images.openfoodfacts.org/images/products/890/106/301/2141/front_en.5.400.jpg';
+      if (t.includes('cake') || t.includes('muffin') || t.includes('pastry') || t.includes('pie') || t.includes('plum cake')) return 'https://images.openfoodfacts.org/images/products/890/600/725/0870/front_en.3.400.jpg';
+      if (t.includes('chips') || t.includes('crisps') || t.includes('mixture') || t.includes('murukku') || t.includes('snack') || t.includes('lays') || t.includes('kurkure') || t.includes('bingo') || t.includes('sev') || t.includes('namkeen')) return 'https://images.openfoodfacts.org/images/products/890/149/110/1837/front_en.4.400.jpg';
+      if (t.includes('dates') || t.includes('lion dates') || t.includes('badam') || t.includes('cashew') || t.includes('nut') || t.includes('pista') || t.includes('almond') || t.includes('walnut') || t.includes('raisin') || t.includes('kishmish')) return 'https://images.openfoodfacts.org/images/products/890/600/672/0039/front_en.4.400.jpg';
 
       // Cleaning & Household
-      if (t.includes('detergent') || t.includes('surf') || t.includes('ariel') || t.includes('rin') || t.includes('tide') || t.includes('washing') || t.includes('wheel') || t.includes('ala') || t.includes('comfort') || t.includes('revive') || t.includes('ujala') || t.includes('fabric')) return 'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('dishwash') || t.includes('vim') || t.includes('pril') || t.includes('exo') || t.includes('scrub') || t.includes('utensil') || t.includes('scouring')) return 'https://images.unsplash.com/photo-1585421514738-01798e348b17?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('cleaner') || t.includes('harpic') || t.includes('lizol') || t.includes('colin') || t.includes('phenyl') || t.includes('bleach') || t.includes('floor') || t.includes('toilet') || t.includes('glass cleaner')) return 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('hit') || t.includes('all out') || t.includes('good knight') || t.includes('mortein') || t.includes('mosquito') || t.includes('coil') || t.includes('cockroach') || t.includes('chalk')) return 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('agarbatti') || t.includes('agarbathi') || t.includes('sambrani') || t.includes('camphor') || t.includes('pooja') || t.includes('dhoop') || t.includes('mangaldeep') || t.includes('cycle') || t.includes('karpooram')) return 'https://images.unsplash.com/photo-1602928321679-560bb453f190?auto=format&fit=crop&w=400&q=80';
+      if (t.includes('detergent') || t.includes('surf') || t.includes('ariel') || t.includes('rin') || t.includes('tide') || t.includes('washing') || t.includes('wheel') || t.includes('ala') || t.includes('comfort') || t.includes('revive') || t.includes('ujala') || t.includes('fabric')) return 'https://images.openfoodfacts.org/images/products/890/910/600/7123/front_en.3.400.jpg';
+      if (t.includes('dishwash') || t.includes('vim') || t.includes('pril') || t.includes('exo') || t.includes('scrub') || t.includes('utensil') || t.includes('scouring')) return 'https://images.openfoodfacts.org/images/products/890/910/600/7123/front_en.3.400.jpg';
+      if (t.includes('cleaner') || t.includes('harpic') || t.includes('lizol') || t.includes('colin') || t.includes('phenyl') || t.includes('bleach') || t.includes('floor') || t.includes('toilet') || t.includes('glass cleaner')) return 'https://images.openfoodfacts.org/images/products/890/910/600/7123/front_en.3.400.jpg';
+      if (t.includes('hit') || t.includes('all out') || t.includes('good knight') || t.includes('mortein') || t.includes('mosquito') || t.includes('coil') || t.includes('cockroach') || t.includes('chalk')) return 'https://5.imimg.com/data5/SELLER/Default/2023/9/347492193/YV/RF/OC/58276089/714vzdjkr6l-sl1500-500x500.jpg';
+      if (t.includes('agarbatti') || t.includes('agarbathi') || t.includes('sambrani') || t.includes('camphor') || t.includes('pooja') || t.includes('dhoop') || t.includes('mangaldeep') || t.includes('cycle') || t.includes('karpooram')) return 'https://5.imimg.com/data5/SELLER/Default/2023/9/347492193/YV/RF/OC/58276089/714vzdjkr6l-sl1500-500x500.jpg';
 
-      // Stationery
-      if (t.includes('pen') || t.includes('pencil') || t.includes('doms') || t.includes('flair') || t.includes('notebook') || t.includes('eraser') || t.includes('sharpener') || t.includes('scale') || t.includes('ruler') || t.includes('crayon') || t.includes('marker') || t.includes('sketch') || t.includes('stationery') || t.includes('glue') || t.includes('fevicol')) return 'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?auto=format&fit=crop&w=400&q=80';
-
-      // Fruits & Vegetables
-      if (t.includes('apple') || t.includes('banana') || t.includes('grape') || t.includes('orange fruit') || t.includes('pomegranate') || t.includes('fruit')) return 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=400&q=80';
-      if (t.includes('tomato') || t.includes('onion') || t.includes('potato') || t.includes('garlic') || t.includes('ginger') || t.includes('vegetable') || t.includes('vengayam') || t.includes('thakkali') || t.includes('urulai')) return 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=400&q=80';
-
-      return 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&q=80';
+      // Default Retail Stand-up Clear Grocery Pouch
+      return 'https://5.imimg.com/data5/SELLER/Default/2023/11/363842183/LM/TL/WW/175405/bopp-toor-dal-bag-500x500.jpg';
     }
 
     function renderInventoryList(items) {

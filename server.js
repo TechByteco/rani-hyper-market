@@ -411,6 +411,34 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // API Endpoints: MarkBot Autonomous Supervisor & Market Intelligence
+  if (reqPath === '/api/markbot/status') {
+    const statePath = path.join(__dirname, 'markbot', 'markbot_state.json');
+    let state = { status: 'OFFLINE' };
+    try {
+      if (fs.existsSync(statePath)) {
+        state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+      }
+    } catch {}
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(state));
+    return;
+  }
+
+  if (reqPath === '/api/markbot/insights') {
+    let report = {};
+    try {
+      const MarkbotIntelligence = require('./markbot/markbot_intelligence');
+      const intel = new MarkbotIntelligence();
+      report = intel.generateFullMarketReport();
+    } catch (e) {
+      report = { error: e.message };
+    }
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(report));
+    return;
+  }
+
   if (reqPath === '/' || reqPath === '') reqPath = '/index.html';
   const cleanPath = decodeURIComponent(reqPath);
   let filePath = path.join(__dirname, cleanPath);

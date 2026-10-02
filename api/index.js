@@ -339,6 +339,30 @@ module.exports = async (req, res) => {
       return sendJson(500, { error: 'AI Image Engine not available' });
     }
 
+    // 12. MarkBot Status & Market Insights
+    if (reqPath === '/api/markbot/status') {
+      const state = readLocalJson('markbot/markbot_state.json', { status: 'ONLINE', supervisorHealthy: true });
+      return sendJson(200, state);
+    }
+
+    if (reqPath === '/api/markbot/insights') {
+      let report = {};
+      try {
+        let MarkbotIntelligence = null;
+        try { MarkbotIntelligence = require('../markbot/markbot_intelligence'); } catch {}
+        if (!MarkbotIntelligence) {
+          try { MarkbotIntelligence = require('./markbot/markbot_intelligence'); } catch {}
+        }
+        if (MarkbotIntelligence) {
+          const intel = new MarkbotIntelligence();
+          report = intel.generateFullMarketReport();
+        }
+      } catch (e) {
+        report = { error: e.message };
+      }
+      return sendJson(200, report);
+    }
+
     // Default: 404 for unknown API routes
     return sendJson(404, { error: 'API route not found', path: reqPath });
   } catch (error) {

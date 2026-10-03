@@ -2524,7 +2524,8 @@
 
     const SB_URL = 'https://xjyuxlslaqpqlzxvxaqn.supabase.co';
     const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqeXV4bHNsYXFwcWx6eHZ4YXFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMTE0NDcsImV4cCI6MjEwNDc4NzQ0N30.SrrZ4aVJasotXUvJWHoFitodvfNHpt-xlNx9pijpf9s';
-    const sb = window.supabase.createClient(SB_URL, SB_KEY);
+    let sb = null;
+    try { if (window.supabase && typeof window.supabase.createClient === 'function') sb = window.supabase.createClient(SB_URL, SB_KEY); } catch(e){ console.warn('Supabase offline mode'); }
 
     
     // EXECUTIVE MODULE NAVIGATOR
@@ -2616,11 +2617,11 @@ let allProducts = [];
         const [posStatusRes, liveOrdersRes, profileRes, analyticsRes, ordersRes, productsRes, custRes] = await Promise.all([
           fetch('/api/pos/status').then(r => r.json()).catch(() => null),
           fetch('/api/pos/orders?limit=250').then(r => r.json()).catch(() => null),
-          fetch('rani_store_profile.json').then(r => r.json()).catch(() => null),
-          fetch('rani_analytics.json').then(r => r.json()).catch(() => null),
-          fetch('rani_orders.json').then(r => r.json()).catch(() => null),
+          fetch('/rani_store_profile.json').then(r => r.json()).catch(() => null),
+          fetch('/rani_analytics.json').then(r => r.json()).catch(() => null),
+          fetch('/rani_orders.json').then(r => r.json()).catch(() => null),
           fetch('/products_catalog.json?v=' + Date.now()).then(r => r.json()).catch(() => fetch('/rani_products.json?v=' + Date.now()).then(r => r.json())).catch(() => null),
-          fetch('rani_customers.json').then(r => r.json()).catch(() => null)
+          fetch('/rani_customers.json').then(r => r.json()).catch(() => null)
         ]);
 
         // Update Desktop POS Connection Header Badge
@@ -2820,7 +2821,12 @@ let allProducts = [];
     /* STORE PROFILE & GPS AUTO-DETECT */
     function loadStoreCustomizations() {
       const tenantId = sessionStorage.getItem('nsn_tenant_id') || '37a64e83-514d-4b00-b90a-9af172dacdd6';
-      const stored = localStorage.getItem('nsn_store_custom_' + tenantId) || localStorage.getItem('nsn_store_custom_active');
+      let d = {};
+      try {
+        d = JSON.parse(localStorage.getItem('nsn_store_custom_' + tenantId) || localStorage.getItem('nsn_store_custom_active') || '{}');
+      } catch(e) {
+        d = {};
+      }
       
       const defaultData = {
         name: 'RANI HYPER MARKET',
@@ -2831,7 +2837,31 @@ let allProducts = [];
         address: '93, Sundara pandian street, Anwar complex, Near Kottai Karuppasamy Kovil, Bodinayakanur',
         hours: 'Mon - Sun: 7:00 AM - 10:00 PM',
         aboutUs: 'Welcome to RANI HYPER MARKET! Located at Anwar Complex, Sundara Pandian Street, Bodinayakanur. We provide top quality grocery, provisions, dairy, and household essentials with free delivery.',
-        heroImg: 'https://5.imimg.com/data5/SELLER/Default/2021/6/YQ/ZB/VC/52481281/ponni-boiled-rice-500x500.jpg"fa-solid fa-spinner fa-spin"></i> Locating...';
+        heroImg: 'https://5.imimg.com/data5/SELLER/Default/2021/6/YQ/ZB/VC/52481281/ponni-boiled-rice-500x500.jpg'
+      };
+
+      const finalData = Object.assign({}, defaultData, d);
+
+      if (document.getElementById('cust-name')) document.getElementById('cust-name').value = finalData.name || '';
+      if (document.getElementById('cust-tagline')) document.getElementById('cust-tagline').value = finalData.tagline || '';
+      if (document.getElementById('cust-announcement')) document.getElementById('cust-announcement').value = finalData.announcement || '';
+      if (document.getElementById('cust-phone')) document.getElementById('cust-phone').value = finalData.phone || '';
+      if (document.getElementById('cust-email')) document.getElementById('cust-email').value = finalData.email || '';
+      if (document.getElementById('cust-address')) document.getElementById('cust-address').value = finalData.address || '';
+      if (document.getElementById('cust-hours')) document.getElementById('cust-hours').value = finalData.hours || '';
+      if (document.getElementById('cust-hero-img')) document.getElementById('cust-hero-img').value = finalData.heroImg || '';
+      if (document.getElementById('cust-about')) document.getElementById('cust-about').value = finalData.aboutUs || '';
+    }
+
+    function autoDetectStoreGps() {
+      const btn = document.getElementById('btn-store-gps');
+      if (btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Locating...';
+
+      if (!navigator.geolocation) {
+        alert('Geolocation is not supported by your browser.');
+        if (btn) btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> Use Current GPS Location';
+        return;
+      }
 
       navigator.geolocation.getCurrentPosition(
         (pos) => {
@@ -2840,21 +2870,21 @@ let allProducts = [];
           localStorage.setItem('nsn_store_lat', lat);
           localStorage.setItem('nsn_store_lng', lng);
 
-          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+          fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng)
             .then(res => res.json())
             .then(data => {
-              const displayAddr = data.display_name || `RANI HYPER MARKET (GPS: ${lat}, ${lng})`;
-              document.getElementById('cust-address').value = displayAddr;
-              btn.innerHTML = '<i class="fa-solid fa-check text-emerald-600"></i> Store GPS Saved!';
+              const displayAddr = data.display_name || ('RANI HYPER MARKET (GPS: ' + lat + ', ' + lng + ')');
+              if (document.getElementById('cust-address')) document.getElementById('cust-address').value = displayAddr;
+              if (btn) btn.innerHTML = '<i class="fa-solid fa-check text-emerald-600"></i> Store GPS Saved!';
             })
             .catch(() => {
-              document.getElementById('cust-address').value = `RANI HYPER MARKET (GPS: ${lat}, ${lng})`;
-              btn.innerHTML = '<i class="fa-solid fa-check"></i> GPS Coordinates Saved!';
+              if (document.getElementById('cust-address')) document.getElementById('cust-address').value = 'RANI HYPER MARKET (GPS: ' + lat + ', ' + lng + ')';
+              if (btn) btn.innerHTML = '<i class="fa-solid fa-check"></i> GPS Coordinates Saved!';
             });
         },
         (err) => {
           alert('Unable to retrieve store location: ' + err.message);
-          btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> Use Current GPS Location';
+          if (btn) btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> Use Current GPS Location';
         }
       );
     }

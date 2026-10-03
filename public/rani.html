@@ -1843,7 +1843,8 @@ async function initRealData() {
 
   try {
     // 2. Fetch real customers from rani_customers.json
-    const custRes = await fetch('rani_customers.json');
+    let custRes = await fetch('/rani_customers.json').catch(() => null);
+    if (!custRes || !custRes.ok) custRes = await fetch('rani_customers.json').catch(() => null);
     if (custRes.ok) {
       const custs = await custRes.json();
       if (Array.isArray(custs) && custs.length > 0) {

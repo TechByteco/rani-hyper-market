@@ -159,13 +159,13 @@
 
       <div class="glass-card p-4 rounded-2xl border-l-4 border-blue-600">
         <span class="text-[10px] font-bold text-gray-400 uppercase block tracking-wider">Total Sales Revenue</span>
-        <h3 id="stat-total-sales" class="text-xl sm:text-2xl font-black text-blue-800 mt-1">â‚¹28,61,860.00</h3>
+        <h3 id="stat-total-sales" class="text-xl sm:text-2xl font-black text-blue-800 mt-1">₹28,61,860.00</h3>
         <span class="text-[11px] font-semibold text-blue-700">Gross POS Revenue</span>
       </div>
 
       <div class="glass-card p-4 rounded-2xl border-l-4 border-purple-600">
         <span class="text-[10px] font-bold text-gray-400 uppercase block tracking-wider">Net Real Profit</span>
-        <h3 id="stat-total-profit" class="text-xl sm:text-2xl font-black text-purple-700 mt-1">â‚¹3,49,712.05</h3>
+        <h3 id="stat-total-profit" class="text-xl sm:text-2xl font-black text-purple-700 mt-1">₹3,49,712.05</h3>
         <span class="text-[11px] font-semibold text-purple-700">Margin: ~12.2%</span>
       </div>
 
@@ -335,7 +335,7 @@
           <div id="adm-inv-items" class="space-y-1">
             <div class="flex justify-between font-bold text-gray-800">
               <span>Provisions Grocery Bill</span>
-              <span id="adm-inv-total">â‚¹0.00</span>
+              <span id="adm-inv-total">₹0.00</span>
             </div>
           </div>
         </div>
@@ -370,7 +370,8 @@
   <script>
     const SB_URL = 'https://xjyuxlslaqpqlzxvxaqn.supabase.co';
     const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqeXV4bHNsYXFwcWx6eHZ4YXFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMTE0NDcsImV4cCI6MjEwNDc4NzQ0N30.SrrZ4aVJasotXUvJWHoFitodvfNHpt-xlNx9pijpf9s';
-    const sb = window.supabase.createClient(SB_URL, SB_KEY);
+    let sb = null;
+    try { if (window.supabase && typeof window.supabase.createClient === 'function') sb = window.supabase.createClient(SB_URL, SB_KEY); } catch(e){ console.warn('Supabase offline mode'); }
 
     let allOrders = [];
     let raniAnalytics = null;
@@ -416,19 +417,25 @@
         if (analyticsRes.status === 'fulfilled' && analyticsRes.value) {
           raniAnalytics = analyticsRes.value;
           document.getElementById('stat-total-bills').innerText = raniAnalytics.totalOrders ? raniAnalytics.totalOrders.toLocaleString('en-IN') : '16,781';
-          document.getElementById('stat-total-sales').innerText = 'â‚¹' + (raniAnalytics.totalSales || 2861860).toLocaleString('en-IN', { minimumFractionDigits: 2 });
-          document.getElementById('stat-total-profit').innerText = 'â‚¹' + (raniAnalytics.totalProfit || 349712.05).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+          document.getElementById('stat-total-sales').innerText = '₹' + (raniAnalytics.totalSales || 2861860).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+          document.getElementById('stat-total-profit').innerText = '₹' + (raniAnalytics.totalProfit || 349712.05).toLocaleString('en-IN', { minimumFractionDigits: 2 });
         }
 
-        // Also fetch any real-time orders from Supabase
-        const { data: sbOrders } = await sb.from('orders').select('*').order('created_at', { ascending: false });
-        if (sbOrders && sbOrders.length > 0) {
-          const existingIds = new Set(localOrders.map(o => String(o.id)));
-          sbOrders.forEach(o => {
-            if (!existingIds.has(String(o.id))) {
-              localOrders.unshift(o);
+        // Non-blocking merge of live web orders (1.5s timeout)
+        if (sb) {
+          try {
+            const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 1500));
+            const fetchPromise = sb.from('orders').select('*').order('created_at', { ascending: false });
+            const { data: sbOrders } = await Promise.race([fetchPromise, timeoutPromise]);
+            if (sbOrders && sbOrders.length > 0) {
+              const existingIds = new Set(localOrders.map(o => String(o.id)));
+              sbOrders.forEach(o => {
+                if (!existingIds.has(String(o.id))) {
+                  localOrders.unshift(o);
+                }
+              });
             }
-          });
+          } catch(e) {}
         }
 
         allOrders = localOrders;
@@ -438,7 +445,7 @@
       } catch (err) {
         console.error('Error loading bill history:', err);
         const tbody = document.getElementById('bills-table-tbody');
-        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-red-500 font-bold">Failed to load bill history: ${err.message}</td></tr>`;
+        if (allOrders.length === 0) { tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-amber-500 font-bold"><i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Offline Mode: Cloud sync unavailable (${err.message})</td></tr>`; } else { renderTable(); }
       }
     }
 
@@ -570,8 +577,8 @@
           <th class="py-3 px-3">Voucher # &amp; Date</th>
           <th class="py-3 px-3">Customer &amp; Contact</th>
           <th class="py-3 px-3">Product Summary</th>
-          <th class="py-3 px-3 text-right">Bill Total (â‚¹)</th>
-          <th class="py-3 px-3 text-right">Cost (â‚¹)</th>
+          <th class="py-3 px-3 text-right">Bill Total (₹)</th>
+          <th class="py-3 px-3 text-right">Cost (₹)</th>
           <th class="py-3 px-3 text-right">Profit Margin</th>
           <th class="py-3 px-3 text-center">Status</th>
           <th class="py-3 px-3 text-right">Actions</th>
@@ -629,14 +636,14 @@
               ${o.product_summary || 'Retail Provisions Bill'}
             </td>
             <td class="py-3 px-3 text-right font-black text-gray-900 whitespace-nowrap">
-              â‚¹${sales.toFixed(2)}
+              ₹${sales.toFixed(2)}
             </td>
             <td class="py-3 px-3 text-right font-bold text-amber-800 whitespace-nowrap">
-              â‚¹${cost.toFixed(2)}
+              ₹${cost.toFixed(2)}
             </td>
             <td class="py-3 px-3 text-right whitespace-nowrap">
               <span class="px-2 py-0.5 rounded-full font-black text-[11px] ${profit >= 0 ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-red-100 text-red-800 border border-red-200'}">
-                +â‚¹${profit.toFixed(2)} (${pct}%)
+                +₹${profit.toFixed(2)} (${pct}%)
               </span>
             </td>
             <td class="py-3 px-3 text-center whitespace-nowrap">
@@ -665,9 +672,9 @@
         <tr class="bg-emerald-50/80 text-emerald-950 font-black">
           <th class="py-3 px-3">Date</th>
           <th class="py-3 px-3 text-center">Delivered Bills Count</th>
-          <th class="py-3 px-3 text-right">Daily Sales Total (â‚¹)</th>
-          <th class="py-3 px-3 text-right">Daily Purchase Cost (â‚¹)</th>
-          <th class="py-3 px-3 text-right">Net Daily Profit (â‚¹)</th>
+          <th class="py-3 px-3 text-right">Daily Sales Total (₹)</th>
+          <th class="py-3 px-3 text-right">Daily Purchase Cost (₹)</th>
+          <th class="py-3 px-3 text-right">Net Daily Profit (₹)</th>
           <th class="py-3 px-3 text-right">Profit Margin (%)</th>
           <th class="py-3 px-3 text-center">Action</th>
         </tr>
@@ -691,9 +698,9 @@
             <tr class="hover:bg-emerald-50/40 transition">
               <td class="py-3 px-3 font-extrabold text-gray-900">${d}</td>
               <td class="py-3 px-3 text-center font-black text-blue-700">${row.count} bills</td>
-              <td class="py-3 px-3 text-right font-black text-gray-900">â‚¹${row.sales.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-              <td class="py-3 px-3 text-right font-bold text-amber-800">â‚¹${row.cost.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-              <td class="py-3 px-3 text-right font-black text-emerald-700">+â‚¹${row.profit.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              <td class="py-3 px-3 text-right font-black text-gray-900">₹${row.sales.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              <td class="py-3 px-3 text-right font-bold text-amber-800">₹${row.cost.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              <td class="py-3 px-3 text-right font-black text-emerald-700">+₹${row.profit.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
               <td class="py-3 px-3 text-right font-extrabold text-emerald-800">${pct}%</td>
               <td class="py-3 px-3 text-center">
                 <button onclick="filterByDayVouchers('${d}')" class="px-3 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded-lg text-xs font-bold">
@@ -722,9 +729,9 @@
         <tr class="bg-emerald-50/80 text-emerald-950 font-black">
           <th class="py-3 px-3">Month</th>
           <th class="py-3 px-3 text-center">Total Bills Count</th>
-          <th class="py-3 px-3 text-right">Monthly Sales Revenue (â‚¹)</th>
-          <th class="py-3 px-3 text-right">Monthly Purchase Cost (â‚¹)</th>
-          <th class="py-3 px-3 text-right">Net Monthly Profit (â‚¹)</th>
+          <th class="py-3 px-3 text-right">Monthly Sales Revenue (₹)</th>
+          <th class="py-3 px-3 text-right">Monthly Purchase Cost (₹)</th>
+          <th class="py-3 px-3 text-right">Net Monthly Profit (₹)</th>
           <th class="py-3 px-3 text-right">Profit Margin (%)</th>
         </tr>
       `;
@@ -743,9 +750,9 @@
             <tr class="hover:bg-emerald-50/40 transition">
               <td class="py-3.5 px-3 font-extrabold text-gray-900">${monthMap[m] || m}</td>
               <td class="py-3.5 px-3 text-center font-black text-blue-700">${row.count.toLocaleString('en-IN')} bills</td>
-              <td class="py-3.5 px-3 text-right font-black text-gray-900">â‚¹${row.sales.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-              <td class="py-3.5 px-3 text-right font-bold text-amber-800">â‚¹${row.cost.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-              <td class="py-3.5 px-3 text-right font-black text-emerald-700">+â‚¹${row.profit.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              <td class="py-3.5 px-3 text-right font-black text-gray-900">₹${row.sales.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              <td class="py-3.5 px-3 text-right font-bold text-amber-800">₹${row.cost.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              <td class="py-3.5 px-3 text-right font-black text-emerald-700">+₹${row.profit.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
               <td class="py-3.5 px-3 text-right font-black text-emerald-800">${pct}%</td>
             </tr>
           `;
@@ -774,9 +781,9 @@
       document.getElementById('adm-inv-cust-name').innerText = o.customer_name || 'Walk-in Customer';
       document.getElementById('adm-inv-cust-addr').innerText = o.shipping_address || 'Bodinayakanur Town';
       document.getElementById('adm-inv-payment').innerText = o.payment_method || 'Cash / Counter POS';
-      document.getElementById('adm-inv-total').innerText = 'â‚¹' + parseFloat(o.total_amount).toFixed(2);
+      document.getElementById('adm-inv-total').innerText = '₹' + parseFloat(o.total_amount).toFixed(2);
 
-      const qrBillText = encodeURIComponent(`STORE:${storeName}\nBILL:${invNo}\nDATE:${o.voucher_date || ''}\nCUSTOMER:${o.customer_name || 'Counter'}\nTOTAL:â‚¹${o.total_amount}\nPAYMENT:${o.payment_method || 'Cash'}`);
+      const qrBillText = encodeURIComponent(`STORE:${storeName}\nBILL:${invNo}\nDATE:${o.voucher_date || ''}\nCUSTOMER:${o.customer_name || 'Counter'}\nTOTAL:₹${o.total_amount}\nPAYMENT:${o.payment_method || 'Cash'}`);
       document.getElementById('adm-inv-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${qrBillText}`;
 
       document.getElementById('admin-invoice-modal').classList.remove('hidden');
@@ -809,7 +816,7 @@
       const msg = `*ORDER RECEIPT & CONFIRMATION â€” ${storeName}*\n\n` +
         `Hello ${o.customer_name || 'Customer'},\n` +
         `Your bill ${invNo} is confirmed.\n\n` +
-        `ðŸ’° *Bill Amount:* â‚¹${parseFloat(o.total_amount).toFixed(2)}\n` +
+        `ðŸ’° *Bill Amount:* ₹${parseFloat(o.total_amount).toFixed(2)}\n` +
         `ðŸ“… *Date:* ${o.voucher_date || '05/09/2026'}\n` +
         `ðŸ’³ *Payment:* ${o.payment_method || 'Cash on Delivery'}\n` +
         `ðŸ“ *Address:* ${o.shipping_address || 'Bodinayakanur'}\n\n` +

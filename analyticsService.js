@@ -26,7 +26,12 @@ function loadJsonFallback(filename, defaultValue = null) {
   return defaultValue;
 }
 
+const isWindows = process.platform === 'win32';
+
 function queryDb(sql) {
+  if (!isWindows || !fs.existsSync(SQLITE_EXE) || !fs.existsSync(DB_PATH)) {
+    return [];
+  }
   try {
     const out = execFileSync(SQLITE_EXE, [DB_PATH, '-json', sql], {
       encoding: 'utf8',
@@ -34,12 +39,13 @@ function queryDb(sql) {
     });
     return JSON.parse(out.trim() || '[]');
   } catch (err) {
-    console.error('SQL Error:', err.message);
+    console.warn('SQL Warning (fallback active):', err.message);
     return [];
   }
 }
 
 function checkProcessRunning(processName) {
+  if (!isWindows) return false;
   try {
     const cmd = `tasklist /FI "IMAGENAME eq ${processName}" /NH`;
     const out = execSync(cmd, { encoding: 'utf8' });

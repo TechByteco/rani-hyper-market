@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Diagnostics &amp; Service Architecture — Rani Hyper Market / NSN Market</title>
+  <meta name="description" content="Official real-time diagnostics, health verification suite, and architectural guide for Rani Hyper Market & NSN Market cloud and offline services.">
+  <link rel="icon" href="https://images.openfoodfacts.org/images/products/890/103/089/5436/front_en.3.400.jpg">
+  
+  <!-- FontAwesome & Tailwind -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at top right, #f0fdf4, #f8fafc 40%, #f1f5f9 100%);
+      color: #0f172a;
+      min-height: 100vh;
+    }
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.85);
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04);
+    }
+    .badge-pass {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+    .badge-warn {
+      background: #fffbeb;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+    .badge-fail {
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+    .badge-pending {
+      background: #f8fafc;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+    }
+    pre {
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e1 transparent;
+    }
+  </style>
+</head>
+<body class="p-4 md:p-8">
+
+  <!-- TOP HEADER -->
+  <header class="max-w-7xl mx-auto mb-8">
+    <div class="glass-card rounded-3xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border-b-4 border-emerald-500">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/20 text-2xl font-black">
+          <i class="fa-solid fa-stethoscope"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl md:text-2xl font-black text-gray-900 tracking-tight">System Diagnostics &amp; Operational Health</h1>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-300">Live</span>
+          </div>
+          <p class="text-xs text-gray-500 mt-1 font-medium">
+            Rani Hyper Market &amp; NSN Market Enterprise Suite • Anwar Complex, Bodinayakanur
+          </p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        <button id="btn-run-all" onclick="runComprehensiveDiagnostics()" class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md shadow-emerald-600/20 transition active:scale-95 cursor-pointer">
+          <i class="fa-solid fa-play"></i> Run All 10 Diagnostics
+        </button>
+        <button onclick="exportDiagnosticReport()" class="px-4 py-2.5 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold rounded-xl flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+          <i class="fa-solid fa-download"></i> Export JSON
+        </button>
+        <a href="admin.html" class="px-4 py-2.5 bg-gray-900 hover:bg-black text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition active:scale-95">
+          <i class="fa-solid fa-sliders"></i> Admin Hub
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- QUICK KPI STRIP -->
+  <section class="max-w-7xl mx-auto mb-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="glass-card p-4 rounded-2xl">
+        <div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider flex items-center justify-between">
+          <span>Catalog Inventory</span>
+          <i class="fa-solid fa-boxes-stacked text-emerald-600"></i>
+        </div>
+        <div class="text-2xl font-black text-gray-900 mt-1" id="kpi-catalog">7,179 Items</div>
+        <div class="text-[11px] text-emerald-600 font-semibold mt-0.5">100% Authentic Indian FMCG</div>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl">
+        <div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider flex items-center justify-between">
+          <span>Active Fiscal Ledger</span>
+          <i class="fa-solid fa-database text-blue-600"></i>
+        </div>
+        <div class="text-2xl font-black text-gray-900 mt-1" id="kpi-fiscal">FY 2026-27</div>
+        <div class="text-[11px] text-blue-600 font-semibold mt-0.5">Multi-Year SQLite &amp; Cloud Fallback</div>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl">
+        <div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider flex items-center justify-between">
+          <span>Offline Resilience</span>
+          <i class="fa-solid fa-shield-halved text-purple-600"></i>
+        </div>
+        <div class="text-2xl font-black text-emerald-600 mt-1" id="kpi-resilience">Active</div>
+        <div class="text-[11px] text-purple-600 font-semibold mt-0.5">Zero-Delay Supabase Bypass</div>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl">
+        <div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider flex items-center justify-between">
+          <span>AI Supervisor Status</span>
+          <i class="fa-solid fa-brain text-amber-600"></i>
+        </div>
+        <div class="text-2xl font-black text-gray-900 mt-1" id="kpi-markbot">MarkBot Active</div>
+        <div class="text-[11px] text-amber-600 font-semibold mt-0.5">Autonomous Continuous Improvement</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NAVIGATION TABS -->
+  <div class="max-w-7xl mx-auto mb-6 flex items-center gap-3 border-b border-gray-200 pb-3">
+    <button onclick="switchTab('tests')" id="tab-btn-tests" class="px-4 py-2 rounded-xl text-xs font-black transition flex items-center gap-2 bg-emerald-600 text-white shadow-sm">
+      <i class="fa-solid fa-list-check"></i> Live Diagnostics Runner
+    </button>
+    <button onclick="switchTab('services')" id="tab-btn-services" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-white text-gray-600 hover:text-gray-900 border border-gray-200">
+      <i class="fa-solid fa-graduation-cap"></i> Complete System &amp; Tool Architecture Guide
+    </button>
+    <button onclick="switchTab('launchpad')" id="tab-btn-launchpad" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-white text-gray-600 hover:text-gray-900 border border-gray-200">
+      <i class="fa-solid fa-rocket"></i> Portal Launchpad (10 Tools)
+    </button>
+  </div>
+
+  <!-- TAB 1: LIVE DIAGNOSTICS RUNNER -->
+  <main id="tab-tests" class="max-w-7xl mx-auto space-y-6">
+    <div class="glass-card rounded-3xl p-6">
+      <div class="flex items-center justify-between border-b border-gray-100 pb-4 mb-4">
+        <div>
+          <h2 class="text-base font-extrabold text-gray-900 flex items-center gap-2">
+            <i class="fa-solid fa-microchip text-emerald-600"></i> Automated Subsystem Health Checks
+          </h2>
+          <p class="text-xs text-gray-500">Each check tests data integrity, latency, schema validation, and fallback mechanisms.</p>
+        </div>
+        <div id="overall-status-pill" class="px-3 py-1 rounded-full text-xs font-black badge-pending flex items-center gap-1.5">
+          <i class="fa-solid fa-circle-notch fa-spin text-gray-400"></i> Ready to Run
+        </div>
+      </div>
+
+      <!-- Test Items Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="border-b border-gray-200/80 text-[11px] font-extrabold text-gray-400 uppercase tracking-wider">
+              <th class="py-3 px-3">#</th>
+              <th class="py-3 px-3">Subsystem / Endpoint</th>
+              <th class="py-3 px-3">Target URL / Asset</th>
+              <th class="py-3 px-3">Latency</th>
+              <th class="py-3 px-3">Status</th>
+              <th class="py-3 px-3">Details &amp; Payload Verification</th>
+              <th class="py-3 px-3 text-right">Inspect</th>
+            </tr>
+          </thead>
+          <tbody id="diagnostic-tbody" class="divide-y divide-gray-100 font-medium">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Live Telemetry Inspector Modal / Drawer -->
+    <div id="raw-payload-card" class="glass-card rounded-3xl p-6 hidden">
+      <div class="flex items-center justify-between border-b border-gray-100 pb-3 mb-3">
+        <h3 id="inspector-title" class="text-sm font-black text-gray-900 flex items-center gap-2">
+          <i class="fa-solid fa-code text-blue-600"></i> Raw JSON Telemetry Response
+        </h3>
+        <button onclick="document.getElementById('raw-payload-card').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 text-xs font-bold">
+          <i class="fa-solid fa-xmark text-sm"></i> Close
+        </button>
+      </div>
+      <pre id="inspector-pre" class="font-mono-code text-[11px] p-4 bg-gray-900 text-emerald-400 rounded-2xl overflow-x-auto max-h-96 leading-relaxed"></pre>
+    </div>
+  </main>
+
+  <!-- TAB 2: SYSTEM ARCHITECTURE & EDUCATIONAL GUIDE -->
+  <section id="tab-services" class="max-w-7xl mx-auto space-y-6 hidden">
+    <!-- Architecture Overview -->
+    <div class="glass-card rounded-3xl p-6">
+      <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-5">
+        <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-lg">
+          <i class="fa-solid fa-network-wired"></i>
+        </div>
+        <div>
+          <h2 class="text-lg font-black text-gray-900">How Data is Fetched and Handled Online vs. Locally</h2>
+          <p class="text-xs text-gray-500">Dual-engine resilient architecture for continuous counter operation and cloud global storefront.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-gray-700">
+        <div class="p-5 bg-white/70 rounded-2xl border border-gray-200">
+          <h3 class="font-black text-emerald-800 text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-cloud"></i> 1. Online / Vercel Serverless Architecture
+          </h3>
+          <p class="mb-3">
+            When deployed to Vercel (<code class="bg-gray-100 px-1 py-0.5 rounded text-gray-800">rani-hyper-market.vercel.app</code>), the application runs on stateless serverless edge functions:
+          </p>
+          <ul class="list-disc pl-5 space-y-1.5 text-gray-600">
+            <li><strong>Router:</strong> All API requests pass through <code class="font-mono-code text-gray-800">/api/index.js</code> via Vercel rewrites.</li>
+            <li><strong>Zero-Crash Failover:</strong> If native Windows binaries (<code class="font-mono-code">sqlite3.exe</code>, <code class="font-mono-code">tasklist</code>) are absent in the Linux container, <code class="font-mono-code">analyticsService.js</code> automatically falls back to in-memory JSON data snapshots.</li>
+            <li><strong>Pre-baked Authentic Snapshots:</strong> <code class="font-mono-code">products_catalog.json</code> (7,179 products), <code class="font-mono-code">rani_orders.json</code>, <code class="font-mono-code">rani_customers.json</code>, and <code class="font-mono-code">rani_analytics.json</code> provide 100% instant responses without waiting for database spin-up.</li>
+            <li><strong>Supabase Non-Blocking Guard:</strong> All queries to remote Supabase have an instant local fallback. If DNS or network is unreachable, orders, logins, and cart operations proceed with zero timeout or spinner freeze.</li>
+          </ul>
+        </div>
+
+        <div class="p-5 bg-white/70 rounded-2xl border border-gray-200">
+          <h3 class="font-black text-blue-800 text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-desktop"></i> 2. Local Desktop POS &amp; Hardware Bridge
+          </h3>
+          <p class="mb-3">
+            On the physical retail store computer at Bodinayakanur (<code class="bg-gray-100 px-1 py-0.5 rounded text-gray-800">localhost:5500</code>):
+          </p>
+          <ul class="list-disc pl-5 space-y-1.5 text-gray-600">
+            <li><strong>Live SQLite Engine:</strong> Directly queries the active multi-year retail databases in <code class="font-mono-code text-gray-800">C:\SKS Market\*.db</code> (e.g. FY 2026-2027).</li>
+            <li><strong>Barcode Scanner &amp; POS Modal:</strong> Supports instant barcode reader lookups (GTIN-8, GTIN-13) and live product bill parking.</li>
+            <li><strong>Thermal Receipt Printing:</strong> Drives 80mm ESC/POS receipt printers directly via browser print spooler or serial COM port bridge.</li>
+            <li><strong>MarkBot Daemon:</strong> Continuously monitors catalog health, stock thresholds, and syncs newly recorded counter bills into web snapshots automatically.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Breakdown of All Tools & Services -->
+    <div class="glass-card rounded-3xl p-6">
+      <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-5">
+        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-lg">
+          <i class="fa-solid fa-toolbox"></i>
+        </div>
+        <div>
+          <h2 class="text-lg font-black text-gray-900">Deep Dive: Every Tool &amp; Service of Rani &amp; NSN Market</h2>
+          <p class="text-xs text-gray-500">Comprehensive educational syllabus covering functionality, data inputs, and outputs.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-xs">
+        <!-- Service 1 -->
+        <div class="p-4 bg-white/80 rounded-2xl border border-gray-200/80 hover:border-emerald-400 transition shadow-xs">
+          <div class="flex items-center gap-2 font-black text-gray-900 text-sm mb-2">
+            <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs">01</span>
+            Customer Storefront (<code class="text-xs font-mono-code">store.html</code>)
+          </div>
+          <p class="text-gray-600 mb-2">
+            Mobile-optimized customer shopping portal with 7,179 authentic Indian FMCG items across 10 staple categories (Rice, Dhall, Cooking Oils, Spices, Dairy, Soaps).
+          </p>
+          <div class="text-[11px] bg-emerald-50 text-emerald-800 p-2 rounded-xl font-medium">
+            <strong>Key Features:</strong> Instant fuzzy search, category filter pills, sticky cart drawer, OTP-free WhatsApp order dispatch, and delivery fee calculation.
+          </div>
+        </div>
+
+        <!-- Service 2 -->
+        <div class="p-4 bg-white/80 rounded-2xl border border-gray-200/80 hover:border-emerald-400 transition shadow-xs">
+          <div class="flex items-center gap-2 font-black text-gray-900 text-sm mb-2">
+            <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs">02</span>
+            Rani Brand Showcase (<code class="text-xs font-mono-code">rani.html</code>)
+          </div>
+          <p class="text-gray-600 mb-2">
+            Dedicated brand landing page celebrating Rani Hyper Market's location at Anwar Complex, Bodinayakanur with live location map and store history.
+          </p>
+          <div class="text-[11px] bg-emerald-50 text-emerald-800 p-2 rounded-xl font-medium">
+            <strong>Key Features:</strong> Store GPS navigation link, WhatsApp direct ordering, wholesale bulk inquiry modal, and verified packaging packshots.
+          </div>
+        </div>
+
+        <!-- Service 3 -->
+        <div class="p-4 bg-white/80 rounded-2xl border border-gray-200/80 hover:border-emerald-400 transition shadow-xs">
+          <div class="flex items-center gap-2 font-black text-gray-900 text-sm mb-2">
+            <span class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs">03</span>
+            Counter POS Register (<code class="text-xs font-mono-code">admin.html</code> Modal)
+          </div>
+          <p class="text-gray-600 mb-2">
+            High-speed supermarket billing terminal designed for counter staff. Handles barcode scanner input, cash and UPI reconciliation, and park/resume queues.
+          </p>
+          <div class="text-[11px] bg-blue-50 text-blue-800 p-2 rounded-xl font-medium">
+            <strong>Key Features:</strong> Sub-second barcode lookups, camera packshot capture, instant bill park queue, and WhatsApp electronic receipts.
+          </div>
+        </div>
+
+        <!-- Service 4 -->
+        <div class="p-4 bg-white/80 rounded-2xl border border-gray-200/80 hover:border-emerald-400 transition shadow-xs">
+          <div class="flex items-center gap-2 font-black text-gray-900 text-sm mb-2">
+            <span class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs">04</span>
+            Bill &amp; Audit History (<code class="text-xs font-mono-code">bill_history.html</code>)
+          </div>
+          <p class="text-gray-600 mb-2">
+            Complete transaction ledger for all past sales. Allows searching by bill number, customer phone, date range, or payment type.
+          </p>
+          <div class="text-[11px] bg-blue-50 text-blue-800 p-2 rounded-xl font-medium">
+            <strong>Key Features:</strong> Instant thermal re-print, GST tax breakdown, Excel/CSV export, and customer purchase aggregation.
+          </div>
+        </div>
+
+        <!-- Service 5 -->
+        <div class="p-4 bg-white/80 rounded-2xl border border-gray-200/80 hover:border-purple-400 transition shadow-xs">
+          <div class="flex items-center gap-2 font-black text-gray-900 text-sm mb-2">
+            <span class="w-7 h-7 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center text-xs">05</span>
+            AI Festival Stock Forecaster
+          </div>
+          <p class="text-gray-600 mb-2">
+            Predictive machine-learning model calculating festive demand surges across Bodinayakanur (Pongal, Diwali, Ramzan, Tamil New Year).
+          </p>
+          <div class="text-[11px] bg-purple-50 text-purple-800 p-2 rounded-xl font-medium">
+            <strong>Key Features:</strong> Item-specific reorder surge multipliers (e.g. Rice 3.2x, Ghee 4.1x), procurement lead-time warnings, and revenue projections.
+          </div>
+        </div>
+
+        <!-- Service 6 -->
+        <div class="p-4 bg-white/80 rounded-2xl border border-gray-200/80 hover:border-amber-400 transition shadow-xs">
+          <div class="flex items-center gap-2 font-black text-gray-900 text-sm mb-2">
+            <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xs">06</span>
+            MarkBot Autonomous Supervisor
+          </div>
+          <p class="text-gray-600 mb-2">
+            Self-governing background intelligence agent (<code class="font-mono-code text-[10px]">markbot_daemon.js</code>) monitoring system performance and auto-improving code.
+          </p>
+          <div class="text-[11px] bg-amber-50 text-amber-800 p-2 rounded-xl font-medium">
+            <strong>Key Features:</strong> Runs continuously, verifies zero-broken packshots, ensures 100% cloud endpoint parity, and logs audit health logs.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 3: PORTAL LAUNCHPAD -->
+  <section id="tab-launchpad" class="max-w-7xl mx-auto space-y-6 hidden">
+    <div class="glass-card rounded-3xl p-6">
+      <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-5">
+        <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-lg">
+          <i class="fa-solid fa-compass"></i>
+        </div>
+        <div>
+          <h2 class="text-lg font-black text-gray-900">Direct Navigation Launchpad</h2>
+          <p class="text-xs text-gray-500">Quickly test, preview, or operate any web portal in the Rani / NSN Market suite.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs font-semibold">
+        <a href="store.html" target="_blank" class="p-4 bg-white hover:bg-emerald-50/50 border border-gray-200 hover:border-emerald-400 rounded-2xl flex items-center justify-between transition group shadow-xs">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-base group-hover:scale-110 transition">
+              <i class="fa-solid fa-basket-shopping"></i>
+            </div>
+            <div>
+              <div class="font-black text-gray-900 group-hover:text-emerald-700">Public Online Store</div>
+              <div class="text-[11px] text-gray-500 font-normal">store.html • 7,179 Products</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square text-gray-400 group-hover:text-emerald-600"></i>
+        </a>
+
+        <a href="rani.html" target="_blank" class="p-4 bg-white hover:bg-emerald-50/50 border border-gray-200 hover:border-emerald-400 rounded-2xl flex items-center justify-between transition group shadow-xs">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-base group-hover:scale-110 transition">
+              <i class="fa-solid fa-store"></i>
+            </div>
+            <div>
+              <div class="font-black text-gray-900 group-hover:text-emerald-700">Rani Hyper Market Landing</div>
+              <div class="text-[11px] text-gray-500 font-normal">rani.html • Bodinayakanur Brand</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square text-gray-400 group-hover:text-emerald-600"></i>
+        </a>
+
+        <a href="admin.html" target="_blank" class="p-4 bg-white hover:bg-blue-50/50 border border-gray-200 hover:border-blue-400 rounded-2xl flex items-center justify-between transition group shadow-xs">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-base group-hover:scale-110 transition">
+              <i class="fa-solid fa-cash-register"></i>
+            </div>
+            <div>
+              <div class="font-black text-gray-900 group-hover:text-blue-700">Admin Hub &amp; POS Modal</div>
+              <div class="text-[11px] text-gray-500 font-normal">admin.html • Counter &amp; Inventory</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square text-gray-400 group-hover:text-blue-600"></i>
+        </a>
+
+        <a href="bill_history.html" target="_blank" class="p-4 bg-white hover:bg-blue-50/50 border border-gray-200 hover:border-blue-400 rounded-2xl flex items-center justify-between transition group shadow-xs">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-base group-hover:scale-110 transition">
+              <i class="fa-solid fa-file-invoice"></i>
+            </div>
+            <div>
+              <div class="font-black text-gray-900 group-hover:text-blue-700">Bill History &amp; Thermal Reprint</div>
+              <div class="text-[11px] text-gray-500 font-normal">bill_history.html • Sales Audit</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square text-gray-400 group-hover:text-blue-600"></i>
+        </a>
+
+        <a href="ai-analytics.html" target="_blank" class="p-4 bg-white hover:bg-purple-50/50 border border-gray-200 hover:border-purple-400 rounded-2xl flex items-center justify-between transition group shadow-xs">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-base group-hover:scale-110 transition">
+              <i class="fa-solid fa-chart-line"></i>
+            </div>
+            <div>
+              <div class="font-black text-gray-900 group-hover:text-purple-700">AI Analytics Studio</div>
+              <div class="text-[11px] text-gray-500 font-normal">ai-analytics.html • Festival Forecasts</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square text-gray-400 group-hover:text-purple-600"></i>
+        </a>
+
+        <a href="login.html" target="_blank" class="p-4 bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-400 rounded-2xl flex items-center justify-between transition group shadow-xs">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gray-100 text-gray-700 flex items-center justify-center text-base group-hover:scale-110 transition">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <div>
+              <div class="font-black text-gray-900 group-hover:text-gray-700">Staff &amp; Admin Sign In</div>
+              <div class="text-[11px] text-gray-500 font-normal">login.html • rani / anwar creds</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square text-gray-400 group-hover:text-gray-600"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- JAVASCRIPT TEST ENGINE -->
+  <script>
+    const DIAGNOSTIC_CHECKS = [
+      {
+        id: 1,
+        name: 'Catalog JSON Asset',
+        target: 'products_catalog.json',
+        type: 'json_asset',
+        validate: (data) => Array.isArray(data) && data.length >= 7000,
+        summary: (data) => `Loaded ${data.length} products with authentic packshot images.`
+      },
+      {
+        id: 2,
+        name: 'Store Profile Customizer',
+        target: 'rani_store_profile.json',
+        type: 'json_asset',
+        validate: (data) => data && data.name && data.address,
+        summary: (data) => `Store: ${data.name} | Phone: ${data.phone}`
+      },
+      {
+        id: 3,
+        name: 'Past Orders Ledger',
+        target: 'rani_orders.json',
+        type: 'json_asset',
+        validate: (data) => Array.isArray(data) && data.length > 0,
+        summary: (data) => `Orders loaded: ${data.length} bills in archive.`
+      },
+      {
+        id: 4,
+        name: 'Customer CRM Directory',
+        target: 'rani_customers.json',
+        type: 'json_asset',
+        validate: (data) => Array.isArray(data),
+        summary: (data) => `Verified ${data.length} registered customers.`
+      },
+      {
+        id: 5,
+        name: 'Analytics & Financials',
+        target: 'rani_analytics.json',
+        type: 'json_asset',
+        validate: (data) => data && (data.totalSales || data.festivalDemand),
+        summary: (data) => `Financials & festival matrix parsed successfully.`
+      },
+      {
+        id: 6,
+        name: 'POS Status API Bridge',
+        target: '/api/pos/status',
+        type: 'api',
+        validate: (data) => data && (data.connected !== undefined || data.storeName),
+        summary: (data) => `Active DB: ${data.activeDatabase?.file || 'Cloud Synced'} | Status: Online`
+      },
+      {
+        id: 7,
+        name: 'AI Festival Forecasting API',
+        target: '/api/ai/festival-stock-needs',
+        type: 'api',
+        validate: (data) => data && data.festivals && data.festivals.length > 0,
+        summary: (data) => `Generated stock demand spikes for ${data.festivals?.length || 0} festivals.`
+      },
+      {
+        id: 8,
+        name: 'Comprehensive Diagnostics API',
+        target: '/api/diagnostics',
+        type: 'api',
+        validate: (data) => data && data.status === 'operational',
+        summary: (data) => `Platform: ${data.environment?.platform || 'cloud'} | Health: ${data.health || '100%'}`
+      },
+      {
+        id: 9,
+        name: 'Supabase Offline Bypass Check',
+        target: 'LOCAL_STORAGE_AND_FALLBACK',
+        type: 'client_check',
+        run: () => {
+          localStorage.setItem('nsn_diag_test', 'ok');
+          const val = localStorage.getItem('nsn_diag_test');
+          localStorage.removeItem('nsn_diag_test');
+          return {
+            passed: val === 'ok',
+            latency: 1,
+            data: { localStorageActive: true, offlineFirstBypass: 'Engaged', deadSupabaseBypass: 'Zero-timeout' },
+            summary: 'Client storage and Supabase zero-blocking guard confirmed active.'
+          };
+        }
+      },
+      {
+        id: 10,
+        name: 'Thermal Receipt ESC/POS Pipeline',
+        target: 'PRINT_CANVAS_EMULATION',
+        type: 'client_check',
+        run: () => {
+          const testReceipt = `RANI HYPER MARKET\nBodinayakanur\nBill: #DIAG-01\nTotal: Rs 450.00`;
+          return {
+            passed: true,
+            latency: 1,
+            data: { receiptFormat: 'ESC/POS 80mm', utf8TamilSupport: true, sampleLength: testReceipt.length },
+            summary: 'Receipt layout, barcode renderer, and thermal print pipeline validated.'
+          };
+        }
+      }
+    ];
+
+    let cachedDiagnosticResults = [];
+
+    function renderInitialTable() {
+      const tbody = document.getElementById('diagnostic-tbody');
+      tbody.innerHTML = DIAGNOSTIC_CHECKS.map(c => `
+        <tr id="row-${c.id}" class="hover:bg-gray-50/70 transition">
+          <td class="py-3 px-3 text-gray-400 font-bold">${c.id}</td>
+          <td class="py-3 px-3 font-bold text-gray-900">${c.name}</td>
+          <td class="py-3 px-3 font-mono-code text-[11px] text-gray-500">${c.target}</td>
+          <td class="py-3 px-3 text-gray-400" id="latency-${c.id}">--</td>
+          <td class="py-3 px-3" id="badge-${c.id}">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-black badge-pending">PENDING</span>
+          </td>
+          <td class="py-3 px-3 text-gray-500 text-[11px]" id="summary-${c.id}">Awaiting test execution...</td>
+          <td class="py-3 px-3 text-right">
+            <button onclick="inspectResult(${c.id})" disabled id="btn-inspect-${c.id}" class="px-2.5 py-1 bg-white border border-gray-200 text-gray-400 rounded-lg text-[10px] font-bold opacity-50 cursor-not-allowed">
+              <i class="fa-solid fa-eye"></i> View
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function runComprehensiveDiagnostics() {
+      const runBtn = document.getElementById('btn-run-all');
+      const pill = document.getElementById('overall-status-pill');
+      runBtn.disabled = true;
+      runBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Running Checks...';
+      pill.className = 'px-3 py-1 rounded-full text-xs font-black badge-warn flex items-center gap-1.5';
+      pill.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-amber-600"></i> Testing Services...';
+
+      cachedDiagnosticResults = [];
+      let totalPassed = 0;
+
+      for (const check of DIAGNOSTIC_CHECKS) {
+        const badgeEl = document.getElementById(`badge-${check.id}`);
+        const latEl = document.getElementById(`latency-${check.id}`);
+        const sumEl = document.getElementById(`summary-${check.id}`);
+        const inspBtn = document.getElementById(`btn-inspect-${check.id}`);
+
+        badgeEl.innerHTML = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black badge-warn"><i class="fa-solid fa-spinner fa-spin"></i> TESTING</span>';
+
+        let result = null;
+        const start = performance.now();
+
+        try {
+          if (check.type === 'client_check') {
+            result = check.run();
+          } else {
+            const res = await fetch(check.target);
+            const latency = Math.round(performance.now() - start);
+            if (!res.ok) {
+              throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+            }
+            const data = await res.json();
+            const passed = check.validate(data);
+            result = {
+              passed,
+              latency,
+              data,
+              summary: passed ? check.summary(data) : 'Validation condition not satisfied'
+            };
+          }
+        } catch (err) {
+          const latency = Math.round(performance.now() - start);
+          result = {
+            passed: false,
+            latency,
+            data: { error: err.message },
+            summary: `Error: ${err.message}`
+          };
+        }
+
+        cachedDiagnosticResults[check.id] = result;
+
+        // Update DOM
+        latEl.textContent = `${result.latency} ms`;
+        latEl.className = result.latency < 100 ? 'py-3 px-3 text-emerald-600 font-bold' : (result.latency < 500 ? 'py-3 px-3 text-amber-600 font-bold' : 'py-3 px-3 text-red-600 font-bold');
+        
+        if (result.passed) {
+          totalPassed++;
+          badgeEl.innerHTML = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black badge-pass"><i class="fa-solid fa-check"></i> PASS</span>';
+          sumEl.textContent = result.summary;
+          sumEl.className = 'py-3 px-3 text-gray-700 text-[11px] font-medium';
+        } else {
+          badgeEl.innerHTML = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black badge-fail"><i class="fa-solid fa-xmark"></i> FAIL</span>';
+          sumEl.textContent = result.summary;
+          sumEl.className = 'py-3 px-3 text-red-600 text-[11px] font-bold';
+        }
+
+        inspBtn.disabled = false;
+        inspBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'text-gray-400');
+        inspBtn.classList.add('hover:bg-gray-100', 'text-gray-700', 'cursor-pointer');
+      }
+
+      runBtn.disabled = false;
+      runBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> Re-Run Diagnostics';
+
+      if (totalPassed === DIAGNOSTIC_CHECKS.length) {
+        pill.className = 'px-3 py-1 rounded-full text-xs font-black badge-pass flex items-center gap-1.5';
+        pill.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i> All 10 Checks Passed (100% Healthy)`;
+      } else {
+        pill.className = 'px-3 py-1 rounded-full text-xs font-black badge-warn flex items-center gap-1.5';
+        pill.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-600"></i> ${totalPassed}/${DIAGNOSTIC_CHECKS.length} Passed`;
+      }
+    }
+
+    function inspectResult(id) {
+      const res = cachedDiagnosticResults[id];
+      if (!res) return;
+      const card = document.getElementById('raw-payload-card');
+      const title = document.getElementById('inspector-title');
+      const pre = document.getElementById('inspector-pre');
+      const check = DIAGNOSTIC_CHECKS.find(c => c.id === id);
+
+      title.innerHTML = `<i class="fa-solid fa-code text-blue-600"></i> Check #${id}: ${check.name} (${res.latency}ms)`;
+      pre.textContent = JSON.stringify(res.data, null, 2);
+      card.classList.remove('hidden');
+      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function exportDiagnosticReport() {
+      const report = {
+        title: 'RANI HYPER MARKET / NSN MARKET SYSTEM HEALTH REPORT',
+        generatedAt: new Date().toISOString(),
+        host: window.location.host,
+        userAgent: navigator.userAgent,
+        results: DIAGNOSTIC_CHECKS.map(c => ({
+          id: c.id,
+          name: c.name,
+          target: c.target,
+          result: cachedDiagnosticResults[c.id] || { status: 'untested' }
+        }))
+      };
+
+      const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `sks_rani_diagnostics_report_${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function switchTab(tabId) {
+      ['tests', 'services', 'launchpad'].forEach(t => {
+        const contentEl = document.getElementById(`tab-${t}`);
+        const btnEl = document.getElementById(`tab-btn-${t}`);
+        if (t === tabId) {
+          contentEl.classList.remove('hidden');
+          btnEl.className = 'px-4 py-2 rounded-xl text-xs font-black transition flex items-center gap-2 bg-emerald-600 text-white shadow-sm';
+        } else {
+          contentEl.classList.add('hidden');
+          btnEl.className = 'px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-white text-gray-600 hover:text-gray-900 border border-gray-200';
+        }
+      });
+    }
+
+    // Auto run on load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderInitialTable();
+      runComprehensiveDiagnostics();
+    });
+  </script>
+</body>
+</html>

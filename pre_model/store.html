@@ -479,7 +479,7 @@
   <!-- ANNOUNCEMENT BANNER -->
   <div id="announcement-banner" class="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white text-center py-2 px-4 text-xs font-bold shadow-sm relative z-40 flex items-center justify-center gap-2">
     <i class="fa-solid fa-bullhorn text-amber-300"></i>
-    <span id="announcement-text">🎉 Special Offer: Fresh farm vegetables & organic groceries available today!</span>
+    <span id="announcement-text">🎉 Welcome to RANI HYPER MARKET! Free Delivery in Bodinayakanur & Best Wholesale Rates!</span>
   </div>
 
   <!-- SUSPENDED NOTICE -->
@@ -545,9 +545,9 @@
             <span id="store-badge-license" class="px-3 py-1 bg-amber-100 text-amber-800 border border-amber-300 rounded-full text-xs font-bold">
               ⭐ Verified Store
             </span>
-            <span id="store-date-pill" class="px-3 py-1 bg-emerald-700 text-white border border-emerald-600 rounded-full text-xs font-extrabold shadow-sm flex items-center gap-1.5">
-              <i class="fa-solid fa-calendar-day text-amber-300"></i>
-              <span>Store Date: <b id="store-date-display" class="font-black">05-Sep-2026</b></span>
+            <span class="px-3 py-1 bg-emerald-700 text-white border border-emerald-600 rounded-full text-xs font-extrabold shadow-sm flex items-center gap-1.5">
+              <i class="fa-solid fa-truck-fast text-amber-300"></i>
+              <span>Free Delivery in Bodinayakanur</span>
             </span>
           </div>
           <h2 id="hero-store-name" class="text-3xl sm:text-4xl font-black text-gray-900 leading-tight">
@@ -1409,7 +1409,7 @@
         const raniDefaults = {
           name: 'RANI HYPER MARKET',
           tagline: 'Fresh Farm Groceries & Everyday Supermarket',
-          announcement: `🎉 Welcome to RANI HYPER MARKET! Store Date: ${activeStoreDate} • Free Delivery in Bodinayakanur!`,
+          announcement: '🎉 Welcome to RANI HYPER MARKET! Free Delivery in Bodinayakanur & Best Wholesale Rates!',
           phone: '77088 34547, 88073 34547',
           email: 'rani.hypermarket@gmail.com',
           hours: 'Mon - Sun: 7:00 AM - 10:00 PM',
@@ -1438,7 +1438,12 @@
           if (elTag) elTag.innerText = d.tagline;
         }
         if (document.getElementById('announcement-text')) {
-          document.getElementById('announcement-text').innerHTML = `<span class="bg-amber-400 text-emerald-950 font-black px-2 py-0.5 rounded-md text-[10px] mr-1.5 shadow-sm"><i class="fa-solid fa-calendar-day mr-1"></i> ${activeStoreDate}</span> ${d.announcement || 'Fresh farm vegetables & wholesale groceries available today!'}`;
+          let ann = d.announcement || '🎉 Welcome to RANI HYPER MARKET! Free Delivery in Bodinayakanur & Best Wholesale Rates!';
+          // Sanitize if cached date exists
+          if (ann.includes('Store Date:') || ann.includes('05-Sep') || ann.includes('2026-09-05')) {
+            ann = '🎉 Welcome to RANI HYPER MARKET! Free Delivery in Bodinayakanur & Best Wholesale Rates!';
+          }
+          document.getElementById('announcement-text').innerHTML = ann;
         }
         if (d.aboutUs && document.getElementById('about-us-text')) {
           document.getElementById('about-us-text').innerText = d.aboutUs;
@@ -2046,7 +2051,7 @@
       }).join('');
 
       document.getElementById('showing-count-text').innerText = `Showing 1 - ${slice.length} of ${totalAvailable.toLocaleString('en-IN')} products`;
-      document.getElementById('product-count').innerText = `${allProducts.length.toLocaleString('en-IN')} items available • Store Date: ${activeStoreDate}`;
+      document.getElementById('product-count').innerText = `${allProducts.length.toLocaleString('en-IN')} items available • Wholesale Prices`;
 
       const loadMoreBox = document.getElementById('load-more-container');
       if (displayedCount < totalAvailable) {

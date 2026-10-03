@@ -353,7 +353,13 @@ const server = http.createServer((req, res) => {
   }
 
   if (reqPath === '/api/rani/backup-info') {
-    const fetchDir = 'G:/dell intel core i7 pc data/SKS new fetchable';
+    const candidateDirs = [
+      'C:/SKS_Market_Projects/SKS new fetchable',
+      'C:/SKS new fetchable',
+      'G:/dell intel core i7 pc data/SKS new fetchable',
+      'F:/dell intel core i7 pc data/SKS new fetchable'
+    ];
+    const fetchDir = candidateDirs.find(d => fs.existsSync(d)) || candidateDirs[0];
     const zipName = 'Full Backup RANI HYPER MARKET on 12-Sep-2026.zip';
     const zipPath = path.join(fetchDir, zipName);
     let zipStats = null;

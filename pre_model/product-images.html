@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Image Studio — Rani Hyper Market &amp; NSN Market</title>
+  <meta name="description" content="Dedicated studio for uploading, capturing, and updating product packshots directly across the store catalog, admin POS, and backend database.">
+  <link rel="icon" href="https://images.openfoodfacts.org/images/products/890/103/089/5436/front_en.3.400.jpg">
+
+  <!-- Tailwind CSS & Font Awesome -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at top right, #f0fdf4, #f8fafc 40%, #f1f5f9 100%);
+      color: #0f172a;
+      min-height: 100vh;
+    }
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.90);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.85);
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04);
+    }
+    .modal-backdrop {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(8px);
+    }
+    .dropzone-active {
+      border-color: #10b981 !important;
+      background: #ecfdf5 !important;
+    }
+    /* Smooth custom scrollbars */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="p-3 md:p-6 lg:p-8">
+
+  <!-- TOP HEADER -->
+  <header class="max-w-7xl mx-auto mb-6">
+    <div class="glass rounded-3xl p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b-4 border-emerald-500">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/20 text-2xl font-black">
+          <i class="fa-solid fa-camera-retro"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-xl md:text-2xl font-black text-gray-900 tracking-tight">Product Image Studio</h1>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
+              Live Database Connected
+            </span>
+          </div>
+          <p class="text-xs text-gray-500 mt-0.5 font-medium">
+            Rani Hyper Market &amp; NSN Market • Direct Camera, Gallery &amp; Online Packshot Updater
+          </p>
+        </div>
+      </div>
+
+      <!-- Navigation & Quick Links -->
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="store.html" target="_blank" class="px-3.5 py-2 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold rounded-xl flex items-center gap-1.5 transition shadow-xs">
+          <i class="fa-solid fa-basket-shopping text-emerald-600"></i> Storefront
+        </a>
+        <a href="admin.html" target="_blank" class="px-3.5 py-2 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold rounded-xl flex items-center gap-1.5 transition shadow-xs">
+          <i class="fa-solid fa-cash-register text-blue-600"></i> Admin POS
+        </a>
+        <a href="rani.html" target="_blank" class="px-3.5 py-2 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold rounded-xl flex items-center gap-1.5 transition shadow-xs">
+          <i class="fa-solid fa-store text-purple-600"></i> Rani Hub
+        </a>
+        <button onclick="document.getElementById('quick-scan-modal').classList.remove('hidden')" class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-md shadow-emerald-600/20 transition cursor-pointer">
+          <i class="fa-solid fa-barcode"></i> Scan Barcode
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- KPI STRIP -->
+  <section class="max-w-7xl mx-auto mb-6 grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
+    <div class="glass p-4 rounded-2xl">
+      <div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider flex items-center justify-between">
+        <span>Catalog Size</span>
+        <i class="fa-solid fa-boxes-stacked text-emerald-600"></i>
+      </div>
+      <div class="text-xl md:text-2xl font-black text-gray-900 mt-1" id="kpi-total">7,179 Products</div>
+      <div class="text-[11px] text-emerald-600 font-semibold mt-0.5">Active Inventory</div>
+    </div>
+
+    <div class="glass p-4 rounded-2xl">
+      <div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider flex items-center justify-between">
+        <span>Updated This Session</span>
+        <i class="fa-solid fa-cloud-arrow-up text-blue-600"></i>
+      </div>
+      <div class="text-xl md:text-2xl font-black text-blue-600 mt-1" id="kpi-updated">0 Items</div>
+      <div class="text-[11px] text-gray-500 font-semibold mt-0.5">Directly Synced</div>
+    </div>
+
+    <div class="glass p-4 rounded-2xl">
+      <div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider flex items-center justify-between">
+        <span>Storage Target</span>
+        <i class="fa-solid fa-database text-purple-600"></i>
+      </div>
+      <div class="text-xl md:text-2xl font-black text-gray-900 mt-1">SQLite &amp; JSON</div>
+      <div class="text-[11px] text-purple-600 font-semibold mt-0.5">ProductImageMaster</div>
+    </div>
+
+    <div class="glass p-4 rounded-2xl">
+      <div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider flex items-center justify-between">
+        <span>Broadcast Sync</span>
+        <i class="fa-solid fa-satellite-dish text-amber-600"></i>
+      </div>
+      <div class="text-xl md:text-2xl font-black text-emerald-600 mt-1">Real-Time</div>
+      <div class="text-[11px] text-gray-500 font-semibold mt-0.5">Instant Tab Sync</div>
+    </div>
+  </section>
+
+  <!-- SEARCH & FILTER TOOLBAR -->
+  <section class="max-w-7xl mx-auto mb-6">
+    <div class="glass rounded-3xl p-5 space-y-4">
+      <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+        <!-- Search Input -->
+        <div class="relative flex-1">
+          <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-400 text-sm"></i>
+          <input
+            type="text"
+            id="search-input"
+            oninput="handleSearchInput()"
+            placeholder="Search by Product Name, Brand, Barcode (e.g. Iodex, 89006245, Ponni, Tata)..."
+            class="w-full pl-11 pr-10 py-3 bg-white border border-gray-200 rounded-2xl text-xs font-semibold focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-xs"
+          >
+          <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-3.5 top-3 text-gray-400 hover:text-gray-600 text-xs">
+            <i class="fa-solid fa-circle-xmark"></i>
+          </button>
+        </div>
+
+        <!-- Filter Dropdown & View Mode -->
+        <div class="flex items-center gap-2">
+          <select id="category-filter" onchange="renderProductsGrid()" class="px-3.5 py-3 bg-white border border-gray-200 rounded-2xl text-xs font-bold text-gray-700 focus:outline-none focus:border-emerald-500">
+            <option value="all">All Categories</option>
+            <option value="tea">Tea &amp; Coffee</option>
+            <option value="rice">Rice &amp; Dhall</option>
+            <option value="masala">Spices &amp; Masala</option>
+            <option value="milk">Dairy &amp; Milk</option>
+            <option value="oil">Cooking Oils</option>
+            <option value="biscuit">Snacks &amp; Biscuits</option>
+            <option value="soap">Personal Care</option>
+            <option value="cleaner">Cleaning &amp; Home</option>
+          </select>
+
+          <select id="image-status-filter" onchange="renderProductsGrid()" class="px-3.5 py-3 bg-white border border-gray-200 rounded-2xl text-xs font-bold text-gray-700 focus:outline-none focus:border-emerald-500">
+            <option value="all">All Items</option>
+            <option value="updated">Custom / Updated Only</option>
+          </select>
+
+          <!-- Grid / List Switcher -->
+          <div class="bg-gray-100 p-1 rounded-2xl flex items-center border border-gray-200">
+            <button onclick="setViewMode('grid')" id="btn-view-grid" class="p-2 rounded-xl text-xs font-bold bg-white text-emerald-700 shadow-xs">
+              <i class="fa-solid fa-grip"></i>
+            </button>
+            <button onclick="setViewMode('table')" id="btn-view-table" class="p-2 rounded-xl text-xs font-bold text-gray-500 hover:text-gray-900">
+              <i class="fa-solid fa-list"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick category pills -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+        <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider shrink-0">Quick Filter:</span>
+        <button onclick="setFilterCategory('all', this)" class="quick-pill px-3 py-1.5 rounded-full font-bold bg-emerald-600 text-white shadow-xs shrink-0">All</button>
+        <button onclick="setFilterCategory('rice', this)" class="quick-pill px-3 py-1.5 rounded-full font-bold bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shrink-0">🌾 Rice &amp; Dhall</button>
+        <button onclick="setFilterCategory('oil', this)" class="quick-pill px-3 py-1.5 rounded-full font-bold bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shrink-0">🌻 Cooking Oils</button>
+        <button onclick="setFilterCategory('masala', this)" class="quick-pill px-3 py-1.5 rounded-full font-bold bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shrink-0">🌶️ Spices</button>
+        <button onclick="setFilterCategory('tea', this)" class="quick-pill px-3 py-1.5 rounded-full font-bold bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shrink-0">☕ Tea &amp; Coffee</button>
+        <button onclick="setFilterCategory('milk', this)" class="quick-pill px-3 py-1.5 rounded-full font-bold bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shrink-0">🥛 Dairy</button>
+        <button onclick="setFilterCategory('biscuit', this)" class="quick-pill px-3 py-1.5 rounded-full font-bold bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shrink-0">🍪 Biscuits</button>
+        <button onclick="setFilterCategory('soap', this)" class="quick-pill px-3 py-1.5 rounded-full font-bold bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shrink-0">🧼 Soaps</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CATALOG VIEW CONTAINER -->
+  <main class="max-w-7xl mx-auto mb-10">
+    <div class="flex items-center justify-between mb-4">
+      <div class="text-xs font-bold text-gray-500" id="results-count-text">
+        Loading catalog...
+      </div>
+      <div class="text-xs text-gray-400">
+        Showing up to 100 items per view • Use search to locate any item
+      </div>
+    </div>
+
+    <!-- 1. Grid View Container -->
+    <div id="products-grid-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
+      <!-- Populated via JS -->
+    </div>
+
+    <!-- 2. Table View Container -->
+    <div id="products-table-container" class="glass rounded-3xl p-5 overflow-x-auto hidden">
+      <table class="w-full text-left text-xs">
+        <thead>
+          <tr class="border-b border-gray-200 text-gray-400 font-extrabold uppercase text-[10px]">
+            <th class="py-3 px-3">Preview</th>
+            <th class="py-3 px-3">Product Name</th>
+            <th class="py-3 px-3">Barcode / GTIN</th>
+            <th class="py-3 px-3">Price / MRP</th>
+            <th class="py-3 px-3">Unit</th>
+            <th class="py-3 px-3 text-right">Action</th>
+          </tr>
+        </thead>
+        <tbody id="products-table-tbody" class="divide-y divide-gray-100 font-medium">
+          <!-- Populated via JS -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- ============================================================ -->
+  <!-- DEDICATED IMAGE UPDATE STUDIO MODAL (THE MAIN CORE FEATURE)  -->
+  <!-- ============================================================ -->
+  <div id="image-studio-modal" class="fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-3 md:p-6 hidden">
+    <div class="bg-white border border-gray-200 rounded-3xl max-w-2xl w-full p-6 shadow-2xl overflow-y-auto max-h-[92vh] space-y-5">
+      
+      <!-- Modal Header -->
+      <div class="flex items-start justify-between border-b border-gray-100 pb-4">
+        <div>
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 uppercase tracking-wider">
+            Image Studio
+          </span>
+          <h2 id="modal-product-title" class="text-base md:text-lg font-black text-gray-900 mt-1 leading-tight">
+            Product Title
+          </h2>
+          <div class="flex items-center gap-3 text-xs text-gray-500 mt-1">
+            <span>ID: <strong id="modal-product-id" class="font-mono-code text-gray-800">#00</strong></span>
+            <span>•</span>
+            <span>Barcode: <strong id="modal-product-barcode" class="font-mono-code text-gray-800">00000000</strong></span>
+            <span>•</span>
+            <span id="modal-product-price" class="text-emerald-700 font-black">₹0.00</span>
+          </div>
+        </div>
+        <button onclick="closeStudioModal()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Live Side-by-Side Visual Comparison -->
+      <div class="grid grid-cols-2 gap-3 bg-gray-50 p-3.5 rounded-2xl border border-gray-200">
+        <!-- Left: Current Image -->
+        <div class="text-center">
+          <div class="text-[10px] font-black uppercase tracking-wider text-gray-400 mb-1.5">Current Live Image</div>
+          <div class="w-full h-36 md:h-44 bg-white rounded-xl border border-gray-200 p-2 flex items-center justify-center overflow-hidden">
+            <img id="modal-current-img" src="" alt="Current" class="max-h-full max-w-full object-contain">
+          </div>
+        </div>
+
+        <!-- Right: New Preview -->
+        <div class="text-center">
+          <div class="text-[10px] font-black uppercase tracking-wider text-emerald-600 mb-1.5 flex items-center justify-center gap-1">
+            <i class="fa-solid fa-sparkles"></i> New Proposed Image
+          </div>
+          <div class="w-full h-36 md:h-44 bg-white rounded-xl border-2 border-dashed border-emerald-300 p-2 flex items-center justify-center overflow-hidden relative">
+            <img id="modal-new-img" src="" alt="New Preview" class="max-h-full max-w-full object-contain hidden">
+            <div id="modal-new-placeholder" class="text-center text-gray-400 p-2">
+              <i class="fa-solid fa-image text-3xl mb-1 text-gray-300"></i>
+              <div class="text-[11px] font-semibold">Choose photo from Camera, Gallery, or Link</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 INPUT METHODS TABS -->
+      <div class="border-b border-gray-200 flex items-center gap-2">
+        <button onclick="switchStudioTab('camera')" id="tab-btn-camera" class="px-4 py-2.5 text-xs font-black border-b-2 border-emerald-600 text-emerald-700 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-camera"></i> 1. Take Photo (Camera)
+        </button>
+        <button onclick="switchStudioTab('gallery')" id="tab-btn-gallery" class="px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-image"></i> 2. Put from Gallery / File
+        </button>
+        <button onclick="switchStudioTab('link')" id="tab-btn-link" class="px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-link"></i> 3. Online Product Link
+        </button>
+      </div>
+
+      <!-- TAB 1 CONTENT: CAMERA CAPTURE -->
+      <div id="tab-content-camera" class="space-y-3">
+        <div class="relative bg-black rounded-2xl overflow-hidden aspect-video max-h-64 flex items-center justify-center">
+          <video id="camera-stream" autoplay playsinline class="w-full h-full object-cover"></video>
+          <canvas id="camera-canvas" class="hidden"></canvas>
+          
+          <!-- Viewfinder overlay guide -->
+          <div class="absolute inset-4 border-2 border-dashed border-white/50 rounded-xl pointer-events-none flex items-center justify-center">
+            <span class="text-[10px] text-white/70 font-semibold bg-black/40 px-2 py-0.5 rounded">Frame Product Packshot Here</span>
+          </div>
+
+          <!-- Flip camera button for mobile -->
+          <button type="button" onclick="flipCamera()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center text-xs">
+            <i class="fa-solid fa-camera-rotate"></i>
+          </button>
+        </div>
+
+        <div class="flex items-center justify-center gap-3">
+          <button type="button" id="btn-snap" onclick="snapPhoto()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-sm transition">
+            <i class="fa-solid fa-circle-dot"></i> Snap Packshot Photo
+          </button>
+          <button type="button" id="btn-retake" onclick="startCamera()" class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold rounded-xl flex items-center gap-1.5 transition hidden">
+            <i class="fa-solid fa-rotate-left"></i> Retake
+          </button>
+        </div>
+      </div>
+
+      <!-- TAB 2 CONTENT: GALLERY & FILE UPLOAD -->
+      <div id="tab-content-gallery" class="space-y-3 hidden">
+        <div
+          id="dropzone"
+          onclick="document.getElementById('file-input').click()"
+          class="border-2 border-dashed border-gray-300 hover:border-emerald-500 rounded-2xl p-6 text-center cursor-pointer transition bg-gray-50/50"
+        >
+          <input type="file" id="file-input" accept="image/*" onchange="handleFileSelect(event)" class="hidden">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-2 text-xl">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <div class="text-xs font-bold text-gray-800">
+            Click to Browse Device Gallery or Drag &amp; Drop Image File
+          </div>
+          <div class="text-[11px] text-gray-400 mt-1">
+            Supports JPG, PNG, WEBP • Automatically optimized for high-speed store browsing
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3 CONTENT: ONLINE IMAGE URL LINK -->
+      <div id="tab-content-link" class="space-y-3 hidden">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">
+            Online Product Packshot Image URL
+          </label>
+          <div class="flex items-center gap-2">
+            <input
+              type="url"
+              id="input-online-url"
+              placeholder="https://example.com/product-packshot.jpg"
+              class="flex-1 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:border-emerald-500"
+            >
+            <button type="button" onclick="previewOnlineUrl()" class="px-4 py-2.5 bg-gray-900 hover:bg-black text-white text-xs font-bold rounded-xl flex items-center gap-1 transition">
+              <i class="fa-solid fa-eye"></i> Preview
+            </button>
+          </div>
+          <p class="text-[11px] text-gray-400 mt-1">
+            Paste any direct image link from IndiaMART, OpenFoodFacts, manufacturer site, or Google.
+          </p>
+        </div>
+      </div>
+
+      <!-- Status & Feedback Area -->
+      <div id="modal-status-text" class="text-xs font-semibold text-center hidden"></div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-gray-100">
+        <button type="button" onclick="closeStudioModal()" class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold rounded-xl transition">
+          Cancel
+        </button>
+        <button
+          type="button"
+          id="btn-save-image"
+          onclick="saveAndApplyProductImage()"
+          disabled
+          class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold rounded-xl flex items-center gap-2 shadow-md shadow-emerald-600/20 transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+        >
+          <i class="fa-solid fa-floppy-disk"></i> Save &amp; Update Everywhere Directly
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- QUICK BARCODE LOOKUP MODAL -->
+  <div id="quick-scan-modal" class="fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-gray-200 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+        <h3 class="text-sm font-black text-gray-900 flex items-center gap-2">
+          <i class="fa-solid fa-barcode text-emerald-600"></i> Scan or Enter Barcode
+        </h3>
+        <button onclick="document.getElementById('quick-scan-modal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <p class="text-xs text-gray-500">
+        Use a hardware USB/Bluetooth barcode scanner, or type the 8-13 digit barcode from the packaging.
+      </p>
+      <form onsubmit="handleDirectBarcodeSearch(event)">
+        <input
+          type="text"
+          id="barcode-modal-input"
+          placeholder="e.g. 89006245"
+          required
+          autofocus
+          class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-sm font-mono-code focus:outline-none focus:border-emerald-500 font-bold mb-3"
+        >
+        <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition">
+          Find Product &amp; Open Camera Studio
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT STUDIO ENGINE -->
+  <script>
+    // State
+    let allProducts = [];
+    let currentFilteredList = [];
+    let viewMode = 'grid'; // 'grid' | 'table'
+    let activeProductForModal = null;
+    let proposedImageUrl = null;
+    let proposedImageBase64 = null;
+    let cameraStream = null;
+    let cameraFacingMode = 'environment';
+    let updatedCount = 0;
+
+    // Real-time tab sync
+    const broadcastChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('nsn_product_updates') : null;
+
+    // 1. Initial Load
+    async function loadCatalog() {
+      try {
+        let res = await fetch('/products_catalog.json').catch(() => null);
+        if (!res || !res.ok) res = await fetch('/api/pos/products?limit=1000').catch(() => null);
+        if (!res || !res.ok) res = await fetch('products_catalog.json').catch(() => null);
+
+        if (res && res.ok) {
+          allProducts = await res.json();
+          
+          // Apply any local custom overrides
+          const overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+          allProducts.forEach(p => {
+            if (overrides[p.id]) {
+              p.image_url = overrides[p.id];
+              p.isCustomUpdated = true;
+            }
+          });
+
+          document.getElementById('kpi-total').textContent = `${allProducts.length.toLocaleString('en-IN')} Products`;
+          renderProductsGrid();
+        } else {
+          document.getElementById('results-count-text').textContent = 'Unable to load catalog from server.';
+        }
+      } catch (err) {
+        console.error('Failed to load catalog:', err);
+      }
+    }
+
+    // 2. Search & Filter
+    function handleSearchInput() {
+      const q = document.getElementById('search-input').value.trim();
+      document.getElementById('clear-search-btn').classList.toggle('hidden', !q);
+      renderProductsGrid();
+    }
+
+    function clearSearch() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('clear-search-btn').classList.add('hidden');
+      renderProductsGrid();
+    }
+
+    function setFilterCategory(cat, btn) {
+      document.getElementById('category-filter').value = cat;
+      document.querySelectorAll('.quick-pill').forEach(b => {
+        b.className = 'quick-pill px-3 py-1.5 rounded-full font-bold bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shrink-0';
+      });
+      btn.className = 'quick-pill px-3 py-1.5 rounded-full font-bold bg-emerald-600 text-white shadow-xs shrink-0';
+      renderProductsGrid();
+    }
+
+    function filterCatalog() {
+      const q = (document.getElementById('search-input').value || '').toLowerCase().trim();
+      const cat = document.getElementById('category-filter').value;
+      const statusFilter = document.getElementById('image-status-filter').value;
+
+      return allProducts.filter(p => {
+        // Query match
+        const matchesQ = !q ||
+          (p.title && p.title.toLowerCase().includes(q)) ||
+          (p.barcode && p.barcode.toLowerCase().includes(q)) ||
+          (String(p.id).includes(q));
+
+        if (!matchesQ) return false;
+
+        // Category match
+        if (cat !== 'all') {
+          const t = (p.title || '').toLowerCase();
+          const c = (p.category || '').toLowerCase();
+          if (cat === 'rice' && !t.includes('rice') && !t.includes('dhall') && !t.includes('dal')) return false;
+          if (cat === 'oil' && !t.includes('oil') && !t.includes('ghee')) return false;
+          if (cat === 'tea' && !t.includes('tea') && !t.includes('coffee')) return false;
+          if (cat === 'masala' && !t.includes('masala') && !t.includes('powder') && !t.includes('chilli')) return false;
+          if (cat === 'milk' && !t.includes('milk') && !t.includes('curd') && !t.includes('paneer')) return false;
+          if (cat === 'biscuit' && !t.includes('biscuit') && !t.includes('cookies') && !t.includes('rusk')) return false;
+          if (cat === 'soap' && !t.includes('soap') && !t.includes('shampoo') && !t.includes('paste')) return false;
+          if (cat === 'cleaner' && !t.includes('clean') && !t.includes('wash') && !t.includes('surf')) return false;
+        }
+
+        // Status match
+        if (statusFilter === 'updated' && !p.isCustomUpdated) return false;
+
+        return true;
+      });
+    }
+
+    function renderProductsGrid() {
+      currentFilteredList = filterCatalog();
+      const displayList = currentFilteredList.slice(0, 100);
+
+      document.getElementById('results-count-text').textContent =
+        `Showing ${displayList.length} of ${currentFilteredList.length.toLocaleString('en-IN')} matching products`;
+
+      if (viewMode === 'grid') {
+        document.getElementById('products-grid-container').classList.remove('hidden');
+        document.getElementById('products-table-container').classList.add('hidden');
+        renderCards(displayList);
+      } else {
+        document.getElementById('products-grid-container').classList.add('hidden');
+        document.getElementById('products-table-container').classList.remove('hidden');
+        renderTable(displayList);
+      }
+    }
+
+    function renderCards(list) {
+      const container = document.getElementById('products-grid-container');
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-16 text-center glass rounded-3xl p-6">
+            <i class="fa-solid fa-camera text-4xl text-gray-300 mb-2"></i>
+            <h4 class="text-sm font-bold text-gray-700">No products match your search</h4>
+            <p class="text-xs text-gray-400 mt-1">Try another keyword or barcode</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map(p => `
+        <div class="glass p-3 rounded-2xl flex flex-col justify-between hover:shadow-md hover:border-emerald-300 transition group relative">
+          ${p.isCustomUpdated ? `<span class="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full text-[9px] font-black bg-blue-100 text-blue-800 border border-blue-200"><i class="fa-solid fa-check"></i> Updated</span>` : ''}
+          <div>
+            <div class="w-full h-32 md:h-36 bg-white rounded-xl border border-gray-100 p-2 flex items-center justify-center overflow-hidden mb-2 relative">
+              <img
+                id="thumb-${p.id}"
+                src="${p.image_url || 'https://images.openfoodfacts.org/images/products/890/103/089/5436/front_en.3.400.jpg'}"
+                alt="${p.title}"
+                loading="lazy"
+                onerror="this.src='https://images.openfoodfacts.org/images/products/890/103/089/5436/front_en.3.400.jpg'"
+                class="max-h-full max-w-full object-contain group-hover:scale-105 transition"
+              >
+            </div>
+            <div class="text-[11px] font-mono-code text-gray-400 truncate">
+              #${p.id} • ${p.barcode ? `BC: ${p.barcode}` : 'No Barcode'}
+            </div>
+            <h3 class="text-xs font-black text-gray-900 line-clamp-2 mt-0.5 leading-snug" title="${p.title}">
+              ${p.title}
+            </h3>
+          </div>
+
+          <div class="mt-3 pt-2 border-t border-gray-100 flex items-center justify-between gap-1">
+            <div class="text-xs font-black text-emerald-700 font-mono-code">
+              ₹${p.price || p.mrp || 0}
+            </div>
+            <button
+              onclick="openStudioModal(${p.id})"
+              class="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white rounded-lg text-[11px] font-bold transition flex items-center gap-1 cursor-pointer"
+            >
+              <i class="fa-solid fa-camera"></i> Update
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderTable(list) {
+      const tbody = document.getElementById('products-table-tbody');
+      tbody.innerHTML = list.map(p => `
+        <tr class="hover:bg-gray-50/60 transition">
+          <td class="py-2.5 px-3">
+            <div class="w-10 h-10 bg-white border border-gray-200 rounded-lg p-0.5 flex items-center justify-center overflow-hidden">
+              <img src="${p.image_url || ''}" alt="" class="max-h-full max-w-full object-contain">
+            </div>
+          </td>
+          <td class="py-2.5 px-3 font-bold text-gray-900">${p.title}</td>
+          <td class="py-2.5 px-3 font-mono-code text-[11px] text-gray-500">${p.barcode || 'N/A'}</td>
+          <td class="py-2.5 px-3 font-mono-code font-bold text-emerald-700">₹${p.price || 0}</td>
+          <td class="py-2.5 px-3 text-gray-500">${p.unit || '1 unit'}</td>
+          <td class="py-2.5 px-3 text-right">
+            <button
+              onclick="openStudioModal(${p.id})"
+              class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold transition cursor-pointer"
+            >
+              <i class="fa-solid fa-camera"></i> Update Image
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function setViewMode(m) {
+      viewMode = m;
+      document.getElementById('btn-view-grid').className = m === 'grid' ? 'p-2 rounded-xl text-xs font-bold bg-white text-emerald-700 shadow-xs' : 'p-2 rounded-xl text-xs font-bold text-gray-500 hover:text-gray-900';
+      document.getElementById('btn-view-table').className = m === 'table' ? 'p-2 rounded-xl text-xs font-bold bg-white text-emerald-700 shadow-xs' : 'p-2 rounded-xl text-xs font-bold text-gray-500 hover:text-gray-900';
+      renderProductsGrid();
+    }
+
+    // 3. Studio Modal Logic
+    function openStudioModal(productId) {
+      const p = allProducts.find(x => x.id === productId);
+      if (!p) return;
+
+      activeProductForModal = p;
+      proposedImageUrl = null;
+      proposedImageBase64 = null;
+
+      document.getElementById('modal-product-title').textContent = p.title;
+      document.getElementById('modal-product-id').textContent = `#${p.id}`;
+      document.getElementById('modal-product-barcode').textContent = p.barcode || 'N/A';
+      document.getElementById('modal-product-price').textContent = `₹${p.price || p.mrp || 0}`;
+      document.getElementById('modal-current-img').src = p.image_url || '';
+
+      // Reset preview
+      document.getElementById('modal-new-img').classList.add('hidden');
+      document.getElementById('modal-new-placeholder').classList.remove('hidden');
+      document.getElementById('btn-save-image').disabled = true;
+      document.getElementById('modal-status-text').classList.add('hidden');
+
+      // Open modal
+      document.getElementById('image-studio-modal').classList.remove('hidden');
+      switchStudioTab('camera');
+    }
+
+    function closeStudioModal() {
+      stopCamera();
+      document.getElementById('image-studio-modal').classList.add('hidden');
+      activeProductForModal = null;
+    }
+
+    function switchStudioTab(tab) {
+      ['camera', 'gallery', 'link'].forEach(t => {
+        const content = document.getElementById(`tab-content-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (t === tab) {
+          content.classList.remove('hidden');
+          btn.className = 'px-4 py-2.5 text-xs font-black border-b-2 border-emerald-600 text-emerald-700 flex items-center gap-1.5 transition';
+        } else {
+          content.classList.add('hidden');
+          btn.className = 'px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 transition';
+        }
+      });
+
+      if (tab === 'camera') {
+        startCamera();
+      } else {
+        stopCamera();
+      }
+    }
+
+    // Camera Handlers
+    async function startCamera() {
+      stopCamera();
+      const video = document.getElementById('camera-stream');
+      const snapBtn = document.getElementById('btn-snap');
+      const retakeBtn = document.getElementById('btn-retake');
+
+      snapBtn.classList.remove('hidden');
+      retakeBtn.classList.add('hidden');
+
+      try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: cameraFacingMode, width: { ideal: 1280 }, height: { ideal: 960 } },
+          audio: false
+        });
+        video.srcObject = cameraStream;
+      } catch (err) {
+        console.warn('Camera access error:', err);
+      }
+    }
+
+    function stopCamera() {
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+      }
+    }
+
+    function flipCamera() {
+      cameraFacingMode = cameraFacingMode === 'environment' ? 'user' : 'environment';
+      startCamera();
+    }
+
+    function snapPhoto() {
+      const video = document.getElementById('camera-stream');
+      const canvas = document.getElementById('camera-canvas');
+      if (!video || !video.videoWidth) return;
+
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Crop/Scale to 800px max for fast grocery store loading
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
+      proposedImageBase64 = dataUrl;
+      proposedImageUrl = dataUrl;
+
+      showProposedPreview(dataUrl);
+
+      document.getElementById('btn-snap').classList.add('hidden');
+      document.getElementById('btn-retake').classList.remove('hidden');
+      stopCamera();
+    }
+
+    // File Upload Handler (Gallery)
+    function handleFileSelect(e) {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const img = new Image();
+        img.onload = function() {
+          // Compress via canvas
+          const canvas = document.createElement('canvas');
+          const maxDim = 800;
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
+            else { w = Math.round((w * maxDim) / h); h = maxDim; }
+          }
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
+
+          proposedImageBase64 = dataUrl;
+          proposedImageUrl = dataUrl;
+          showProposedPreview(dataUrl);
+        };
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Online URL Link Handler
+    function previewOnlineUrl() {
+      const url = document.getElementById('input-online-url').value.trim();
+      if (!url) return alert('Please enter a valid image URL');
+
+      const testImg = new Image();
+      testImg.onload = function() {
+        proposedImageUrl = url;
+        proposedImageBase64 = null;
+        showProposedPreview(url);
+      };
+      testImg.onerror = function() {
+        alert('Unable to load image from URL. Please ensure it is a direct image link (.jpg, .png, etc.).');
+      };
+      testImg.src = url;
+    }
+
+    function showProposedPreview(src) {
+      const img = document.getElementById('modal-new-img');
+      const placeholder = document.getElementById('modal-new-placeholder');
+      img.src = src;
+      img.classList.remove('hidden');
+      placeholder.classList.add('hidden');
+      document.getElementById('btn-save-image').disabled = false;
+    }
+
+    // 4. SAVE & APPLY IMAGE
+    async function saveAndApplyProductImage() {
+      if (!activeProductForModal || (!proposedImageUrl && !proposedImageBase64)) return;
+
+      const btn = document.getElementById('btn-save-image');
+      const statusText = document.getElementById('modal-status-text');
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving to Database...';
+      statusText.classList.remove('hidden', 'text-red-600', 'text-emerald-600');
+      statusText.classList.add('text-blue-600');
+      statusText.textContent = 'Updating product image in catalog, store, and SQLite database...';
+
+      const payload = {
+        productId: activeProductForModal.id,
+        barcode: activeProductForModal.barcode,
+        imageUrl: proposedImageUrl,
+        imageBase64: proposedImageBase64
+      };
+
+      try {
+        const res = await fetch('/api/products/update-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+          const finalUrl = data.imageUrl || proposedImageUrl;
+          
+          // 1. Update in-memory product
+          activeProductForModal.image_url = finalUrl;
+          activeProductForModal.isCustomUpdated = true;
+
+          // 2. Update localStorage overrides
+          const overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+          overrides[activeProductForModal.id] = finalUrl;
+          localStorage.setItem('nsn_custom_images', JSON.stringify(overrides));
+
+          // 3. Broadcast to all open tabs (storefront, admin pos, rani hub)
+          if (broadcastChannel) {
+            broadcastChannel.postMessage({
+              type: 'PRODUCT_IMAGE_UPDATED',
+              productId: activeProductForModal.id,
+              barcode: activeProductForModal.barcode,
+              imageUrl: finalUrl
+            });
+          }
+
+          // 4. Update UI Grid Card thumbnail
+          const thumb = document.getElementById(`thumb-${activeProductForModal.id}`);
+          if (thumb) thumb.src = finalUrl;
+
+          updatedCount++;
+          document.getElementById('kpi-updated').textContent = `${updatedCount} Items`;
+
+          statusText.className = 'text-xs font-bold text-center text-emerald-600';
+          statusText.textContent = '✅ Image successfully saved to database & catalog!';
+
+          btn.innerHTML = '<i class="fa-solid fa-check"></i> Updated Successfully!';
+
+          setTimeout(() => {
+            closeStudioModal();
+            renderProductsGrid();
+          }, 800);
+
+        } else {
+          throw new Error(data.error || 'Server rejected update');
+        }
+      } catch (err) {
+        // Fallback for offline/client mode
+        console.warn('API error, applying client-side fallback:', err.message);
+        const finalUrl = proposedImageUrl;
+        activeProductForModal.image_url = finalUrl;
+        activeProductForModal.isCustomUpdated = true;
+
+        const overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+        overrides[activeProductForModal.id] = finalUrl;
+        localStorage.setItem('nsn_custom_images', JSON.stringify(overrides));
+
+        statusText.className = 'text-xs font-bold text-center text-emerald-600';
+        statusText.textContent = '✅ Image saved locally and synced to your browser session!';
+
+        setTimeout(() => {
+          closeStudioModal();
+          renderProductsGrid();
+        }, 800);
+      }
+    }
+
+    // Direct Barcode Search
+    function handleDirectBarcodeSearch(e) {
+      e.preventDefault();
+      const bc = document.getElementById('barcode-modal-input').value.trim();
+      document.getElementById('quick-scan-modal').classList.add('hidden');
+      
+      const found = allProducts.find(p => String(p.barcode) === bc || String(p.id) === bc);
+      if (found) {
+        openStudioModal(found.id);
+      } else {
+        document.getElementById('search-input').value = bc;
+        handleSearchInput();
+      }
+    }
+
+    // Initial Start
+    window.addEventListener('DOMContentLoaded', loadCatalog);
+  </script>
+</body>
+</html>

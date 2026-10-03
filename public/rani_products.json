@@ -30,10 +30,12 @@
       "category": "Health & OTC Wellness",
       "formFactor": "jar",
       "expected_image_type": "front_packshot",
-      "raw_title": "8G R Iodex"
+      "raw_title": "8G R Iodex",
+      "image_url": "https://images.openfoodfacts.org/images/products/000/008/900/0014/front_en.3.400.jpg"
     },
     "ai_match_priority": "PRIORITY_1_GTIN_EXACT",
-    "ai_match_signal": "GTIN_PACKSHOT_REGISTRY"
+    "ai_match_signal": "GTIN_PACKSHOT_REGISTRY",
+    "image": "https://images.openfoodfacts.org/images/products/000/008/900/0014/front_en.3.400.jpg"
   },
   {
     "id": 10,
@@ -199722,10 +199724,12 @@
       "category": "Health & OTC Wellness",
       "formFactor": "jar",
       "expected_image_type": "front_packshot",
-      "raw_title": "8G R IODEX PIN BALM"
+      "raw_title": "8G R IODEX PIN BALM",
+      "image_url": "https://images.openfoodfacts.org/images/products/000/008/900/0014/front_en.3.400.jpg"
     },
     "ai_match_priority": "PRIORITY_1_GTIN_EXACT",
-    "ai_match_signal": "GTIN_PACKSHOT_REGISTRY"
+    "ai_match_signal": "GTIN_PACKSHOT_REGISTRY",
+    "image": "https://images.openfoodfacts.org/images/products/000/008/900/0014/front_en.3.400.jpg"
   },
   {
     "id": 24365,

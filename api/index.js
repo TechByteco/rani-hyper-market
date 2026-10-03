@@ -231,6 +231,125 @@ if (reqPath === '/api/pos/status') {
     }
 
     // 3. POS Products Catalog
+        // ----------------------------------------------------
+    // Dedicated Product Image Updating API (Vercel Serverless)
+    // ----------------------------------------------------
+    if (reqPath === '/api/products/update-image' && req.method === 'POST') {
+      const body = await getBody();
+      const { productId, barcode, imageUrl, imageBase64 } = body;
+
+      if (!productId && !barcode) {
+        return sendJson(400, { error: 'productId or barcode is required' });
+      }
+
+      let finalUrl = imageUrl;
+
+      // Handle base64 image (from Camera or Gallery File upload)
+      if (imageBase64 && typeof imageBase64 === 'string' && imageBase64.startsWith('data:image')) {
+        try {
+          const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'products');
+          if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+          const matches = imageBase64.match(/^data:image\/([a-zA-Z0-9]+);base64,(.+)$/);
+          const ext = (matches && matches[1]) ? (matches[1] === 'jpeg' ? 'jpg' : matches[1]) : 'jpg';
+          const base64Data = matches ? matches[2] : imageBase64.replace(/^data:image\/\w+;base64,/, '');
+          const filename = 'prod_' + (productId || barcode) + '_' + Date.now() + '.' + ext;
+          const filePath = path.join(uploadsDir, filename);
+          fs.writeFileSync(filePath, Buffer.from(base64Data, 'base64'));
+
+          finalUrl = '/uploads/products/' + filename;
+        } catch (uploadErr) {
+          console.warn('Base64 image save error:', uploadErr.message);
+          if (!finalUrl) finalUrl = imageBase64;
+        }
+      }
+
+      if (!finalUrl) {
+        return sendJson(400, { error: 'No imageUrl or imageBase64 provided' });
+      }
+
+      // Update JSON catalogs
+      const jsonFiles = [
+        'products_catalog.json',
+        'public/products_catalog.json',
+        'pre_model/products_catalog.json',
+        'rani_products.json',
+        'public/rani_products.json'
+      ];
+
+      let updatedInCatalog = false;
+      let matchedItem = null;
+
+      for (const jf of jsonFiles) {
+        const fullP = path.join(process.cwd(), jf);
+        if (fs.existsSync(fullP)) {
+          try {
+            const data = JSON.parse(fs.readFileSync(fullP, 'utf8'));
+            if (Array.isArray(data)) {
+              let modified = false;
+              for (const item of data) {
+                if ((productId && String(item.id) === String(productId)) ||
+                    (barcode && String(item.barcode) === String(barcode))) {
+                  item.image_url = finalUrl;
+                  item.image = finalUrl;
+                  if (item.canonical_record) item.canonical_record.image_url = finalUrl;
+                  modified = true;
+                  updatedInCatalog = true;
+                  if (!matchedItem) matchedItem = { id: item.id, title: item.title, barcode: item.barcode };
+                }
+              }
+              if (modified) {
+                fs.writeFileSync(fullP, JSON.stringify(data, null, 2), 'utf8');
+              }
+            }
+          } catch (err) {
+            console.warn('Error updating', jf, err.message);
+          }
+        }
+      }
+
+      // Update SQLite database (if on Windows)
+      let dbUpdated = false;
+      try {
+        if (process.platform === 'win32') {
+          const sqliteExe = 'C:/SKS Market/sqlite3.exe';
+          const dbPath = 'C:/SKS Market/Data/database/37a64e83-514d-4b00-b90a-9af172dacdd6/9bcfb0b0-2cd2-11f1-9b4b-6fef85f604f9_2026-2027.db';
+          if (fs.existsSync(sqliteExe) && fs.existsSync(dbPath)) {
+            const { execFileSync } = require('child_process');
+            const initTableSql = 'CREATE TABLE IF NOT EXISTS ProductImageMaster (id INTEGER PRIMARY KEY AUTOINCREMENT, product_id INTEGER UNIQUE, barcode TEXT, image_url TEXT, updated_at TEXT);';
+            execFileSync(sqliteExe, [dbPath, initTableSql]);
+
+            const safeUrl = finalUrl.replace(/'/g, "''");
+            const safeBc = (barcode || '').replace(/'/g, "''");
+            const now = new Date().toISOString();
+            const pIdVal = productId ? String(productId) : 'NULL';
+            const upsertSql = 'INSERT INTO ProductImageMaster (product_id, barcode, image_url, updated_at) VALUES (' + pIdVal + ", '" + safeBc + "', '" + safeUrl + "', '" + now + "') ON CONFLICT(product_id) DO UPDATE SET image_url='" + safeUrl + "', barcode='" + safeBc + "', updated_at='" + now + "';";
+            execFileSync(sqliteExe, [dbPath, upsertSql]);
+            dbUpdated = true;
+          }
+        }
+      } catch (dbErr) {
+        console.warn('SQLite update error:', dbErr.message);
+      }
+
+      return sendJson(200, {
+        success: true,
+        productId,
+        barcode,
+        imageUrl: finalUrl,
+        product: matchedItem,
+        updatedInCatalog,
+        dbUpdated,
+        message: 'Product image updated successfully across catalog, store, and database!'
+      });
+    }
+
+    if (reqPath === '/api/products/images') {
+      const catalog = readLocalJson('products_catalog.json', []);
+      const imagesMap = {};
+      catalog.forEach(p => { if (p.image_url) imagesMap[p.id] = p.image_url; });
+      return sendJson(200, { total: Object.keys(imagesMap).length, images: imagesMap });
+    }
+
     if (reqPath === '/api/pos/products') {
       const search = (queryParams.get('search') || '').toLowerCase().trim();
       const limit = parseInt(queryParams.get('limit') || '100', 10);

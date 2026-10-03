@@ -311,7 +311,7 @@
       display: flex;
       gap: 14px;
       width: max-content;
-      animation: brandMarqueeScroll 42s linear infinite;
+      animation: brandMarqueeScroll 28s linear infinite; -webkit-animation: brandMarqueeScroll 28s linear infinite;
       will-change: transform;
     }
     .brand-marquee-container:hover .brand-marquee-track {
@@ -319,7 +319,11 @@
     }
     @keyframes brandMarqueeScroll {
       0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+      100% { transform: translateX(-33.333%); }
+    }
+    @-webkit-keyframes brandMarqueeScroll {
+      0% { -webkit-transform: translateX(0); }
+      100% { -webkit-transform: translateX(-33.333%); }
     }
     .brand-card-item {
       flex: 0 0 auto;
@@ -648,7 +652,342 @@
         <!-- LIVELY INFINITE MOVING MARQUEE -->
         <div class="brand-marquee-container" id="brand-marquee-wrapper">
           <div class="brand-marquee-track" id="brand-marquee-track">
-            <!-- Injected via JavaScript -->
+
+              <div class="brand-card-item" data-brand="Aashirvaad" onclick="filterByBrand('Aashirvaad')" title="Filter by Aashirvaad">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/e16b4eb3-b6d3-4858-bfe6-dd6b5599e4a7-Aashirvaad.jpg" alt="Aashirvaad" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/e16b4eb3-b6d3-4858-bfe6-dd6b5599e4a7-Aashirvaad.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Aashirvaad</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Atta & Flours</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Aachi" onclick="filterByBrand('Aachi')" title="Filter by Aachi">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/7c344540-6bc2-4226-91a6-18a3d9c799da-blob.webp" alt="Aachi" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/7c344540-6bc2-4226-91a6-18a3d9c799da-blob.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Aachi</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Spices & Masala</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Amul" onclick="filterByBrand('Amul')" title="Filter by Amul">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/6bcfd86b-3830-4bfc-8619-986ee84581fc-blob.webp" alt="Amul" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/6bcfd86b-3830-4bfc-8619-986ee84581fc-blob.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Amul</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Dairy & Butter</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Surf Excel" onclick="filterByBrand('Surf Excel')" title="Filter by Surf Excel">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/5b6fb9e9-f62f-4909-a58f-567d9fe586f5-Surfexcel.jpg" alt="Surf Excel" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/5b6fb9e9-f62f-4909-a58f-567d9fe586f5-Surfexcel.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Surf Excel</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Detergents</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Colgate" onclick="filterByBrand('Colgate')" title="Filter by Colgate">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/f52e9dee-0865-4847-8beb-853d7b6f8aac-Colgate.webp" alt="Colgate" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/f52e9dee-0865-4847-8beb-853d7b6f8aac-Colgate.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Colgate</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Oral Care</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Bru" onclick="filterByBrand('Bru')" title="Filter by Bru">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/494d3b17-b09f-448b-b491-b0ee6e64407a-Bru.webp" alt="Bru" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/494d3b17-b09f-448b-b491-b0ee6e64407a-Bru.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Bru</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Coffee</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Fortune" onclick="filterByBrand('Fortune')" title="Filter by Fortune">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/37cb9c9b-7724-4cbc-adbc-51ee91ba017e-blob-4.webp" alt="Fortune" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/37cb9c9b-7724-4cbc-adbc-51ee91ba017e-blob-4.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Fortune</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Edible Oils</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Maggi" onclick="filterByBrand('Maggi')" title="Filter by Maggi">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/b89abe51-5964-44ee-a576-40d16275ceaa-Maggie.jpg" alt="Maggi" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/b89abe51-5964-44ee-a576-40d16275ceaa-Maggie.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Maggi</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Noodles & Sauces</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Parle" onclick="filterByBrand('Parle')" title="Filter by Parle">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/2286f3cb-335a-4fed-81d8-cf5d946f637b-blob.webp" alt="Parle" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/2286f3cb-335a-4fed-81d8-cf5d946f637b-blob.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Parle</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Biscuits & Snacks</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Parachute" onclick="filterByBrand('Parachute')" title="Filter by Parachute">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/c93b11b1-5b5c-47a4-a2cc-69f388a272e3-Parachute.jpg" alt="Parachute" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/c93b11b1-5b5c-47a4-a2cc-69f388a272e3-Parachute.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Parachute</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Coconut Oils</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Vim" onclick="filterByBrand('Vim')" title="Filter by Vim">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/86e6d9c5-48c4-46b9-aab7-f7c6a9bd91c2-Vim.jpg" alt="Vim" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/86e6d9c5-48c4-46b9-aab7-f7c6a9bd91c2-Vim.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Vim</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Dishwash</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Good Knight" onclick="filterByBrand('Good Knight')" title="Filter by Good Knight">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/621a9559-45cb-4539-ac6a-6bc7a749e4c1-Goodknight.webp" alt="Good Knight" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/621a9559-45cb-4539-ac6a-6bc7a749e4c1-Goodknight.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Good Knight</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Repellents</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Brooke Bond" onclick="filterByBrand('Brooke Bond')" title="Filter by Brooke Bond">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/ff6a598d-abe6-43a8-84ac-8b486833046c-brookbond-1.webp" alt="Brooke Bond" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/ff6a598d-abe6-43a8-84ac-8b486833046c-brookbond-1.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Brooke Bond</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Tea</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="GRB" onclick="filterByBrand('GRB')" title="Filter by GRB">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/fedf2c52-297a-4012-a310-2297a790f1df-GRB.jpg" alt="GRB" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/fedf2c52-297a-4012-a310-2297a790f1df-GRB.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">GRB</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Ghee & Sweets</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Aashirvaad" onclick="filterByBrand('Aashirvaad')" title="Filter by Aashirvaad">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/e16b4eb3-b6d3-4858-bfe6-dd6b5599e4a7-Aashirvaad.jpg" alt="Aashirvaad" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/e16b4eb3-b6d3-4858-bfe6-dd6b5599e4a7-Aashirvaad.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Aashirvaad</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Atta & Flours</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Aachi" onclick="filterByBrand('Aachi')" title="Filter by Aachi">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/7c344540-6bc2-4226-91a6-18a3d9c799da-blob.webp" alt="Aachi" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/7c344540-6bc2-4226-91a6-18a3d9c799da-blob.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Aachi</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Spices & Masala</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Amul" onclick="filterByBrand('Amul')" title="Filter by Amul">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/6bcfd86b-3830-4bfc-8619-986ee84581fc-blob.webp" alt="Amul" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/6bcfd86b-3830-4bfc-8619-986ee84581fc-blob.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Amul</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Dairy & Butter</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Surf Excel" onclick="filterByBrand('Surf Excel')" title="Filter by Surf Excel">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/5b6fb9e9-f62f-4909-a58f-567d9fe586f5-Surfexcel.jpg" alt="Surf Excel" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/5b6fb9e9-f62f-4909-a58f-567d9fe586f5-Surfexcel.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Surf Excel</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Detergents</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Colgate" onclick="filterByBrand('Colgate')" title="Filter by Colgate">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/f52e9dee-0865-4847-8beb-853d7b6f8aac-Colgate.webp" alt="Colgate" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/f52e9dee-0865-4847-8beb-853d7b6f8aac-Colgate.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Colgate</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Oral Care</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Bru" onclick="filterByBrand('Bru')" title="Filter by Bru">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/494d3b17-b09f-448b-b491-b0ee6e64407a-Bru.webp" alt="Bru" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/494d3b17-b09f-448b-b491-b0ee6e64407a-Bru.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Bru</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Coffee</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Fortune" onclick="filterByBrand('Fortune')" title="Filter by Fortune">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/37cb9c9b-7724-4cbc-adbc-51ee91ba017e-blob-4.webp" alt="Fortune" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/37cb9c9b-7724-4cbc-adbc-51ee91ba017e-blob-4.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Fortune</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Edible Oils</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Maggi" onclick="filterByBrand('Maggi')" title="Filter by Maggi">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/b89abe51-5964-44ee-a576-40d16275ceaa-Maggie.jpg" alt="Maggi" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/b89abe51-5964-44ee-a576-40d16275ceaa-Maggie.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Maggi</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Noodles & Sauces</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Parle" onclick="filterByBrand('Parle')" title="Filter by Parle">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/2286f3cb-335a-4fed-81d8-cf5d946f637b-blob.webp" alt="Parle" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/2286f3cb-335a-4fed-81d8-cf5d946f637b-blob.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Parle</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Biscuits & Snacks</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Parachute" onclick="filterByBrand('Parachute')" title="Filter by Parachute">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/c93b11b1-5b5c-47a4-a2cc-69f388a272e3-Parachute.jpg" alt="Parachute" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/c93b11b1-5b5c-47a4-a2cc-69f388a272e3-Parachute.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Parachute</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Coconut Oils</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Vim" onclick="filterByBrand('Vim')" title="Filter by Vim">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/86e6d9c5-48c4-46b9-aab7-f7c6a9bd91c2-Vim.jpg" alt="Vim" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/86e6d9c5-48c4-46b9-aab7-f7c6a9bd91c2-Vim.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Vim</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Dishwash</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Good Knight" onclick="filterByBrand('Good Knight')" title="Filter by Good Knight">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/621a9559-45cb-4539-ac6a-6bc7a749e4c1-Goodknight.webp" alt="Good Knight" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/621a9559-45cb-4539-ac6a-6bc7a749e4c1-Goodknight.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Good Knight</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Repellents</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Brooke Bond" onclick="filterByBrand('Brooke Bond')" title="Filter by Brooke Bond">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/ff6a598d-abe6-43a8-84ac-8b486833046c-brookbond-1.webp" alt="Brooke Bond" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/ff6a598d-abe6-43a8-84ac-8b486833046c-brookbond-1.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Brooke Bond</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Tea</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="GRB" onclick="filterByBrand('GRB')" title="Filter by GRB">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/fedf2c52-297a-4012-a310-2297a790f1df-GRB.jpg" alt="GRB" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/fedf2c52-297a-4012-a310-2297a790f1df-GRB.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">GRB</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Ghee & Sweets</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Aashirvaad" onclick="filterByBrand('Aashirvaad')" title="Filter by Aashirvaad">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/e16b4eb3-b6d3-4858-bfe6-dd6b5599e4a7-Aashirvaad.jpg" alt="Aashirvaad" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/e16b4eb3-b6d3-4858-bfe6-dd6b5599e4a7-Aashirvaad.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Aashirvaad</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Atta & Flours</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Aachi" onclick="filterByBrand('Aachi')" title="Filter by Aachi">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/7c344540-6bc2-4226-91a6-18a3d9c799da-blob.webp" alt="Aachi" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/7c344540-6bc2-4226-91a6-18a3d9c799da-blob.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Aachi</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Spices & Masala</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Amul" onclick="filterByBrand('Amul')" title="Filter by Amul">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/6bcfd86b-3830-4bfc-8619-986ee84581fc-blob.webp" alt="Amul" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/6bcfd86b-3830-4bfc-8619-986ee84581fc-blob.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Amul</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Dairy & Butter</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Surf Excel" onclick="filterByBrand('Surf Excel')" title="Filter by Surf Excel">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/5b6fb9e9-f62f-4909-a58f-567d9fe586f5-Surfexcel.jpg" alt="Surf Excel" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/5b6fb9e9-f62f-4909-a58f-567d9fe586f5-Surfexcel.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Surf Excel</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Detergents</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Colgate" onclick="filterByBrand('Colgate')" title="Filter by Colgate">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/f52e9dee-0865-4847-8beb-853d7b6f8aac-Colgate.webp" alt="Colgate" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/f52e9dee-0865-4847-8beb-853d7b6f8aac-Colgate.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Colgate</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Oral Care</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Bru" onclick="filterByBrand('Bru')" title="Filter by Bru">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/494d3b17-b09f-448b-b491-b0ee6e64407a-Bru.webp" alt="Bru" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/494d3b17-b09f-448b-b491-b0ee6e64407a-Bru.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Bru</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Coffee</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Fortune" onclick="filterByBrand('Fortune')" title="Filter by Fortune">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/37cb9c9b-7724-4cbc-adbc-51ee91ba017e-blob-4.webp" alt="Fortune" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/37cb9c9b-7724-4cbc-adbc-51ee91ba017e-blob-4.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Fortune</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Edible Oils</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Maggi" onclick="filterByBrand('Maggi')" title="Filter by Maggi">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/b89abe51-5964-44ee-a576-40d16275ceaa-Maggie.jpg" alt="Maggi" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/b89abe51-5964-44ee-a576-40d16275ceaa-Maggie.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Maggi</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Noodles & Sauces</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Parle" onclick="filterByBrand('Parle')" title="Filter by Parle">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/2286f3cb-335a-4fed-81d8-cf5d946f637b-blob.webp" alt="Parle" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/2286f3cb-335a-4fed-81d8-cf5d946f637b-blob.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Parle</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Biscuits & Snacks</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Parachute" onclick="filterByBrand('Parachute')" title="Filter by Parachute">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/c93b11b1-5b5c-47a4-a2cc-69f388a272e3-Parachute.jpg" alt="Parachute" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/c93b11b1-5b5c-47a4-a2cc-69f388a272e3-Parachute.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Parachute</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Coconut Oils</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Vim" onclick="filterByBrand('Vim')" title="Filter by Vim">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/86e6d9c5-48c4-46b9-aab7-f7c6a9bd91c2-Vim.jpg" alt="Vim" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/86e6d9c5-48c4-46b9-aab7-f7c6a9bd91c2-Vim.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Vim</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Dishwash</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Good Knight" onclick="filterByBrand('Good Knight')" title="Filter by Good Knight">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/621a9559-45cb-4539-ac6a-6bc7a749e4c1-Goodknight.webp" alt="Good Knight" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/621a9559-45cb-4539-ac6a-6bc7a749e4c1-Goodknight.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Good Knight</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Repellents</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="Brooke Bond" onclick="filterByBrand('Brooke Bond')" title="Filter by Brooke Bond">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/ff6a598d-abe6-43a8-84ac-8b486833046c-brookbond-1.webp" alt="Brooke Bond" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/ff6a598d-abe6-43a8-84ac-8b486833046c-brookbond-1.webp';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">Brooke Bond</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Tea</span>
+              </div>
+
+              <div class="brand-card-item" data-brand="GRB" onclick="filterByBrand('GRB')" title="Filter by GRB">
+                <div class="brand-card-logo-wrap">
+                  <img src="/images/brands/fedf2c52-297a-4012-a310-2297a790f1df-GRB.jpg" alt="GRB" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='https://nationalhypermart.com/wp-content/uploads/2026/02/fedf2c52-297a-4012-a310-2297a790f1df-GRB.jpg';">
+                </div>
+                <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">GRB</h5>
+                <span class="text-[10px] text-emerald-700 font-bold">Ghee & Sweets</span>
+              </div>
           </div>
         </div>
       </div>
@@ -1362,6 +1701,11 @@
     let currentCategory = 'all';
 
     function initStore() {
+      applyStoreCustomizations();
+      renderBrandMarquee();
+      startFlashDealTimer();
+      updateWishlistBadge();
+
       try {
         const saved = localStorage.getItem('nsn_cart');
         if (saved) cart = JSON.parse(saved);
@@ -2099,25 +2443,105 @@
     // =======================================================
 
     const POPULAR_BRANDS = [
-      { name: 'Aashirvaad', query: 'aashirvaad', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/e16b4eb3-b6d3-4858-bfe6-dd6b5599e4a7-Aashirvaad.jpg', category: 'Atta & Flours' },
-      { name: 'Surf Excel', query: 'surf excel', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/5b6fb9e9-f62f-4909-a58f-567d9fe586f5-Surfexcel.jpg', category: 'Detergents' },
-      { name: 'Colgate', query: 'colgate', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/f52e9dee-0865-4847-8beb-853d7b6f8aac-Colgate.webp', category: 'Oral Care' },
-      { name: 'Bru', query: 'bru', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/494d3b17-b09f-448b-b491-b0ee6e64407a-Bru.webp', category: 'Coffee' },
-      { name: 'Brooke Bond', query: 'brooke bond', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/ff6a598d-abe6-43a8-84ac-8b486833046c-brookbond-1.webp', category: 'Tea' },
-      { name: 'Maggi', query: 'maggi', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/b89abe51-5964-44ee-a576-40d16275ceaa-Maggie.jpg', category: 'Noodles & Sauces' },
-      { name: 'Parachute', query: 'parachute', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/c93b11b1-5b5c-47a4-a2cc-69f388a272e3-Parachute.jpg', category: 'Hair Oils' },
-      { name: 'Vim', query: 'vim', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/86e6d9c5-48c4-46b9-aab7-f7c6a9bd91c2-Vim.jpg', category: 'Dishwash' },
-      { name: 'Good Knight', query: 'good knight', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/621a9559-45cb-4539-ac6a-6bc7a749e4c1-Goodknight.webp', category: 'Repellents' },
-      { name: 'GRB', query: 'grb', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/fedf2c52-297a-4012-a310-2297a790f1df-GRB.jpg', category: 'Ghee & Sweets' },
-      { name: 'Aachi', query: 'aachi', logo: 'https://images.openfoodfacts.org/images/products/890/601/036/0382/front_en.11.400.jpg', category: 'Spices & Masala' },
-      { name: 'Sakthi', query: 'sakthi', logo: 'https://5.imimg.com/data5/SELLER/Default/2023/11/363842183/LM/TL/WW/175405/bopp-toor-dal-bag-500x500.jpg', category: 'Masalas' },
-      { name: 'Rin', query: 'rin', logo: 'https://images.openfoodfacts.org/images/products/890/103/034/1105/front_en.4.400.jpg', category: 'Laundry' },
-      { name: 'Britannia', query: 'britannia', logo: 'https://images.openfoodfacts.org/images/products/890/106/301/2140/front_en.18.400.jpg', category: 'Biscuits' },
-      { name: 'Dettol', query: 'dettol', logo: 'https://images.openfoodfacts.org/images/products/890/139/611/0009/front_en.4.400.jpg', category: 'Antiseptic & Soaps' },
-      { name: 'Tata', query: 'tata', logo: 'https://images.openfoodfacts.org/images/products/890/105/200/0038/front_en.21.400.jpg', category: 'Salt, Tea & Dal' },
-      { name: 'Dove', query: 'dove', logo: 'https://images.openfoodfacts.org/images/products/890/103/000/1234/front_en.3.400.jpg', category: 'Body & Hair' },
-      { name: 'Horlicks', query: 'horlicks', logo: 'https://images.openfoodfacts.org/images/products/890/103/036/1234/front_en.5.400.jpg', category: 'Health Drinks' }
-    ];
+  {
+    "name": "Aashirvaad",
+    "query": "aashirvaad",
+    "logo": "/images/brands/e16b4eb3-b6d3-4858-bfe6-dd6b5599e4a7-Aashirvaad.jpg",
+    "fallback": "https://nationalhypermart.com/wp-content/uploads/2026/02/e16b4eb3-b6d3-4858-bfe6-dd6b5599e4a7-Aashirvaad.jpg",
+    "category": "Atta & Flours"
+  },
+  {
+    "name": "Aachi",
+    "query": "aachi",
+    "logo": "/images/brands/7c344540-6bc2-4226-91a6-18a3d9c799da-blob.webp",
+    "fallback": "https://nationalhypermart.com/wp-content/uploads/2026/02/7c344540-6bc2-4226-91a6-18a3d9c799da-blob.webp",
+    "category": "Spices & Masala"
+  },
+  {
+    "name": "Amul",
+    "query": "amul",
+    "logo": "/images/brands/6bcfd86b-3830-4bfc-8619-986ee84581fc-blob.webp",
+    "fallback": "https://nationalhypermart.com/wp-content/uploads/2026/02/6bcfd86b-3830-4bfc-8619-986ee84581fc-blob.webp",
+    "category": "Dairy & Butter"
+  },
+  {
+    "name": "Surf Excel",
+    "query": "surf excel",
+    "logo": "/images/brands/5b6fb9e9-f62f-4909-a58f-567d9fe586f5-Surfexcel.jpg",
+    "fallback": "https://nationalhypermart.com/wp-content/uploads/2026/02/5b6fb9e9-f62f-4909-a58f-567d9fe586f5-Surfexcel.jpg",
+    "category": "Detergents"
+  },
+  {
+    "name": "Colgate",
+    "query": "colgate",
+    "logo": "/images/brands/f52e9dee-0865-4847-8beb-853d7b6f8aac-Colgate.webp",
+    "fallback": "https://nationalhypermart.com/wp-content/uploads/2026/02/f52e9dee-0865-4847-8beb-853d7b6f8aac-Colgate.webp",
+    "category": "Oral Care"
+  },
+  {
+    "name": "Bru",
+    "query": "bru",
+    "logo": "/images/brands/494d3b17-b09f-448b-b491-b0ee6e64407a-Bru.webp",
+    "fallback": "https://nationalhypermart.com/wp-content/uploads/2026/02/494d3b17-b09f-448b-b491-b0ee6e64407a-Bru.webp",
+    "category": "Coffee"
+  },
+  {
+    "name": "Fortune",
+    "query": "fortune",
+    "logo": "/images/brands/37cb9c9b-7724-4cbc-adbc-51ee91ba017e-blob-4.webp",
+    "fallback": "https://nationalhypermart.com/wp-content/uploads/2026/02/37cb9c9b-7724-4cbc-adbc-51ee91ba017e-blob-4.webp",
+    "category": "Edible Oils"
+  },
+  {
+    "name": "Maggi",
+    "query": "maggi",
+    "logo": "/images/brands/b89abe51-5964-44ee-a576-40d16275ceaa-Maggie.jpg",
+    "fallback": "https://nationalhypermart.com/wp-content/uploads/2026/02/b89abe51-5964-44ee-a576-40d16275ceaa-Maggie.jpg",
+    "category": "Noodles & Sauces"
+  },
+  {
+    "name": "Parle",
+    "query": "parle",
+    "logo": "/images/brands/2286f3cb-335a-4fed-81d8-cf5d946f637b-blob.webp",
+    "fallback": "https://nationalhypermart.com/wp-content/uploads/2026/02/2286f3cb-335a-4fed-81d8-cf5d946f637b-blob.webp",
+    "category": "Biscuits & Snacks"
+  },
+  {
+    "name": "Parachute",
+    "query": "parachute",
+    "logo": "/images/brands/c93b11b1-5b5c-47a4-a2cc-69f388a272e3-Parachute.jpg",
+    "fallback": "https://nationalhypermart.com/wp-content/uploads/2026/02/c93b11b1-5b5c-47a4-a2cc-69f388a272e3-Parachute.jpg",
+    "category": "Coconut Oils"
+  },
+  {
+    "name": "Vim",
+    "query": "vim",
+    "logo": "/images/brands/86e6d9c5-48c4-46b9-aab7-f7c6a9bd91c2-Vim.jpg",
+    "fallback": "https://nationalhypermart.com/wp-content/uploads/2026/02/86e6d9c5-48c4-46b9-aab7-f7c6a9bd91c2-Vim.jpg",
+    "category": "Dishwash"
+  },
+  {
+    "name": "Good Knight",
+    "query": "good knight",
+    "logo": "/images/brands/621a9559-45cb-4539-ac6a-6bc7a749e4c1-Goodknight.webp",
+    "fallback": "https://nationalhypermart.com/wp-content/uploads/2026/02/621a9559-45cb-4539-ac6a-6bc7a749e4c1-Goodknight.webp",
+    "category": "Repellents"
+  },
+  {
+    "name": "Brooke Bond",
+    "query": "brooke bond",
+    "logo": "/images/brands/ff6a598d-abe6-43a8-84ac-8b486833046c-brookbond-1.webp",
+    "fallback": "https://nationalhypermart.com/wp-content/uploads/2026/02/ff6a598d-abe6-43a8-84ac-8b486833046c-brookbond-1.webp",
+    "category": "Tea"
+  },
+  {
+    "name": "GRB",
+    "query": "grb",
+    "logo": "/images/brands/fedf2c52-297a-4012-a310-2297a790f1df-GRB.jpg",
+    "fallback": "https://nationalhypermart.com/wp-content/uploads/2026/02/fedf2c52-297a-4012-a310-2297a790f1df-GRB.jpg",
+    "category": "Ghee & Sweets"
+  }
+];
 
     let activeBrandFilter = null;
     let wishlist = [];
@@ -2129,22 +2553,19 @@
       const track = document.getElementById('brand-marquee-track');
       if (!track) return;
 
-      // Duplicate list twice for a seamless infinite scroll loop
-      const combined = [...POPULAR_BRANDS, ...POPULAR_BRANDS];
-
-      track.innerHTML = combined.map((b, idx) => {
+      const sets = [...POPULAR_BRANDS, ...POPULAR_BRANDS, ...POPULAR_BRANDS];
+      track.innerHTML = sets.map(b => {
         const isActive = activeBrandFilter && activeBrandFilter.toLowerCase() === b.name.toLowerCase();
         return `
-          <div class="brand-card-item ${isActive ? 'active-brand' : ''}" onclick="filterByBrand('${b.name}')" title="Click to view all ${b.name} products">
+          <div class="brand-card-item ${isActive ? 'active-brand' : ''}" data-brand="${b.name}" onclick="filterByBrand('${b.name}')" title="Filter by ${b.name}">
             <div class="brand-card-logo-wrap">
-              <img src="${b.logo}" alt="${b.name}" class="brand-card-logo" loading="lazy" onerror="this.src='https://images.openfoodfacts.org/images/products/890/601/036/0382/front_en.11.400.jpg'">
+              <img src="${b.logo}" alt="${b.name}" class="brand-card-logo" loading="lazy" onerror="this.onerror=null; this.src='${b.fallback}';">
             </div>
             <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">${b.name}</h5>
             <span class="text-[10px] text-emerald-700 font-bold">${b.category}</span>
           </div>
         `;
       }).join('');
-
       updateWishlistBadge();
     }
 

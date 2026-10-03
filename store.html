@@ -295,6 +295,155 @@
     }
     .scrollbar-none::-webkit-scrollbar { display: none; }
     .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+  
+    /* =======================================================
+       NATIONAL HYPER MART INSPIRED STYLES: LIVELY MARQUEE & CARDS
+       ======================================================= */
+    .brand-marquee-container {
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+      mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+      padding: 6px 0;
+    }
+    .brand-marquee-track {
+      display: flex;
+      gap: 14px;
+      width: max-content;
+      animation: brandMarqueeScroll 42s linear infinite;
+      will-change: transform;
+    }
+    .brand-marquee-container:hover .brand-marquee-track {
+      animation-play-state: paused;
+    }
+    @keyframes brandMarqueeScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .brand-card-item {
+      flex: 0 0 auto;
+      width: 125px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 12px 8px;
+      text-align: center;
+      border: 1.5px solid rgba(229, 231, 235, 0.9);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .brand-card-item:hover {
+      transform: translateY(-6px) scale(1.05);
+      border-color: #10b981;
+      background: #ffffff;
+      box-shadow: 0 16px 32px rgba(16, 185, 129, 0.22), 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+    .brand-card-item.active-brand {
+      border-color: #059669;
+      background: linear-gradient(145deg, #ecfdf5, #ffffff);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.35), 0 12px 28px rgba(16, 185, 129, 0.25);
+    }
+    .brand-card-logo-wrap {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      overflow: hidden;
+      padding: 4px;
+    }
+    .brand-card-logo {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+    .brand-card-item:hover .brand-card-logo {
+      transform: scale(1.12);
+    }
+
+    /* National Hyper Mart Card Styling */
+    .nhm-product-card {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(20px);
+      border: 1.5px solid rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      padding: 12px;
+    }
+    .nhm-product-card:hover {
+      transform: translateY(-5px);
+      background: #ffffff;
+      border-color: rgba(16, 185, 129, 0.45);
+      box-shadow: 0 20px 40px rgba(16, 185, 129, 0.16), 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+    .nhm-thumb-box {
+      position: relative;
+      width: 100%;
+      height: 175px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid #f1f5f9;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .nhm-thumb-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 8px;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nhm-product-card:hover .nhm-thumb-img {
+      transform: scale(1.08);
+    }
+    .nhm-btn-wishlist {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(229, 231, 235, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+    .nhm-btn-wishlist:hover {
+      transform: scale(1.15);
+      color: #e11d48;
+      border-color: #fecdd3;
+      background: #fff;
+    }
+    .nhm-btn-wishlist.active-wish {
+      color: #e11d48;
+      background: #fff1f2;
+      border-color: #fda4af;
+    }
+
   </style>
 </head>
 <body class="relative min-h-screen flex flex-col justify-between">
@@ -369,6 +518,12 @@
             <span class="md:hidden">AI Cart</span>
           </button>
 
+          
+          <button type="button" onclick="toggleWishlistDrawer()" class="px-3 py-2 bg-white/80 hover:bg-white text-gray-700 hover:text-rose-600 border border-gray-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer" title="View Saved Wishlist">
+            <i class="fa-solid fa-heart text-rose-500"></i>
+            <span class="hidden sm:inline">Wishlist</span>
+            <span id="wishlist-badge" class="bg-rose-100 text-rose-700 font-extrabold px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+          </button>
           <button onclick="toggleCart()" class="btn-emerald px-4 py-2 text-xs flex items-center gap-2">
             <i class="fa-solid fa-cart-shopping text-sm"></i>
             <span class="hidden sm:inline">Cart</span>
@@ -463,6 +618,42 @@
       </div>
     </section>
 
+    
+    <!-- BRANDS YOU LOVE (LIVELY INFINITE MOVING MARQUEE - NATIONAL HYPER MART STYLE) -->
+    <section class="max-w-7xl mx-auto w-full px-6 mb-7" id="brands-section">
+      <div class="glass p-5 sm:p-6 rounded-3xl shadow-xl border border-white/95">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-100 text-rose-700 border border-rose-200">
+                <i class="fa-solid fa-fire text-rose-600"></i> Top FMCG Partners
+              </span>
+              <span class="text-xs font-bold text-gray-400">• Click any brand to browse</span>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-black text-gray-900 flex items-center gap-2 mt-1">
+              <span>Brands You Love</span>
+              <span class="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-300">100% Authentic</span>
+            </h3>
+          </div>
+          <div class="hidden sm:flex items-center gap-1.5">
+            <button type="button" onclick="scrollBrandMarquee(-1)" class="w-8 h-8 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-emerald-700 hover:border-emerald-300 shadow-xs flex items-center justify-center transition active:scale-90 cursor-pointer" title="Previous Brands">
+              <i class="fa-solid fa-chevron-left text-xs"></i>
+            </button>
+            <button type="button" onclick="scrollBrandMarquee(1)" class="w-8 h-8 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-emerald-700 hover:border-emerald-300 shadow-xs flex items-center justify-center transition active:scale-90 cursor-pointer" title="Next Brands">
+              <i class="fa-solid fa-chevron-right text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- LIVELY INFINITE MOVING MARQUEE -->
+        <div class="brand-marquee-container" id="brand-marquee-wrapper">
+          <div class="brand-marquee-track" id="brand-marquee-track">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- CATEGORY PILLS -->
     <section class="max-w-7xl mx-auto w-full px-6 mb-6">
       <div class="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-none">
@@ -494,6 +685,36 @@
           <button onclick="sortProducts('popular')" id="btn-sort-pop" class="tab-pill active text-xs">Featured</button>
           <button onclick="sortProducts('low-high')" id="btn-sort-lh" class="tab-pill text-xs">Price: Low to High</button>
           <button onclick="sortProducts('high-low')" id="btn-sort-hl" class="tab-pill text-xs">Price: High to Low</button>
+        </div>
+      </div>
+
+      
+      <!-- ACTIVE BRAND FILTER NOTICE -->
+      <div id="active-brand-banner" class="hidden mb-5 p-3.5 bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-2xl shadow-md flex items-center justify-between">
+        <div class="flex items-center gap-2 text-xs font-bold">
+          <span class="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center"><i class="fa-solid fa-tag text-amber-300"></i></span>
+          <span>Filtered by Brand: <strong id="active-brand-name" class="font-black text-amber-200 underline"></strong> (<span id="active-brand-count">0 items</span>)</span>
+        </div>
+        <button type="button" onclick="clearBrandFilter()" class="px-3 py-1 bg-white text-emerald-800 hover:bg-emerald-50 text-xs font-black rounded-xl shadow-xs transition active:scale-95 flex items-center gap-1 cursor-pointer">
+          <i class="fa-solid fa-xmark"></i> Clear Filter
+        </button>
+      </div>
+
+      <!-- FLASH SALE COUNTDOWN (NATIONAL HYPER MART STYLE) -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-rose-600 via-red-600 to-amber-600 text-white p-3.5 sm:p-4 rounded-2xl shadow-lg mb-6">
+        <div class="flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center font-black text-base flex-shrink-0">
+            <i class="fa-solid fa-bolt text-amber-300 animate-pulse"></i>
+          </span>
+          <div>
+            <h4 class="text-xs sm:text-sm font-black tracking-wide uppercase">Today's Blockbuster Deals &amp; Daily Highlights</h4>
+            <p class="text-[11px] text-rose-100 font-medium">Extra supermarket discounts on flour, dals, dairy, beverages &amp; home essentials</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-black bg-black/35 px-3.5 py-1.5 rounded-xl border border-white/25 self-start sm:self-auto">
+          <i class="fa-regular fa-clock text-amber-300 text-xs"></i>
+          <span class="text-[10px] text-amber-200 uppercase tracking-wider">Ends In:</span>
+          <span id="flash-deal-timer" class="font-mono text-amber-300 text-xs font-black tracking-wider">04:45:12</span>
         </div>
       </div>
 
@@ -579,6 +800,33 @@
     <footer class="text-center py-6 text-xs text-gray-500 glass border-t border-white/60">
       &copy; 2026 Rani Hyper Market • Bodinayakanur, Theni • Powered by SNS Marketing Retail OS
     </footer>
+  </div>
+
+  
+  <!-- WISHLIST DRAWER (NATIONAL HYPER MART STYLE) -->
+  <div id="wishlist-drawer" class="fixed inset-0 bg-black/25 backdrop-blur-sm z-50 hidden flex justify-end">
+    <div class="glass w-full max-w-md h-full flex flex-col p-6 shadow-2xl overflow-hidden">
+      <div class="flex items-center justify-between border-b border-gray-200/70 pb-3 mb-3">
+        <h3 class="font-black text-gray-900 text-lg flex items-center gap-2">
+          <i class="fa-solid fa-heart text-rose-500"></i> Your Wishlist
+          <span id="wishlist-drawer-count" class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">0 items</span>
+        </h3>
+        <button onclick="toggleWishlistDrawer()" class="text-gray-400 hover:text-gray-700 text-xl font-bold">&times;</button>
+      </div>
+
+      <div id="wishlist-items-container" class="flex-1 overflow-y-auto space-y-2.5 pr-1">
+        <!-- Wishlist items populated dynamically -->
+      </div>
+
+      <div class="border-t border-gray-200/70 pt-4 space-y-2.5 mt-2">
+        <button onclick="addAllWishlistToCart()" id="btn-add-all-wishlist" class="btn-emerald w-full py-3 text-xs font-black flex items-center justify-center gap-2">
+          <i class="fa-solid fa-cart-plus"></i> Move All Wishlist to Cart
+        </button>
+        <button onclick="clearWishlist()" class="w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl text-xs font-bold transition">
+          Clear Wishlist
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- CART DRAWER -->
@@ -1716,50 +1964,77 @@
         const cartQty = cartItem ? (parseInt(cartItem.quantity, 10) || 1) : 0;
         const finalImg = getRelevantProductImage(p.title, p.image_url);
         const isNonVeg = /egg|chicken|mutton|fish|meat|prawn/i.test(p.title);
+        const isWishlisted = wishlist.includes(String(p.id));
 
         return `
-          <div class="glass-card p-3.5 flex flex-col justify-between hover:shadow-xl transition-all duration-300 group relative border border-white/80 rounded-2xl bg-white/70 backdrop-blur-md">
+          <div class="nhm-product-card group">
             <div>
-              <div class="relative w-full h-44 rounded-xl overflow-hidden mb-3 bg-gray-50 border border-gray-100 flex items-center justify-center cursor-pointer" onclick="openProductQuickView('${p.id}')">
-                <img src="${finalImg}" alt="${p.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                
+              <!-- THUMBNAIL BOX (NATIONAL HYPER MART STYLE) -->
+              <div class="nhm-thumb-box" onclick="openProductQuickView('${p.id}')">
+                <img src="${finalImg}" alt="${p.title}" loading="lazy" class="nhm-thumb-img">
+
+                <!-- BADGE STACK: SALE / FRESH -->
                 ${discountPct > 0 ? `
-                  <span class="absolute top-2 left-2 bg-gradient-to-r from-red-600 to-rose-600 text-white font-black text-[10px] px-2 py-0.5 rounded-full shadow-md flex items-center gap-1">
+                  <span class="absolute top-2.5 left-2.5 bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white font-black text-[10px] px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1 uppercase tracking-wider">
                     <i class="fa-solid fa-tag text-[8px]"></i> ${discountPct}% OFF
                   </span>
-                ` : ''}
+                ` : `
+                  <span class="absolute top-2.5 left-2.5 bg-emerald-600 text-white font-black text-[9px] px-2 py-0.5 rounded-full shadow-xs uppercase tracking-wider">
+                    Fresh
+                  </span>
+                `}
 
-                <div class="absolute top-2 right-2 flex items-center gap-1.5">
+                <!-- TOP RIGHT ACTIONS: VEG/NON-VEG & WISHLIST HEART -->
+                <div class="absolute top-2.5 right-2.5 flex flex-col items-center gap-1.5 z-10">
                   <span class="inline-flex items-center justify-center w-5 h-5 rounded-md bg-white/95 shadow-xs border ${isNonVeg ? 'border-amber-800' : 'border-emerald-600'}" title="${isNonVeg ? 'Non-Vegetarian' : '100% Vegetarian'}">
                     <span class="w-2 h-2 rounded-full ${isNonVeg ? 'bg-amber-800' : 'bg-emerald-600'}"></span>
                   </span>
+
+                  <button type="button" id="wish-btn-${p.id}" onclick="toggleWishlistItem('${p.id}', event)" class="nhm-btn-wishlist ${isWishlisted ? 'active-wish' : ''}" title="${isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}">
+                    <i class="${isWishlisted ? 'fa-solid fa-heart text-rose-500' : 'fa-regular fa-heart'} text-xs"></i>
+                  </button>
                 </div>
 
+                <!-- QUICK VIEW HOVER OVERLAY -->
                 <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-2 text-center opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <span class="text-[11px] font-bold text-white bg-black/40 px-2.5 py-0.5 rounded-full backdrop-blur-xs flex items-center gap-1">
+                  <span class="text-[11px] font-bold text-white bg-black/50 px-3 py-0.5 rounded-full backdrop-blur-xs flex items-center gap-1.5 shadow-md">
                     <i class="fa-regular fa-eye text-xs"></i> Quick View
                   </span>
                 </div>
               </div>
 
+              <!-- PRODUCT DETAILS -->
               <div class="cursor-pointer" onclick="openProductQuickView('${p.id}')">
-                <div class="flex items-center justify-between text-[11px] text-gray-500 font-semibold mb-1">
-                  <span class="bg-gray-100 px-2 py-0.5 rounded-md text-gray-600 font-bold">${p.unit || '1 unit'}</span>
-                  <span class="text-emerald-700 font-black flex items-center gap-1"><i class="fa-solid fa-clock text-[9px]"></i> 30 min</span>
+                <div class="flex items-center justify-between text-[10px] text-gray-500 font-bold mb-1">
+                  <span class="text-emerald-700 uppercase tracking-wider font-extrabold truncate max-w-[130px]">${p.category || 'GROCERY'}</span>
+                  <span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded font-bold">${p.unit || '1 unit'}</span>
                 </div>
-                <h4 class="font-black text-gray-900 text-sm leading-snug hover:text-emerald-700 transition line-clamp-2">${p.title}</h4>
+
+                <h4 class="font-bold text-gray-900 text-xs sm:text-sm leading-snug group-hover:text-emerald-700 transition line-clamp-2 min-h-[2.5rem]">
+                  ${p.title}
+                </h4>
+
+                <!-- RATING & EXPRESS DELIVERY -->
+                <div class="flex items-center gap-1 my-1.5 text-[10px] text-amber-500">
+                  <div class="flex gap-0.5">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                  </div>
+                  <span class="text-gray-400 font-semibold">(4.8)</span>
+                  <span class="text-emerald-700 font-black ml-auto flex items-center gap-0.5"><i class="fa-solid fa-bolt text-[9px] text-amber-500"></i> 30m</span>
+                </div>
               </div>
             </div>
 
-            <div class="mt-3 pt-2.5 border-t border-gray-100">
-              <div class="flex items-center justify-between mb-2">
+            <!-- PRICING & ADD TO CART STEPPER -->
+            <div class="mt-2.5 pt-2 border-t border-gray-100">
+              <div class="flex items-baseline justify-between mb-2">
                 <div>
                   ${mrp > sellRate ? `<del class="text-[11px] text-gray-400 font-semibold block leading-none">MRP ₹${mrp.toFixed(2)}</del>` : ''}
-                  <div class="text-emerald-800 font-black text-base sm:text-lg leading-tight">
+                  <div class="text-gray-900 font-black text-base sm:text-lg leading-tight">
                     ₹${sellRate.toFixed(2)}
                   </div>
                 </div>
-                ${savings > 0 ? `<span class="text-[10px] font-extrabold text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded">Save ₹${savings.toFixed(0)}</span>` : ''}
+                ${savings > 0 ? `<span class="text-[10px] font-black text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">Save ₹${savings.toFixed(0)}</span>` : ''}
               </div>
 
               <div id="card-stepper-${p.id}">
@@ -1813,9 +2088,263 @@
       applyFiltersAndSearch();
     }
 
+    
+    // =======================================================
+    // NATIONAL HYPER MART INSPIRED FEATURES: BRANDS, WISHLIST & TIMER
+    // =======================================================
+
+    const POPULAR_BRANDS = [
+      { name: 'Aashirvaad', query: 'aashirvaad', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/e16b4eb3-b6d3-4858-bfe6-dd6b5599e4a7-Aashirvaad.jpg', category: 'Atta & Flours' },
+      { name: 'Surf Excel', query: 'surf excel', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/5b6fb9e9-f62f-4909-a58f-567d9fe586f5-Surfexcel.jpg', category: 'Detergents' },
+      { name: 'Colgate', query: 'colgate', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/f52e9dee-0865-4847-8beb-853d7b6f8aac-Colgate.webp', category: 'Oral Care' },
+      { name: 'Bru', query: 'bru', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/494d3b17-b09f-448b-b491-b0ee6e64407a-Bru.webp', category: 'Coffee' },
+      { name: 'Brooke Bond', query: 'brooke bond', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/ff6a598d-abe6-43a8-84ac-8b486833046c-brookbond-1.webp', category: 'Tea' },
+      { name: 'Maggi', query: 'maggi', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/b89abe51-5964-44ee-a576-40d16275ceaa-Maggie.jpg', category: 'Noodles & Sauces' },
+      { name: 'Parachute', query: 'parachute', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/c93b11b1-5b5c-47a4-a2cc-69f388a272e3-Parachute.jpg', category: 'Hair Oils' },
+      { name: 'Vim', query: 'vim', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/86e6d9c5-48c4-46b9-aab7-f7c6a9bd91c2-Vim.jpg', category: 'Dishwash' },
+      { name: 'Good Knight', query: 'good knight', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/621a9559-45cb-4539-ac6a-6bc7a749e4c1-Goodknight.webp', category: 'Repellents' },
+      { name: 'GRB', query: 'grb', logo: 'https://nationalhypermart.com/wp-content/uploads/2026/02/fedf2c52-297a-4012-a310-2297a790f1df-GRB.jpg', category: 'Ghee & Sweets' },
+      { name: 'Aachi', query: 'aachi', logo: 'https://images.openfoodfacts.org/images/products/890/601/036/0382/front_en.11.400.jpg', category: 'Spices & Masala' },
+      { name: 'Sakthi', query: 'sakthi', logo: 'https://5.imimg.com/data5/SELLER/Default/2023/11/363842183/LM/TL/WW/175405/bopp-toor-dal-bag-500x500.jpg', category: 'Masalas' },
+      { name: 'Rin', query: 'rin', logo: 'https://images.openfoodfacts.org/images/products/890/103/034/1105/front_en.4.400.jpg', category: 'Laundry' },
+      { name: 'Britannia', query: 'britannia', logo: 'https://images.openfoodfacts.org/images/products/890/106/301/2140/front_en.18.400.jpg', category: 'Biscuits' },
+      { name: 'Dettol', query: 'dettol', logo: 'https://images.openfoodfacts.org/images/products/890/139/611/0009/front_en.4.400.jpg', category: 'Antiseptic & Soaps' },
+      { name: 'Tata', query: 'tata', logo: 'https://images.openfoodfacts.org/images/products/890/105/200/0038/front_en.21.400.jpg', category: 'Salt, Tea & Dal' },
+      { name: 'Dove', query: 'dove', logo: 'https://images.openfoodfacts.org/images/products/890/103/000/1234/front_en.3.400.jpg', category: 'Body & Hair' },
+      { name: 'Horlicks', query: 'horlicks', logo: 'https://images.openfoodfacts.org/images/products/890/103/036/1234/front_en.5.400.jpg', category: 'Health Drinks' }
+    ];
+
+    let activeBrandFilter = null;
+    let wishlist = [];
+    try {
+      wishlist = JSON.parse(localStorage.getItem('rani_wishlist') || '[]');
+    } catch(e) { wishlist = []; }
+
+    function renderBrandMarquee() {
+      const track = document.getElementById('brand-marquee-track');
+      if (!track) return;
+
+      // Duplicate list twice for a seamless infinite scroll loop
+      const combined = [...POPULAR_BRANDS, ...POPULAR_BRANDS];
+
+      track.innerHTML = combined.map((b, idx) => {
+        const isActive = activeBrandFilter && activeBrandFilter.toLowerCase() === b.name.toLowerCase();
+        return `
+          <div class="brand-card-item ${isActive ? 'active-brand' : ''}" onclick="filterByBrand('${b.name}')" title="Click to view all ${b.name} products">
+            <div class="brand-card-logo-wrap">
+              <img src="${b.logo}" alt="${b.name}" class="brand-card-logo" loading="lazy" onerror="this.src='https://images.openfoodfacts.org/images/products/890/601/036/0382/front_en.11.400.jpg'">
+            </div>
+            <h5 class="text-xs font-black text-gray-900 leading-tight truncate w-full">${b.name}</h5>
+            <span class="text-[10px] text-emerald-700 font-bold">${b.category}</span>
+          </div>
+        `;
+      }).join('');
+
+      updateWishlistBadge();
+    }
+
+    function scrollBrandMarquee(direction) {
+      const wrapper = document.getElementById('brand-marquee-wrapper');
+      if (wrapper) {
+        wrapper.scrollBy({ left: direction * 280, behavior: 'smooth' });
+      }
+    }
+
+    function filterByBrand(brandName) {
+      if (activeBrandFilter === brandName) {
+        clearBrandFilter();
+        return;
+      }
+      activeBrandFilter = brandName;
+      document.getElementById('active-brand-banner').classList.remove('hidden');
+      document.getElementById('active-brand-name').textContent = brandName;
+      
+      // Update UI active brand highlights
+      document.querySelectorAll('.brand-card-item').forEach(el => {
+        if (el.textContent.includes(brandName)) {
+          el.classList.add('active-brand');
+        } else {
+          el.classList.remove('active-brand');
+        }
+      });
+
+      applyFiltersAndSearch();
+
+      const count = currentFilteredList.length;
+      document.getElementById('active-brand-count').textContent = `${count.toLocaleString('en-IN')} items`;
+
+      // Smooth scroll to product grid
+      const grid = document.getElementById('product-grid');
+      if (grid) {
+        grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function clearBrandFilter() {
+      activeBrandFilter = null;
+      document.getElementById('active-brand-banner').classList.add('hidden');
+      document.querySelectorAll('.brand-card-item').forEach(el => el.classList.remove('active-brand'));
+      applyFiltersAndSearch();
+    }
+
+    // WISHLIST LOGIC (NATIONAL HYPER MART STYLE)
+    function toggleWishlistItem(productId, event) {
+      if (event) event.stopPropagation();
+      const pIdStr = String(productId);
+      const idx = wishlist.indexOf(pIdStr);
+      let added = false;
+      if (idx > -1) {
+        wishlist.splice(idx, 1);
+      } else {
+        wishlist.push(pIdStr);
+        added = true;
+      }
+      localStorage.setItem('rani_wishlist', JSON.stringify(wishlist));
+      updateWishlistBadge();
+      renderWishlistDrawer();
+
+      // Update button state on card
+      const btn = document.getElementById('wish-btn-' + pIdStr);
+      if (btn) {
+        if (added) {
+          btn.classList.add('active-wish');
+          btn.innerHTML = '<i class="fa-solid fa-heart text-rose-500 text-xs"></i>';
+        } else {
+          btn.classList.remove('active-wish');
+          btn.innerHTML = '<i class="fa-regular fa-heart text-xs"></i>';
+        }
+      }
+
+      showSideToast(added ? '❤️ Added to your Wishlist!' : 'Removed from Wishlist', added ? 'Saved for quick access.' : '');
+    }
+
+    function updateWishlistBadge() {
+      const badge = document.getElementById('wishlist-badge');
+      if (badge) badge.textContent = wishlist.length;
+      const drawerCount = document.getElementById('wishlist-drawer-count');
+      if (drawerCount) drawerCount.textContent = `${wishlist.length} items`;
+    }
+
+    function toggleWishlistDrawer() {
+      const drawer = document.getElementById('wishlist-drawer');
+      if (drawer) {
+        if (drawer.classList.contains('hidden')) {
+          renderWishlistDrawer();
+          drawer.classList.remove('hidden');
+        } else {
+          drawer.classList.add('hidden');
+        }
+      }
+    }
+
+    function renderWishlistDrawer() {
+      const container = document.getElementById('wishlist-items-container');
+      if (!container) return;
+
+      if (wishlist.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-16 text-gray-400">
+            <i class="fa-regular fa-heart text-4xl mb-3 text-rose-200"></i>
+            <p class="font-bold text-gray-600 text-sm">Your Wishlist is Empty</p>
+            <p class="text-xs text-gray-400 mt-1">Tap the heart on any product to save it here!</p>
+          </div>
+        `;
+        return;
+      }
+
+      const wishProducts = allProducts.filter(p => wishlist.includes(String(p.id)));
+
+      container.innerHTML = wishProducts.map(p => {
+        const sellRate = parseFloat(p.price) || 0;
+        const finalImg = getRelevantProductImage(p.title, p.image_url);
+        return `
+          <div class="p-3 bg-white rounded-2xl border border-gray-150 flex items-center justify-between gap-3 shadow-xs">
+            <img src="${finalImg}" alt="${p.title}" class="w-14 h-14 object-contain rounded-xl bg-gray-50 border p-1 flex-shrink-0">
+            <div class="min-w-0 flex-1">
+              <h5 class="text-xs font-black text-gray-900 truncate">${p.title}</h5>
+              <div class="flex items-center gap-2 mt-0.5">
+                <span class="text-xs font-black text-emerald-800">₹${sellRate.toFixed(2)}</span>
+                <span class="text-[10px] text-gray-400 font-semibold">${p.unit || '1 unit'}</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5 flex-shrink-0">
+              <button onclick="handleCardAdd('${p.id}', event)" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black shadow-xs flex items-center gap-1 cursor-pointer" title="Add to Cart">
+                <i class="fa-solid fa-cart-plus text-[10px]"></i> Add
+              </button>
+              <button onclick="toggleWishlistItem('${p.id}', event)" class="w-7 h-7 rounded-xl bg-gray-100 hover:bg-red-50 text-gray-400 hover:text-red-600 flex items-center justify-center transition cursor-pointer" title="Remove">
+                &times;
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function addAllWishlistToCart() {
+      if (wishlist.length === 0) return;
+      wishlist.forEach(id => {
+        const item = cart.find(x => String(x.id) === String(id));
+        if (!item) {
+          const p = allProducts.find(x => String(x.id) === String(id));
+          if (p) {
+            cart.push({
+              id: p.id,
+              name: p.title,
+              price: parseFloat(p.price) || 0,
+              mrp: parseFloat(p.mrp) || parseFloat(p.price) || 0,
+              image_url: getRelevantProductImage(p.title, p.image_url),
+              unit: p.unit || '1 unit',
+              quantity: 1
+            });
+          }
+        }
+      });
+      saveCart();
+      syncAllCardSteppers();
+      toggleWishlistDrawer();
+      toggleCart();
+      showSideToast('🛒 All Wishlist Items Added to Cart!', 'Review your order in the cart.');
+    }
+
+    function clearWishlist() {
+      wishlist = [];
+      localStorage.removeItem('rani_wishlist');
+      updateWishlistBadge();
+      renderWishlistDrawer();
+      renderProductsList();
+    }
+
+    // FLASH DEALS COUNTDOWN TIMER
+    function startFlashDealTimer() {
+      const el = document.getElementById('flash-deal-timer');
+      if (!el) return;
+
+      function update() {
+        const now = new Date();
+        const endOfDay = new Date();
+        endOfDay.setHours(23, 59, 59, 999);
+        const diff = Math.max(0, endOfDay - now);
+
+        const hours = String(Math.floor(diff / (1000 * 60 * 60))).padStart(2, '0');
+        const mins = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+        const secs = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+
+        el.textContent = `${hours}:${mins}:${secs}`;
+      }
+      update();
+      setInterval(update, 1000);
+    }
+
     function applyFiltersAndSearch() {
       const q = document.getElementById('search-input').value.toLowerCase().trim();
       let list = allProducts;
+
+      
+      // Brand filter from National Hyper Mart
+      if (activeBrandFilter) {
+        const bf = activeBrandFilter.toLowerCase();
+        list = list.filter(p => (p.title && p.title.toLowerCase().includes(bf)));
+      }
 
       // Category filter across ALL 7,129 items
       if (currentCategory !== 'all') {

@@ -1733,688 +1733,206 @@
     let currentSort = 'popular';
     let currentCategory = 'all';
 
-    // Double-sided product image lookup map (keyword → {front, back} paths)
-    const DOUBLE_SIDED_MAP = {
-  "100": {
-    "front": "/images/products/nihar_naturals_extra_care_hair_front.webp",
-    "back": "/images/products/nihar_naturals_extra_care_hair_back.webp",
-    "title": "Nihar Naturals Extra Care Hairfall Control Oil, 100 ml"
-  },
-  "125": {
-    "front": "/images/products/liril_lemon_tea_tree_oil_soap__front.png",
-    "back": "/images/products/liril_lemon_tea_tree_oil_soap__back.png",
-    "title": "Liril Lemon & Tea Tree Oil Soap 125 g"
-  },
-  "144": {
-    "front": "/images/products/mayora_malkist_cheese_flavoure_front.webp",
-    "back": "/images/products/mayora_malkist_cheese_flavoure_back.webp",
-    "title": "Mayora Malkist Cheese Flavoured Cracker Biscuits 144 g"
-  },
-  "175": {
-    "front": "/images/products/nihar_naturals_shanti_jasmine__front.webp",
-    "back": "/images/products/nihar_naturals_shanti_jasmine__back.webp",
-    "title": "Nihar Naturals Shanti Jasmine Coconut Hair Oil 175 ml"
-  },
-  "190": {
-    "front": "/images/products/nihar_naturals_shanti_amla_bad_front.webp",
-    "back": "/images/products/nihar_naturals_shanti_amla_bad_back.webp",
-    "title": "Nihar Naturals Shanti Amla Badam Hair Oil 190 ml"
-  },
-  "300": {
-    "front": "/images/products/parachute_advansed_ayurvedic_d_front.webp",
-    "back": "/images/products/parachute_advansed_ayurvedic_d_back.png",
-    "title": "Parachute Advansed Ayurvedic Deep Conditioning Hot Hair Oil 300 ml"
-  },
-  "400": {
-    "front": "/images/products/parachute_aloe_vera_gold_cocon_front.webp",
-    "back": "/images/products/parachute_aloe_vera_gold_cocon_back.webp",
-    "title": "Parachute Aloe vera Gold Coconut Advanced Hair Oil 400 ml"
-  },
-  "500": {
-    "front": "/images/products/hair_care_damage_repair_non_st_front.webp",
-    "back": "/images/products/hair_care_damage_repair_non_st_back.webp",
-    "title": "Hair & Care Damage Repair Non-Sticky Hair Oil with Aloe Vera, Olive Oil & Green Tea, 500 ml"
-  },
-  "8211": {
+    // Double-sided product image entries — requires title similarity score to avoid false positives
+    const DS_ENTRIES = [
+  {
+    "title": "POND'S SUN MIRACLE SPF 30 PA +++ SUNSCREEN BODY LOTION &#8211; PROTECT & BRIGHT WITH NIACINAMIDE",
+    "titleNorm": "pond s sun miracle spf 30 pa     sunscreen body lotion   8211  protect   bright with niacinamide",
     "front": "/images/products/pond_s_sun_miracle_spf_30_pa_s_front.png",
-    "back": "/images/products/pond_s_sun_miracle_spf_30_pa_s_back.png",
-    "title": "POND'S SUN MIRACLE SPF 30 PA +++ SUNSCREEN BODY LOTION &#8211; PROTECT & BRIGHT WITH NIACINAMIDE"
+    "back": "/images/products/pond_s_sun_miracle_spf_30_pa_s_back.png"
   },
-  "pond": {
-    "front": "/images/products/pond_s_sun_miracle_spf_30_pa_s_front.png",
-    "back": "/images/products/pond_s_sun_miracle_spf_30_pa_s_back.png",
-    "title": "POND'S SUN MIRACLE SPF 30 PA +++ SUNSCREEN BODY LOTION &#8211; PROTECT & BRIGHT WITH NIACINAMIDE"
-  },
-  "sun": {
-    "front": "/images/products/pond_s_sun_miracle_spf_30_pa_s_front.png",
-    "back": "/images/products/pond_s_sun_miracle_spf_30_pa_s_back.png",
-    "title": "POND'S SUN MIRACLE SPF 30 PA +++ SUNSCREEN BODY LOTION &#8211; PROTECT & BRIGHT WITH NIACINAMIDE"
-  },
-  "miracle": {
-    "front": "/images/products/pond_s_sun_miracle_spf_30_pa_s_front.png",
-    "back": "/images/products/pond_s_sun_miracle_spf_30_pa_s_back.png",
-    "title": "POND'S SUN MIRACLE SPF 30 PA +++ SUNSCREEN BODY LOTION &#8211; PROTECT & BRIGHT WITH NIACINAMIDE"
-  },
-  "spf": {
-    "front": "/images/products/pond_s_sun_miracle_spf_30_pa_s_front.png",
-    "back": "/images/products/pond_s_sun_miracle_spf_30_pa_s_back.png",
-    "title": "POND'S SUN MIRACLE SPF 30 PA +++ SUNSCREEN BODY LOTION &#8211; PROTECT & BRIGHT WITH NIACINAMIDE"
-  },
-  "sunscreen": {
-    "front": "/images/products/pond_s_sun_miracle_spf_30_pa_s_front.png",
-    "back": "/images/products/pond_s_sun_miracle_spf_30_pa_s_back.png",
-    "title": "POND'S SUN MIRACLE SPF 30 PA +++ SUNSCREEN BODY LOTION &#8211; PROTECT & BRIGHT WITH NIACINAMIDE"
-  },
-  "body": {
-    "front": "/images/products/pond_s_sun_miracle_spf_30_pa_s_front.png",
-    "back": "/images/products/pond_s_sun_miracle_spf_30_pa_s_back.png",
-    "title": "POND'S SUN MIRACLE SPF 30 PA +++ SUNSCREEN BODY LOTION &#8211; PROTECT & BRIGHT WITH NIACINAMIDE"
-  },
-  "lotion": {
-    "front": "/images/products/pond_s_sun_miracle_spf_30_pa_s_front.png",
-    "back": "/images/products/pond_s_sun_miracle_spf_30_pa_s_back.png",
-    "title": "POND'S SUN MIRACLE SPF 30 PA +++ SUNSCREEN BODY LOTION &#8211; PROTECT & BRIGHT WITH NIACINAMIDE"
-  },
-  "protect": {
-    "front": "/images/products/pond_s_sun_miracle_spf_30_pa_s_front.png",
-    "back": "/images/products/pond_s_sun_miracle_spf_30_pa_s_back.png",
-    "title": "POND'S SUN MIRACLE SPF 30 PA +++ SUNSCREEN BODY LOTION &#8211; PROTECT & BRIGHT WITH NIACINAMIDE"
-  },
-  "bright": {
-    "front": "/images/products/pond_s_sun_miracle_spf_30_pa_s_front.png",
-    "back": "/images/products/pond_s_sun_miracle_spf_30_pa_s_back.png",
-    "title": "POND'S SUN MIRACLE SPF 30 PA +++ SUNSCREEN BODY LOTION &#8211; PROTECT & BRIGHT WITH NIACINAMIDE"
-  },
-  "niacinamide": {
-    "front": "/images/products/pond_s_sun_miracle_spf_30_pa_s_front.png",
-    "back": "/images/products/pond_s_sun_miracle_spf_30_pa_s_back.png",
-    "title": "POND'S SUN MIRACLE SPF 30 PA +++ SUNSCREEN BODY LOTION &#8211; PROTECT & BRIGHT WITH NIACINAMIDE"
-  },
-  "nourishing": {
+  {
+    "title": "POND'S Niacinamide Nourishing Body Lotion",
+    "titleNorm": "pond s niacinamide nourishing body lotion",
     "front": "/images/products/pond_s_niacinamide_nourishing__front.png",
-    "back": "/images/products/pond_s_niacinamide_nourishing__back.png",
-    "title": "POND'S Niacinamide Nourishing Body Lotion"
+    "back": "/images/products/pond_s_niacinamide_nourishing__back.png"
   },
-  "dove": {
+  {
+    "title": "Dove Serum Bar with Nutrient Serum | 375g (125g x 3)",
+    "titleNorm": "dove serum bar with nutrient serum   375g  125g x 3 ",
     "front": "/images/products/dove_serum_bar_with_nutrient_s_front.png",
-    "back": "/images/products/dove_serum_bar_with_nutrient_s_back.png",
-    "title": "Dove Serum Bar with Nutrient Serum | 375g (125g x 3)"
+    "back": "/images/products/dove_serum_bar_with_nutrient_s_back.png"
   },
-  "serum": {
-    "front": "/images/products/dove_serum_bar_with_nutrient_s_front.png",
-    "back": "/images/products/dove_serum_bar_with_nutrient_s_back.png",
-    "title": "Dove Serum Bar with Nutrient Serum | 375g (125g x 3)"
-  },
-  "nutrient": {
-    "front": "/images/products/dove_serum_bar_with_nutrient_s_front.png",
-    "back": "/images/products/dove_serum_bar_with_nutrient_s_back.png",
-    "title": "Dove Serum Bar with Nutrient Serum | 375g (125g x 3)"
-  },
-  "375g": {
-    "front": "/images/products/dove_serum_bar_with_nutrient_s_front.png",
-    "back": "/images/products/dove_serum_bar_with_nutrient_s_back.png",
-    "title": "Dove Serum Bar with Nutrient Serum | 375g (125g x 3)"
-  },
-  "125g": {
-    "front": "/images/products/dove_serum_bar_with_nutrient_s_front.png",
-    "back": "/images/products/dove_serum_bar_with_nutrient_s_back.png",
-    "title": "Dove Serum Bar with Nutrient Serum | 375g (125g x 3)"
-  },
-  "dreamflower": {
+  {
+    "title": "POND'S Dreamflower Fragrant Talcum Powder, With Vitamin B3, (400gm)",
+    "titleNorm": "pond s dreamflower fragrant talcum powder  with vitamin b3   400gm ",
     "front": "/images/products/pond_s_dreamflower_fragrant_ta_front.png",
-    "back": "/images/products/pond_s_dreamflower_fragrant_ta_back.png",
-    "title": "POND'S Dreamflower Fragrant Talcum Powder, With Vitamin B3, (400gm)"
+    "back": "/images/products/pond_s_dreamflower_fragrant_ta_back.png"
   },
-  "fragrant": {
-    "front": "/images/products/pond_s_dreamflower_fragrant_ta_front.png",
-    "back": "/images/products/pond_s_dreamflower_fragrant_ta_back.png",
-    "title": "POND'S Dreamflower Fragrant Talcum Powder, With Vitamin B3, (400gm)"
-  },
-  "talcum": {
-    "front": "/images/products/pond_s_dreamflower_fragrant_ta_front.png",
-    "back": "/images/products/pond_s_dreamflower_fragrant_ta_back.png",
-    "title": "POND'S Dreamflower Fragrant Talcum Powder, With Vitamin B3, (400gm)"
-  },
-  "powder": {
-    "front": "/images/products/pond_s_dreamflower_fragrant_ta_front.png",
-    "back": "/images/products/pond_s_dreamflower_fragrant_ta_back.png",
-    "title": "POND'S Dreamflower Fragrant Talcum Powder, With Vitamin B3, (400gm)"
-  },
-  "vitamin": {
-    "front": "/images/products/pond_s_dreamflower_fragrant_ta_front.png",
-    "back": "/images/products/pond_s_dreamflower_fragrant_ta_back.png",
-    "title": "POND'S Dreamflower Fragrant Talcum Powder, With Vitamin B3, (400gm)"
-  },
-  "400gm": {
-    "front": "/images/products/pond_s_dreamflower_fragrant_ta_front.png",
-    "back": "/images/products/pond_s_dreamflower_fragrant_ta_back.png",
-    "title": "POND'S Dreamflower Fragrant Talcum Powder, With Vitamin B3, (400gm)"
-  },
-  "radiance": {
+  {
+    "title": "Dove Serum Bar with Radiance Serum | 625g (125g x 5)",
+    "titleNorm": "dove serum bar with radiance serum   625g  125g x 5 ",
     "front": "/images/products/dove_serum_bar_with_radiance_s_front.png",
-    "back": "/images/products/dove_serum_bar_with_radiance_s_back.png",
-    "title": "Dove Serum Bar with Radiance Serum | 625g (125g x 5)"
+    "back": "/images/products/dove_serum_bar_with_radiance_s_back.png"
   },
-  "625g": {
-    "front": "/images/products/dove_serum_bar_with_radiance_s_front.png",
-    "back": "/images/products/dove_serum_bar_with_radiance_s_back.png",
-    "title": "Dove Serum Bar with Radiance Serum | 625g (125g x 5)"
-  },
-  "pro": {
+  {
+    "title": "Dove Serum Bar with Pro-Ceramide Serum | 375g (125g x 3)",
+    "titleNorm": "dove serum bar with pro ceramide serum   375g  125g x 3 ",
     "front": "/images/products/dove_serum_bar_with_pro_cerami_front.png",
-    "back": "/images/products/dove_serum_bar_with_pro_cerami_back.png",
-    "title": "Dove Serum Bar with Pro-Ceramide Serum | 375g (125g x 3)"
+    "back": "/images/products/dove_serum_bar_with_pro_cerami_back.png"
   },
-  "ceramide": {
-    "front": "/images/products/dove_serum_bar_with_pro_cerami_front.png",
-    "back": "/images/products/dove_serum_bar_with_pro_cerami_back.png",
-    "title": "Dove Serum Bar with Pro-Ceramide Serum | 375g (125g x 3)"
-  },
-  "beauty": {
+  {
+    "title": "POND'S Bright Beauty Anti-Dullness Facewash with Vitamin B3",
+    "titleNorm": "pond s bright beauty anti dullness facewash with vitamin b3",
     "front": "/images/products/pond_s_bright_beauty_anti_dull_front.png",
-    "back": "/images/products/pond_s_bright_beauty_anti_dull_back.png",
-    "title": "POND'S Bright Beauty Anti-Dullness Facewash with Vitamin B3"
+    "back": "/images/products/pond_s_bright_beauty_anti_dull_back.png"
   },
-  "anti": {
-    "front": "/images/products/pond_s_bright_beauty_anti_dull_front.png",
-    "back": "/images/products/pond_s_bright_beauty_anti_dull_back.png",
-    "title": "POND'S Bright Beauty Anti-Dullness Facewash with Vitamin B3"
-  },
-  "dullness": {
-    "front": "/images/products/pond_s_bright_beauty_anti_dull_front.png",
-    "back": "/images/products/pond_s_bright_beauty_anti_dull_back.png",
-    "title": "POND'S Bright Beauty Anti-Dullness Facewash with Vitamin B3"
-  },
-  "facewash": {
-    "front": "/images/products/pond_s_bright_beauty_anti_dull_front.png",
-    "back": "/images/products/pond_s_bright_beauty_anti_dull_back.png",
-    "title": "POND'S Bright Beauty Anti-Dullness Facewash with Vitamin B3"
-  },
-  "detox": {
+  {
+    "title": "POND'S Bright Miracle Detox Facewash with 10X Power of Charcoal",
+    "titleNorm": "pond s bright miracle detox facewash with 10x power of charcoal",
     "front": "/images/products/pond_s_bright_miracle_detox_fa_front.png",
-    "back": "/images/products/pond_s_bright_miracle_detox_fa_back.png",
-    "title": "POND'S Bright Miracle Detox Facewash with 10X Power of Charcoal"
+    "back": "/images/products/pond_s_bright_miracle_detox_fa_back.png"
   },
-  "10x": {
-    "front": "/images/products/pond_s_bright_miracle_detox_fa_front.png",
-    "back": "/images/products/pond_s_bright_miracle_detox_fa_back.png",
-    "title": "POND'S Bright Miracle Detox Facewash with 10X Power of Charcoal"
-  },
-  "power": {
-    "front": "/images/products/pond_s_bright_miracle_detox_fa_front.png",
-    "back": "/images/products/pond_s_bright_miracle_detox_fa_back.png",
-    "title": "POND'S Bright Miracle Detox Facewash with 10X Power of Charcoal"
-  },
-  "charcoal": {
-    "front": "/images/products/pond_s_bright_miracle_detox_fa_front.png",
-    "back": "/images/products/pond_s_bright_miracle_detox_fa_back.png",
-    "title": "POND'S Bright Miracle Detox Facewash with 10X Power of Charcoal"
-  },
-  "vit": {
+  {
+    "title": "POND'S Bright Beauty Vit C+E+A Gel Face Wash",
+    "titleNorm": "pond s bright beauty vit c e a gel face wash",
     "front": "/images/products/pond_s_bright_beauty_vit_c_e_a_front.png",
-    "back": "/images/products/pond_s_bright_beauty_vit_c_e_a_back.png",
-    "title": "POND'S Bright Beauty Vit C+E+A Gel Face Wash"
+    "back": "/images/products/pond_s_bright_beauty_vit_c_e_a_back.png"
   },
-  "face": {
-    "front": "/images/products/pond_s_bright_beauty_vit_c_e_a_front.png",
-    "back": "/images/products/pond_s_bright_beauty_vit_c_e_a_back.png",
-    "title": "POND'S Bright Beauty Vit C+E+A Gel Face Wash"
-  },
-  "wash": {
-    "front": "/images/products/pond_s_bright_beauty_vit_c_e_a_front.png",
-    "back": "/images/products/pond_s_bright_beauty_vit_c_e_a_back.png",
-    "title": "POND'S Bright Beauty Vit C+E+A Gel Face Wash"
-  },
-  "comfort": {
+  {
+    "title": "Comfort After Wash",
+    "titleNorm": "comfort after wash",
     "front": "/images/products/comfort_after_wash_front.webp",
-    "back": "/images/products/comfort_after_wash_back.webp",
-    "title": "Comfort After Wash"
+    "back": "/images/products/comfort_after_wash_back.webp"
   },
-  "after": {
-    "front": "/images/products/comfort_after_wash_front.webp",
-    "back": "/images/products/comfort_after_wash_back.webp",
-    "title": "Comfort After Wash"
-  },
-  "hair": {
+  {
+    "title": "Hair & Care Damage Repair Non-Sticky Hair Oil with Aloe Vera, Olive Oil & Green Tea, 500 ml",
+    "titleNorm": "hair   care damage repair non sticky hair oil with aloe vera  olive oil   green tea  500 ml",
     "front": "/images/products/hair_care_damage_repair_non_st_front.webp",
-    "back": "/images/products/hair_care_damage_repair_non_st_back.webp",
-    "title": "Hair & Care Damage Repair Non-Sticky Hair Oil with Aloe Vera, Olive Oil & Green Tea, 500 ml"
+    "back": "/images/products/hair_care_damage_repair_non_st_back.webp"
   },
-  "care": {
-    "front": "/images/products/hair_care_damage_repair_non_st_front.webp",
-    "back": "/images/products/hair_care_damage_repair_non_st_back.webp",
-    "title": "Hair & Care Damage Repair Non-Sticky Hair Oil with Aloe Vera, Olive Oil & Green Tea, 500 ml"
-  },
-  "damage": {
-    "front": "/images/products/hair_care_damage_repair_non_st_front.webp",
-    "back": "/images/products/hair_care_damage_repair_non_st_back.webp",
-    "title": "Hair & Care Damage Repair Non-Sticky Hair Oil with Aloe Vera, Olive Oil & Green Tea, 500 ml"
-  },
-  "repair": {
-    "front": "/images/products/hair_care_damage_repair_non_st_front.webp",
-    "back": "/images/products/hair_care_damage_repair_non_st_back.webp",
-    "title": "Hair & Care Damage Repair Non-Sticky Hair Oil with Aloe Vera, Olive Oil & Green Tea, 500 ml"
-  },
-  "sticky": {
-    "front": "/images/products/hair_care_damage_repair_non_st_front.webp",
-    "back": "/images/products/hair_care_damage_repair_non_st_back.webp",
-    "title": "Hair & Care Damage Repair Non-Sticky Hair Oil with Aloe Vera, Olive Oil & Green Tea, 500 ml"
-  },
-  "aloe": {
-    "front": "/images/products/hair_care_damage_repair_non_st_front.webp",
-    "back": "/images/products/hair_care_damage_repair_non_st_back.webp",
-    "title": "Hair & Care Damage Repair Non-Sticky Hair Oil with Aloe Vera, Olive Oil & Green Tea, 500 ml"
-  },
-  "vera": {
-    "front": "/images/products/hair_care_damage_repair_non_st_front.webp",
-    "back": "/images/products/hair_care_damage_repair_non_st_back.webp",
-    "title": "Hair & Care Damage Repair Non-Sticky Hair Oil with Aloe Vera, Olive Oil & Green Tea, 500 ml"
-  },
-  "olive": {
-    "front": "/images/products/hair_care_damage_repair_non_st_front.webp",
-    "back": "/images/products/hair_care_damage_repair_non_st_back.webp",
-    "title": "Hair & Care Damage Repair Non-Sticky Hair Oil with Aloe Vera, Olive Oil & Green Tea, 500 ml"
-  },
-  "green": {
-    "front": "/images/products/hair_care_damage_repair_non_st_front.webp",
-    "back": "/images/products/hair_care_damage_repair_non_st_back.webp",
-    "title": "Hair & Care Damage Repair Non-Sticky Hair Oil with Aloe Vera, Olive Oil & Green Tea, 500 ml"
-  },
-  "tea": {
-    "front": "/images/products/hair_care_damage_repair_non_st_front.webp",
-    "back": "/images/products/hair_care_damage_repair_non_st_back.webp",
-    "title": "Hair & Care Damage Repair Non-Sticky Hair Oil with Aloe Vera, Olive Oil & Green Tea, 500 ml"
-  },
-  "nihar": {
+  {
+    "title": "Nihar Naturals Extra Care Hairfall Control Oil, 100 ml",
+    "titleNorm": "nihar naturals extra care hairfall control oil  100 ml",
     "front": "/images/products/nihar_naturals_extra_care_hair_front.webp",
-    "back": "/images/products/nihar_naturals_extra_care_hair_back.webp",
-    "title": "Nihar Naturals Extra Care Hairfall Control Oil, 100 ml"
+    "back": "/images/products/nihar_naturals_extra_care_hair_back.webp"
   },
-  "naturals": {
-    "front": "/images/products/nihar_naturals_extra_care_hair_front.webp",
-    "back": "/images/products/nihar_naturals_extra_care_hair_back.webp",
-    "title": "Nihar Naturals Extra Care Hairfall Control Oil, 100 ml"
-  },
-  "extra": {
-    "front": "/images/products/nihar_naturals_extra_care_hair_front.webp",
-    "back": "/images/products/nihar_naturals_extra_care_hair_back.webp",
-    "title": "Nihar Naturals Extra Care Hairfall Control Oil, 100 ml"
-  },
-  "hairfall": {
-    "front": "/images/products/nihar_naturals_extra_care_hair_front.webp",
-    "back": "/images/products/nihar_naturals_extra_care_hair_back.webp",
-    "title": "Nihar Naturals Extra Care Hairfall Control Oil, 100 ml"
-  },
-  "control": {
-    "front": "/images/products/nihar_naturals_extra_care_hair_front.webp",
-    "back": "/images/products/nihar_naturals_extra_care_hair_back.webp",
-    "title": "Nihar Naturals Extra Care Hairfall Control Oil, 100 ml"
-  },
-  "shanti": {
+  {
+    "title": "Nihar Naturals Shanti Jasmine Coconut Hair Oil 175 ml",
+    "titleNorm": "nihar naturals shanti jasmine coconut hair oil 175 ml",
     "front": "/images/products/nihar_naturals_shanti_jasmine__front.webp",
-    "back": "/images/products/nihar_naturals_shanti_jasmine__back.webp",
-    "title": "Nihar Naturals Shanti Jasmine Coconut Hair Oil 175 ml"
+    "back": "/images/products/nihar_naturals_shanti_jasmine__back.webp"
   },
-  "jasmine": {
-    "front": "/images/products/nihar_naturals_shanti_jasmine__front.webp",
-    "back": "/images/products/nihar_naturals_shanti_jasmine__back.webp",
-    "title": "Nihar Naturals Shanti Jasmine Coconut Hair Oil 175 ml"
-  },
-  "coconut": {
-    "front": "/images/products/nihar_naturals_shanti_jasmine__front.webp",
-    "back": "/images/products/nihar_naturals_shanti_jasmine__back.webp",
-    "title": "Nihar Naturals Shanti Jasmine Coconut Hair Oil 175 ml"
-  },
-  "shanthi": {
+  {
+    "title": "Shanthi Sarson Badam Hair Oil (175ml)",
+    "titleNorm": "shanthi sarson badam hair oil  175ml ",
     "front": "/images/products/shanthi_sarson_badam_hair_oil__front.webp",
-    "back": "/images/products/shanthi_sarson_badam_hair_oil__back.webp",
-    "title": "Shanthi Sarson Badam Hair Oil (175ml)"
+    "back": "/images/products/shanthi_sarson_badam_hair_oil__back.webp"
   },
-  "sarson": {
-    "front": "/images/products/shanthi_sarson_badam_hair_oil__front.webp",
-    "back": "/images/products/shanthi_sarson_badam_hair_oil__back.webp",
-    "title": "Shanthi Sarson Badam Hair Oil (175ml)"
-  },
-  "badam": {
-    "front": "/images/products/shanthi_sarson_badam_hair_oil__front.webp",
-    "back": "/images/products/shanthi_sarson_badam_hair_oil__back.webp",
-    "title": "Shanthi Sarson Badam Hair Oil (175ml)"
-  },
-  "175ml": {
-    "front": "/images/products/shanthi_sarson_badam_hair_oil__front.webp",
-    "back": "/images/products/shanthi_sarson_badam_hair_oil__back.webp",
-    "title": "Shanthi Sarson Badam Hair Oil (175ml)"
-  },
-  "amla": {
+  {
+    "title": "Nihar Naturals Shanti Amla Badam Hair Oil 190 ml",
+    "titleNorm": "nihar naturals shanti amla badam hair oil 190 ml",
     "front": "/images/products/nihar_naturals_shanti_amla_bad_front.webp",
-    "back": "/images/products/nihar_naturals_shanti_amla_bad_back.webp",
-    "title": "Nihar Naturals Shanti Amla Badam Hair Oil 190 ml"
+    "back": "/images/products/nihar_naturals_shanti_amla_bad_back.webp"
   },
-  "parachute": {
+  {
+    "title": "Parachute Advansed Jasmine Gold Coconut Non-Sticky Hair Oil 500 ml",
+    "titleNorm": "parachute advansed jasmine gold coconut non sticky hair oil 500 ml",
     "front": "/images/products/parachute_advansed_jasmine_gol_front.webp",
-    "back": "/images/products/parachute_advansed_jasmine_gol_back.webp",
-    "title": "Parachute Advansed Jasmine Gold Coconut Non-Sticky Hair Oil 500 ml"
+    "back": "/images/products/parachute_advansed_jasmine_gol_back.webp"
   },
-  "advansed": {
-    "front": "/images/products/parachute_advansed_jasmine_gol_front.webp",
-    "back": "/images/products/parachute_advansed_jasmine_gol_back.webp",
-    "title": "Parachute Advansed Jasmine Gold Coconut Non-Sticky Hair Oil 500 ml"
-  },
-  "gold": {
-    "front": "/images/products/parachute_advansed_jasmine_gol_front.webp",
-    "back": "/images/products/parachute_advansed_jasmine_gol_back.webp",
-    "title": "Parachute Advansed Jasmine Gold Coconut Non-Sticky Hair Oil 500 ml"
-  },
-  "advanced": {
+  {
+    "title": "Parachute Aloe vera Gold Coconut Advanced Hair Oil 400 ml",
+    "titleNorm": "parachute aloe vera gold coconut advanced hair oil 400 ml",
     "front": "/images/products/parachute_aloe_vera_gold_cocon_front.webp",
-    "back": "/images/products/parachute_aloe_vera_gold_cocon_back.webp",
-    "title": "Parachute Aloe vera Gold Coconut Advanced Hair Oil 400 ml"
+    "back": "/images/products/parachute_aloe_vera_gold_cocon_back.webp"
   },
-  "ayurvedic": {
+  {
+    "title": "Parachute Advansed Ayurvedic Deep Conditioning Hot Hair Oil 300 ml",
+    "titleNorm": "parachute advansed ayurvedic deep conditioning hot hair oil 300 ml",
     "front": "/images/products/parachute_advansed_ayurvedic_d_front.webp",
-    "back": "/images/products/parachute_advansed_ayurvedic_d_back.png",
-    "title": "Parachute Advansed Ayurvedic Deep Conditioning Hot Hair Oil 300 ml"
+    "back": "/images/products/parachute_advansed_ayurvedic_d_back.png"
   },
-  "deep": {
-    "front": "/images/products/parachute_advansed_ayurvedic_d_front.webp",
-    "back": "/images/products/parachute_advansed_ayurvedic_d_back.png",
-    "title": "Parachute Advansed Ayurvedic Deep Conditioning Hot Hair Oil 300 ml"
-  },
-  "conditioning": {
-    "front": "/images/products/parachute_advansed_ayurvedic_d_front.webp",
-    "back": "/images/products/parachute_advansed_ayurvedic_d_back.png",
-    "title": "Parachute Advansed Ayurvedic Deep Conditioning Hot Hair Oil 300 ml"
-  },
-  "hot": {
-    "front": "/images/products/parachute_advansed_ayurvedic_d_front.webp",
-    "back": "/images/products/parachute_advansed_ayurvedic_d_back.png",
-    "title": "Parachute Advansed Ayurvedic Deep Conditioning Hot Hair Oil 300 ml"
-  },
-  "pure": {
+  {
+    "title": "Parachute Pure Coconut Oil 100 ml",
+    "titleNorm": "parachute pure coconut oil 100 ml",
     "front": "/images/products/parachute_pure_coconut_oil_100_front.webp",
-    "back": "/images/products/parachute_pure_coconut_oil_100_back.webp",
-    "title": "Parachute Pure Coconut Oil 100 ml"
+    "back": "/images/products/parachute_pure_coconut_oil_100_back.webp"
   },
-  "dailyherbs": {
+  {
+    "title": "DAILYHERBS Premium Nut Mix |( Almonds, Cashews, Raisins, Apricots, Dates, Assorted Seeds & Nuts (500 g)",
+    "titleNorm": "dailyherbs premium nut mix    almonds  cashews  raisins  apricots  dates  assorted seeds   nuts  500 g ",
     "front": "/images/products/dailyherbs_premium_nut_mix_alm_front.webp",
-    "back": "/images/products/dailyherbs_premium_nut_mix_alm_back.webp",
-    "title": "DAILYHERBS Premium Nut Mix |( Almonds, Cashews, Raisins, Apricots, Dates, Assorted Seeds & Nuts (500 g)"
+    "back": "/images/products/dailyherbs_premium_nut_mix_alm_back.webp"
   },
-  "premium": {
-    "front": "/images/products/dailyherbs_premium_nut_mix_alm_front.webp",
-    "back": "/images/products/dailyherbs_premium_nut_mix_alm_back.webp",
-    "title": "DAILYHERBS Premium Nut Mix |( Almonds, Cashews, Raisins, Apricots, Dates, Assorted Seeds & Nuts (500 g)"
-  },
-  "nut": {
-    "front": "/images/products/dailyherbs_premium_nut_mix_alm_front.webp",
-    "back": "/images/products/dailyherbs_premium_nut_mix_alm_back.webp",
-    "title": "DAILYHERBS Premium Nut Mix |( Almonds, Cashews, Raisins, Apricots, Dates, Assorted Seeds & Nuts (500 g)"
-  },
-  "almonds": {
-    "front": "/images/products/dailyherbs_premium_nut_mix_alm_front.webp",
-    "back": "/images/products/dailyherbs_premium_nut_mix_alm_back.webp",
-    "title": "DAILYHERBS Premium Nut Mix |( Almonds, Cashews, Raisins, Apricots, Dates, Assorted Seeds & Nuts (500 g)"
-  },
-  "cashews": {
-    "front": "/images/products/dailyherbs_premium_nut_mix_alm_front.webp",
-    "back": "/images/products/dailyherbs_premium_nut_mix_alm_back.webp",
-    "title": "DAILYHERBS Premium Nut Mix |( Almonds, Cashews, Raisins, Apricots, Dates, Assorted Seeds & Nuts (500 g)"
-  },
-  "raisins": {
-    "front": "/images/products/dailyherbs_premium_nut_mix_alm_front.webp",
-    "back": "/images/products/dailyherbs_premium_nut_mix_alm_back.webp",
-    "title": "DAILYHERBS Premium Nut Mix |( Almonds, Cashews, Raisins, Apricots, Dates, Assorted Seeds & Nuts (500 g)"
-  },
-  "apricots": {
-    "front": "/images/products/dailyherbs_premium_nut_mix_alm_front.webp",
-    "back": "/images/products/dailyherbs_premium_nut_mix_alm_back.webp",
-    "title": "DAILYHERBS Premium Nut Mix |( Almonds, Cashews, Raisins, Apricots, Dates, Assorted Seeds & Nuts (500 g)"
-  },
-  "dates": {
-    "front": "/images/products/dailyherbs_premium_nut_mix_alm_front.webp",
-    "back": "/images/products/dailyherbs_premium_nut_mix_alm_back.webp",
-    "title": "DAILYHERBS Premium Nut Mix |( Almonds, Cashews, Raisins, Apricots, Dates, Assorted Seeds & Nuts (500 g)"
-  },
-  "assorted": {
-    "front": "/images/products/dailyherbs_premium_nut_mix_alm_front.webp",
-    "back": "/images/products/dailyherbs_premium_nut_mix_alm_back.webp",
-    "title": "DAILYHERBS Premium Nut Mix |( Almonds, Cashews, Raisins, Apricots, Dates, Assorted Seeds & Nuts (500 g)"
-  },
-  "seeds": {
-    "front": "/images/products/dailyherbs_premium_nut_mix_alm_front.webp",
-    "back": "/images/products/dailyherbs_premium_nut_mix_alm_back.webp",
-    "title": "DAILYHERBS Premium Nut Mix |( Almonds, Cashews, Raisins, Apricots, Dates, Assorted Seeds & Nuts (500 g)"
-  },
-  "nuts": {
-    "front": "/images/products/dailyherbs_premium_nut_mix_alm_front.webp",
-    "back": "/images/products/dailyherbs_premium_nut_mix_alm_back.webp",
-    "title": "DAILYHERBS Premium Nut Mix |( Almonds, Cashews, Raisins, Apricots, Dates, Assorted Seeds & Nuts (500 g)"
-  },
-  "aachi": {
+  {
+    "title": "Aachi Garam Masala",
+    "titleNorm": "aachi garam masala",
     "front": "/images/products/aachi_garam_masala_front.webp",
-    "back": "/images/products/aachi_garam_masala_back.webp",
-    "title": "Aachi Garam Masala"
+    "back": "/images/products/aachi_garam_masala_back.webp"
   },
-  "garam": {
-    "front": "/images/products/aachi_garam_masala_front.webp",
-    "back": "/images/products/aachi_garam_masala_back.webp",
-    "title": "Aachi Garam Masala"
-  },
-  "masala": {
-    "front": "/images/products/aachi_garam_masala_front.webp",
-    "back": "/images/products/aachi_garam_masala_back.webp",
-    "title": "Aachi Garam Masala"
-  },
-  "domex": {
+  {
+    "title": "Domex Disinfectant Multi-Surface Cleaner 5L",
+    "titleNorm": "domex disinfectant multi surface cleaner 5l",
     "front": "/images/products/domex_disinfectant_multi_surfa_front.png",
-    "back": "/images/products/domex_disinfectant_multi_surfa_back.png",
-    "title": "Domex Disinfectant Multi-Surface Cleaner 5L"
+    "back": "/images/products/domex_disinfectant_multi_surfa_back.png"
   },
-  "disinfectant": {
-    "front": "/images/products/domex_disinfectant_multi_surfa_front.png",
-    "back": "/images/products/domex_disinfectant_multi_surfa_back.png",
-    "title": "Domex Disinfectant Multi-Surface Cleaner 5L"
-  },
-  "multi": {
-    "front": "/images/products/domex_disinfectant_multi_surfa_front.png",
-    "back": "/images/products/domex_disinfectant_multi_surfa_back.png",
-    "title": "Domex Disinfectant Multi-Surface Cleaner 5L"
-  },
-  "surface": {
-    "front": "/images/products/domex_disinfectant_multi_surfa_front.png",
-    "back": "/images/products/domex_disinfectant_multi_surfa_back.png",
-    "title": "Domex Disinfectant Multi-Surface Cleaner 5L"
-  },
-  "cleaner": {
-    "front": "/images/products/domex_disinfectant_multi_surfa_front.png",
-    "back": "/images/products/domex_disinfectant_multi_surfa_back.png",
-    "title": "Domex Disinfectant Multi-Surface Cleaner 5L"
-  },
-  "liril": {
+  {
+    "title": "Liril Lemon & Tea Tree Oil Soap 125 g",
+    "titleNorm": "liril lemon   tea tree oil soap 125 g",
     "front": "/images/products/liril_lemon_tea_tree_oil_soap__front.png",
-    "back": "/images/products/liril_lemon_tea_tree_oil_soap__back.png",
-    "title": "Liril Lemon & Tea Tree Oil Soap 125 g"
+    "back": "/images/products/liril_lemon_tea_tree_oil_soap__back.png"
   },
-  "lemon": {
-    "front": "/images/products/liril_lemon_tea_tree_oil_soap__front.png",
-    "back": "/images/products/liril_lemon_tea_tree_oil_soap__back.png",
-    "title": "Liril Lemon & Tea Tree Oil Soap 125 g"
-  },
-  "tree": {
-    "front": "/images/products/liril_lemon_tea_tree_oil_soap__front.png",
-    "back": "/images/products/liril_lemon_tea_tree_oil_soap__back.png",
-    "title": "Liril Lemon & Tea Tree Oil Soap 125 g"
-  },
-  "soap": {
-    "front": "/images/products/liril_lemon_tea_tree_oil_soap__front.png",
-    "back": "/images/products/liril_lemon_tea_tree_oil_soap__back.png",
-    "title": "Liril Lemon & Tea Tree Oil Soap 125 g"
-  },
-  "mantra": {
+  {
+    "title": "Mantra Groundnut Oil 1 L",
+    "titleNorm": "mantra groundnut oil 1 l",
     "front": "/images/products/mantra_groundnut_oil_1_l_front.webp",
-    "back": "/images/products/mantra_groundnut_oil_1_l_back.webp",
-    "title": "Mantra Groundnut Oil 1 L"
+    "back": "/images/products/mantra_groundnut_oil_1_l_back.webp"
   },
-  "groundnut": {
-    "front": "/images/products/mantra_groundnut_oil_1_l_front.webp",
-    "back": "/images/products/mantra_groundnut_oil_1_l_back.webp",
-    "title": "Mantra Groundnut Oil 1 L"
-  },
-  "mayora": {
+  {
+    "title": "Mayora Malkist Cheese Flavoured Cracker Biscuits 144 g",
+    "titleNorm": "mayora malkist cheese flavoured cracker biscuits 144 g",
     "front": "/images/products/mayora_malkist_cheese_flavoure_front.webp",
-    "back": "/images/products/mayora_malkist_cheese_flavoure_back.webp",
-    "title": "Mayora Malkist Cheese Flavoured Cracker Biscuits 144 g"
+    "back": "/images/products/mayora_malkist_cheese_flavoure_back.webp"
   },
-  "malkist": {
-    "front": "/images/products/mayora_malkist_cheese_flavoure_front.webp",
-    "back": "/images/products/mayora_malkist_cheese_flavoure_back.webp",
-    "title": "Mayora Malkist Cheese Flavoured Cracker Biscuits 144 g"
-  },
-  "cheese": {
-    "front": "/images/products/mayora_malkist_cheese_flavoure_front.webp",
-    "back": "/images/products/mayora_malkist_cheese_flavoure_back.webp",
-    "title": "Mayora Malkist Cheese Flavoured Cracker Biscuits 144 g"
-  },
-  "flavoured": {
-    "front": "/images/products/mayora_malkist_cheese_flavoure_front.webp",
-    "back": "/images/products/mayora_malkist_cheese_flavoure_back.webp",
-    "title": "Mayora Malkist Cheese Flavoured Cracker Biscuits 144 g"
-  },
-  "cracker": {
-    "front": "/images/products/mayora_malkist_cheese_flavoure_front.webp",
-    "back": "/images/products/mayora_malkist_cheese_flavoure_back.webp",
-    "title": "Mayora Malkist Cheese Flavoured Cracker Biscuits 144 g"
-  },
-  "biscuits": {
-    "front": "/images/products/mayora_malkist_cheese_flavoure_front.webp",
-    "back": "/images/products/mayora_malkist_cheese_flavoure_back.webp",
-    "title": "Mayora Malkist Cheese Flavoured Cracker Biscuits 144 g"
-  },
-  "nestle": {
+  {
+    "title": "Nestle Kitkat Cereal Squares With Delicious Taste Of Kitkat Chocolate Box and Wafer Newest Addition 330g (Imported) POST",
+    "titleNorm": "nestle kitkat cereal squares with delicious taste of kitkat chocolate box and wafer newest addition 330g  imported  post",
     "front": "/images/products/nestle_kitkat_cereal_squares_w_front.webp",
-    "back": "/images/products/nestle_kitkat_cereal_squares_w_back.webp",
-    "title": "Nestle Kitkat Cereal Squares With Delicious Taste Of Kitkat Chocolate Box and Wafer Newest Addition 330g (Imported) POST"
+    "back": "/images/products/nestle_kitkat_cereal_squares_w_back.webp"
   },
-  "kitkat": {
-    "front": "/images/products/nestle_kitkat_cereal_squares_w_front.webp",
-    "back": "/images/products/nestle_kitkat_cereal_squares_w_back.webp",
-    "title": "Nestle Kitkat Cereal Squares With Delicious Taste Of Kitkat Chocolate Box and Wafer Newest Addition 330g (Imported) POST"
-  },
-  "cereal": {
-    "front": "/images/products/nestle_kitkat_cereal_squares_w_front.webp",
-    "back": "/images/products/nestle_kitkat_cereal_squares_w_back.webp",
-    "title": "Nestle Kitkat Cereal Squares With Delicious Taste Of Kitkat Chocolate Box and Wafer Newest Addition 330g (Imported) POST"
-  },
-  "squares": {
-    "front": "/images/products/nestle_kitkat_cereal_squares_w_front.webp",
-    "back": "/images/products/nestle_kitkat_cereal_squares_w_back.webp",
-    "title": "Nestle Kitkat Cereal Squares With Delicious Taste Of Kitkat Chocolate Box and Wafer Newest Addition 330g (Imported) POST"
-  },
-  "delicious": {
-    "front": "/images/products/nestle_kitkat_cereal_squares_w_front.webp",
-    "back": "/images/products/nestle_kitkat_cereal_squares_w_back.webp",
-    "title": "Nestle Kitkat Cereal Squares With Delicious Taste Of Kitkat Chocolate Box and Wafer Newest Addition 330g (Imported) POST"
-  },
-  "taste": {
-    "front": "/images/products/nestle_kitkat_cereal_squares_w_front.webp",
-    "back": "/images/products/nestle_kitkat_cereal_squares_w_back.webp",
-    "title": "Nestle Kitkat Cereal Squares With Delicious Taste Of Kitkat Chocolate Box and Wafer Newest Addition 330g (Imported) POST"
-  },
-  "chocolate": {
-    "front": "/images/products/nestle_kitkat_cereal_squares_w_front.webp",
-    "back": "/images/products/nestle_kitkat_cereal_squares_w_back.webp",
-    "title": "Nestle Kitkat Cereal Squares With Delicious Taste Of Kitkat Chocolate Box and Wafer Newest Addition 330g (Imported) POST"
-  },
-  "wafer": {
-    "front": "/images/products/nestle_kitkat_cereal_squares_w_front.webp",
-    "back": "/images/products/nestle_kitkat_cereal_squares_w_back.webp",
-    "title": "Nestle Kitkat Cereal Squares With Delicious Taste Of Kitkat Chocolate Box and Wafer Newest Addition 330g (Imported) POST"
-  },
-  "newest": {
-    "front": "/images/products/nestle_kitkat_cereal_squares_w_front.webp",
-    "back": "/images/products/nestle_kitkat_cereal_squares_w_back.webp",
-    "title": "Nestle Kitkat Cereal Squares With Delicious Taste Of Kitkat Chocolate Box and Wafer Newest Addition 330g (Imported) POST"
-  },
-  "addition": {
-    "front": "/images/products/nestle_kitkat_cereal_squares_w_front.webp",
-    "back": "/images/products/nestle_kitkat_cereal_squares_w_back.webp",
-    "title": "Nestle Kitkat Cereal Squares With Delicious Taste Of Kitkat Chocolate Box and Wafer Newest Addition 330g (Imported) POST"
-  },
-  "330g": {
-    "front": "/images/products/nestle_kitkat_cereal_squares_w_front.webp",
-    "back": "/images/products/nestle_kitkat_cereal_squares_w_back.webp",
-    "title": "Nestle Kitkat Cereal Squares With Delicious Taste Of Kitkat Chocolate Box and Wafer Newest Addition 330g (Imported) POST"
-  },
-  "imported": {
-    "front": "/images/products/nestle_kitkat_cereal_squares_w_front.webp",
-    "back": "/images/products/nestle_kitkat_cereal_squares_w_back.webp",
-    "title": "Nestle Kitkat Cereal Squares With Delicious Taste Of Kitkat Chocolate Box and Wafer Newest Addition 330g (Imported) POST"
-  },
-  "post": {
-    "front": "/images/products/nestle_kitkat_cereal_squares_w_front.webp",
-    "back": "/images/products/nestle_kitkat_cereal_squares_w_back.webp",
-    "title": "Nestle Kitkat Cereal Squares With Delicious Taste Of Kitkat Chocolate Box and Wafer Newest Addition 330g (Imported) POST"
-  },
-  "upro": {
+  {
+    "title": "Upro Surf Excel Matic Top-Load Detergent Powder 6Kgs",
+    "titleNorm": "upro surf excel matic top load detergent powder 6kgs",
     "front": "/images/products/upro_surf_excel_matic_top_load_front.png",
-    "back": "/images/products/upro_surf_excel_matic_top_load_back.png",
-    "title": "Upro Surf Excel Matic Top-Load Detergent Powder 6Kgs"
+    "back": "/images/products/upro_surf_excel_matic_top_load_back.png"
   },
-  "surf": {
-    "front": "/images/products/upro_surf_excel_matic_top_load_front.png",
-    "back": "/images/products/upro_surf_excel_matic_top_load_back.png",
-    "title": "Upro Surf Excel Matic Top-Load Detergent Powder 6Kgs"
+  {
+    "title": "Dove Serum Bar with Nutrient Serum | 625g (125g x 5)",
+    "titleNorm": "dove serum bar with nutrient serum   625g  125g x 5 ",
+    "front": "/images/products/dove_serum_bar_with_nutrient_s_front.png",
+    "back": "/images/products/dove_serum_bar_with_nutrient_s_back.png"
   },
-  "excel": {
-    "front": "/images/products/upro_surf_excel_matic_top_load_front.png",
-    "back": "/images/products/upro_surf_excel_matic_top_load_back.png",
-    "title": "Upro Surf Excel Matic Top-Load Detergent Powder 6Kgs"
-  },
-  "matic": {
-    "front": "/images/products/upro_surf_excel_matic_top_load_front.png",
-    "back": "/images/products/upro_surf_excel_matic_top_load_back.png",
-    "title": "Upro Surf Excel Matic Top-Load Detergent Powder 6Kgs"
-  },
-  "top": {
-    "front": "/images/products/upro_surf_excel_matic_top_load_front.png",
-    "back": "/images/products/upro_surf_excel_matic_top_load_back.png",
-    "title": "Upro Surf Excel Matic Top-Load Detergent Powder 6Kgs"
-  },
-  "load": {
-    "front": "/images/products/upro_surf_excel_matic_top_load_front.png",
-    "back": "/images/products/upro_surf_excel_matic_top_load_back.png",
-    "title": "Upro Surf Excel Matic Top-Load Detergent Powder 6Kgs"
-  },
-  "detergent": {
-    "front": "/images/products/upro_surf_excel_matic_top_load_front.png",
-    "back": "/images/products/upro_surf_excel_matic_top_load_back.png",
-    "title": "Upro Surf Excel Matic Top-Load Detergent Powder 6Kgs"
-  },
-  "6kgs": {
-    "front": "/images/products/upro_surf_excel_matic_top_load_front.png",
-    "back": "/images/products/upro_surf_excel_matic_top_load_back.png",
-    "title": "Upro Surf Excel Matic Top-Load Detergent Powder 6Kgs"
-  },
-  "fabric": {
+  {
+    "title": "Comfort Fabric Conditioner 5L",
+    "titleNorm": "comfort fabric conditioner 5l",
     "front": "/images/products/comfort_fabric_conditioner_5l_front.webp",
-    "back": "/images/products/comfort_fabric_conditioner_5l_back.webp",
-    "title": "Comfort Fabric Conditioner 5L"
-  },
-  "conditioner": {
-    "front": "/images/products/comfort_fabric_conditioner_5l_front.webp",
-    "back": "/images/products/comfort_fabric_conditioner_5l_back.webp",
-    "title": "Comfort Fabric Conditioner 5L"
+    "back": "/images/products/comfort_fabric_conditioner_5l_back.webp"
   }
-};
+];
 
     function getDoubleSidedBack(title) {
       if (!title) return null;
-      const stop = new Set(['and','the','with','for','non','gel','bar','oil','set','mix','pack','box','from','per','each','plus','size']);
-      const words = title.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(w => w.length >= 3 && !stop.has(w));
-      for (const w of words) {
-        if (DOUBLE_SIDED_MAP[w]) return DOUBLE_SIDED_MAP[w].back;
+      const t = title.toLowerCase().replace(/[^a-z0-9\s]/g, ' ');
+      const tWords = new Set(t.split(/\s+/).filter(w => w.length >= 3));
+      let bestScore = 0;
+      let bestBack = null;
+      for (const entry of DS_ENTRIES) {
+        const eWords = entry.titleNorm.split(/\s+/).filter(w => w.length >= 3);
+        if (eWords.length === 0) continue;
+        // Count how many DS title words appear in catalog title
+        const matches = eWords.filter(w => tWords.has(w)).length;
+        // Require at least 2 matching words AND >40% of DS title words matched
+        const ratio = matches / eWords.length;
+        if (matches >= 2 && ratio >= 0.40) {
+          const score = matches + ratio;
+          if (score > bestScore) {
+            bestScore = score;
+            bestBack = entry.back;
+          }
+        }
       }
-      return null;
+      return bestBack;
     }
 
     function initStore() {

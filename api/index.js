@@ -236,7 +236,14 @@ if (reqPath === '/api/pos/status') {
     // ----------------------------------------------------
     if (reqPath === '/api/products/update-image' && req.method === 'POST') {
       const body = await getBody();
-      const { productId, barcode, imageUrl, imageBase64 } = body;
+      const { authUser, authPass, productId, barcode, imageUrl, imageBase64 } = body;
+
+      // Security check for updating images
+      const isValidAdmin = (authUser && authUser.toLowerCase() === 'admin' && authPass === 'admin123') ||
+                          (req.headers['x-admin-key'] === 'admin123');
+      if (!isValidAdmin) {
+        return sendJson(401, { error: 'Unauthorized: Administrator authentication required (admin / admin123)' });
+      }
 
       if (!productId && !barcode) {
         return sendJson(400, { error: 'productId or barcode is required' });

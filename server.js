@@ -170,7 +170,16 @@ if (reqPath === '/api/pos/status') {
     req.on('end', () => {
       try {
         const parsed = JSON.parse(body || '{}');
-        const { productId, barcode, imageUrl, imageBase64 } = parsed;
+        const { authUser, authPass, productId, barcode, imageUrl, imageBase64 } = parsed;
+
+        // Security check for updating images
+        const isValidAdmin = (authUser && authUser.toLowerCase() === 'admin' && authPass === 'admin123') ||
+                            (req.headers['x-admin-key'] === 'admin123');
+        if (!isValidAdmin) {
+          res.writeHead(401, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Unauthorized: Administrator authentication required (admin / admin123)' }));
+          return;
+        }
 
         if (!productId && !barcode) {
           res.writeHead(400, { 'Content-Type': 'application/json' });

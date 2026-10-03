@@ -855,8 +855,8 @@ tbody tr:hover td{background:#f8fcfb;}
         <div class="report-title">📊 Sales Report</div>
         <div class="filter-card">
           <div class="filter-grid">
-            <div class="filter-group"><div class="flabel">Report Type</div><select class="fsel" id="srType"><option>Daywise</option><option>Partywise</option><option>Productwise</option><option>Invoicewise</option></select></div>
-            <div class="filter-group"><div class="flabel">Party</div><select class="fsel" id="srParty"><option>-- All --</option></select></div>
+            <div class="filter-group"><div class="flabel">Report Type</div><select class="fsel" id="srType" onchange="genSalesReport()"><option>Daywise</option><option>Partywise</option><option>Productwise</option><option>Invoicewise</option></select></div>
+            <div class="filter-group"><div class="flabel">Party</div><select class="fsel" id="srParty" onchange="genSalesReport()"><option value="">-- All Parties --</option></select></div>
             <div class="filter-group"><div class="flabel">Start Date</div><input class="finput2" type="date" id="srStart"></div>
             <div class="filter-group"><div class="flabel">End Date</div><input class="finput2" type="date" id="srEnd"></div>
           </div>
@@ -1391,6 +1391,64 @@ document.addEventListener('click',e=>{
 // ============================================================
 // DASHBOARD
 // ============================================================
+
+function updateSalesMetricsAndCharts() {
+  if (!DB.sales || DB.sales.length === 0) return;
+  const dayMap = {};
+  DB.sales.forEach(s => {
+    dayMap[s.date] = (dayMap[s.date] || 0) + (s.total || 0);
+  });
+  const sortedDates = Object.keys(dayMap).sort();
+  if (sortedDates.length > 0) {
+    const recent7 = sortedDates.slice(-7);
+    chartDataSets.sales[7] = recent7.map(d => dayMap[d]);
+    const recent30 = sortedDates.slice(-30);
+    chartDataSets.sales[30] = recent30.map(d => dayMap[d]);
+  }
+  if (currentPage === 'salesReport') genSalesReport();
+  if (currentPage === 'dashboard') refreshDashboard();
+}
+
+function viewSaleReceipt(id) {
+  const sale = (DB.sales || []).find(s => String(s.id) === String(id) || String(s.voucher_no) === String(id));
+  if (!sale) {
+    toast('Sale record not found', 'error');
+    return;
+  }
+  buildThermalReceipt(sale);
+  openModal('thermalReceiptModal');
+}
+
+function exportSalesReportCsv(type) {
+  const list = (DB.sales || []);
+  if (list.length === 0) return toast('No sales data to export', 'error');
+
+  let csv = 'Voucher No,Date,Customer,Phone,Payment Method,Net Amount,Items\n';
+  list.forEach(s => {
+    const row = [
+      '"' + (s.voucher_no || s.id) + '"',
+      '"' + s.date + '"',
+      '"' + (s.party || s.customer_name || 'Cash Party').replace(/"/g, '""') + '"',
+      '"' + (s.customer_phone || '') + '"',
+      '"' + (s.payment_method || 'Cash') + '"',
+      (s.total || s.net_amount || 0),
+      '"' + (s.product_summary || '').replace(/"/g, '""') + '"'
+    ];
+    csv += row.join(',') + '\n';
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Rani_Hyper_Market_Sales_Report_' + (new Date().toISOString().split('T')[0]) + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('✅ Sales Report exported to CSV!', 'success');
+}
+
 function refreshDashboard(){
   const today=new Date();
   document.getElementById('todayDateLabel').textContent=today.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
@@ -1878,6 +1936,61 @@ async function initRealData() {
       }
     }
   } catch(e) {}
+
+  try {
+    // 4. Fetch real past sales orders from /rani_orders.json or /api/pos/orders
+    let ordersRes = await fetch('/rani_orders.json').catch(() => null);
+    if (!ordersRes || !ordersRes.ok) ordersRes = await fetch('/api/pos/orders?limit=1000').catch(() => null);
+    if (!ordersRes || !ordersRes.ok) ordersRes = await fetch('rani_orders.json').catch(() => null);
+    if (ordersRes && ordersRes.ok) {
+      const orders = await ordersRes.json();
+      if (Array.isArray(orders) && orders.length > 0) {
+        DB.sales = orders.map((o, idx) => {
+          const dateStr = o.voucher_date || (o.created_at ? o.created_at.split('T')[0] : '') || new Date().toISOString().split('T')[0];
+          const vouNo = String(o.voucher_no || o.id || (10000 + idx));
+          const netAmt = parseFloat(o.total_amount || o.net_amount || o.total || 0);
+          const partyName = o.customer_name || 'Cash Party';
+          return {
+            id: o.id || vouNo,
+            db_id: o.db_id,
+            voucher_no: vouNo,
+            billNo: o.billNo || ('BILL-' + vouNo),
+            date: dateStr,
+            voucher_date: dateStr,
+            created_at: o.created_at || (dateStr + 'T10:00:00.000Z'),
+            party: partyName,
+            customer_name: partyName,
+            customer_phone: o.customer_phone || o.phone || '9876543210',
+            shipping_address: o.shipping_address || (partyName + ' | Bodinayakanur'),
+            total: netAmt,
+            net_amount: netAmt,
+            total_amount: netAmt,
+            cost: parseFloat(o.cost || (netAmt * 0.82)),
+            profit: parseFloat(o.profit || (netAmt * 0.18)),
+            payment_method: o.payment_method || 'Cash / Counter POS',
+            tendered: parseFloat(o.tendered || netAmt),
+            change_return: parseFloat(o.change_return || 0),
+            discount: parseFloat(o.discount || 0),
+            product_summary: o.product_summary || (Array.isArray(o.items) ? o.items.map(it => it.name + ' x ' + (it.qty || 1)).join(', ') : 'Grocery Items'),
+            items: Array.isArray(o.items) && o.items.length > 0 ? o.items.map(it => ({
+              id: it.id || it.pid,
+              pid: it.id || it.pid,
+              name: it.name || it.title || 'Item',
+              rate: parseFloat(it.rate || it.price || 0),
+              mrp: parseFloat(it.mrp || it.rate || 0),
+              qty: parseFloat(it.qty || 1),
+              unit: it.unit || 'Pcs',
+              amount: parseFloat(it.amount || ((it.rate || it.price || 0) * (it.qty || 1)))
+            })) : [
+              { id: 1, pid: 1, name: o.product_summary || 'Grocery Items', rate: netAmt, mrp: netAmt, qty: 1, unit: 'Pcs', amount: netAmt }
+            ]
+          };
+        });
+        console.log('[RANI POS] Loaded ' + DB.sales.length + ' genuine sales orders into ledger!');
+        updateSalesMetricsAndCharts();
+      }
+    }
+  } catch(e) { console.warn('Orders fetch warning:', e); }
 
   // Update active page displays
   if (currentPage === 'dashboard') refreshDashboard();
@@ -2633,9 +2746,27 @@ function initReportPage(page){
   const dateFields={salesReport:['srStart','srEnd'],purchaseReport:['prRStart','prREnd'],profitReport:['prfStart','prfEnd'],customerStatement:['csStmtStart','csStmtEnd'],supplierStatement:['suppStmtStart','suppStmtEnd'],gstReport:[],stockReport:[],monthlyReport:[]};
   const fields=dateFields[page]||[];
   fields.forEach((id,i)=>{ const el=document.getElementById(id); if(el) el.value=i===0?monthStart:today; });
-  // Populate dropdowns
-  const srParty=document.getElementById('srParty');
-  if(srParty) srParty.innerHTML='<option>-- All --</option>'+DB.customers.map(c=>`<option>${c.name}</option>`).join('');
+
+  if (page === 'salesReport') {
+    if (DB.sales && DB.sales.length > 0) {
+      const sortedDates = DB.sales.map(s => s.date).filter(Boolean).sort();
+      const minDate = sortedDates[0];
+      const maxDate = sortedDates[sortedDates.length - 1];
+      const srStart = document.getElementById('srStart');
+      const srEnd = document.getElementById('srEnd');
+      if (srStart) srStart.value = minDate || monthStart;
+      if (srEnd) srEnd.value = maxDate || today;
+    }
+    const srParty = document.getElementById('srParty');
+    if (srParty) {
+      const parties = [...new Set(DB.sales.map(s => s.party).concat(DB.customers.map(c => c.name)))].filter(Boolean);
+      srParty.innerHTML = '<option value="">-- All Parties --</option>' + parties.map(p => `<option value="${p}">${p}</option>`).join('');
+    }
+    setTimeout(() => genSalesReport(), 30);
+  } else {
+    const srParty = document.getElementById('srParty');
+    if (srParty) srParty.innerHTML = '<option value="">-- All Parties --</option>' + DB.customers.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+  }
   const prReportSupp=document.getElementById('prReportSupp');
   if(prReportSupp) prReportSupp.innerHTML='<option>-- All --</option>'+DB.suppliers.map(s=>`<option>${s.name}</option>`).join('');
   const csStmtCust=document.getElementById('csStmtCust');
@@ -2647,15 +2778,262 @@ function initReportPage(page){
 }
 
 function genSalesReport(){
-  const raw=chartDataSets.sales[7];
-  const labels=['Apr 6','Apr 7','Apr 8','Apr 9','Apr 10','Apr 11','Apr 12'];
-  const rows=labels.map((d,i)=>({date:d,invoices:Math.ceil(raw[i]/2200),amount:raw[i]}));
-  const total=rows.reduce((s,r)=>({invoices:s.invoices+r.invoices,amount:s.amount+r.amount}),{invoices:0,amount:0});
-  document.getElementById('srResults').innerHTML=`<div class="result-card"><table>
-    <thead><tr><th>Date</th><th>Invoices</th><th>Amount (₹)</th></tr></thead>
-    <tbody>${rows.map(r=>`<tr><td>${r.date}</td><td>${r.invoices}</td><td style="font-family:var(--mono)">₹${r.amount.toLocaleString()}</td></tr>`).join('')}</tbody>
-    <tfoot><tr><td>Total</td><td>${total.invoices}</td><td style="font-family:var(--mono)">₹${total.amount.toLocaleString()}</td></tr></tfoot>
-  </table></div>`;
+  const type = document.getElementById('srType')?.value || 'Daywise';
+  const partyFilter = document.getElementById('srParty')?.value || '';
+  const startDate = document.getElementById('srStart')?.value || '';
+  const endDate = document.getElementById('srEnd')?.value || '';
+
+  let list = (DB.sales && DB.sales.length > 0) ? DB.sales : [];
+
+  // Filter by party
+  if (partyFilter && partyFilter !== '-- All --' && partyFilter !== '-- All Parties --') {
+    list = list.filter(s => (s.party === partyFilter || s.customer_name === partyFilter));
+  }
+
+  // Filter by date range
+  if (startDate) {
+    list = list.filter(s => s.date >= startDate);
+  }
+  if (endDate) {
+    list = list.filter(s => s.date <= endDate);
+  }
+
+  const container = document.getElementById('srResults');
+  if (!container) return;
+
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div class="result-card" style="padding:40px 20px;text-align:center;">
+        <div style="font-size:36px;margin-bottom:10px;">🔍</div>
+        <h4 style="font-weight:700;color:var(--teal-d);margin-bottom:6px;">No Sales Records Found</h4>
+        <p style="font-size:12px;color:#888;">Try broadening the date range or choosing "-- All Parties --".</p>
+      </div>`;
+    return;
+  }
+
+  const totalAmount = list.reduce((sum, s) => sum + (s.total || s.net_amount || 0), 0);
+  const totalInvoices = list.length;
+  const avgOrderValue = Math.round(totalAmount / (totalInvoices || 1));
+  const totalProfit = list.reduce((sum, s) => sum + (s.profit || 0), 0);
+
+  let tableHtml = '';
+
+  if (type === 'Invoicewise') {
+    tableHtml = `
+      <table>
+        <thead>
+          <tr>
+            <th>Voucher #</th>
+            <th>Date</th>
+            <th>Customer / Party</th>
+            <th>Items</th>
+            <th>Payment Mode</th>
+            <th style="text-align:right;">Amount (₹)</th>
+            <th style="text-align:center;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${list.map(s => `
+            <tr>
+              <td style="font-family:var(--mono);font-weight:700;color:var(--teal-d);">#${s.voucher_no || s.id}</td>
+              <td style="white-space:nowrap;">${s.date}</td>
+              <td style="font-weight:600;">${s.party || s.customer_name || 'Cash Party'}</td>
+              <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:#666;" title="${s.product_summary || ''}">${s.product_summary || ((s.items?.length || 1) + ' items')}</td>
+              <td><span style="font-size:10px;padding:2px 8px;border-radius:10px;background:#f0fdf4;color:#166534;font-weight:700;border:1px solid #bbf7d0;">${s.payment_method || 'Cash'}</span></td>
+              <td style="text-align:right;font-family:var(--mono);font-weight:700;">₹${(s.total || 0).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+              <td style="text-align:center;">
+                <button type="button" onclick="viewSaleReceipt('${s.id}')" style="background:var(--teal-l);color:var(--teal-d);border:1px solid var(--border);padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">
+                  Receipt
+                </button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="5" style="font-weight:800;">Total (${totalInvoices} Invoices)</td>
+            <td style="text-align:right;font-family:var(--mono);font-weight:800;">₹${totalAmount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    `;
+  } else if (type === 'Partywise') {
+    const partyMap = {};
+    list.forEach(s => {
+      const p = s.party || s.customer_name || 'Cash Party';
+      if (!partyMap[p]) partyMap[p] = { party: p, phone: s.customer_phone || '-', count: 0, amount: 0 };
+      partyMap[p].count += 1;
+      partyMap[p].amount += (s.total || 0);
+    });
+    const partyRows = Object.values(partyMap).sort((a, b) => b.amount - a.amount);
+
+    tableHtml = `
+      <table>
+        <thead>
+          <tr>
+            <th>Party / Customer Name</th>
+            <th>Contact Phone</th>
+            <th style="text-align:center;">Invoices Count</th>
+            <th style="text-align:right;">Avg Bill (₹)</th>
+            <th style="text-align:right;">Total Sales (₹)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${partyRows.map(r => `
+            <tr>
+              <td style="font-weight:700;color:var(--teal-d);">${r.party}</td>
+              <td style="font-family:var(--mono);font-size:11px;">${r.phone}</td>
+              <td style="text-align:center;font-weight:700;">${r.count}</td>
+              <td style="text-align:right;font-family:var(--mono);">₹${Math.round(r.amount / r.count).toLocaleString('en-IN')}</td>
+              <td style="text-align:right;font-family:var(--mono);font-weight:700;">₹${r.amount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2" style="font-weight:800;">Total Parties: ${partyRows.length}</td>
+            <td style="text-align:center;font-weight:800;">${totalInvoices}</td>
+            <td style="text-align:right;font-family:var(--mono);font-weight:800;">₹${avgOrderValue.toLocaleString('en-IN')}</td>
+            <td style="text-align:right;font-family:var(--mono);font-weight:800;">₹${totalAmount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+          </tr>
+        </tfoot>
+      </table>
+    `;
+  } else if (type === 'Productwise') {
+    const prodMap = {};
+    list.forEach(s => {
+      if (Array.isArray(s.items)) {
+        s.items.forEach(it => {
+          const name = it.name || it.title || 'Grocery Item';
+          if (!prodMap[name]) prodMap[name] = { name, unit: it.unit || 'Pcs', qty: 0, amount: 0 };
+          prodMap[name].qty += (it.qty || 1);
+          prodMap[name].amount += (it.amount || (it.rate * it.qty) || 0);
+        });
+      }
+    });
+    const prodRows = Object.values(prodMap).sort((a, b) => b.amount - a.amount);
+
+    tableHtml = `
+      <table>
+        <thead>
+          <tr>
+            <th>Product Name</th>
+            <th>Unit</th>
+            <th style="text-align:center;">Qty Sold</th>
+            <th style="text-align:right;">Avg Unit Rate (₹)</th>
+            <th style="text-align:right;">Total Revenue (₹)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${prodRows.map(p => `
+            <tr>
+              <td style="font-weight:600;color:var(--text);">${p.name}</td>
+              <td style="font-size:11px;color:#666;">${p.unit}</td>
+              <td style="text-align:center;font-weight:700;font-family:var(--mono);">${p.qty}</td>
+              <td style="text-align:right;font-family:var(--mono);">₹${(p.amount / (p.qty || 1)).toFixed(2)}</td>
+              <td style="text-align:right;font-family:var(--mono);font-weight:700;color:var(--teal-d);">₹${p.amount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2" style="font-weight:800;">Total Unique Items: ${prodRows.length}</td>
+            <td style="text-align:center;font-weight:800;">${prodRows.reduce((sum, p) => sum + p.qty, 0)}</td>
+            <td></td>
+            <td style="text-align:right;font-family:var(--mono);font-weight:800;">₹${totalAmount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+          </tr>
+        </tfoot>
+      </table>
+    `;
+  } else {
+    // Default: Daywise View
+    const dayMap = {};
+    list.forEach(s => {
+      const d = s.date || 'Unknown';
+      if (!dayMap[d]) dayMap[d] = { date: d, count: 0, cash: 0, upi: 0, amount: 0 };
+      dayMap[d].count += 1;
+      const amt = (s.total || 0);
+      dayMap[d].amount += amt;
+      if ((s.payment_method || '').toLowerCase().includes('upi')) {
+        dayMap[d].upi += amt;
+      } else {
+        dayMap[d].cash += amt;
+      }
+    });
+    const dayRows = Object.values(dayMap).sort((a, b) => b.date.localeCompare(a.date));
+
+    tableHtml = `
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th style="text-align:center;">Invoices Count</th>
+            <th style="text-align:right;">Cash (₹)</th>
+            <th style="text-align:right;">UPI / Digital (₹)</th>
+            <th style="text-align:right;">Total Sales (₹)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${dayRows.map(r => `
+            <tr>
+              <td style="font-weight:700;color:var(--teal-d);">${r.date}</td>
+              <td style="text-align:center;font-weight:700;">${r.count}</td>
+              <td style="text-align:right;font-family:var(--mono);">₹${r.cash.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+              <td style="text-align:right;font-family:var(--mono);">₹${r.upi.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+              <td style="text-align:right;font-family:var(--mono);font-weight:700;">₹${r.amount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td style="font-weight:800;">Total (${dayRows.length} Days)</td>
+            <td style="text-align:center;font-weight:800;">${totalInvoices}</td>
+            <td style="text-align:right;font-family:var(--mono);font-weight:800;">₹${dayRows.reduce((s, r) => s + r.cash, 0).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+            <td style="text-align:right;font-family:var(--mono);font-weight:800;">₹${dayRows.reduce((s, r) => s + r.upi, 0).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+            <td style="text-align:right;font-family:var(--mono);font-weight:800;">₹${totalAmount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+          </tr>
+        </tfoot>
+      </table>
+    `;
+  }
+
+  container.innerHTML = `
+    <div class="result-card" style="margin-bottom:15px;padding:16px 20px;background:linear-gradient(135deg, #f0fdf4 0%, #e6f7f2 100%);border:1px solid #bbf7d0;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <div style="display:flex;gap:24px;flex-wrap:wrap;">
+          <div>
+            <div style="font-size:11px;color:#166534;font-weight:700;text-transform:uppercase;">Total Net Sales</div>
+            <div style="font-size:20px;font-weight:900;color:#14532d;font-family:var(--mono);">₹${totalAmount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:#166534;font-weight:700;text-transform:uppercase;">Total Invoices</div>
+            <div style="font-size:20px;font-weight:900;color:#14532d;">${totalInvoices}</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:#166534;font-weight:700;text-transform:uppercase;">Average Bill Value</div>
+            <div style="font-size:20px;font-weight:900;color:#14532d;font-family:var(--mono);">₹${avgOrderValue.toLocaleString('en-IN')}</div>
+          </div>
+          ${totalProfit > 0 ? `
+          <div>
+            <div style="font-size:11px;color:#166534;font-weight:700;text-transform:uppercase;">Est. Gross Profit</div>
+            <div style="font-size:20px;font-weight:900;color:#15803d;font-family:var(--mono);">₹${Math.round(totalProfit).toLocaleString('en-IN')}</div>
+          </div>` : ''}
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button type="button" onclick="exportSalesReportCsv('${type}')" style="background:#fff;border:1.5px solid #86efac;color:#166534;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;">
+            📥 Export CSV
+          </button>
+          <button type="button" onclick="window.print()" style="background:#166534;border:none;color:#fff;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;">
+            🖨️ Print
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="result-card">
+      ${tableHtml}
+    </div>
+  `;
 }
 function genPurchaseReport(){
   const rows=[{date:'Apr 6',supplier:'ABC Traders',amount:14000},{date:'Apr 8',supplier:'XYZ Distributors',amount:8000},{date:'Apr 10',supplier:'National Foods',amount:11000}];

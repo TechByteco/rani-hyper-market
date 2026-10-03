@@ -6,11 +6,11 @@
   "startTimestamp": 1790927808094,
   "targetEndTimestamp": 1790945808094,
   "targetDurationHours": 5,
-  "totalCyclesCompleted": 32,
-  "lastCycleAt": "2026-10-03T17:16:46.439Z",
+  "totalCyclesCompleted": 33,
+  "lastCycleAt": "2026-10-03T18:44:54.938Z",
   "supervisorStatus": {
     "healthy": true,
-    "lastCheck": "2026-10-03T17:16:46.381Z",
+    "lastCheck": "2026-10-03T18:44:54.837Z",
     "issuesFound": 0,
     "autoRepairsDone": 0,
     "checks": {
@@ -47,6 +47,30 @@
     "averageFamilyYearlySavings": 11304
   },
   "auditHistory": [
+    {
+      "timestamp": "2026-10-03T18:44:54.936Z",
+      "action": "MARKETING_SYNC",
+      "details": {
+        "status": "Synchronized across root, public, and pre_model"
+      }
+    },
+    {
+      "timestamp": "2026-10-03T18:44:54.931Z",
+      "action": "MARKET_INTELLIGENCE_REFRESH",
+      "details": {
+        "bundles": 4,
+        "activeSeason": "Deepavali & Festive Celebration"
+      }
+    },
+    {
+      "timestamp": "2026-10-03T18:44:54.928Z",
+      "action": "SUPERVISOR_AUDIT",
+      "details": {
+        "healthy": true,
+        "issuesFound": 0,
+        "autoRepairsDone": 0
+      }
+    },
     {
       "timestamp": "2026-10-03T17:16:46.438Z",
       "action": "MARKETING_SYNC",
@@ -416,30 +440,6 @@
     },
     {
       "timestamp": "2026-10-02T10:28:44.188Z",
-      "action": "MARKET_INTELLIGENCE_REFRESH",
-      "details": {
-        "bundles": 4,
-        "activeSeason": "Deepavali & Festive Celebration"
-      }
-    },
-    {
-      "timestamp": "2026-10-02T10:28:42.596Z",
-      "action": "SUPERVISOR_AUDIT",
-      "details": {
-        "healthy": true,
-        "issuesFound": 0,
-        "autoRepairsDone": 0
-      }
-    },
-    {
-      "timestamp": "2026-10-02T10:18:44.120Z",
-      "action": "MARKETING_SYNC",
-      "details": {
-        "status": "Synchronized across root, public, and pre_model"
-      }
-    },
-    {
-      "timestamp": "2026-10-02T10:18:44.114Z",
       "action": "MARKET_INTELLIGENCE_REFRESH",
       "details": {
         "bundles": 4,

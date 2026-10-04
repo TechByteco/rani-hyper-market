@@ -1478,8 +1478,16 @@
       
       <div class="grid grid-cols-1 sm:grid-cols-2">
         <!-- Product Image Preview -->
-        <div class="relative bg-gray-50 flex items-center justify-center p-6 border-b sm:border-b-0 sm:border-r border-gray-100">
-          <img id="qv-img" src="" alt="Product" class="max-h-60 max-w-full object-contain rounded-2xl shadow-sm transition-transform duration-300 hover:scale-105">
+        <div class="relative bg-gray-50 flex flex-col items-center justify-center p-6 border-b sm:border-b-0 sm:border-r border-gray-100">
+          <div class="relative w-full flex items-center justify-center min-h-[220px]">
+            <img id="qv-img" src="" alt="Product" class="max-h-60 max-w-full object-contain rounded-2xl shadow-sm transition-all duration-300 hover:scale-105">
+            <span id="qv-side-indicator" class="absolute bottom-1 right-2 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5 rounded-full hidden">Front View</span>
+          </div>
+          <!-- Double-sided side switch switcher (National Hypermarket style) -->
+          <div id="qv-side-toggle-bar" class="hidden mt-3 flex items-center gap-2 bg-white px-3 py-1.5 rounded-full shadow-sm border border-gray-200">
+            <button type="button" id="qv-btn-front" onclick="switchQvSide('front')" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-600 text-white shadow-xs transition">Front Side</button>
+            <button type="button" id="qv-btn-back" onclick="switchQvSide('back')" class="px-3 py-1 rounded-full text-xs font-bold text-gray-600 hover:text-emerald-700 hover:bg-gray-100 transition">Back Side (Label)</button>
+          </div>
           <div id="qv-discount-badge" class="absolute top-4 left-4 bg-red-600 text-white font-black text-xs px-2.5 py-1 rounded-full shadow">
             20% OFF
           </div>
@@ -1911,28 +1919,113 @@
   }
 ];
 
-    function getDoubleSidedBack(title) {
+    function getDoubleSidedMatch(title) {
       if (!title) return null;
       const t = title.toLowerCase().replace(/[^a-z0-9\s]/g, ' ');
-      const tWords = new Set(t.split(/\s+/).filter(w => w.length >= 3));
+      const tWords = new Set(t.split(/\s+/).filter(w => w.length >= 2));
+
+      // Precision Brand / Category Signature matching (Authentic FMCG rules)
+      if (tWords.has('aachi') && (tWords.has('masala') || tWords.has('powder') || tWords.has('curry') || tWords.has('chilli') || tWords.has('sambar') || tWords.has('biriyani') || tWords.has('kulambu') || tWords.has('rice') || tWords.has('paste'))) {
+        const entry = DS_ENTRIES.find(e => e.titleNorm.includes('aachi garam masala'));
+        if (entry) return entry;
+      }
+      if (tWords.has('parachute')) {
+        if (tWords.has('aloe') || tWords.has('vera')) {
+          const entry = DS_ENTRIES.find(e => e.titleNorm.includes('aloe vera'));
+          if (entry) return entry;
+        }
+        if (tWords.has('jasmine')) {
+          const entry = DS_ENTRIES.find(e => e.titleNorm.includes('jasmine gold'));
+          if (entry) return entry;
+        }
+        if (tWords.has('ayurvedic') || tWords.has('deep') || tWords.has('hot')) {
+          const entry = DS_ENTRIES.find(e => e.titleNorm.includes('deep conditioning'));
+          if (entry) return entry;
+        }
+        const pure = DS_ENTRIES.find(e => e.titleNorm.includes('parachute pure coconut'));
+        if (pure) return pure;
+      }
+      if (tWords.has('nihar')) {
+        if (tWords.has('jasmine')) {
+          const entry = DS_ENTRIES.find(e => e.titleNorm.includes('shanti jasmine'));
+          if (entry) return entry;
+        }
+        if (tWords.has('amla')) {
+          const entry = DS_ENTRIES.find(e => e.titleNorm.includes('shanti amla'));
+          if (entry) return entry;
+        }
+        const extra = DS_ENTRIES.find(e => e.titleNorm.includes('extra care hairfall'));
+        if (extra) return extra;
+      }
+      if (tWords.has('domex')) {
+        const entry = DS_ENTRIES.find(e => e.titleNorm.includes('domex'));
+        if (entry) return entry;
+      }
+      if (tWords.has('comfort')) {
+        const entry = DS_ENTRIES.find(e => e.titleNorm.includes('comfort fabric conditioner'));
+        if (entry) return entry;
+      }
+      if (tWords.has('liril')) {
+        const entry = DS_ENTRIES.find(e => e.titleNorm.includes('liril'));
+        if (entry) return entry;
+      }
+      if (tWords.has('dove') && (tWords.has('soap') || tWords.has('bar') || tWords.has('serum'))) {
+        const entry = DS_ENTRIES.find(e => e.titleNorm.includes('dove serum bar'));
+        if (entry) return entry;
+      }
+      if (tWords.has('pond') || tWords.has('ponds')) {
+        if (tWords.has('sunscreen') || tWords.has('spf') || tWords.has('sun')) {
+          const entry = DS_ENTRIES.find(e => e.titleNorm.includes('sun miracle'));
+          if (entry) return entry;
+        }
+        if (tWords.has('talc') || tWords.has('powder') || tWords.has('dreamflower')) {
+          const entry = DS_ENTRIES.find(e => e.titleNorm.includes('dreamflower'));
+          if (entry) return entry;
+        }
+        if (tWords.has('lotion') || tWords.has('nourishing') || tWords.has('body')) {
+          const entry = DS_ENTRIES.find(e => e.titleNorm.includes('niacinamide nourishing'));
+          if (entry) return entry;
+        }
+        if (tWords.has('facewash') || tWords.has('face') || tWords.has('wash')) {
+          const entry = DS_ENTRIES.find(e => e.titleNorm.includes('anti dullness facewash'));
+          if (entry) return entry;
+        }
+      }
+      if (tWords.has('mantra') && tWords.has('oil')) {
+        const entry = DS_ENTRIES.find(e => e.titleNorm.includes('mantra groundnut'));
+        if (entry) return entry;
+      }
+      if (tWords.has('kitkat')) {
+        const entry = DS_ENTRIES.find(e => e.titleNorm.includes('kitkat'));
+        if (entry) return entry;
+      }
+      if (tWords.has('malkist') || (tWords.has('cheese') && tWords.has('cracker'))) {
+        const entry = DS_ENTRIES.find(e => e.titleNorm.includes('malkist'));
+        if (entry) return entry;
+      }
+
+      // Secondary multi-word ratio score
       let bestScore = 0;
-      let bestBack = null;
+      let best = null;
       for (const entry of DS_ENTRIES) {
         const eWords = entry.titleNorm.split(/\s+/).filter(w => w.length >= 3);
         if (eWords.length === 0) continue;
-        // Count how many DS title words appear in catalog title
         const matches = eWords.filter(w => tWords.has(w)).length;
-        // Require at least 2 matching words AND >40% of DS title words matched
         const ratio = matches / eWords.length;
         if (matches >= 2 && ratio >= 0.40) {
           const score = matches + ratio;
           if (score > bestScore) {
             bestScore = score;
-            bestBack = entry.back;
+            best = entry;
           }
         }
       }
-      return bestBack;
+      return best;
+    }
+
+    function getDoubleSidedBack(title) {
+      const match = getDoubleSidedMatch(title);
+      return match ? match.back : null;
     }
 
     function initStore() {
@@ -2192,6 +2285,20 @@
     }
 
     function getRelevantProductImage(title, existingUrl) {
+      // 1. If product already has an authentic uploaded or catalog image (not generic placeholder/unsplash), keep it
+      if (existingUrl && !existingUrl.includes('apollo247') && !existingUrl.includes('aas0010_1') && !existingUrl.includes('unsplash.com')) {
+        return existingUrl;
+      }
+      // 2. Check if product matches an authentic National Hypermarket front image
+      try {
+        if (typeof getDoubleSidedMatch === 'function') {
+          const nhmMatch = getDoubleSidedMatch(title);
+          if (nhmMatch && nhmMatch.front) {
+            return nhmMatch.front;
+          }
+        }
+      } catch(e) {}
+
       if (existingUrl && !existingUrl.includes('apollo247') && !existingUrl.includes('aas0010_1') && !existingUrl.includes('unsplash.com')) {
         return existingUrl;
       }
@@ -2373,6 +2480,29 @@
       const isNonVeg = /egg|chicken|mutton|fish|meat|prawn/i.test(p.title);
 
       document.getElementById('qv-img').src = finalImg;
+
+      // National Hypermarket double-side handling in Quick View
+      window.currentQvFrontImg = finalImg;
+      window.currentQvBackImg = null;
+      try {
+        const dsMatch = getDoubleSidedMatch(p.title);
+        if (dsMatch && dsMatch.back) {
+          window.currentQvBackImg = dsMatch.back;
+        }
+      } catch(e) {}
+
+      const toggleBar = document.getElementById('qv-side-toggle-bar');
+      const sideInd = document.getElementById('qv-side-indicator');
+      if (toggleBar) {
+        if (window.currentQvBackImg) {
+          toggleBar.classList.remove('hidden');
+          if (sideInd) sideInd.classList.remove('hidden');
+          switchQvSide('front');
+        } else {
+          toggleBar.classList.add('hidden');
+          if (sideInd) sideInd.classList.add('hidden');
+        }
+      }
       document.getElementById('qv-title').innerText = p.title;
       document.getElementById('qv-desc').innerText = p.description || 'Premium quality grocery product. Freshly sourced and hygienic packaged.';
       document.getElementById('qv-unit').innerText = 'Pack: ' + (p.unit || '1 unit');
@@ -2403,6 +2533,26 @@
 
       document.getElementById('qv-qty').innerText = currentQvQty;
       document.getElementById('product-quick-view-modal').classList.remove('hidden');
+    }
+
+    
+    function switchQvSide(side) {
+      const imgEl = document.getElementById('qv-img');
+      const btnFront = document.getElementById('qv-btn-front');
+      const btnBack = document.getElementById('qv-btn-back');
+      const sideInd = document.getElementById('qv-side-indicator');
+      if (!imgEl) return;
+      if (side === 'back' && window.currentQvBackImg) {
+        imgEl.src = window.currentQvBackImg;
+        if (btnFront) { btnFront.className = 'px-3 py-1 rounded-full text-xs font-bold text-gray-600 hover:text-emerald-700 hover:bg-gray-100 transition'; }
+        if (btnBack) { btnBack.className = 'px-3 py-1 rounded-full text-xs font-bold bg-emerald-600 text-white shadow-xs transition'; }
+        if (sideInd) sideInd.innerText = 'Back Label View';
+      } else {
+        imgEl.src = window.currentQvFrontImg;
+        if (btnFront) { btnFront.className = 'px-3 py-1 rounded-full text-xs font-bold bg-emerald-600 text-white shadow-xs transition'; }
+        if (btnBack) { btnBack.className = 'px-3 py-1 rounded-full text-xs font-bold text-gray-600 hover:text-emerald-700 hover:bg-gray-100 transition'; }
+        if (sideInd) sideInd.innerText = 'Front View';
+      }
     }
 
     function closeProductQuickView() {

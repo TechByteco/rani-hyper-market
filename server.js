@@ -14,6 +14,7 @@ const MIME = {
 };
 
 const analytics = require('./analyticsService');
+const hypermarketBackend = require('./hypermarketBackend');
 
 const server = http.createServer((req, res) => {
   // CORS headers
@@ -33,6 +34,19 @@ const server = http.createServer((req, res) => {
 
   // API Endpoints: Live Desktop POS Bridge
     // API Endpoints: System Diagnostics & Health Suite
+  // National Hypermarket Backend API v1
+  if (reqPath === '/api/v1/products') {
+    const search = queryParams.get('search') || '';
+    const category = queryParams.get('category') || '';
+    const page = parseInt(queryParams.get('page') || '1', 10);
+    const limit = parseInt(queryParams.get('limit') || '50', 10);
+    
+    const result = hypermarketBackend.getProducts({ search, category, page, limit });
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(result));
+    return;
+  }
+
   if (reqPath === '/api/diagnostics') {
     let catalog = [];
     try {

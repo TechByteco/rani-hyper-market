@@ -422,11 +422,35 @@
         </div>
       </div>
 
-      <!-- TAB 3 CONTENT: ONLINE IMAGE URL LINK -->
+      <!-- TAB 3 CONTENT: ONLINE IMAGE URL LINK & SEARCH HELPER -->
       <div id="tab-content-link" class="space-y-3 hidden">
+        <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-2xl">
+          <div class="text-xs font-bold text-emerald-900 flex items-center gap-1.5 mb-1">
+            <i class="fa-solid fa-wand-magic-sparkles text-emerald-600"></i> Automatic Web Search Query
+          </div>
+          <div class="flex items-center gap-2 mt-2">
+            <input
+              type="text"
+              id="input-search-query"
+              class="flex-1 px-3 py-2 bg-white border border-emerald-300 rounded-xl text-xs font-bold text-gray-800"
+              placeholder="Search query (e.g. 40G Sensodyne Fresh Gel in jpg format)"
+            >
+            <button
+              type="button"
+              onclick="openGoogleImageSearch()"
+              class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-sm transition"
+            >
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Search Web
+            </button>
+          </div>
+          <p class="text-[10px] text-emerald-700 mt-1.5 font-medium">
+            Click <b>Search Web</b> to find the first JPG packshot on Google Images, then right-click <i>"Copy Image Address"</i> and paste below.
+          </p>
+        </div>
+
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">
-            Online Product Packshot Image URL
+            Direct Product Packshot Image URL (.jpg / .png)
           </label>
           <div class="flex items-center gap-2">
             <input
@@ -440,7 +464,7 @@
             </button>
           </div>
           <p class="text-[11px] text-gray-400 mt-1">
-            Paste any direct image link from IndiaMART, OpenFoodFacts, manufacturer site, or Google.
+            Paste any direct image link from Apollo Pharmacy, OpenFoodFacts, IndiaMART, or Google Images.
           </p>
         </div>
       </div>
@@ -776,6 +800,12 @@
 
       // Open modal
       document.getElementById('image-studio-modal').classList.remove('hidden');
+      
+      // Auto-populate online JPG search query
+      const searchBox = document.getElementById('input-search-query');
+      if (searchBox && p) {
+        searchBox.value = p.title + ' in jpg format';
+      }
       switchStudioTab('camera');
     }
 
@@ -894,6 +924,14 @@
     }
 
     // Online URL Link Handler
+    
+    function openGoogleImageSearch() {
+      const q = document.getElementById('input-search-query')?.value?.trim() || (activeProductForModal ? activeProductForModal.title + ' in jpg format' : '');
+      if (!q) return;
+      const url = 'https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(q);
+      window.open(url, '_blank');
+    }
+
     function previewOnlineUrl() {
       const url = document.getElementById('input-online-url').value.trim();
       if (!url) return alert('Please enter a valid image URL');

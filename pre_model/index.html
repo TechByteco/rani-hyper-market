@@ -2286,7 +2286,7 @@
 
     function getRelevantProductImage(title, existingUrl) {
       // 1. If product already has an authentic uploaded or catalog image (not generic placeholder/unsplash), keep it
-      if (existingUrl && !existingUrl.includes('apollo247') && !existingUrl.includes('aas0010_1') && !existingUrl.includes('unsplash.com')) {
+      if (existingUrl && !existingUrl.includes('aas0010_1') && !existingUrl.includes('unsplash.com')) {
         return existingUrl;
       }
       // 2. Check if product matches an authentic National Hypermarket front image

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="ta" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,6 +22,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/landing.css">
+
+  <!-- GSAP & ScrollTrigger for Refined Editorial Scroll-Linked Motion -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
   <!-- Schema.org Structured Data -->
   <script type="application/ld+json">
@@ -96,89 +100,99 @@
     }
   ]
   </script>
-
-  <style>
-    /* Inline essential overrides ensuring instant, flicker-free rendering */
-    :root {
-      --bg-cream: #F7F1E6;
-      --color-green: #214A38;
-      --color-charcoal: #1D2921;
-      --color-terracotta: #BD4A35;
-      --color-gold: #C69B43;
-      --border-subtle: #E5DCCF;
-    }
-    body {
-      background-color: #F7F1E6;
-      color: #1D2921;
-      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-    }
-    h1, h2, h3, .font-serif {
-      font-family: 'DM Serif Display', Georgia, serif;
-    }
-  </style>
 </head>
-<body class="bg-[#F7F1E6] text-[#1D2921] antialiased selection:bg-[#214A38] selection:text-white">
+<body class="bg-[#F7F1E6] text-[#1D2921] antialiased selection:bg-[#214A38] selection:text-white font-tamil">
 
   <!-- ══════════════════════════════════════════════════════════
-       1. SMALL OPAQUE ANNOUNCEMENT BAR (CLEAN & RESTRAINED)
+       1. SMALL OPAQUE ANNOUNCEMENT BAR
   ══════════════════════════════════════════════════════════ -->
   <aside class="bg-[#214A38] text-white text-xs py-2 px-4 border-b border-[#18372A]">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1 sm:gap-4 font-medium text-[11px] sm:text-xs">
       <div class="flex items-center gap-2">
         <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#C69B43]"></span>
-        <span>Bodinayakanur’s Trusted Supermarket • Serving Local Families Since 2010</span>
+        <span data-i18n="announcement">தினமும் புதிய வரவுகள் · போடிநாயக்கனூரில் எங்களைப் பார்வையிடுங்கள்</span>
       </div>
       <div class="flex items-center gap-4 text-emerald-100">
-        <span>Open Daily <strong>7:00 AM – 10:30 PM</strong></span>
+        <span><span data-i18n="hoursLabel">இயங்கும் நேரம்</span>: <strong data-i18n="hoursTime">காலை 7:00 – இரவு 10:30 மணி</strong></span>
         <span class="hidden md:inline text-white/30">|</span>
-        <span class="hidden md:inline">WhatsApp Orders: <strong class="text-white">+91 77088 34547</strong></span>
+        <span class="hidden md:inline">WhatsApp: <strong class="text-white">+91 77088 34547</strong></span>
       </div>
     </div>
   </aside>
 
   <!-- ══════════════════════════════════════════════════════════
-       2. OPAQUE CLEAN HEADER (SOLID CREAM & CRISP BORDER)
+       2. OPAQUE CLEAN HEADER WITH LANGUAGE TOGGLE
   ══════════════════════════════════════════════════════════ -->
   <header class="bg-[#F7F1E6] border-b border-[#E5DCCF] sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-18 sm:h-20 flex items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-18 sm:h-20 flex items-center justify-between gap-3 sm:gap-4">
       
       <!-- Brand & Location -->
-      <a href="/" class="flex items-center gap-3.5 no-underline group">
+      <a href="/" class="flex items-center gap-3.5 no-underline group flex-shrink-0">
         <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-[#214A38] text-white flex items-center justify-center text-lg border border-[#18372A]">
           <i class="fa-solid fa-store"></i>
         </div>
         <div>
           <span class="font-serif text-xl sm:text-2xl text-[#1D2921] tracking-tight block leading-tight">Rani Hyper Market</span>
-          <span class="text-[11px] font-bold text-[#214A38] uppercase tracking-wider block">Main Road, Bodinayakanur</span>
+          <span data-i18n="brandSubtitle" class="text-[11px] font-bold text-[#214A38] uppercase tracking-wider block">மெயின் ரோடு, போடிநாயக்கனூர்</span>
         </div>
       </a>
 
       <!-- Clean Navigation Links -->
-      <nav class="hidden lg:flex items-center gap-7 text-[13.5px] font-bold text-[#536259]">
-        <a href="#about" class="hover:text-[#214A38] transition">About Store</a>
-        <a href="#departments" class="hover:text-[#214A38] transition">Departments</a>
+      <nav class="hidden xl:flex items-center gap-6 text-[13.5px] font-bold text-[#536259]">
+        <a href="#about" data-i18n="navAbout" class="hover:text-[#214A38] transition">கடை பற்றி</a>
+        <a href="#departments" data-i18n="navDepartments" class="hover:text-[#214A38] transition">பிரிவுகள்</a>
         <a href="#offers" class="hover:text-[#BD4A35] transition flex items-center gap-1.5">
-          <span>Weekly Offers</span>
+          <span data-i18n="navOffers">சலுகைகள்</span>
           <span class="bg-[#BD4A35] text-white text-[9px] px-1.5 py-0.2 rounded font-extrabold uppercase">Save</span>
         </a>
-        <a href="#brands" class="hover:text-[#214A38] transition">Brands</a>
-        <a href="#faq" class="hover:text-[#214A38] transition">FAQ</a>
-        <a href="#location" class="hover:text-[#214A38] transition">Hours & Map</a>
+        <a href="#brands" data-i18n="navBrands" class="hover:text-[#214A38] transition">பிராண்டுகள்</a>
+        <a href="#faq" data-i18n="navFaq" class="hover:text-[#214A38] transition">கேள்வி-பதில்</a>
+        <a href="#location" data-i18n="navLocation" class="hover:text-[#214A38] transition">கடை நேரம் &amp; மேப்</a>
       </nav>
 
-      <!-- Action Buttons -->
-      <div class="flex items-center gap-2 sm:gap-3">
-        <a href="tel:+917708834547" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#E5DCCF] bg-white text-[#1D2921] hover:border-[#214A38] text-xs font-bold transition">
+      <!-- Action Area: Language Switcher + Call + Store Link -->
+      <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+        
+        <!-- PRIMARY TASK 1: Language Switcher [ தமிழ் | English ] placed before search/cart -->
+        <div class="lang-switcher" role="group" aria-label="Select website language">
+          <button
+            type="button"
+            id="lang-btn-ta"
+            onclick="setAppLanguage('ta')"
+            aria-pressed="true"
+            aria-label="Change language to Tamil"
+            class="lang-btn active font-tamil"
+          >
+            தமிழ்
+          </button>
+          <span class="text-[#D6CAB8] text-xs px-0.5 select-none" aria-hidden="true">|</span>
+          <button
+            type="button"
+            id="lang-btn-en"
+            onclick="setAppLanguage('en')"
+            aria-pressed="false"
+            aria-label="Change language to English"
+            class="lang-btn font-sans"
+          >
+            English
+          </button>
+        </div>
+
+        <!-- Direct Phone Call -->
+        <a href="tel:+917708834547" class="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#E5DCCF] bg-white text-[#1D2921] hover:border-[#214A38] text-xs font-bold transition no-underline">
           <i class="fa-solid fa-phone text-[#214A38]"></i>
           <span>77088 34547</span>
         </a>
-        <a href="/store" class="btn-primary text-xs sm:text-sm py-2 sm:py-2.5 px-4 sm:px-5">
-          <span>Explore Store</span>
-          <i class="fa-solid fa-arrow-right text-[11px]"></i>
+
+        <!-- Explore Store Button -->
+        <a href="/store" class="btn-primary text-xs sm:text-sm py-2 sm:py-2.5 px-3.5 sm:px-4.5 inline-flex items-center gap-1.5">
+          <span data-i18n="navExplore">கடைக்குச் செல்ல</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
         </a>
+
         <!-- Mobile Drawer Toggle -->
-        <button type="button" onclick="toggleLandingMobileMenu()" class="lg:hidden w-10 h-10 rounded-lg bg-white border border-[#E5DCCF] text-[#1D2921] flex items-center justify-center cursor-pointer" aria-label="Open Navigation Menu">
-          <i class="fa-solid fa-bars text-base"></i>
+        <button type="button" onclick="toggleLandingMobileMenu()" class="xl:hidden w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-white border border-[#E5DCCF] text-[#1D2921] flex items-center justify-center cursor-pointer" aria-label="Open Navigation Menu">
+          <i class="fa-solid fa-bars text-sm sm:text-base"></i>
         </button>
       </div>
 
@@ -188,68 +202,73 @@
   <!-- ══════════════════════════════════════════════════════════
        3. PREMIUM RETAIL-EDITORIAL SPLIT HERO SECTION
   ══════════════════════════════════════════════════════════ -->
-  <section class="border-b border-[#E5DCCF] bg-[#F7F1E6] pt-10 sm:pt-14 pb-12 sm:pb-16">
+  <section id="hero-section" class="border-b border-[#E5DCCF] bg-[#F7F1E6] pt-10 sm:pt-14 pb-12 sm:pb-16 relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
 
         <!-- Left Column: Editorial Headline & Copy (7 cols) -->
-        <div class="lg:col-span-7">
+        <div class="lg:col-span-7 anim-hero-text-group">
           
-          <!-- Category Tag / Heritage Badge -->
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-white border border-[#E5DCCF] text-xs font-bold text-[#214A38] mb-5">
+          <!-- Eyebrow Badge -->
+          <div class="anim-hero-eyebrow inline-flex items-center gap-2 px-3 py-1 rounded-md bg-white border border-[#E5DCCF] text-xs font-bold text-[#214A38] mb-5 shadow-2xs">
             <span class="w-1.5 h-1.5 rounded-full bg-[#BD4A35]"></span>
-            <span>Bodinayakanur, Theni • Local Hypermarket Since 2010</span>
+            <span data-i18n="eyebrow">ராணி ஹைப்பர் மார்க்கெட் · போடிநாயக்கனூர்</span>
           </div>
 
-          <!-- Main H1 (DM Serif Display) -->
-          <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#1D2921] leading-[1.08] mb-3">
-            Everything your home needs. One market you can trust.
+          <!-- Main H1 (DM Serif Display / Noto Sans Tamil) -->
+          <h1 data-i18n="headline" class="anim-hero-heading text-4xl sm:text-5xl lg:text-6xl text-[#1D2921] leading-[1.1] mb-3 font-serif">
+            உங்கள் வீட்டிற்கு தேவையான அனைத்தும். நீங்கள் நம்பும் ஒரே மார்க்கெட்.
           </h1>
 
           <!-- Tamil Identification Line -->
           <p class="font-tamil font-bold text-[#214A38] text-base sm:text-lg mb-5">
-            ராணி ஹைப்பர் மார்க்கெட் — தரமான மளிகை & அன்றாடத் தேவைகள்
+            ராணி ஹைப்பர் மார்க்கெட் — போடிநாயக்கனூர்
           </p>
 
           <!-- Supporting Editorial Copy -->
-          <p class="text-[#536259] text-base sm:text-lg leading-relaxed max-w-2xl mb-7 font-normal">
-            From fresh farm produce, certified Ponni rice, and authentic Tamil masalas to daily dairy, packaged FMCG, and household essentials. Shop over <strong>7,000+ trusted products</strong> in-store on Main Road or order directly via WhatsApp for fast doorstep delivery across Bodinayakanur.
+          <p data-i18n="description" class="anim-hero-desc text-[#536259] text-base sm:text-lg leading-relaxed max-w-2xl mb-7 font-normal">
+            புதிய காய்கறிகள், தினசரி மளிகைப் பொருட்கள், வீட்டுத் தேவைகள் மற்றும் நம்பகமான பிராண்டுகள்—அனைத்தும் ஒரே இடத்தில்.
           </p>
 
           <!-- Primary Actions & Links -->
-          <div class="flex flex-wrap items-center gap-4 sm:gap-6 mb-8">
-            <a href="/store" class="btn-primary text-sm sm:text-base py-3 px-6 sm:px-7">
-              <span>Explore the store →</span>
+          <div class="anim-hero-actions flex flex-wrap items-center gap-4 sm:gap-6 mb-8">
+            <a href="/store" class="btn-primary text-sm sm:text-base py-3 px-6 sm:px-7 inline-flex items-center gap-2">
+              <span data-i18n="primaryCTA">கடையைப் பார்வையிடுங்கள்</span>
+              <span>→</span>
             </a>
-            <a href="#offers" class="link-editorial text-sm sm:text-base">
-              <span>View this week’s offers →</span>
+            <a href="#offers" class="link-editorial text-sm sm:text-base inline-flex items-center gap-1.5">
+              <span data-i18n="secondaryCTA">இந்த வார சலுகைகளைப் பாருங்கள்</span>
+              <span>→</span>
             </a>
           </div>
 
           <!-- Compact Search Bar Routing directly into /store?search= -->
           <form action="/store" method="GET" class="max-w-xl mb-7">
-            <div class="flex items-center bg-white rounded-lg border border-[#E5DCCF] p-1 shadow-sm focus-within:border-[#214A38] transition">
+            <div class="flex items-center bg-white rounded-lg border border-[#E5DCCF] p-1 shadow-xs focus-within:border-[#214A38] transition">
               <i class="fa-solid fa-magnifying-glass text-[#536259] ml-3 text-sm"></i>
               <input 
                 type="text" 
                 name="search" 
-                placeholder="Search 7,000+ items (e.g. Ponni Rice, Arokya Milk, Aachi...)" 
+                data-i18n-placeholder="searchPlaceholder"
+                data-i18n-aria="searchPlaceholder"
+                placeholder="7,000+ பொருட்கள் தேடுங்கள் (எ.கா. பொன்னி அரிசி, ஆரோக்கிய பால், ஆச்சி...)" 
+                aria-label="7,000+ பொருட்கள் தேடுங்கள்"
                 class="w-full px-3 py-2 text-xs sm:text-sm text-[#1D2921] placeholder-[#798880] focus:outline-none bg-transparent"
                 required
               >
               <button type="submit" class="bg-[#214A38] hover:bg-[#18372A] text-white text-xs font-bold px-4 py-2 rounded-md transition flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
-                <span>Search</span>
+                <span data-i18n="searchButton">தேடு</span>
               </button>
             </div>
           </form>
 
           <!-- Trust Row (Exact Specification) -->
-          <div class="pt-2 border-t border-[#E5DCCF] text-xs sm:text-[13px] font-semibold text-[#536259] flex flex-wrap items-center gap-y-2">
-            <span>Fresh arrivals daily</span>
+          <div class="anim-hero-trust pt-2 border-t border-[#E5DCCF] text-xs sm:text-[13px] font-semibold text-[#536259] flex flex-wrap items-center gap-y-2">
+            <span data-i18n="trust1">தினமும் புதிய வரவுகள்</span>
             <span class="mx-2 text-[#BD4A35]">·</span>
-            <span>Trusted local favourites</span>
+            <span data-i18n="trust2">நம்பகமான உள்ளூர் விருப்பங்கள்</span>
             <span class="mx-2 text-[#BD4A35]">·</span>
-            <span>Easy parking &amp; quick billing</span>
+            <span data-i18n="trust3">எளிய பார்க்கிங் மற்றும் விரைவான பில்லிங்</span>
           </div>
 
         </div>
@@ -257,39 +276,41 @@
         <!-- Right Column: Real Photograph & Compact Solid Green Offer Card (5 cols) -->
         <div class="lg:col-span-5 flex flex-col gap-4">
           
-          <!-- Large Real Grocery / Store Photograph -->
-          <div class="w-full h-72 sm:h-84 rounded-lg overflow-hidden border border-[#E5DCCF] bg-white shadow-sm relative">
+          <!-- Large Real Grocery / Store Photograph Container -->
+          <div class="w-full h-72 sm:h-84 rounded-lg overflow-hidden border border-[#E5DCCF] bg-white shadow-xs relative">
             <img 
               src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1000&q=80" 
-              alt="Fresh Groceries and Produce at Rani Hyper Market" 
-              class="w-full h-full object-cover"
+              alt="Fresh Groceries and Farm Produce at Rani Hyper Market, Bodinayakanur" 
+              class="anim-hero-img w-full h-full object-cover transform origin-center will-change-transform"
               loading="eager"
             >
-            <div class="absolute bottom-3 left-3 bg-[#1D2921]/90 text-white text-[11px] font-bold px-3 py-1 rounded border border-white/20">
-              📍 In-Store at Main Road, Bodinayakanur
+            <div class="anim-hero-overlay absolute inset-0 bg-black/40 opacity-0 pointer-events-none transition-opacity"></div>
+            <div class="absolute bottom-3 left-3 bg-[#1D2921]/90 text-white text-[11px] font-bold px-3 py-1 rounded border border-white/20 z-10">
+              📍 <span data-i18n="photoCaption">மெயின் ரோடு, போடிநாயக்கனூர் நேரடி அங்காடி</span>
             </div>
           </div>
 
           <!-- Compact Solid Green Offer Card (Exact Specification) -->
-          <div class="retail-card-green p-5 sm:p-6 shadow-sm">
+          <div class="anim-offer-card retail-card-green p-5 sm:p-6 shadow-sm will-change-transform">
             <div class="flex items-start justify-between gap-3 mb-2">
-              <span class="bg-[#BD4A35] text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded">
-                Special Store Offer
+              <span data-i18n="offerLabel" class="bg-[#BD4A35] text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded">
+                இந்த வாரம் ராணியில்
               </span>
-              <span class="text-[#C69B43] text-xs font-bold">
-                Valid in Bodinayakanur
+              <span data-i18n="offerValidity" class="text-[#C69B43] text-xs font-bold">
+                போடிநாயக்கனூரில் மட்டும்
               </span>
             </div>
-            <h3 class="font-serif text-2xl sm:text-3xl text-white mb-2 leading-tight">
-              Save up to 30% on everyday essentials
+            <h3 data-i18n="offerText" class="text-2xl sm:text-3xl text-white mb-2 leading-tight font-serif">
+              தினசரி தேவையான பொருட்களில் 30% வரை சேமியுங்கள்.
             </h3>
-            <p class="text-emerald-100 text-xs sm:text-sm leading-relaxed mb-4">
-              Wholesale-tier savings on rice sacks, cold-pressed cooking oils, dals, dairy provisions, and bulk household detergents.
+            <p data-i18n="offerSubtext" class="text-emerald-100 text-xs sm:text-sm leading-relaxed mb-4">
+              அரிசி மூட்டைகள், சமையல் எண்ணெய், பருப்பு வகைகள் மற்றும் வீட்டுப் பயன்பாட்டுப் பொருட்களில் மொத்த விலை சேமிப்பு.
             </p>
             <div class="flex items-center justify-between pt-3 border-t border-[#2D634C] text-xs">
-              <span class="font-bold text-emerald-200">MRP discounts on every purchase</span>
-              <a href="/store" class="text-[#C69B43] hover:text-white font-bold underline transition">
-                Shop Essentials →
+              <span data-i18n="offerBadge" class="font-bold text-emerald-200">ஒவ்வொரு வாங்குதலுக்கும் MRP தள்ளுபடி</span>
+              <a href="/store" class="text-[#C69B43] hover:text-white font-bold underline transition inline-flex items-center gap-1">
+                <span data-i18n="offerCTA">வாராந்திர சலுகைகளைப் பாருங்கள்</span>
+                <span>→</span>
               </a>
             </div>
           </div>
@@ -308,132 +329,116 @@
       
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 pb-4 border-b border-[#E5DCCF]">
         <div>
-          <span class="text-[#BD4A35] text-xs font-black uppercase tracking-wider block mb-1">Organized Catalog</span>
-          <h2 class="font-serif text-3xl sm:text-4xl text-[#1D2921]">Browse by Department</h2>
+          <span data-i18n="departmentsSubtitle" class="text-[#BD4A35] text-xs font-black uppercase tracking-wider block mb-1">மளிகைப் பிரிவுகள்</span>
+          <h2 data-i18n="departmentsTitle" class="text-3xl sm:text-4xl text-[#1D2921] font-serif">பிரிவுகள் வாரியாகப் பாருங்கள்</h2>
         </div>
         <a href="/store" class="link-editorial text-xs sm:text-sm">
-          <span>View all 7,000+ items online →</span>
+          <span data-i18n="departmentsViewAll">7,000+ பொருட்களை ஆன்லைனில் பார்க்க →</span>
         </a>
       </div>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         
         <!-- Dept 1 -->
-        <a href="/store?category=rice" class="department-card">
+        <a href="/store?category=rice" class="department-card anim-dept-card">
           <div>
-            <div class="w-10 h-10 rounded-md bg-[#F7F1E6] border border-[#E5DCCF] flex items-center justify-center text-xl mb-3">
-              🌾
-            </div>
-            <h4 class="font-serif text-lg text-[#1D2921] mb-1">Rice, Grains &amp; Dals</h4>
-            <p class="text-xs text-[#536259]">Ponni boiled rice, basmati, toor dal, urad dal &amp; pulses</p>
+            <div class="w-10 h-10 rounded-md bg-[#F7F1E6] border border-[#E5DCCF] flex items-center justify-center text-xl mb-3">🌾</div>
+            <h4 data-i18n="deptRice" class="text-lg text-[#1D2921] mb-1 font-serif">அரிசி, தானியங்கள் &amp; பருப்பு</h4>
+            <p data-i18n="deptRiceDesc" class="text-xs text-[#536259]">பொன்னி புழுங்கல் அரிசி, பாசுமதி, துவரம் பருப்பு, உளுந்து &amp; பயறு வகைகள்</p>
           </div>
           <div class="mt-4 pt-3 border-t border-[#E5DCCF] flex items-center justify-between text-xs font-bold text-[#214A38]">
-            <span>620+ Products</span>
+            <span data-i18n="deptRiceCount">620+ பொருட்கள்</span>
             <span>→</span>
           </div>
         </a>
 
         <!-- Dept 2 -->
-        <a href="/store?category=milk" class="department-card">
+        <a href="/store?category=milk" class="department-card anim-dept-card">
           <div>
-            <div class="w-10 h-10 rounded-md bg-[#F7F1E6] border border-[#E5DCCF] flex items-center justify-center text-xl mb-3">
-              🥛
-            </div>
-            <h4 class="font-serif text-lg text-[#1D2921] mb-1">Dairy, Milk &amp; Butter</h4>
-            <p class="text-xs text-[#536259]">Arokya milk, fresh curd, Amul butter, paneer &amp; ghee</p>
+            <div class="w-10 h-10 rounded-md bg-[#F7F1E6] border border-[#E5DCCF] flex items-center justify-center text-xl mb-3">🥛</div>
+            <h4 data-i18n="deptDairy" class="text-lg text-[#1D2921] mb-1 font-serif">பால், தயிர் &amp; வெண்ணெய்</h4>
+            <p data-i18n="deptDairyDesc" class="text-xs text-[#536259]">ஆரோக்கிய பால், கெட்டி தயிர், அமுல் வெண்ணெய், பனீர் &amp; நெய்</p>
           </div>
           <div class="mt-4 pt-3 border-t border-[#E5DCCF] flex items-center justify-between text-xs font-bold text-[#214A38]">
-            <span>180+ Products</span>
+            <span data-i18n="deptDairyCount">180+ பொருட்கள்</span>
             <span>→</span>
           </div>
         </a>
 
         <!-- Dept 3 -->
-        <a href="/store?category=masala" class="department-card">
+        <a href="/store?category=masala" class="department-card anim-dept-card">
           <div>
-            <div class="w-10 h-10 rounded-md bg-[#F7F1E6] border border-[#E5DCCF] flex items-center justify-center text-xl mb-3">
-              🌶️
-            </div>
-            <h4 class="font-serif text-lg text-[#1D2921] mb-1">Spices &amp; Masalas</h4>
-            <p class="text-xs text-[#536259]">Aachi, Sakthi, Everest, sambar powder &amp; whole spices</p>
+            <div class="w-10 h-10 rounded-md bg-[#F7F1E6] border border-[#E5DCCF] flex items-center justify-center text-xl mb-3">🌶️</div>
+            <h4 data-i18n="deptMasala" class="text-lg text-[#1D2921] mb-1 font-serif">மசாலா &amp; வாசனைப் பொருட்கள்</h4>
+            <p data-i18n="deptMasalaDesc" class="text-xs text-[#536259]">ஆச்சி, சக்தி, எவரெஸ்ட், சாம்பார் தூள் &amp; முழு வாசனைப் பொருட்கள்</p>
           </div>
           <div class="mt-4 pt-3 border-t border-[#E5DCCF] flex items-center justify-between text-xs font-bold text-[#214A38]">
-            <span>340+ Products</span>
+            <span data-i18n="deptMasalaCount">340+ பொருட்கள்</span>
             <span>→</span>
           </div>
         </a>
 
         <!-- Dept 4 -->
-        <a href="/store?category=oil" class="department-card">
+        <a href="/store?category=oil" class="department-card anim-dept-card">
           <div>
-            <div class="w-10 h-10 rounded-md bg-[#F7F1E6] border border-[#E5DCCF] flex items-center justify-center text-xl mb-3">
-              🫙
-            </div>
-            <h4 class="font-serif text-lg text-[#1D2921] mb-1">Edible Oils &amp; Ghee</h4>
-            <p class="text-xs text-[#536259]">Gingelly, groundnut, GRB ghee &amp; Fortune sunflower</p>
+            <div class="w-10 h-10 rounded-md bg-[#F7F1E6] border border-[#E5DCCF] flex items-center justify-center text-xl mb-3">🫙</div>
+            <h4 data-i18n="deptOil" class="text-lg text-[#1D2921] mb-1 font-serif">சமையல் எண்ணெய் &amp; நெய்</h4>
+            <p data-i18n="deptOilDesc" class="text-xs text-[#536259]">நல்லெண்ணெய், கடலை எண்ணெய், GRB நெய் &amp; ஃபார்ச்சூன் சூரியகாந்தி எண்ணெய்</p>
           </div>
           <div class="mt-4 pt-3 border-t border-[#E5DCCF] flex items-center justify-between text-xs font-bold text-[#214A38]">
-            <span>120+ Products</span>
+            <span data-i18n="deptOilCount">120+ பொருட்கள்</span>
             <span>→</span>
           </div>
         </a>
 
         <!-- Dept 5 -->
-        <a href="/store?category=tea" class="department-card">
+        <a href="/store?category=tea" class="department-card anim-dept-card">
           <div>
-            <div class="w-10 h-10 rounded-md bg-[#F7F1E6] border border-[#E5DCCF] flex items-center justify-center text-xl mb-3">
-              ☕
-            </div>
-            <h4 class="font-serif text-lg text-[#1D2921] mb-1">Tea &amp; Filter Coffee</h4>
-            <p class="text-xs text-[#536259]">Bru, Narasus, 3 Roses, Bovonto &amp; beverages</p>
+            <div class="w-10 h-10 rounded-md bg-[#F7F1E6] border border-[#E5DCCF] flex items-center justify-center text-xl mb-3">☕</div>
+            <h4 data-i18n="deptTea" class="text-lg text-[#1D2921] mb-1 font-serif">தேநீர் &amp; ஃபில்டர் காபி</h4>
+            <p data-i18n="deptTeaDesc" class="text-xs text-[#536259]">ப்ரூ, நரசுஸ், 3 ரோசஸ், பவொன்டோ &amp; குளிர்பானங்கள்</p>
           </div>
           <div class="mt-4 pt-3 border-t border-[#E5DCCF] flex items-center justify-between text-xs font-bold text-[#214A38]">
-            <span>210+ Products</span>
+            <span data-i18n="deptTeaCount">210+ பொருட்கள்</span>
             <span>→</span>
           </div>
         </a>
 
         <!-- Dept 6 -->
-        <a href="/store?category=biscuit" class="department-card">
+        <a href="/store?category=biscuit" class="department-card anim-dept-card">
           <div>
-            <div class="w-10 h-10 rounded-md bg-[#F7F1E6] border border-[#E5DCCF] flex items-center justify-center text-xl mb-3">
-              🍪
-            </div>
-            <h4 class="font-serif text-lg text-[#1D2921] mb-1">Snacks &amp; Biscuits</h4>
-            <p class="text-xs text-[#536259]">Parle, Britannia, traditional mixture, rusks &amp; sweets</p>
+            <div class="w-10 h-10 rounded-md bg-[#F7F1E6] border border-[#E5DCCF] flex items-center justify-center text-xl mb-3">🍪</div>
+            <h4 data-i18n="deptBiscuits" class="text-lg text-[#1D2921] mb-1 font-serif">பிஸ்கட் &amp; தின்பண்டங்கள்</h4>
+            <p data-i18n="deptBiscuitsDesc" class="text-xs text-[#536259]">பார்லே, பிரிட்டானியா, பாரம்பரிய மிக்ஸர், ரஸ்க் &amp; இனிப்புகள்</p>
           </div>
           <div class="mt-4 pt-3 border-t border-[#E5DCCF] flex items-center justify-between text-xs font-bold text-[#214A38]">
-            <span>450+ Products</span>
+            <span data-i18n="deptBiscuitsCount">450+ பொருட்கள்</span>
             <span>→</span>
           </div>
         </a>
 
         <!-- Dept 7 -->
-        <a href="/store?category=soap" class="department-card">
+        <a href="/store?category=soap" class="department-card anim-dept-card">
           <div>
-            <div class="w-10 h-10 rounded-md bg-[#F7F1E6] border border-[#E5DCCF] flex items-center justify-center text-xl mb-3">
-              🧴
-            </div>
-            <h4 class="font-serif text-lg text-[#1D2921] mb-1">Personal Care</h4>
-            <p class="text-xs text-[#536259]">Hamam, Dettol, Clinic Plus, Parachute hair oil</p>
+            <div class="w-10 h-10 rounded-md bg-[#F7F1E6] border border-[#E5DCCF] flex items-center justify-center text-xl mb-3">🧴</div>
+            <h4 data-i18n="deptPersonal" class="text-lg text-[#1D2921] mb-1 font-serif">சுய பாதுகாப்பு &amp; சோப்புகள்</h4>
+            <p data-i18n="deptPersonalDesc" class="text-xs text-[#536259]">ஹமாம், டெட்டால், கிளினிக் பிளஸ், பாராசூட் தேங்காய் எண்ணெய்</p>
           </div>
           <div class="mt-4 pt-3 border-t border-[#E5DCCF] flex items-center justify-between text-xs font-bold text-[#214A38]">
-            <span>520+ Products</span>
+            <span data-i18n="deptPersonalCount">520+ பொருட்கள்</span>
             <span>→</span>
           </div>
         </a>
 
         <!-- Dept 8 -->
-        <a href="/store?category=cleaner" class="department-card">
+        <a href="/store?category=cleaner" class="department-card anim-dept-card">
           <div>
-            <div class="w-10 h-10 rounded-md bg-[#F7F1E6] border border-[#E5DCCF] flex items-center justify-center text-xl mb-3">
-              🧹
-            </div>
-            <h4 class="font-serif text-lg text-[#1D2921] mb-1">Cleaning &amp; Home</h4>
-            <p class="text-xs text-[#536259]">Surf Excel, Vim, Harpic, Good Knight refills</p>
+            <div class="w-10 h-10 rounded-md bg-[#F7F1E6] border border-[#E5DCCF] flex items-center justify-center text-xl mb-3">🧹</div>
+            <h4 data-i18n="deptCleaning" class="text-lg text-[#1D2921] mb-1 font-serif">வீட்டு பராமரிப்பு &amp; துப்புரவு</h4>
+            <p data-i18n="deptCleaningDesc" class="text-xs text-[#536259]">சர்ப் எக்செல், விம், ஹார்பிக், குட் நைட் ரீபில்கள்</p>
           </div>
           <div class="mt-4 pt-3 border-t border-[#E5DCCF] flex items-center justify-between text-xs font-bold text-[#214A38]">
-            <span>390+ Products</span>
+            <span data-i18n="deptCleaningCount">390+ பொருட்கள்</span>
             <span>→</span>
           </div>
         </a>
@@ -449,12 +454,12 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
       
       <div class="max-w-3xl mb-12">
-        <span class="text-[#BD4A35] text-xs font-black uppercase tracking-wider block mb-1">Our Heritage</span>
-        <h2 class="font-serif text-3xl sm:text-4xl text-[#1D2921] mb-4">
-          Built for Bodinayakanur Families
+        <span data-i18n="aboutTag" class="text-[#BD4A35] text-xs font-black uppercase tracking-wider block mb-1">எங்கள் பாரம்பரியம்</span>
+        <h2 data-i18n="aboutTitle" class="text-3xl sm:text-4xl text-[#1D2921] mb-4 font-serif">
+          போடிநாயக்கனூர் குடும்பங்களுக்காக உருவாக்கப்பட்டது
         </h2>
-        <p class="text-[#536259] text-base leading-relaxed">
-          Since 2010, Rani Hyper Market has provided honest prices, authentic procurement, and friendly neighborhood retail. We source directly from authorized FMCG distributors and accredited Tamil Nadu agricultural mills to ensure pure grain quality and honest weights.
+        <p data-i18n="aboutDescription" class="text-[#536259] text-base leading-relaxed">
+          2010 முதல், ராணி ஹைப்பர் மார்க்கெட் நியாயமான விலைகள், உண்மையான தரம் மற்றும் கனிவான சேவையை வழங்கி வருகிறது. தரமான தானியங்கள் மற்றும் சரியான எடையை உறுதிசெய்ய, அங்கீகரிக்கப்பட்ட FMCG விநியோகஸ்தர்கள் மற்றும் தமிழ்நாடு அரிசி ஆலைகளிலிருந்து நேரடியாக கொள்முதல் செய்கிறோம்.
         </p>
       </div>
 
@@ -465,9 +470,9 @@
           <div class="w-9 h-9 rounded-md bg-[#214A38] text-white flex items-center justify-center text-sm mb-3">
             <i class="fa-solid fa-wheat-awn"></i>
           </div>
-          <h4 class="font-serif text-lg text-[#1D2921] mb-1.5">Direct Procurement</h4>
-          <p class="text-xs text-[#536259] leading-relaxed">
-            Directly from regional rice mills and verified FMCG partners like HUL, ITC, and Britannia.
+          <h4 data-i18n="pillar1Title" class="text-lg text-[#1D2921] mb-1.5 font-serif">நேரடி கொள்முதல்</h4>
+          <p data-i18n="pillar1Desc" class="text-xs text-[#536259] leading-relaxed">
+            அரிசி ஆலைகள் மற்றும் HUL, ITC, பிரிட்டானியா போன்ற முன்னணி நிறுவனங்களிடமிருந்து நேரடியாகப் பெறப்படுகிறது.
           </p>
         </div>
 
@@ -476,9 +481,9 @@
           <div class="w-9 h-9 rounded-md bg-[#214A38] text-white flex items-center justify-center text-sm mb-3">
             <i class="fa-solid fa-receipt"></i>
           </div>
-          <h4 class="font-serif text-lg text-[#1D2921] mb-1.5">Transparent Billing</h4>
-          <p class="text-xs text-[#536259] leading-relaxed">
-            Computerized itemized GST bills with clear MRP savings. Pay via Cash, GPay, or PhonePe.
+          <h4 data-i18n="pillar2Title" class="text-lg text-[#1D2921] mb-1.5 font-serif">வெளிப்படையான பில்லிங்</h4>
+          <p data-i18n="pillar2Desc" class="text-xs text-[#536259] leading-relaxed">
+            MRP தள்ளுபடியுடன் கூடிய கணினி ரசீது. ரொக்கம், GPay அல்லது PhonePe மூலம் செலுத்தலாம்.
           </p>
         </div>
 
@@ -487,9 +492,9 @@
           <div class="w-9 h-9 rounded-md bg-[#214A38] text-white flex items-center justify-center text-sm mb-3">
             <i class="fa-solid fa-truck-fast"></i>
           </div>
-          <h4 class="font-serif text-lg text-[#1D2921] mb-1.5">30-Min Local Delivery</h4>
-          <p class="text-xs text-[#536259] leading-relaxed">
-            Fast doorstep dispatch across Bodinayakanur town. Free delivery on orders over ₹500.
+          <h4 data-i18n="pillar3Title" class="text-lg text-[#1D2921] mb-1.5 font-serif">30-நிமிட உள்ளூர் டெலிவரி</h4>
+          <p data-i18n="pillar3Desc" class="text-xs text-[#536259] leading-relaxed">
+            போடிநாயக்கனூர் நகர் முழுவதும் விரைவான வீட்டு விநியோகம். ₹500க்கு மேல் இலவச டெலிவரி.
           </p>
         </div>
 
@@ -498,9 +503,9 @@
           <div class="w-9 h-9 rounded-md bg-[#214A38] text-white flex items-center justify-center text-sm mb-3">
             <i class="fa-brands fa-whatsapp"></i>
           </div>
-          <h4 class="font-serif text-lg text-[#1D2921] mb-1.5">WhatsApp Ordering</h4>
-          <p class="text-xs text-[#536259] leading-relaxed">
-            Snap a photo of your handwritten grocery list or send a voice message. Our team packs and delivers.
+          <h4 data-i18n="pillar4Title" class="text-lg text-[#1D2921] mb-1.5 font-serif">வாட்ஸ்அப் ஆர்டர்கள்</h4>
+          <p data-i18n="pillar4Desc" class="text-xs text-[#536259] leading-relaxed">
+            மளிகைப் பட்டியலின் புகைப்படத்தை அல்லது குரல் செய்தியை அனுப்புங்கள். நாங்கள் பேக் செய்து அனுப்புவோம்.
           </p>
         </div>
 
@@ -510,7 +515,7 @@
   </section>
 
   <!-- ══════════════════════════════════════════════════════════
-       6. WEEKLY OFFERS CALLOUT SECTION (#offers)
+       6. WEEKLY OFFERS SECTION (#offers)
   ══════════════════════════════════════════════════════════ -->
   <section id="offers" class="py-12 sm:py-16 border-b border-[#E5DCCF] bg-[#FAF5ED]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
@@ -520,31 +525,31 @@
           
           <div class="lg:col-span-8">
             <div class="flex items-center gap-2 mb-2">
-              <span class="bg-[#BD4A35] text-white text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded">
-                This Week's Specials
+              <span data-i18n="weeklySpecialsTag" class="bg-[#BD4A35] text-white text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded">
+                இந்த வார சிறப்பு சலுகைகள்
               </span>
-              <span class="text-xs font-bold text-[#536259]">Updated Every Monday</span>
+              <span data-i18n="weeklyUpdated" class="text-xs font-bold text-[#536259]">ஒவ்வொரு திங்கட்கிழமையும் புதுப்பிக்கப்படுகிறது</span>
             </div>
-            <h3 class="font-serif text-2xl sm:text-4xl text-[#1D2921] mb-3">
-              Essential Kitchen Savings for Bodinayakanur Households
+            <h3 data-i18n="weeklyTitle" class="text-2xl sm:text-4xl text-[#1D2921] mb-3 font-serif">
+              போடிநாயக்கனூர் இல்லங்களுக்கான சமையலறை சேமிப்புகள்
             </h3>
-            <p class="text-xs sm:text-sm text-[#536259] leading-relaxed max-w-2xl mb-4">
-              Get genuine discounts on monthly staple sacks (Ponni rice, idli rice), refined and gingelly cooking oils, Arokya dairy provisions, and FMCG personal care multipacks.
+            <p data-i18n="weeklyDescription" class="text-xs sm:text-sm text-[#536259] leading-relaxed max-w-2xl mb-4">
+              மாதாந்திர அரிசி மூட்டைகள் (பொன்னி அரிசி, இட்லி அரிசி), சமையல் எண்ணெய்கள், ஆரோக்கிய பால் பொருட்கள் மற்றும் வீட்டுப் பயன்பாட்டுப் பொருட்களில் உண்மையான தள்ளுபடி.
             </p>
             <div class="flex flex-wrap items-center gap-4 text-xs font-bold text-[#1D2921]">
-              <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-[#214A38]"></i> Up to 30% Off MRP</span>
-              <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-[#214A38]"></i> Free Home Delivery Over ₹500</span>
-              <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-[#214A38]"></i> Same-Day Doorstep Dispatch</span>
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-[#214A38]"></i> <span data-i18n="weeklyHighlight1">MRP-ல் 30% வரை தள்ளுபடி</span></span>
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-[#214A38]"></i> <span data-i18n="weeklyHighlight2">₹500க்கு மேல் இலவச ஹோம் டெலிவரி</span></span>
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-[#214A38]"></i> <span data-i18n="weeklyHighlight3">அன்றைய தினமே விரைவான விநியோகம்</span></span>
             </div>
           </div>
 
           <div class="lg:col-span-4 flex flex-col gap-3">
             <a href="/store" class="btn-primary text-center justify-center py-3.5">
-              <span>Explore All Offers Online →</span>
+              <span data-i18n="weeklyExploreBtn">அனைத்து சலுகைகளையும் ஆன்லைனில் பார்க்க →</span>
             </a>
             <a href="https://wa.me/917708834547?text=Hello%20Rani%20Hyper%20Market!%20Please%20share%20this%20week's%20grocery%20offers." target="_blank" rel="noopener noreferrer" class="btn-secondary text-center justify-center py-3">
               <i class="fa-brands fa-whatsapp text-sm"></i>
-              <span>Ask for Offer List on WhatsApp</span>
+              <span data-i18n="weeklyWhatsAppBtn">வாட்ஸ்அப்பில் சலுகைப் பட்டியல் கேளுங்கள்</span>
             </a>
           </div>
 
@@ -555,20 +560,19 @@
   </section>
 
   <!-- ══════════════════════════════════════════════════════════
-       7. TOP BRANDS WE CARRY (CLEAN GRID, NO CRAZY MARQUEE)
+       7. TOP BRANDS WE CARRY (CLEAN GRID)
   ══════════════════════════════════════════════════════════ -->
   <section id="brands" class="py-14 sm:py-20 border-b border-[#E5DCCF] bg-[#F7F1E6]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
       
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 pb-4 border-b border-[#E5DCCF]">
         <div>
-          <span class="text-[#BD4A35] text-xs font-black uppercase tracking-wider block mb-1">Authentic Procurement</span>
-          <h2 class="font-serif text-3xl sm:text-4xl text-[#1D2921]">Top Brands We Carry</h2>
+          <span data-i18n="brandsTag" class="text-[#BD4A35] text-xs font-black uppercase tracking-wider block mb-1">நம்பகமான கொள்முதல்</span>
+          <h2 data-i18n="brandsTitle" class="text-3xl sm:text-4xl text-[#1D2921] font-serif">நாங்கள் வழங்கும் முன்னணி பிராண்டுகள்</h2>
         </div>
-        <span class="text-xs font-semibold text-[#536259]">100% Genuine Manufacturer-Direct FMCG</span>
+        <span data-i18n="brandsSubtitle" class="text-xs font-semibold text-[#536259]">100% அசல் நிறுவன தயாரிப்புகள் மட்டுமே</span>
       </div>
 
-      <!-- Restrained Clean Grid of Brands -->
       <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 sm:gap-3.5">
         
         <a href="/store?search=aashirvaad" class="brand-grid-item" title="Aashirvaad">
@@ -695,9 +699,9 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
       
       <div class="max-w-3xl mb-10">
-        <span class="text-[#BD4A35] text-xs font-black uppercase tracking-wider block mb-1">Visit In Person</span>
-        <h2 class="font-serif text-3xl sm:text-4xl text-[#1D2921] mb-2">Store Location &amp; Hours</h2>
-        <p class="text-xs sm:text-sm text-[#536259]">Conveniently situated on Main Road, Bodinayakanur with spacious aisles and quick checkout counters.</p>
+        <span data-i18n="locationTag" class="text-[#BD4A35] text-xs font-black uppercase tracking-wider block mb-1">நேரில் பார்வையிட</span>
+        <h2 data-i18n="locationTitle" class="text-3xl sm:text-4xl text-[#1D2921] mb-2 font-serif">கடை இருப்பிடம் &amp; இயங்கும் நேரம்</h2>
+        <p data-i18n="locationDescription" class="text-xs sm:text-sm text-[#536259]">போடிநாயக்கனூர் மெயின் ரோட்டில் விசாலமான வழிகள் மற்றும் விரைவான பில்லிங் வசதியுடன் அமைந்துள்ளது.</p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -709,14 +713,14 @@
           <div class="retail-card p-5">
             <div class="flex items-center gap-2 mb-3 text-xs font-bold text-[#214A38] uppercase">
               <i class="fa-solid fa-clock"></i>
-              <span>Operating Hours</span>
+              <span data-i18n="hoursLabel">இயங்கும் நேரம்</span>
             </div>
             <div class="flex items-center justify-between py-2 border-b border-[#E5DCCF] text-sm">
-              <span class="font-semibold text-[#1D2921]">Monday – Sunday (All 7 Days)</span>
-              <span class="font-bold text-[#214A38]">7:00 AM – 10:30 PM</span>
+              <span data-i18n="hoursDaily" class="font-semibold text-[#1D2921]">திங்கள் – ஞாயிறு (வாரத்தின் 7 நாட்களும்)</span>
+              <span data-i18n="hoursTime" class="font-bold text-[#214A38]">காலை 7:00 – இரவு 10:30 மணி</span>
             </div>
-            <p class="text-xs text-[#536259] mt-2.5">
-              Open continuously through afternoons and fully open on all festival and government holidays.
+            <p data-i18n="hoursNote" class="text-xs text-[#536259] mt-2.5">
+              மதிய வேளையிலும் தொடர்ந்து திறந்திருக்கும்; அனைத்து ஞாயிறு மற்றும் பண்டிகை நாட்களிலும் முழுமையாக இயங்கும்.
             </p>
           </div>
 
@@ -724,20 +728,20 @@
           <div class="retail-card p-5">
             <div class="flex items-center gap-2 mb-3 text-xs font-bold text-[#214A38] uppercase">
               <i class="fa-solid fa-headset"></i>
-              <span>Phone &amp; WhatsApp Orders</span>
+              <span data-i18n="contactLabel">தொலைபேசி &amp; வாட்ஸ்அப் ஆர்டர்கள்</span>
             </div>
             <div class="space-y-2.5">
               <a href="tel:+917708834547" class="flex items-center justify-between p-3 rounded-md bg-[#FAF5ED] border border-[#E5DCCF] hover:border-[#214A38] text-xs font-bold text-[#1D2921] transition no-underline">
-                <span>Call Store Directly: +91 77088 34547</span>
-                <span class="text-[#214A38]">Call →</span>
+                <span data-i18n="contactCall">நேரடியாக அழைக்கவும்: +91 77088 34547</span>
+                <span class="text-[#214A38]">→</span>
               </a>
               <a href="https://wa.me/917708834547?text=Hello%20Rani%20Hyper%20Market!%20I%20would%20like%20to%20order%20groceries." target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3 rounded-md bg-[#FAF5ED] border border-[#E5DCCF] hover:border-[#214A38] text-xs font-bold text-[#1D2921] transition no-underline">
-                <span class="flex items-center gap-1.5"><i class="fa-brands fa-whatsapp text-green-600"></i> WhatsApp Grocery Order: +91 77088 34547</span>
-                <span class="text-[#214A38]">Chat →</span>
+                <span class="flex items-center gap-1.5"><i class="fa-brands fa-whatsapp text-green-600"></i> <span data-i18n="contactWhatsApp">வாட்ஸ்அப் மளிகை ஆர்டர்: +91 77088 34547</span></span>
+                <span class="text-[#214A38]">→</span>
               </a>
               <a href="https://maps.app.goo.gl/V4CtDbvk66CXf6Xk8" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3 rounded-md bg-[#FAF5ED] border border-[#E5DCCF] hover:border-[#214A38] text-xs font-bold text-[#1D2921] transition no-underline">
-                <span>Main Road, Bodinayakanur, Theni – 625513</span>
-                <span class="text-[#214A38]">Maps →</span>
+                <span data-i18n="contactAddress">மெயின் ரோடு, போடிநாயக்கனூர், தேனி – 625513</span>
+                <span class="text-[#214A38]">→</span>
               </a>
             </div>
           </div>
@@ -750,7 +754,7 @@
             <div class="flex items-center justify-between mb-3 text-xs">
               <span class="font-bold text-[#1D2921]">Rani Super Market Location</span>
               <a href="https://maps.app.goo.gl/V4CtDbvk66CXf6Xk8" target="_blank" rel="noopener noreferrer" class="text-[#214A38] font-bold hover:underline">
-                Open in Google Maps App →
+                <span data-i18n="openMapsApp">கூகுள் மேப் செயலியில் திறக்கவும் →</span>
               </a>
             </div>
             <div class="w-full h-72 sm:h-80 rounded-md overflow-hidden border border-[#E5DCCF] relative">
@@ -776,8 +780,8 @@
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       
       <div class="max-w-2xl mb-10">
-        <span class="text-[#BD4A35] text-xs font-black uppercase tracking-wider block mb-1">Help &amp; Answers</span>
-        <h2 class="font-serif text-3xl sm:text-4xl text-[#1D2921]">Frequently Asked Questions</h2>
+        <span data-i18n="faqTag" class="text-[#BD4A35] text-xs font-black uppercase tracking-wider block mb-1">உதவி &amp; பதில்கள்</span>
+        <h2 data-i18n="faqTitle" class="text-3xl sm:text-4xl text-[#1D2921] font-serif">அடிக்கடி கேட்கப்படும் கேள்விகள்</h2>
       </div>
 
       <div class="space-y-3">
@@ -785,55 +789,55 @@
         <!-- Q1 -->
         <div class="faq-item">
           <button type="button" onclick="toggleFaq(1)" class="faq-trigger">
-            <span>How do I order groceries on WhatsApp?</span>
+            <span data-i18n="faqQ1">வாட்ஸ்அப்பில் மளிகைப் பொருட்களை எவ்வாறு ஆர்டர் செய்வது?</span>
             <i id="faq-chevron-1" class="fa-solid fa-chevron-down text-xs text-[#536259] transition-transform"></i>
           </button>
-          <div id="faq-content-1" class="faq-content hidden">
-            Send a WhatsApp message to <a href="https://wa.me/917708834547" class="text-[#214A38] font-bold underline">+91 77088 34547</a>. You can write your list in English or Tamil, send an audio message, or take a picture of your handwritten shopping list. We verify item brands, calculate your bill, and dispatch quickly.
+          <div id="faq-content-1" class="faq-content hidden" data-i18n="faqA1">
+            +91 77088 34547 என்ற எண்ணிற்கு வாட்ஸ்அப்பில் செய்தி அனுப்புங்கள். நீங்கள் ஆங்கிலத்திலோ தமிழிலோ எழுதலாம், குரல் செய்தி அனுப்பலாம் அல்லது உங்கள் மளிகைப் பட்டியலை போட்டோ எடுத்து அனுப்பலாம். நாங்கள் உடனடியாக பில் தயார் செய்து டெலிவரி செய்வோம்.
           </div>
         </div>
 
         <!-- Q2 -->
         <div class="faq-item">
           <button type="button" onclick="toggleFaq(2)" class="faq-trigger">
-            <span>How fast is delivery and what are the delivery charges?</span>
+            <span data-i18n="faqQ2">டெலிவரி எவ்வளவு விரைவாக கிடைக்கும்? கட்டணம் எவ்வளவு?</span>
             <i id="faq-chevron-2" class="fa-solid fa-chevron-down text-xs text-[#536259] transition-transform"></i>
           </button>
-          <div id="faq-content-2" class="faq-content hidden">
-            Within Bodinayakanur town limits, delivery takes 30 to 45 minutes. Delivery is completely <strong>Free</strong> for orders above ₹500. A minimal delivery fee of ₹20 applies to orders below ₹500.
+          <div id="faq-content-2" class="faq-content hidden" data-i18n="faqA2">
+            போடிநாயக்கனூர் நகருக்குள் 30 முதல் 45 நிமிடங்களில் டெலிவரி செய்யப்படும். ₹500க்கு மேற்பட்ட ஆர்டர்களுக்கு டெலிவரி முற்றிலும் இலவசம். ₹500க்கு குறைவான ஆர்டர்களுக்கு ₹20 மட்டுமே கட்டணம்.
           </div>
         </div>
 
         <!-- Q3 -->
         <div class="faq-item">
           <button type="button" onclick="toggleFaq(3)" class="faq-trigger">
-            <span>What are the supermarket operating hours?</span>
+            <span data-i18n="faqQ3">சூப்பர் மார்க்கெட் இயங்கும் நேரம் என்ன?</span>
             <i id="faq-chevron-3" class="fa-solid fa-chevron-down text-xs text-[#536259] transition-transform"></i>
           </button>
-          <div id="faq-content-3" class="faq-content hidden">
-            Rani Hyper Market is open daily from <strong>7:00 AM to 10:30 PM</strong>, all 7 days of the week, including Sundays and regional festivals.
+          <div id="faq-content-3" class="faq-content hidden" data-i18n="faqA3">
+            ராணி ஹைப்பர் மார்க்கெட் வாரத்தின் 7 நாட்களும் காலை 7:00 மணி முதல் இரவு 10:30 மணி வரை தொடர்ந்து திறந்திருக்கும். ஞாயிறு மற்றும் பண்டிகை நாட்களிலும் செயல்படும்.
           </div>
         </div>
 
         <!-- Q4 -->
         <div class="faq-item">
           <button type="button" onclick="toggleFaq(4)" class="faq-trigger">
-            <span>What payment methods do you accept?</span>
+            <span data-i18n="faqQ4">எந்தெந்த கட்டண முறைகள் ஏற்றுக்கொள்ளப்படுகின்றன?</span>
             <i id="faq-chevron-4" class="fa-solid fa-chevron-down text-xs text-[#536259] transition-transform"></i>
           </button>
-          <div id="faq-content-4" class="faq-content hidden">
-            We accept Cash on Delivery (COD), UPI scan on delivery (Google Pay, PhonePe, Paytm, BHIM), and Debit/Credit cards at our store counter.
+          <div id="faq-content-4" class="faq-content hidden" data-i18n="faqA4">
+            பொருட்கள் கிடைத்தவுடன் பணம் செலுத்துதல் (Cash on Delivery), UPI க்யூஆர் ஸ்கேன் (Google Pay, PhonePe, Paytm), மற்றும் கடையில் கார்டுகள் மூலம் செலுத்தலாம்.
           </div>
         </div>
 
         <!-- Q5 -->
         <div class="faq-item">
           <button type="button" onclick="toggleFaq(5)" class="faq-trigger">
-            <span>Are the products authentic and fresh?</span>
+            <span data-i18n="faqQ5">பொருட்கள் அனைத்தும் அசல் மற்றும் புதியவையா?</span>
             <i id="faq-chevron-5" class="fa-solid fa-chevron-down text-xs text-[#536259] transition-transform"></i>
           </button>
-          <div id="faq-content-5" class="faq-content hidden">
-            Yes, 100%. We procure directly from verified brand distribution hubs (ITC, HUL, Britannia, Nestle, Amul) and registered Tamil Nadu agricultural mills to ensure genuine expiry dates, pure grade, and consistent quality.
+          <div id="faq-content-5" class="faq-content hidden" data-i18n="faqA5">
+            ஆம், 100%. நாங்கள் அங்கீகரிக்கப்பட்ட பிராண்ட் விநியோகஸ்தர்கள் (ITC, HUL, Britannia, Nestle, Amul) மற்றும் பதிவுசெய்யப்பட்ட ஆலைகளிலிருந்து நேரடியாக வாங்குவதால் சரியான தரம் மற்றும் காலாவதி தேதி உத்தரவாதம் அளிக்கப்படுகிறது.
           </div>
         </div>
 
@@ -858,37 +862,37 @@
             </div>
             <span class="font-serif text-xl text-white">Rani Hyper Market</span>
           </div>
-          <p class="text-xs text-gray-400 max-w-sm leading-relaxed mb-4">
-            Bodinayakanur’s neighborhood supermarket. Offering 7,000+ daily grocery essentials, dairy provisions, authentic masalas, and packaged FMCG at fair local pricing.
+          <p data-i18n="footerBio" class="text-xs text-gray-400 max-w-sm leading-relaxed mb-4">
+            போடிநாயக்கனூரின் நம்பிக்கைக்குரிய சூப்பர் மார்க்கெட். 7,000+ அன்றாட மளிகைப் பொருட்கள், பால் பொருட்கள், அசலான மசாலாக்கள் மற்றும் FMCG பொருட்கள் நியாயமான விலையில்.
           </p>
           <div class="text-xs text-gray-400 space-y-1">
-            <p>📍 Main Road, Bodinayakanur, Theni District – 625513</p>
-            <p>📞 Phone: +91 77088 34547 • Open Daily 7:00 AM – 10:30 PM</p>
+            <p>📍 <span data-i18n="footerAddress">மெயின் ரோடு, போடிநாயக்கனூர், தேனி மாவட்டம் – 625513</span></p>
+            <p>📞 <span data-i18n="footerHours">தொலைபேசி: +91 77088 34547 • தினமும் காலை 7:00 – இரவு 10:30 வரை</span></p>
           </div>
         </div>
 
         <!-- Col 2: Navigation -->
         <div>
-          <h5 class="text-white text-xs font-bold uppercase tracking-wider mb-3">Store Navigation</h5>
+          <h5 data-i18n="footerNavTitle" class="text-white text-xs font-bold uppercase tracking-wider mb-3">கடை வழிசெலுத்தல்</h5>
           <ul class="space-y-2 text-xs">
-            <li><a href="/store" class="text-gray-400 hover:text-white transition">Online Catalog (7,000+ Items)</a></li>
-            <li><a href="#departments" class="text-gray-400 hover:text-white transition">Product Departments</a></li>
-            <li><a href="#offers" class="text-gray-400 hover:text-white transition">Weekly Offers</a></li>
-            <li><a href="#brands" class="text-gray-400 hover:text-white transition">Top Brands</a></li>
-            <li><a href="https://maps.app.goo.gl/V4CtDbvk66CXf6Xk8" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition">Google Maps Directions</a></li>
+            <li><a href="/store" data-i18n="footerCatalog" class="text-gray-400 hover:text-white transition">ஆன்லைன் பட்டியல் (7,000+ பொருட்கள்)</a></li>
+            <li><a href="#departments" data-i18n="navDepartments" class="text-gray-400 hover:text-white transition">பிரிவுகள்</a></li>
+            <li><a href="#offers" data-i18n="navOffers" class="text-gray-400 hover:text-white transition">சலுகைகள்</a></li>
+            <li><a href="#brands" data-i18n="navBrands" class="text-gray-400 hover:text-white transition">பிராண்டுகள்</a></li>
+            <li><a href="https://maps.app.goo.gl/V4CtDbvk66CXf6Xk8" target="_blank" rel="noopener noreferrer" data-i18n="footerMapsLink" class="text-gray-400 hover:text-white transition">கூகுள் மேப்ஸ்</a></li>
           </ul>
         </div>
 
         <!-- Col 3: Direct Orders -->
         <div>
-          <h5 class="text-white text-xs font-bold uppercase tracking-wider mb-3">Customer Service</h5>
-          <p class="text-xs text-gray-400 mb-3 leading-relaxed">
-            Need urgent provisions or doorstep delivery? Contact us on WhatsApp or call our store desk.
+          <h5 data-i18n="footerServiceTitle" class="text-white text-xs font-bold uppercase tracking-wider mb-3">வாடிக்கையாளர் சேவை</h5>
+          <p data-i18n="footerServiceText" class="text-xs text-gray-400 mb-3 leading-relaxed">
+            உடனடி மளிகை தேவை அல்லது ஹோம் டெலிவரி வேண்டுமா? வாட்ஸ்அப்பில் தொடர்பு கொள்ளுங்கள்.
           </p>
           <div class="space-y-2">
-            <a href="https://wa.me/917708834547" target="_blank" rel="noopener noreferrer" class="btn-whatsapp text-xs py-2 w-full text-center">
+            <a href="https://wa.me/917708834547" target="_blank" rel="noopener noreferrer" class="btn-whatsapp text-xs py-2 w-full text-center inline-flex items-center justify-center gap-2">
               <i class="fa-brands fa-whatsapp text-sm"></i>
-              <span>WhatsApp: +91 77088 34547</span>
+              <span data-i18n="footerWhatsAppBtn">வாட்ஸ்அப்: +91 77088 34547</span>
             </a>
           </div>
         </div>
@@ -896,11 +900,11 @@
       </div>
 
       <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
-        <p>© 2026 Rani Hyper Market — Bodinayakanur, Theni. All Rights Reserved.</p>
+        <p data-i18n="footerCopyright">© 2026 Rani Hyper Market — போடிநாயக்கனூர், தேனி. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
         <div class="flex items-center gap-4">
-          <a href="/store" class="text-emerald-400 hover:text-emerald-300 transition">Online Storefront</a>
+          <a href="/store" data-i18n="footerStorefrontLink" class="text-emerald-400 hover:text-emerald-300 transition">ஆன்லைன் ஸ்டோர்</a>
           <span>•</span>
-          <a href="https://maps.app.goo.gl/V4CtDbvk66CXf6Xk8" target="_blank" class="text-emerald-400 hover:text-emerald-300 transition">Google Maps</a>
+          <a href="https://maps.app.goo.gl/V4CtDbvk66CXf6Xk8" target="_blank" rel="noopener noreferrer" data-i18n="footerMapsLink" class="text-emerald-400 hover:text-emerald-300 transition">கூகுள் மேப்ஸ்</a>
         </div>
       </div>
 
@@ -924,27 +928,52 @@
           </button>
         </div>
 
-        <nav class="mt-5 space-y-1 text-sm font-bold text-[#1D2921]">
-          <a href="#about" onclick="toggleLandingMobileMenu()" class="block px-3 py-2 rounded hover:bg-[#FAF5ED] transition">About Store</a>
-          <a href="#departments" onclick="toggleLandingMobileMenu()" class="block px-3 py-2 rounded hover:bg-[#FAF5ED] transition">Departments</a>
-          <a href="#offers" onclick="toggleLandingMobileMenu()" class="block px-3 py-2 rounded hover:bg-[#FAF5ED] text-[#BD4A35] transition">Weekly Offers</a>
-          <a href="#brands" onclick="toggleLandingMobileMenu()" class="block px-3 py-2 rounded hover:bg-[#FAF5ED] transition">Top Brands</a>
-          <a href="#location" onclick="toggleLandingMobileMenu()" class="block px-3 py-2 rounded hover:bg-[#FAF5ED] transition">Store Hours &amp; Map</a>
-          <a href="#faq" onclick="toggleLandingMobileMenu()" class="block px-3 py-2 rounded hover:bg-[#FAF5ED] transition">FAQ</a>
+        <!-- Language Switcher in Mobile Drawer -->
+        <div class="py-3 border-b border-[#E5DCCF] flex justify-center">
+          <div class="lang-switcher w-full justify-center" role="group" aria-label="Select mobile website language">
+            <button
+              type="button"
+              id="mob-lang-btn-ta"
+              onclick="setAppLanguage('ta')"
+              aria-pressed="true"
+              class="lang-btn active w-1/2 font-tamil text-center"
+            >
+              தமிழ்
+            </button>
+            <span class="text-[#D6CAB8] text-xs px-1 select-none" aria-hidden="true">|</span>
+            <button
+              type="button"
+              id="mob-lang-btn-en"
+              onclick="setAppLanguage('en')"
+              aria-pressed="false"
+              class="lang-btn w-1/2 font-sans text-center"
+            >
+              English
+            </button>
+          </div>
+        </div>
+
+        <nav class="mt-4 space-y-1 text-sm font-bold text-[#1D2921]">
+          <a href="#about" onclick="toggleLandingMobileMenu()" data-i18n="navAbout" class="block px-3 py-2 rounded hover:bg-[#FAF5ED] transition">கடை பற்றி</a>
+          <a href="#departments" onclick="toggleLandingMobileMenu()" data-i18n="navDepartments" class="block px-3 py-2 rounded hover:bg-[#FAF5ED] transition">பிரிவுகள்</a>
+          <a href="#offers" onclick="toggleLandingMobileMenu()" data-i18n="navOffers" class="block px-3 py-2 rounded hover:bg-[#FAF5ED] text-[#BD4A35] transition">சலுகைகள்</a>
+          <a href="#brands" onclick="toggleLandingMobileMenu()" data-i18n="navBrands" class="block px-3 py-2 rounded hover:bg-[#FAF5ED] transition">பிராண்டுகள்</a>
+          <a href="#location" onclick="toggleLandingMobileMenu()" data-i18n="navLocation" class="block px-3 py-2 rounded hover:bg-[#FAF5ED] transition">கடை நேரம் &amp; மேப்</a>
+          <a href="#faq" onclick="toggleLandingMobileMenu()" data-i18n="navFaq" class="block px-3 py-2 rounded hover:bg-[#FAF5ED] transition">கேள்வி-பதில்</a>
         </nav>
       </div>
 
-      <div class="pt-5 border-t border-[#E5DCCF] space-y-2">
+      <div class="pt-4 border-t border-[#E5DCCF] space-y-2">
         <a href="/store" class="btn-primary w-full py-2.5 text-xs text-center justify-center">
-          <span>Explore Store (7,000+ Items)</span>
+          <span data-i18n="mobExploreBtn">கடையைப் பார்வையிடுங்கள் (7,000+ பொருட்கள்)</span>
         </a>
         <a href="https://wa.me/917708834547" target="_blank" rel="noopener noreferrer" class="btn-whatsapp w-full py-2.5 text-xs text-center justify-center">
           <i class="fa-brands fa-whatsapp text-sm"></i>
-          <span>Order on WhatsApp</span>
+          <span data-i18n="mobWhatsAppBtn">வாட்ஸ்அப்பில் ஆர்டர் செய்ய</span>
         </a>
         <a href="tel:+917708834547" class="w-full py-2 rounded border border-[#E5DCCF] bg-white text-xs font-bold text-[#1D2921] flex items-center justify-center gap-1.5 hover:bg-[#FAF5ED] transition">
           <i class="fa-solid fa-phone text-[#214A38]"></i>
-          <span>Call: +91 77088 34547</span>
+          <span>77088 34547</span>
         </a>
       </div>
 
@@ -952,17 +981,329 @@
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
-       12. INTERACTIVE SCRIPTS (MOBILE MENU & FAQ)
+       12. PRODUCTION LANGUAGE ENGINE & GSAP SCROLL SCRIPT
   ══════════════════════════════════════════════════════════ -->
   <script>
-    // ── Mobile Menu Toggle ────────────────────────────────────
-    function toggleLandingMobileMenu() {
-      var modal = document.getElementById('landing-mobile-menu');
-      if (!modal) return;
-      modal.classList.toggle('hidden');
+    // ── CENTRALIZED TRANSLATION DICTIONARY ─────────────────────
+    const TRANSLATIONS = {
+      en: {
+        eyebrow: "RANI HYPER MARKET · BODINAYAKANUR",
+        headline: "Everything your home needs. One market you can trust.",
+        description: "From farm-fresh vegetables and daily groceries to household essentials and trusted brands—shop more comfortably, all under one roof.",
+        primaryCTA: "Explore the store",
+        secondaryCTA: "View this week’s offers",
+        trust1: "Fresh arrivals daily",
+        trust2: "Trusted local favourites",
+        trust3: "Easy parking & quick billing",
+        offerLabel: "THIS WEEK AT RANI",
+        offerValidity: "Valid in Bodinayakanur",
+        offerText: "Save up to 30% on everyday essentials.",
+        offerSubtext: "Wholesale-tier savings on rice sacks, cold-pressed cooking oils, dals, dairy provisions, and bulk household detergents.",
+        offerBadge: "MRP discounts on every purchase",
+        offerCTA: "Shop weekly offers",
+        announcement: "Fresh arrivals daily · Visit us in Bodinayakanur",
+        departments: "Departments",
+        offers: "Offers",
+        storeInfo: "Store Info",
+        brandSubtitle: "Main Road, Bodinayakanur",
+        navAbout: "About Store",
+        navDepartments: "Departments",
+        navOffers: "Offers",
+        navBrands: "Brands",
+        navFaq: "FAQ",
+        navLocation: "Hours & Map",
+        navCall: "77088 34547",
+        navExplore: "Explore Store",
+        searchPlaceholder: "Search 7,000+ items (e.g. Ponni Rice, Arokya Milk, Aachi...)",
+        searchButton: "Search",
+        photoCaption: "In-Store at Main Road, Bodinayakanur",
+        departmentsTitle: "Browse by Department",
+        departmentsSubtitle: "Organized Catalog",
+        departmentsViewAll: "View all 7,000+ items online →",
+        deptRice: "Rice, Grains & Dals",
+        deptRiceDesc: "Ponni boiled rice, basmati, toor dal, urad dal & pulses",
+        deptRiceCount: "620+ Products",
+        deptDairy: "Dairy, Milk & Butter",
+        deptDairyDesc: "Arokya milk, fresh curd, Amul butter, paneer & ghee",
+        deptDairyCount: "180+ Products",
+        deptMasala: "Spices & Masalas",
+        deptMasalaDesc: "Aachi, Sakthi, Everest, sambar powder & whole spices",
+        deptMasalaCount: "340+ Products",
+        deptOil: "Edible Oils & Ghee",
+        deptOilDesc: "Gingelly, groundnut, GRB ghee & Fortune sunflower",
+        deptOilCount: "120+ Products",
+        deptTea: "Tea & Filter Coffee",
+        deptTeaDesc: "Bru, Narasus, 3 Roses, Bovonto & beverages",
+        deptTeaCount: "210+ Products",
+        deptBiscuits: "Snacks & Biscuits",
+        deptBiscuitsDesc: "Parle, Britannia, traditional mixture, rusks & sweets",
+        deptBiscuitsCount: "450+ Products",
+        deptPersonal: "Personal Care",
+        deptPersonalDesc: "Hamam, Dettol, Clinic Plus, Parachute hair oil",
+        deptPersonalCount: "520+ Products",
+        deptCleaning: "Cleaning & Home",
+        deptCleaningDesc: "Surf Excel, Vim, Harpic, Good Knight refills",
+        deptCleaningCount: "390+ Products",
+        aboutTag: "Our Heritage",
+        aboutTitle: "Built for Bodinayakanur Families",
+        aboutDescription: "Since 2010, Rani Hyper Market has provided honest prices, authentic procurement, and friendly neighborhood retail. We source directly from authorized FMCG distributors and accredited Tamil Nadu agricultural mills to ensure pure grain quality and honest weights.",
+        pillar1Title: "Direct Procurement",
+        pillar1Desc: "Directly from regional rice mills and verified FMCG partners like HUL, ITC, and Britannia.",
+        pillar2Title: "Transparent Billing",
+        pillar2Desc: "Computerized itemized GST bills with clear MRP savings. Pay via Cash, GPay, or PhonePe.",
+        pillar3Title: "30-Min Local Delivery",
+        pillar3Desc: "Fast doorstep dispatch across Bodinayakanur town. Free delivery on orders over ₹500.",
+        pillar4Title: "WhatsApp Ordering",
+        pillar4Desc: "Snap a photo of your handwritten grocery list or send a voice message. Our team packs and delivers.",
+        weeklySpecialsTag: "This Week's Specials",
+        weeklyUpdated: "Updated Every Monday",
+        weeklyTitle: "Essential Kitchen Savings for Bodinayakanur Households",
+        weeklyDescription: "Get genuine discounts on monthly staple sacks (Ponni rice, idli rice), refined and gingelly cooking oils, Arokya dairy provisions, and FMCG personal care multipacks.",
+        weeklyHighlight1: "Up to 30% Off MRP",
+        weeklyHighlight2: "Free Home Delivery Over ₹500",
+        weeklyHighlight3: "Same-Day Doorstep Dispatch",
+        weeklyExploreBtn: "Explore All Offers Online →",
+        weeklyWhatsAppBtn: "Ask for Offer List on WhatsApp",
+        brandsTag: "Authentic Procurement",
+        brandsTitle: "Top Brands We Carry",
+        brandsSubtitle: "100% Genuine Manufacturer-Direct FMCG",
+        locationTag: "Visit In Person",
+        locationTitle: "Store Location & Hours",
+        locationDescription: "Conveniently situated on Main Road, Bodinayakanur with spacious aisles and quick checkout counters.",
+        hoursLabel: "Operating Hours",
+        hoursDaily: "Monday – Sunday (All 7 Days)",
+        hoursTime: "7:00 AM – 10:30 PM",
+        hoursNote: "Open continuously through afternoons and fully open on all festival and government holidays.",
+        contactLabel: "Phone & WhatsApp Orders",
+        contactCall: "Call Store Directly: +91 77088 34547",
+        contactWhatsApp: "WhatsApp Grocery Order: +91 77088 34547",
+        contactAddress: "Main Road, Bodinayakanur, Theni – 625513",
+        openMapsApp: "Open in Google Maps App →",
+        faqTag: "Help & Answers",
+        faqTitle: "Frequently Asked Questions",
+        faqQ1: "How do I order groceries on WhatsApp?",
+        faqA1: "Send a WhatsApp message to +91 77088 34547. You can write your list in English or Tamil, send an audio message, or take a picture of your handwritten shopping list. We verify item brands, calculate your bill, and dispatch quickly.",
+        faqQ2: "How fast is delivery and what are the delivery charges?",
+        faqA2: "Within Bodinayakanur town limits, delivery takes 30 to 45 minutes. Delivery is completely Free for orders above ₹500. A minimal delivery fee of ₹20 applies to orders below ₹500.",
+        faqQ3: "What are the supermarket operating hours?",
+        faqA3: "Rani Hyper Market is open daily from 7:00 AM to 10:30 PM, all 7 days of the week, including Sundays and regional festivals.",
+        faqQ4: "What payment methods do you accept?",
+        faqA4: "We accept Cash on Delivery (COD), UPI scan on delivery (Google Pay, PhonePe, Paytm, BHIM), and Debit/Credit cards at our store counter.",
+        faqQ5: "Are the products authentic and fresh?",
+        faqA5: "Yes, 100%. We procure directly from verified brand distribution hubs (ITC, HUL, Britannia, Nestle, Amul) and registered Tamil Nadu agricultural mills to ensure genuine expiry dates, pure grade, and consistent quality.",
+        footerBio: "Bodinayakanur’s neighborhood supermarket. Offering 7,000+ daily grocery essentials, dairy provisions, authentic masalas, and packaged FMCG at fair local pricing.",
+        footerAddress: "Main Road, Bodinayakanur, Theni District – 625513",
+        footerHours: "Phone: +91 77088 34547 • Open Daily 7:00 AM – 10:30 PM",
+        footerNavTitle: "Store Navigation",
+        footerCatalog: "Online Catalog (7,000+ Items)",
+        footerServiceTitle: "Customer Service",
+        footerServiceText: "Need urgent provisions or doorstep delivery? Contact us on WhatsApp or call our store desk.",
+        footerWhatsAppBtn: "WhatsApp: +91 77088 34547",
+        footerCopyright: "© 2026 Rani Hyper Market — Bodinayakanur, Theni. All Rights Reserved.",
+        footerStorefrontLink: "Online Storefront",
+        footerMapsLink: "Google Maps",
+        mobExploreBtn: "Explore Store (7,000+ Items)",
+        mobWhatsAppBtn: "Order on WhatsApp",
+        mobCallBtn: "Call: +91 77088 34547"
+      },
+      ta: {
+        eyebrow: "ராணி ஹைப்பர் மார்க்கெட் · போடிநாயக்கனூர்",
+        headline: "உங்கள் வீட்டிற்கு தேவையான அனைத்தும். நீங்கள் நம்பும் ஒரே மார்க்கெட்.",
+        description: "புதிய காய்கறிகள், தினசரி மளிகைப் பொருட்கள், வீட்டுத் தேவைகள் மற்றும் நம்பகமான பிராண்டுகள்—அனைத்தும் ஒரே இடத்தில்.",
+        primaryCTA: "கடையைப் பார்வையிடுங்கள்",
+        secondaryCTA: "இந்த வார சலுகைகளைப் பாருங்கள்",
+        trust1: "தினமும் புதிய வரவுகள்",
+        trust2: "நம்பகமான உள்ளூர் விருப்பங்கள்",
+        trust3: "எளிய பார்க்கிங் மற்றும் விரைவான பில்லிங்",
+        offerLabel: "இந்த வாரம் ராணியில்",
+        offerValidity: "போடிநாயக்கனூரில் மட்டும்",
+        offerText: "தினசரி தேவையான பொருட்களில் 30% வரை சேமியுங்கள்.",
+        offerSubtext: "அரிசி மூட்டைகள், சமையல் எண்ணெய், பருப்பு வகைகள் மற்றும் வீட்டுப் பயன்பாட்டுப் பொருட்களில் மொத்த விலை சேமிப்பு.",
+        offerBadge: "ஒவ்வொரு வாங்குதலுக்கும் MRP தள்ளுபடி",
+        offerCTA: "வாராந்திர சலுகைகளைப் பாருங்கள்",
+        announcement: "தினமும் புதிய வரவுகள் · போடிநாயக்கனூரில் எங்களைப் பார்வையிடுங்கள்",
+        departments: "பிரிவுகள்",
+        offers: "சலுகைகள்",
+        storeInfo: "கடை தகவல்",
+        brandSubtitle: "மெயின் ரோடு, போடிநாயக்கனூர்",
+        navAbout: "கடை பற்றி",
+        navDepartments: "பிரிவுகள்",
+        navOffers: "சலுகைகள்",
+        navBrands: "பிராண்டுகள்",
+        navFaq: "கேள்வி-பதில்",
+        navLocation: "கடை நேரம் & மேப்",
+        navCall: "77088 34547",
+        navExplore: "கடைக்குச் செல்ல",
+        searchPlaceholder: "7,000+ பொருட்கள் தேடுங்கள் (எ.கா. பொன்னி அரிசி, ஆரோக்கிய பால், ஆச்சி...)",
+        searchButton: "தேடு",
+        photoCaption: "மெயின் ரோடு, போடிநாயக்கனூர் நேரடி அங்காடி",
+        departmentsTitle: "பிரிவுகள் வாரியாகப் பாருங்கள்",
+        departmentsSubtitle: "மளிகைப் பிரிவுகள்",
+        departmentsViewAll: "7,000+ பொருட்களை ஆன்லைனில் பார்க்க →",
+        deptRice: "அரிசி, தானியங்கள் & பருப்பு",
+        deptRiceDesc: "பொன்னி புழுங்கல் அரிசி, பாசுமதி, துவரம் பருப்பு, உளுந்து & பயறு வகைகள்",
+        deptRiceCount: "620+ பொருட்கள்",
+        deptDairy: "பால், தயிர் & வெண்ணெய்",
+        deptDairyDesc: "ஆரோக்கிய பால், கெட்டி தயிர், அமுல் வெண்ணெய், பனீர் & நெய்",
+        deptDairyCount: "180+ பொருட்கள்",
+        deptMasala: "மசாலா & வாசனைப் பொருட்கள்",
+        deptMasalaDesc: "ஆச்சி, சக்தி, எவரெஸ்ட், சாம்பார் தூள் & முழு வாசனைப் பொருட்கள்",
+        deptMasalaCount: "340+ பொருட்கள்",
+        deptOil: "சமையல் எண்ணெய் & நெய்",
+        deptOilDesc: "நல்லெண்ணெய், கடலை எண்ணெய், GRB நெய் & ஃபார்ச்சூன் சூரியகாந்தி எண்ணெய்",
+        deptOilCount: "120+ பொருட்கள்",
+        deptTea: "தேநீர் & ஃபில்டர் காபி",
+        deptTeaDesc: "ப்ரூ, நரசுஸ், 3 ரோசஸ், பவொன்டோ & குளிர்பானங்கள்",
+        deptTeaCount: "210+ பொருட்கள்",
+        deptBiscuits: "பிஸ்கட் & தின்பண்டங்கள்",
+        deptBiscuitsDesc: "பார்லே, பிரிட்டானியா, பாரம்பரிய மிக்ஸர், ரஸ்க் & இனிப்புகள்",
+        deptBiscuitsCount: "450+ பொருட்கள்",
+        deptPersonal: "சுய பாதுகாப்பு & சோப்புகள்",
+        deptPersonalDesc: "ஹமாம், டெட்டால், கிளினிக் பிளஸ், பாராசூட் தேங்காய் எண்ணெய்",
+        deptPersonalCount: "520+ பொருட்கள்",
+        deptCleaning: "வீட்டு பராமரிப்பு & துப்புரவு",
+        deptCleaningDesc: "சர்ப் எக்செல், விம், ஹார்பிக், குட் நைட் ரீபில்கள்",
+        deptCleaningCount: "390+ பொருட்கள்",
+        aboutTag: "எங்கள் பாரம்பரியம்",
+        aboutTitle: "போடிநாயக்கனூர் குடும்பங்களுக்காக உருவாக்கப்பட்டது",
+        aboutDescription: "2010 முதல், ராணி ஹைப்பர் மார்க்கெட் நியாயமான விலைகள், உண்மையான தரம் மற்றும் கனிவான சேவையை வழங்கி வருகிறது. தரமான தானியங்கள் மற்றும் சரியான எடையை உறுதிசெய்ய, அங்கீகரிக்கப்பட்ட FMCG விநியோகஸ்தர்கள் மற்றும் தமிழ்நாடு அரிசி ஆலைகளிலிருந்து நேரடியாக கொள்முதல் செய்கிறோம்.",
+        pillar1Title: "நேரடி கொள்முதல்",
+        pillar1Desc: "அரிசி ஆலைகள் மற்றும் HUL, ITC, பிரிட்டானியா போன்ற முன்னணி நிறுவனங்களிடமிருந்து நேரடியாகப் பெறப்படுகிறது.",
+        pillar2Title: "வெளிப்படையான பில்லிங்",
+        pillar2Desc: "MRP தள்ளுபடியுடன் கூடிய கணினி ரசீது. ரொக்கம், GPay அல்லது PhonePe மூலம் செலுத்தலாம்.",
+        pillar3Title: "30-நிமிட உள்ளூர் டெலிவரி",
+        pillar3Desc: "போடிநாயக்கனூர் நகர் முழுவதும் விரைவான வீட்டு விநியோகம். ₹500க்கு மேல் இலவச டெலிவரி.",
+        pillar4Title: "வாட்ஸ்அப் ஆர்டர்கள்",
+        pillar4Desc: "மளிகைப் பட்டியலின் புகைப்படத்தை அல்லது குரல் செய்தியை அனுப்புங்கள். நாங்கள் பேக் செய்து அனுப்புவோம்.",
+        weeklySpecialsTag: "இந்த வார சிறப்பு சலுகைகள்",
+        weeklyUpdated: "ஒவ்வொரு திங்கட்கிழமையும் புதுப்பிக்கப்படுகிறது",
+        weeklyTitle: "போடிநாயக்கனூர் இல்லங்களுக்கான சமையலறை சேமிப்புகள்",
+        weeklyDescription: "மாதாந்திர அரிசி மூட்டைகள் (பொன்னி அரிசி, இட்லி அரிசி), சமையல் எண்ணெய்கள், ஆரோக்கிய பால் பொருட்கள் மற்றும் வீட்டுப் பயன்பாட்டுப் பொருட்களில் உண்மையான தள்ளுபடி.",
+        weeklyHighlight1: "MRP-ல் 30% வரை தள்ளுபடி",
+        weeklyHighlight2: "₹500க்கு மேல் இலவச ஹோம் டெலிவரி",
+        weeklyHighlight3: "அன்றைய தினமே விரைவான விநியோகம்",
+        weeklyExploreBtn: "அனைத்து சலுகைகளையும் ஆன்லைனில் பார்க்க →",
+        weeklyWhatsAppBtn: "வாட்ஸ்அப்பில் சலுகைப் பட்டியல் கேளுங்கள்",
+        brandsTag: "நம்பகமான கொள்முதல்",
+        brandsTitle: "நாங்கள் வழங்கும் முன்னணி பிராண்டுகள்",
+        brandsSubtitle: "100% அசல் நிறுவன தயாரிப்புகள் மட்டுமே",
+        locationTag: "நேரில் பார்வையிட",
+        locationTitle: "கடை இருப்பிடம் & இயங்கும் நேரம்",
+        locationDescription: "போடிநாயக்கனூர் மெயின் ரோட்டில் விசாலமான வழிகள் மற்றும் விரைவான பில்லிங் வசதியுடன் அமைந்துள்ளது.",
+        hoursLabel: "இயங்கும் நேரம்",
+        hoursDaily: "திங்கள் – ஞாயிறு (வாரத்தின் 7 நாட்களும்)",
+        hoursTime: "காலை 7:00 – இரவு 10:30 மணி",
+        hoursNote: "மதிய வேளையிலும் தொடர்ந்து திறந்திருக்கும்; அனைத்து ஞாயிறு மற்றும் பண்டிகை நாட்களிலும் முழுமையாக இயங்கும்.",
+        contactLabel: "தொலைபேசி & வாட்ஸ்அப் ஆர்டர்கள்",
+        contactCall: "நேரடியாக அழைக்கவும்: +91 77088 34547",
+        contactWhatsApp: "வாட்ஸ்அப் மளிகை ஆர்டர்: +91 77088 34547",
+        contactAddress: "மெயின் ரோடு, போடிநாயக்கனூர், தேனி – 625513",
+        openMapsApp: "கூகுள் மேப் செயலியில் திறக்கவும் →",
+        faqTag: "உதவி & பதில்கள்",
+        faqTitle: "அடிக்கடி கேட்கப்படும் கேள்விகள்",
+        faqQ1: "வாட்ஸ்அப்பில் மளிகைப் பொருட்களை எவ்வாறு ஆர்டர் செய்வது?",
+        faqA1: "+91 77088 34547 என்ற எண்ணிற்கு வாட்ஸ்அப்பில் செய்தி அனுப்புங்கள். நீங்கள் ஆங்கிலத்திலோ தமிழிலோ எழுதலாம், குரல் செய்தி அனுப்பலாம் அல்லது உங்கள் மளிகைப் பட்டியலை போட்டோ எடுத்து அனுப்பலாம். நாங்கள் உடனடியாக பில் தயார் செய்து டெலிவரி செய்வோம்.",
+        faqQ2: "டெலிவரி எவ்வளவு விரைவாக கிடைக்கும்? கட்டணம் எவ்வளவு?",
+        faqA2: "போடிநாயக்கனூர் நகருக்குள் 30 முதல் 45 நிமிடங்களில் டெலிவரி செய்யப்படும். ₹500க்கு மேற்பட்ட ஆர்டர்களுக்கு டெலிவரி முற்றிலும் இலவசம். ₹500க்கு குறைவான ஆர்டர்களுக்கு ₹20 மட்டுமே கட்டணம்.",
+        faqQ3: "சூப்பர் மார்க்கெட் இயங்கும் நேரம் என்ன?",
+        faqA3: "ராணி ஹைப்பர் மார்க்கெட் வாரத்தின் 7 நாட்களும் காலை 7:00 மணி முதல் இரவு 10:30 மணி வரை தொடர்ந்து திறந்திருக்கும். ஞாயிறு மற்றும் பண்டிகை நாட்களிலும் செயல்படும்.",
+        faqQ4: "எந்தெந்த கட்டண முறைகள் ஏற்றுக்கொள்ளப்படுகின்றன?",
+        faqA4: "பொருட்கள் கிடைத்தவுடன் பணம் செலுத்துதல் (Cash on Delivery), UPI க்யூஆர் ஸ்கேன் (Google Pay, PhonePe, Paytm), மற்றும் கடையில் கார்டுகள் மூலம் செலுத்தலாம்.",
+        faqQ5: "பொருட்கள் அனைத்தும் அசல் மற்றும் புதியவையா?",
+        faqA5: "ஆம், 100%. நாங்கள் அங்கீகரிக்கப்பட்ட பிராண்ட் விநியோகஸ்தர்கள் (ITC, HUL, Britannia, Nestle, Amul) மற்றும் பதிவுசெய்யப்பட்ட ஆலைகளிலிருந்து நேரடியாக வாங்குவதால் சரியான தரம் மற்றும் காலாவதி தேதி உத்தரவாதம் அளிக்கப்படுகிறது.",
+        footerBio: "போடிநாயக்கனூரின் நம்பிக்கைக்குரிய சூப்பர் மார்க்கெட். 7,000+ அன்றாட மளிகைப் பொருட்கள், பால் பொருட்கள், அசலான மசாலாக்கள் மற்றும் FMCG பொருட்கள் நியாயமான விலையில்.",
+        footerAddress: "மெயின் ரோடு, போடிநாயக்கனூர், தேனி மாவட்டம் – 625513",
+        footerHours: "தொலைபேசி: +91 77088 34547 • தினமும் காலை 7:00 – இரவு 10:30 வரை",
+        footerNavTitle: "கடை வழிசெலுத்தல்",
+        footerCatalog: "ஆன்லைன் பட்டியல் (7,000+ பொருட்கள்)",
+        footerServiceTitle: "வாடிக்கையாளர் சேவை",
+        footerServiceText: "உடனடி மளிகை தேவை அல்லது ஹோம் டெலிவரி வேண்டுமா? வாட்ஸ்அப்பில் தொடர்பு கொள்ளுங்கள்.",
+        footerWhatsAppBtn: "வாட்ஸ்அப்: +91 77088 34547",
+        footerCopyright: "© 2026 Rani Hyper Market — போடிநாயக்கனூர், தேனி. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.",
+        footerStorefrontLink: "ஆன்லைன் ஸ்டோர்",
+        footerMapsLink: "கூகுள் மேப்ஸ்",
+        mobExploreBtn: "கடையைப் பார்வையிடுங்கள் (7,000+ பொருட்கள்)",
+        mobWhatsAppBtn: "வாட்ஸ்அப்பில் ஆர்டர் செய்ய",
+        mobCallBtn: "அழைக்க: +91 77088 34547"
+      }
+    };
+
+    // ── LANGUAGE SWITCHER LOGIC ────────────────────────────────
+    function setAppLanguage(lang) {
+      if (lang !== 'en' && lang !== 'ta') return;
+
+      try {
+        localStorage.setItem('rani-language', lang);
+      } catch (e) {}
+
+      document.documentElement.lang = lang;
+
+      if (lang === 'ta') {
+        document.body.classList.add('font-tamil');
+        document.body.classList.remove('font-sans');
+      } else {
+        document.body.classList.remove('font-tamil');
+        document.body.classList.add('font-sans');
+      }
+
+      // Update Header & Mobile Toggle States
+      ['lang-btn-ta', 'mob-lang-btn-ta'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+          btn.setAttribute('aria-pressed', lang === 'ta' ? 'true' : 'false');
+          if (lang === 'ta') btn.classList.add('active'); else btn.classList.remove('active');
+        }
+      });
+
+      ['lang-btn-en', 'mob-lang-btn-en'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+          btn.setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
+          if (lang === 'en') btn.classList.add('active'); else btn.classList.remove('active');
+        }
+      });
+
+      // Apply Strings to all data-i18n elements
+      const dict = TRANSLATIONS[lang] || TRANSLATIONS.ta;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+
+      // Update Placeholders & Aria Labels
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key]) {
+          el.setAttribute('placeholder', dict[key]);
+        }
+      });
+
+      document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+        const key = el.getAttribute('data-i18n-aria');
+        if (dict[key]) {
+          el.setAttribute('aria-label', dict[key]);
+        }
+      });
     }
 
-    // ── FAQ Accordion Toggle ─────────────────────────────────
+    // Initialize Language on Page Load (Defaults to 'ta')
+    (function initLanguage() {
+      let saved = 'ta';
+      try {
+        saved = localStorage.getItem('rani-language') || 'ta';
+      } catch (e) {}
+      if (saved !== 'en' && saved !== 'ta') saved = 'ta';
+      setAppLanguage(saved);
+    })();
+
+    // ── MOBILE MENU & FAQ TOGGLES ─────────────────────────────
+    function toggleLandingMobileMenu() {
+      var modal = document.getElementById('landing-mobile-menu');
+      if (modal) modal.classList.toggle('hidden');
+    }
+
     function toggleFaq(id) {
       var content = document.getElementById('faq-content-' + id);
       var chevron = document.getElementById('faq-chevron-' + id);
@@ -973,6 +1314,86 @@
         chevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
       }
     }
+
+    // ── PRIMARY TASK 2: REFINED GSAP SCROLL-LINKED MOVEMENT ───
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Respect prefers-reduced-motion
+      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) return;
+
+      var isDesktop = window.innerWidth >= 768;
+
+      if (isDesktop) {
+        // Desktop Hero Pinning & Layered Scrub Movement
+        var heroTimeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: '#hero-section',
+            start: 'top top',
+            end: '+=95%',
+            pin: true,
+            scrub: 0.7,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          }
+        });
+
+        // Hero image: scale gradually 1.00 -> 1.10 & translate vertically by ~-6%
+        heroTimeline.to('.anim-hero-img', {
+          scale: 1.10,
+          yPercent: -6,
+          ease: 'none'
+        }, 0);
+
+        // Subtle dark image overlay transition
+        heroTimeline.to('.anim-hero-overlay', {
+          opacity: 0.35,
+          ease: 'none'
+        }, 0);
+
+        // Hero text group: translate upward by ~-48px and fade from 1 to 0.15
+        heroTimeline.to('.anim-hero-text-group', {
+          y: -48,
+          opacity: 0.15,
+          ease: 'none'
+        }, 0);
+
+        // Layered parallax speeds for text group elements
+        heroTimeline.to('.anim-hero-eyebrow', { y: -20, ease: 'none' }, 0);
+        heroTimeline.to('.anim-hero-heading', { y: -36, ease: 'none' }, 0);
+        heroTimeline.to('.anim-hero-desc', { y: -52, ease: 'none' }, 0);
+        heroTimeline.to('.anim-hero-actions', { y: -64, ease: 'none' }, 0);
+        heroTimeline.to('.anim-hero-trust', { y: -76, ease: 'none' }, 0);
+
+        // Offer card: translate upward around -70px & rotate <= 1 degree
+        heroTimeline.to('.anim-offer-card', {
+          y: -70,
+          rotate: -0.75,
+          ease: 'none'
+        }, 0);
+      }
+
+      // Department items entrance: staggered fade-and-rise (y: 24 to 0, opacity 0 to 1, stagger: 0.08)
+      gsap.fromTo(
+        '.anim-dept-card',
+        { y: 24, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.08,
+          duration: 0.6,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '#departments',
+            start: 'top 82%',
+            once: true
+          }
+        }
+      );
+    });
   </script>
 
 </body>

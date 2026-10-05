@@ -26,7 +26,7 @@
   --shadow-card: 0 4px 12px rgba(29, 41, 33, 0.04), 0 1px 3px rgba(29, 41, 33, 0.03);
   --font-serif: 'DM Serif Display', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-tamil: 'Noto Sans Tamil', sans-serif;
+  --font-tamil: 'Noto Sans Tamil', system-ui, sans-serif;
 }
 
 /* ── 2. Reset & Base Typography ──────────────────────────────── */
@@ -59,7 +59,63 @@ h1, h2, h3, .font-serif {
   font-family: var(--font-tamil);
 }
 
-/* ── 3. Layout Surfaces & Cards (8px Radius, Thin Borders) ───── */
+/* Dynamic Font Adaptation based on document language */
+html[lang="ta"] body {
+  font-family: var(--font-tamil), var(--font-sans);
+}
+
+html[lang="ta"] h1,
+html[lang="ta"] h2,
+html[lang="ta"] h3,
+html[lang="ta"] .font-serif {
+  font-family: var(--font-tamil), sans-serif;
+  font-weight: 700;
+  letter-spacing: normal;
+}
+
+/* ── 3. Language Switcher Segmented Control ──────────────────── */
+.lang-switcher {
+  display: inline-flex;
+  align-items: center;
+  padding: 2.5px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-strong);
+  background-color: var(--bg-surface-warm);
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.lang-btn {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--color-charcoal);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.25;
+}
+
+.lang-btn:focus-visible {
+  outline: 2px solid var(--color-green);
+  outline-offset: 1px;
+}
+
+.lang-btn[aria-pressed="true"],
+.lang-btn.active {
+  background-color: var(--color-green);
+  color: #FFFFFF;
+  box-shadow: 0 1px 2px rgba(29, 41, 33, 0.14);
+}
+
+.lang-btn:not([aria-pressed="true"]):not(.active):hover {
+  background-color: rgba(255, 255, 255, 0.85);
+  color: var(--color-green);
+}
+
+/* ── 4. Layout Surfaces & Cards (8px Radius, Thin Borders) ───── */
 .retail-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
@@ -80,7 +136,7 @@ h1, h2, h3, .font-serif {
   border-radius: var(--radius-md);
 }
 
-/* ── 4. Buttons & Restrained Micro-interactions ─────────────── */
+/* ── 5. Buttons & Restrained Micro-interactions ─────────────── */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -88,7 +144,7 @@ h1, h2, h3, .font-serif {
   gap: 8px;
   background-color: var(--color-green);
   color: #FFFFFF;
-  font-family: var(--font-sans);
+  font-family: inherit;
   font-size: 14px;
   font-weight: 700;
   padding: 12px 24px;
@@ -115,7 +171,7 @@ h1, h2, h3, .font-serif {
   gap: 8px;
   background-color: transparent;
   color: var(--color-green);
-  font-family: var(--font-sans);
+  font-family: inherit;
   font-size: 14px;
   font-weight: 700;
   padding: 12px 22px;
@@ -168,7 +224,7 @@ h1, h2, h3, .font-serif {
   text-decoration: underline;
 }
 
-/* ── 5. Clean Restrained Brand Grid ───────────────────────────── */
+/* ── 6. Clean Restrained Brand Grid ───────────────────────────── */
 .brand-grid-item {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
@@ -207,7 +263,7 @@ h1, h2, h3, .font-serif {
   object-fit: contain;
 }
 
-/* ── 6. Department Category Card ─────────────────────────────── */
+/* ── 7. Department Category Card ─────────────────────────────── */
 .department-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
@@ -226,7 +282,7 @@ h1, h2, h3, .font-serif {
   box-shadow: var(--shadow-card);
 }
 
-/* ── 7. FAQ Accordion ────────────────────────────────────────── */
+/* ── 8. FAQ Accordion ────────────────────────────────────────── */
 .faq-item {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
@@ -248,7 +304,7 @@ h1, h2, h3, .font-serif {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  font-family: var(--font-sans);
+  font-family: inherit;
   font-size: 15px;
   font-weight: 700;
   color: var(--color-charcoal);
@@ -267,7 +323,7 @@ h1, h2, h3, .font-serif {
   line-height: 1.6;
 }
 
-/* ── 8. Mobile Navigation Drawer ──────────────────────────────── */
+/* ── 9. Mobile Navigation Drawer ──────────────────────────────── */
 #landing-mobile-menu {
   position: fixed;
   inset: 0;
@@ -288,4 +344,23 @@ h1, h2, h3, .font-serif {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+/* ── 10. GSAP Scroll Movement GPU Optimizations ───────────────── */
+.anim-hero-img,
+.anim-offer-card,
+.anim-hero-text-group {
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-hero-img,
+  .anim-offer-card,
+  .anim-hero-text-group,
+  .anim-dept-card {
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
 }

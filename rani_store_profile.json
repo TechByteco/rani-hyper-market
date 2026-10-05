@@ -5,7 +5,7 @@
   "tagline": "Fresh Farm Groceries & Everyday Supermarket",
   "announcement": "ðŸŽ‰ Welcome to RANI HYPER MARKET! Delivery Free!! Best wholesale & retail rates.",
   "address": "93, Sundara pandian street,, Anwar complex, Near Kottai Karuppasamy Kovil, Bodinayakanur",
-  "phone": "77088 34547, 88073 34547",
+  "phone": "7708834547",
   "email": "rani.hypermarket@gmail.com",
   "tax_number": "33BAGPN1341C1ZC",
   "hours": "Mon - Sun: 7:00 AM - 10:00 PM",
@@ -13,5 +13,11 @@
   "hero_img": "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=800",
   "backup_info": null,
   "source_database": "9bcfb0b0-2cd2-11f1-9b4b-6fef85f604f9_2026-2027.db",
-  "financial_year": "2026-2027"
+  "financial_year": "2026-2027",
+  "google_maps_url": "https://maps.app.goo.gl/V4CtDbvk66CXf6Xk8",
+  "coordinates": {
+    "latitude": 10.0152721,
+    "longitude": 77.3504626
+  },
+  "whatsapp": "917708834547"
 }

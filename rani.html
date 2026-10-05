@@ -1268,7 +1268,7 @@ let DB = {
     {id:8,code:'P008',name:'Parle-G 800g',cat:'Snacks',mrp:60,rate:58,prate:45,stock:60,unit:'Pcs',gst:12,hsn:'19059090',minStock:10,barcode:'8901234800008',status:'active'},
   ],
   customers:[
-    {id:1,name:'Rajesh Kumar',mobile:'9876543210',email:'rajesh@mail.com',city:'Srivilliputhur',state:'TN',gstin:'',balance:500,creditLimit:5000,addr:'12 Main St'},
+    {id:1,name:'Rajesh Kumar',mobile:'+91 77088 34547',email:'rajesh@mail.com',city:'Srivilliputhur',state:'TN',gstin:'',balance:500,creditLimit:5000,addr:'12 Main St'},
     {id:2,name:'Priya Sharma',mobile:'9123456789',email:'priya@mail.com',city:'Virudhunagar',state:'TN',gstin:'',balance:0,creditLimit:2000,addr:'45 Gandhi Rd'},
     {id:3,name:'Senthil Kumar',mobile:'9345678901',email:'',city:'Madurai',state:'TN',gstin:'',balance:1200,creditLimit:10000,addr:''},
   ],
@@ -1910,7 +1910,7 @@ async function initRealData() {
         DB.customers = custs.map((c, i) => ({
           id: c.id || (i + 1),
           name: c.name || c.customer_name || 'Customer',
-          mobile: c.mobile || c.phone || '9876543210',
+          mobile: c.mobile || c.phone || '+91 77088 34547',
           city: c.city || 'Bodinayakanur',
           state: 'TN',
           balance: c.balance || 0,
@@ -1961,7 +1961,7 @@ async function initRealData() {
             created_at: o.created_at || (dateStr + 'T10:00:00.000Z'),
             party: partyName,
             customer_name: partyName,
-            customer_phone: o.customer_phone || o.phone || '9876543210',
+            customer_phone: o.customer_phone || o.phone || '+91 77088 34547',
             shipping_address: o.shipping_address || (partyName + ' | Bodinayakanur'),
             total: netAmt,
             net_amount: netAmt,
@@ -2130,7 +2130,7 @@ function sendReceiptToWhatsApp() {
 
   if (!sale) { toast('No bill available to share', 'error'); return; }
 
-  const phone = (sale.customer_phone || prompt('Enter customer WhatsApp mobile number:', '9876543210') || '').replace(/[^0-9]/g, '');
+  const phone = (sale.customer_phone || prompt('Enter customer WhatsApp mobile number:', '+91 77088 34547') || '').replace(/[^0-9]/g, '');
   if (!phone || phone.length < 10) { toast('Invalid mobile number', 'error'); return; }
   const phoneFormatted = phone.length === 10 ? ('91' + phone) : phone;
 
@@ -2151,7 +2151,7 @@ async function saveSale(){
     party: tab.party || 'Cash Party',
     saleType: tab.saleType || 'Cash',
     customer_name: document.getElementById('custName').value || tab.custName || 'Cash Party',
-    customer_phone: document.getElementById('custMobile').value || tab.custMobile || '9876543210',
+    customer_phone: document.getElementById('custMobile').value || tab.custMobile || '+91 77088 34547',
     notes: document.getElementById('saleNotes').value || tab.notes || '',
     items: tab.items.map(x => ({...x})),
     subtotal: tab.items.reduce((s,x)=>s+x.rate*x.qty, 0),
@@ -2216,7 +2216,7 @@ function printSale(){
     voucher_no: String(DB.nextSaleId || '17542'),
     voucher_date: document.getElementById('vouDate').value || new Date().toISOString().split('T')[0],
     customer_name: document.getElementById('custName').value || tab.party || 'Cash Party',
-    customer_phone: document.getElementById('custMobile').value || '9876543210',
+    customer_phone: document.getElementById('custMobile').value || '+91 77088 34547',
     items: tab.items,
     total_amount: net,
     payment_method: tab.saleType || 'Cash',

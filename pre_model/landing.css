@@ -1,264 +1,291 @@
 /**
- * Rani Hyper Market — Landing Page Stylesheet
+ * Rani Hyper Market — Retail Editorial Stylesheet
  * Location: Bodinayakanur, Theni, Tamil Nadu
- * Production: https://rani-hyper-market.vercel.app/
+ * Style: Clean, high-contrast, premium local supermarket editorial
  */
 
-/* ── 1. Global Reset & Base Typography ───────────────────────── */
+/* ── 1. CSS Custom Properties ────────────────────────────────── */
+:root {
+  --bg-cream: #F7F1E6;
+  --bg-surface: #FFFFFF;
+  --bg-surface-warm: #FAF5ED;
+  --color-green: #214A38;
+  --color-green-dark: #18372A;
+  --color-green-light: #2D634C;
+  --color-charcoal: #1D2921;
+  --color-charcoal-muted: #536259;
+  --color-terracotta: #BD4A35;
+  --color-terracotta-dark: #9F3E2C;
+  --color-gold: #C69B43;
+  --border-subtle: #E5DCCF;
+  --border-strong: #D6CAB8;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-subtle: 0 1px 3px rgba(29, 41, 33, 0.05), 0 1px 2px rgba(29, 41, 33, 0.03);
+  --shadow-card: 0 4px 12px rgba(29, 41, 33, 0.04), 0 1px 3px rgba(29, 41, 33, 0.03);
+  --font-serif: 'DM Serif Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-tamil: 'Noto Sans Tamil', sans-serif;
+}
+
+/* ── 2. Reset & Base Typography ──────────────────────────────── */
 *, ::before, ::after {
   box-sizing: border-box;
 }
 
-:root {
-  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-heading: 'Outfit', sans-serif;
-  --font-tamil: 'Noto Sans Tamil', sans-serif;
-  
-  --color-emerald-deep: #022c22;
-  --color-emerald-mid: #064e3b;
-  --color-emerald-accent: #047857;
-  --color-emerald-bright: #10b981;
-  --color-emerald-glow: rgba(16, 185, 129, 0.25);
-  --color-amber-gold: #fcd34d;
-  --color-whatsapp: #25d366;
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-body);
-  background: #fafaf9;
-  color: #1c1917;
-  overflow-x: hidden;
+  font-family: var(--font-sans);
+  background-color: var(--bg-cream);
+  color: var(--color-charcoal);
+  margin: 0;
+  padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
 }
 
-h1, h2, h3, h4, .font-heading {
-  font-family: var(--font-heading);
+h1, h2, h3, .font-serif {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
 }
 
 .font-tamil {
   font-family: var(--font-tamil);
 }
 
-/* ── 2. High-Contrast Deep Emerald Hero ──────────────────────── */
-.hero-gradient {
-  background: linear-gradient(135deg, var(--color-emerald-deep) 0%, var(--color-emerald-mid) 50%, var(--color-emerald-accent) 100%);
-  position: relative;
-  overflow: hidden;
+/* ── 3. Layout Surfaces & Cards (8px Radius, Thin Borders) ───── */
+.retail-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-subtle);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
-.hero-gradient::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 85% 20%, var(--color-emerald-glow) 0%, transparent 60%);
-  pointer-events: none;
+.retail-card:hover {
+  border-color: var(--color-green);
+  box-shadow: var(--shadow-card);
 }
 
-/* ── 3. Tactile Glassmorphism & Bento Cards ──────────────────── */
-.glass-nav {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+.retail-card-green {
+  background: var(--color-green);
+  color: #FFFFFF;
+  border: 1px solid var(--color-green-dark);
+  border-radius: var(--radius-md);
 }
 
-.glass-card-dark {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-}
-
-.bento-card {
-  background: #ffffff;
-  border: 1.5px solid #f1f5f9;
-  border-radius: 24px;
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.bento-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--color-emerald-bright);
-  box-shadow: 0 20px 40px -8px rgba(16, 185, 129, 0.12);
-}
-
-/* ── 4. Tactile Spring Buttons ───────────────────────────────── */
-.btn-emerald {
+/* ── 4. Buttons & Restrained Micro-interactions ─────────────── */
+.btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #ffffff;
-  font-weight: 800;
-  font-size: 15px;
-  padding: 14px 28px;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px -4px rgba(16, 185, 129, 0.45);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  gap: 8px;
+  background-color: var(--color-green);
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-green-dark);
   text-decoration: none;
-}
-
-.btn-emerald:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px -4px rgba(16, 185, 129, 0.6);
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
-  color: #ffffff;
-}
-
-.btn-emerald:active {
-  transform: scale(0.98);
-}
-
-.btn-whatsapp-hero {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background: var(--color-whatsapp);
-  color: #ffffff;
-  font-weight: 800;
-  font-size: 15px;
-  padding: 14px 26px;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px -4px rgba(37, 211, 102, 0.45);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  text-decoration: none;
-}
-
-.btn-whatsapp-hero:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px -4px rgba(37, 211, 102, 0.6);
-  background: #20ba59;
-  color: #ffffff;
-}
-
-.btn-whatsapp-hero:active {
-  transform: scale(0.98);
-}
-
-/* ── 5. Top Announcement Marquee ─────────────────────────────── */
-.marquee-wrapper {
-  background: var(--color-emerald-deep);
-  overflow: hidden;
-  white-space: nowrap;
-  position: relative;
-}
-
-.marquee-track {
-  display: inline-block;
-  animation: marqueeScroll 32s linear infinite;
-}
-
-@keyframes marqueeScroll {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
-}
-
-/* ── 6. Brand Marquee Carousel (Store-Style Exact) ──────────── */
-.brand-marquee-container {
-  overflow-x: auto;
-  overflow-y: hidden;
-  position: relative;
-  width: 100%;
-  mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
-  padding: 10px 0;
-  scrollbar-width: none;
-}
-
-.brand-marquee-container::-webkit-scrollbar {
-  display: none;
-}
-
-.brand-marquee-track {
-  display: flex;
-  gap: 16px;
-  width: max-content;
-  animation: brandMarqueeScroll 28s linear infinite;
-  will-change: transform;
-}
-
-.brand-marquee-container:hover .brand-marquee-track {
-  animation-play-state: paused;
-}
-
-@keyframes brandMarqueeScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-33.333%); }
-}
-
-.brand-card-item {
-  flex: 0 0 auto;
-  width: 130px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
-  padding: 14px 10px;
-  text-align: center;
-  border: 1.5px solid rgba(229, 231, 235, 0.9);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.18s ease, transform 0.12s ease;
   cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-green-dark);
+  color: #FFFFFF;
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: transparent;
+  color: var(--color-green);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px 22px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-green);
+  text-decoration: none;
+  transition: background-color 0.18s ease, color 0.18s ease;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-green);
+  color: #FFFFFF;
+}
+
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #214A38;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid #18372A;
+  text-decoration: none;
+  transition: background-color 0.18s ease;
+}
+
+.btn-whatsapp:hover {
+  background-color: #18372A;
+  color: #FFFFFF;
+}
+
+.link-editorial {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-terracotta);
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.link-editorial:hover {
+  color: var(--color-terracotta-dark);
+  text-decoration: underline;
+}
+
+/* ── 5. Clean Restrained Brand Grid ───────────────────────────── */
+.brand-grid-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
 }
 
-.brand-card-item:hover {
-  transform: translateY(-6px) scale(1.05);
-  border-color: var(--color-emerald-bright);
-  background: #ffffff;
-  box-shadow: 0 16px 32px rgba(16, 185, 129, 0.22);
+.brand-grid-item:hover {
+  border-color: var(--color-green);
+  background-color: #FFFFFF;
 }
 
-.brand-card-logo-wrap {
-  width: 68px;
-  height: 68px;
-  border-radius: 16px;
-  background: #f8fafc;
-  border: 1px solid #f1f5f9;
+.brand-logo-box {
+  width: 54px;
+  height: 54px;
+  border-radius: var(--radius-sm);
+  background: #FAF8F5;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 8px;
-  overflow: hidden;
-  padding: 6px;
+  padding: 4px;
+  border: 1px solid var(--border-subtle);
 }
 
-.brand-card-logo {
+.brand-logo-box img {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  transition: transform 0.3s ease;
 }
 
-.brand-card-item:hover .brand-card-logo {
-  transform: scale(1.12);
+/* ── 6. Department Category Card ─────────────────────────────── */
+.department-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  text-decoration: none;
+  color: var(--color-charcoal);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
-/* ── 7. Festive Shimmer Gradient Divider ─────────────────────── */
-.festive-divider {
-  height: 4px;
-  background: linear-gradient(90deg, #10b981, #f59e0b, #ec4899, #10b981);
-  background-size: 200% 100%;
-  animation: shimmer 4s linear infinite;
+.department-card:hover {
+  border-color: var(--color-green);
+  box-shadow: var(--shadow-card);
 }
 
-@keyframes shimmer {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
+/* ── 7. FAQ Accordion ────────────────────────────────────────── */
+.faq-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 0.15s ease;
 }
 
-/* ── 8. Category Department Cards ────────────────────────────── */
-.category-card {
-  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+.faq-item:hover {
+  border-color: var(--color-green);
 }
 
-.category-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 28px -4px rgba(0, 0, 0, 0.08);
-  border-color: var(--color-emerald-bright);
+.faq-trigger {
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-charcoal);
+  text-align: left;
+  cursor: pointer;
+}
+
+.faq-trigger:hover {
+  color: var(--color-green);
+}
+
+.faq-content {
+  padding: 0 20px 18px 20px;
+  font-size: 13.5px;
+  color: var(--color-charcoal-muted);
+  line-height: 1.6;
+}
+
+/* ── 8. Mobile Navigation Drawer ──────────────────────────────── */
+#landing-mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background-color: rgba(29, 41, 33, 0.45);
+}
+
+#landing-mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 310px;
+  max-width: 85vw;
+  background-color: var(--bg-cream);
+  border-left: 1px solid var(--border-subtle);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

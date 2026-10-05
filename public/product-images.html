@@ -162,6 +162,12 @@
         <button onclick="lockImageStudio()" class="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-bold rounded-xl flex items-center gap-1.5 transition cursor-pointer" title="Lock Studio and Require Sign In">
           <i class="fa-solid fa-lock text-red-500"></i> Lock Studio
         </button>
+        <button onclick="syncAllOverridesToBackend()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold rounded-xl flex items-center gap-1.5 transition cursor-pointer shadow-xs" title="Sync all custom images directly to server catalog & database">
+          <i class="fa-solid fa-cloud-arrow-up text-emerald-600"></i> Sync All to Backend
+        </button>
+        <button onclick="exportCustomImagesBackup()" class="px-3 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 text-xs font-bold rounded-xl flex items-center gap-1.5 transition cursor-pointer shadow-xs" title="Export custom images JSON backup">
+          <i class="fa-solid fa-download text-gray-500"></i> Export
+        </button>
         <button onclick="document.getElementById('quick-scan-modal').classList.remove('hidden')" class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-md shadow-emerald-600/20 transition cursor-pointer">
           <i class="fa-solid fa-barcode"></i> Scan Barcode
         </button>
@@ -482,9 +488,9 @@
           id="btn-save-image"
           onclick="saveAndApplyProductImage()"
           disabled
-          class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold rounded-xl flex items-center gap-2 shadow-md shadow-emerald-600/20 transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          class="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-black rounded-xl flex items-center gap-2 shadow-lg shadow-emerald-600/30 transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer active:scale-98"
         >
-          <i class="fa-solid fa-floppy-disk"></i> Save &amp; Update Everywhere Directly
+          <i class="fa-solid fa-bolt text-amber-300"></i> Instant Update &amp; Save to Backend
         </button>
       </div>
 
@@ -957,7 +963,47 @@
       document.getElementById('btn-save-image').disabled = false;
     }
 
-    // 4. SAVE & APPLY IMAGE
+    // 4. SYNC & BACKUP CONTROLLERS
+    async function syncAllOverridesToBackend() {
+      const overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+      const keys = Object.keys(overrides);
+      if (keys.length === 0) {
+        alert('No custom images recorded on this device yet.');
+        return;
+      }
+
+      if (!confirm('Sync ' + keys.length + ' custom updated images permanently to the backend database & catalog?')) return;
+
+      let synced = 0;
+      for (const id of keys) {
+        try {
+          const res = await fetch('/api/products/update-image', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              authUser: sessionStorage.getItem('nsn_image_studio_user') || 'admin',
+              authPass: 'admin123',
+              productId: id,
+              imageUrl: overrides[id]
+            })
+          });
+          if (res.ok) synced++;
+        } catch(e) {}
+      }
+      alert('Successfully synced ' + synced + ' of ' + keys.length + ' custom images to server database and JSON catalogs!');
+    }
+
+    function exportCustomImagesBackup() {
+      const overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+      const blob = new Blob([JSON.stringify(overrides, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'nsn_custom_images_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+      a.click();
+    }
+
+    // 4. SAVE & APPLY IMAGE (Lively to Backend & Storefront)
     async function saveAndApplyProductImage() {
       if (!activeProductForModal || (!proposedImageUrl && !proposedImageBase64)) return;
 
@@ -999,15 +1045,19 @@
           overrides[activeProductForModal.id] = finalUrl;
           localStorage.setItem('nsn_custom_images', JSON.stringify(overrides));
 
-          // 3. Broadcast to all open tabs (storefront, admin pos, rani hub)
-          if (broadcastChannel) {
-            broadcastChannel.postMessage({
-              type: 'PRODUCT_IMAGE_UPDATED',
-              productId: activeProductForModal.id,
-              barcode: activeProductForModal.barcode,
-              imageUrl: finalUrl
-            });
-          }
+          // 3. Broadcast to all open tabs (storefront, admin pos, rani hub) on dual channels
+          const broadcastPayload = {
+            type: 'PRODUCT_IMAGE_UPDATED',
+            productId: activeProductForModal.id,
+            barcode: activeProductForModal.barcode,
+            imageUrl: finalUrl
+          };
+
+          try {
+            if (broadcastChannel) broadcastChannel.postMessage(broadcastPayload);
+            const sksChannel = new BroadcastChannel('sks_market_sync');
+            sksChannel.postMessage(broadcastPayload);
+          } catch(e) {}
 
           // 4. Update UI Grid Card thumbnail
           const thumb = document.getElementById(`thumb-${activeProductForModal.id}`);
@@ -1016,15 +1066,18 @@
           updatedCount++;
           document.getElementById('kpi-updated').textContent = `${updatedCount} Items`;
 
-          statusText.className = 'text-xs font-bold text-center text-emerald-600';
-          statusText.textContent = '✅ Image successfully saved to database & catalog!';
+          statusText.className = 'text-xs font-bold text-center text-emerald-600 flex flex-col items-center gap-1.5 p-2 bg-emerald-50 rounded-xl border border-emerald-200';
+          statusText.innerHTML = '<span><i class="fa-solid fa-circle-check"></i> <strong>Live Updated & Saved to Backend!</strong></span>' +
+            '<a href="store.html?search=' + encodeURIComponent(activeProductForModal.title) + '" target="_blank" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-black tracking-wide flex items-center gap-1">' +
+            '<i class="fa-solid fa-arrow-up-right-from-square"></i> View Live on Storefront' +
+            '</a>';
 
-          btn.innerHTML = '<i class="fa-solid fa-check"></i> Updated Successfully!';
+          btn.innerHTML = '<i class="fa-solid fa-check"></i> Saved Live!';
 
           setTimeout(() => {
             closeStudioModal();
             renderProductsGrid();
-          }, 800);
+          }, 1500);
 
         } else {
           throw new Error(data.error || 'Server rejected update');

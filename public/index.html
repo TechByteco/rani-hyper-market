@@ -2547,18 +2547,32 @@
       return null;
     }
 
-    function getRelevantProductImage(title, existingUrl) {
-      // 1. Check direct high-definition JPG packshot engine first
+    function getRelevantProductImage(title, existingUrl, productId) {
+      // 1. HIGHEST PRIORITY: Check custom user override in localStorage (Instant Studio Updates)
+      try {
+        if (productId) {
+          const customOverrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+          if (customOverrides[productId]) return customOverrides[productId];
+          if (customOverrides[String(productId)]) return customOverrides[String(productId)];
+        }
+      } catch(e) {}
+
+      // 2. SECOND PRIORITY: If product already has an authentic custom/uploaded/catalog URL (not broken placeholder/unsplash), KEEP IT!
+      if (existingUrl && 
+          !existingUrl.includes('apollo247') && 
+          !existingUrl.includes('aas0010_1') && 
+          !existingUrl.includes('unsplash.com') && 
+          !existingUrl.includes('placeholder')) {
+        return existingUrl;
+      }
+
+      // 3. THIRD PRIORITY: Check direct high-definition authentic JPG packshot engine
       try {
         const directJpg = resolveDirectJpgImage(title);
         if (directJpg) return directJpg;
       } catch(e) {}
 
-      // 2. If product already has an authentic uploaded or catalog image, keep it
-      if (existingUrl && !existingUrl.includes('aas0010_1') && !existingUrl.includes('unsplash.com')) {
-        return existingUrl;
-      }
-      // 2. Check if product matches an authentic National Hypermarket front image
+      // 4. FOURTH PRIORITY: Check National Hypermarket double-sided catalog match
       try {
         if (typeof getDoubleSidedMatch === 'function') {
           const nhmMatch = getDoubleSidedMatch(title);
@@ -2568,9 +2582,7 @@
         }
       } catch(e) {}
 
-      if (existingUrl && !existingUrl.includes('apollo247') && !existingUrl.includes('aas0010_1') && !existingUrl.includes('unsplash.com')) {
-        return existingUrl;
-      }
+      // 5. FIFTH PRIORITY: Category fallback
       const t = (title || '').toLowerCase();
 
       // Oral Care
@@ -2578,8 +2590,8 @@
       if (t.includes('sensodyne') || t.includes('colgate') || t.includes('paste') || t.includes('pepsodent') || t.includes('close up') || t.includes('oral') || t.includes('dant kanti')) return 'https://5.imimg.com/data5/SELLER/Default/2023/8/337181517/XG/TU/XW/5251707/colgate-strong-teeth-toothpaste-800g-500x500.jpg';
 
       // Health & Relief
-      if (t.includes('iodex') || t.includes('vicks') || t.includes('balm') || t.includes('amrutanjan') || t.includes('amurutanjan') || t.includes('pain') || t.includes('ointment') || t.includes('moov') || t.includes('volini')) return 'https://images.openfoodfacts.org/images/products/000/008/900/0014/front_en.3.400.jpg';
-      if (t.includes('eno') || t.includes('digestive') || t.includes('glucose') || t.includes('band aid') || t.includes('dettol') || t.includes('cotton') || t.includes('antiseptic')) return 'https://images.openfoodfacts.org/images/products/000/008/900/0014/front_en.3.400.jpg';
+      if (t.includes('iodex') || t.includes('vicks') || t.includes('balm') || t.includes('amrutanjan') || t.includes('amurutanjan') || t.includes('pain') || t.includes('ointment') || t.includes('moov') || t.includes('volini')) return 'https://images.openbeautyfacts.org/images/products/000/008/900/3978/front_en.4.400.jpg';
+      if (t.includes('eno') || t.includes('digestive') || t.includes('glucose') || t.includes('band aid') || t.includes('dettol') || t.includes('cotton') || t.includes('antiseptic')) return 'https://images.openbeautyfacts.org/images/products/000/005/015/8980/front_en.3.400.jpg';
 
       // Dairy
       if (t.includes('ice cream') || t.includes('icecream') || t.includes('kulfi')) return 'https://images.openfoodfacts.org/images/products/890/126/201/0024/front_en.16.400.jpg';
@@ -2618,34 +2630,77 @@
 
       // Oils
       if (t.includes('coconut oil') || (t.includes('coconut') && !t.includes('biscuit'))) return 'https://images.openfoodfacts.org/images/products/890/108/800/1014/front_en.11.400.jpg';
-      if (t.includes('oil') || t.includes('deepam') || t.includes('gingelly') || t.includes('sunflower') || t.includes('vanaspati') || t.includes('dalda') || t.includes('groundnut') || t.includes('sesame') || t.includes('mustard oil')) return 'https://images.openfoodfacts.org/images/products/890/400/180/0237/front_en.3.400.jpg';
+      if (t.includes('gingelly') || t.includes('sesame') || t.includes('nallennai') || t.includes('til oil') || t.includes('deepam') || t.includes('puja oil') || t.includes('pooja oil') || t.includes('lamp oil') || t.includes('vilakku')) return 'https://images.openfoodfacts.org/images/products/890/601/036/0382/front_en.11.400.jpg';
+      if (t.includes('sunflower') || t.includes('gold winner') || t.includes('fortune') || t.includes('sunrich') || t.includes('sundrop')) return 'https://images.openfoodfacts.org/images/products/890/601/036/0382/front_en.11.400.jpg';
+      if (t.includes('groundnut') || t.includes('kadala') || t.includes('peanut oil') || t.includes('mustard oil') || t.includes('oil')) return 'https://images.openfoodfacts.org/images/products/890/601/036/0382/front_en.11.400.jpg';
+
+      // Biscuits & Snacks
+      if (t.includes('biscuit') || t.includes('cookie') || t.includes('rusk') || t.includes('toast') || t.includes('parle') || t.includes('britannia') || t.includes('marie') || t.includes('bourbon') || t.includes('good day') || t.includes('milk bikis') || t.includes('50 50') || t.includes('krackjack') || t.includes('monaco') || t.includes('dark fantasy') || t.includes('oreo') || t.includes('bounce') || t.includes('unibic') || t.includes('sunfeast')) return 'https://images.openbeautyfacts.org/images/products/690/166/893/7759/front_zh.3.400.jpg';
+      if (t.includes('chips') || t.includes('lays') || t.includes('kurkure') || t.includes('bingo') || t.includes('namkeen') || t.includes('mixture') || t.includes('murukku') || t.includes('sev') || t.includes('snack') || t.includes('popcorn')) return 'https://images.openfoodfacts.org/images/products/890/149/110/1837/front_en.4.400.jpg';
+      if (t.includes('chocolate') || t.includes('cadbury') || t.includes('dairy milk') || t.includes('5 star') || t.includes('kitkat') || t.includes('perk') || t.includes('munch') || t.includes('snickers') || t.includes('bar-one') || t.includes('gems') || t.includes('candy') || t.includes('toffee') || t.includes('sweet')) return 'https://images.openbeautyfacts.org/images/products/890/139/638/8159/front_en.8.400.jpg';
 
       // Personal Care & Soaps
-      if (t.includes('shampoo') || t.includes('karthicka') || t.includes('meera') || t.includes('clinic') || t.includes('head & shoulders') || t.includes('sunsilk') || t.includes('dove shampoo') || t.includes('pantene') || t.includes('conditioner')) return 'https://5.imimg.com/data5/SELLER/Default/2022/9/TU/VG/WT/63187278/clinic-plus-shampoo-500x500.png';
-      if (t.includes('soap') || t.includes('bath') || t.includes('hamam') || t.includes('lifebuoy') || t.includes('medimix') || t.includes('lux') || t.includes('cinthol') || t.includes('sandal') || t.includes('pears') || t.includes('mysore sandal') || t.includes('dettol soap')) return 'https://5.imimg.com/data5/SELLER/Default/2024/5/417140327/QR/DA/QI/128348662/61pcvibnvgl-250x250.jpg';
-      if (t.includes('hair') || t.includes('thailam') || t.includes('amla') || t.includes('vatika') || t.includes('parachute') || t.includes('bajaj almond')) return 'https://images.openfoodfacts.org/images/products/890/108/800/1014/front_en.11.400.jpg';
-      if (t.includes('cream') || t.includes('glow') || t.includes('fair') || t.includes('lotion') || t.includes('vaseline') || t.includes('talc') || t.includes('ponds') || t.includes('facewash') || t.includes('face wash') || t.includes('garnier') || t.includes('rose water') || t.includes('nivea') || t.includes('moisturizer')) return 'https://images.openfoodfacts.org/images/products/000/008/900/0014/front_en.3.400.jpg';
-      if (t.includes('spray') || t.includes('fogg') || t.includes('deo') || t.includes('deodorant') || t.includes('perfume') || t.includes('scent') || t.includes('axe') || t.includes('wild stone')) return 'https://images.openfoodfacts.org/images/products/000/008/900/0014/front_en.3.400.jpg';
-      if (t.includes('baby') || t.includes('himalaya') || t.includes('johnson') || t.includes('diaper') || t.includes('pampers')) return 'https://images.openfoodfacts.org/images/products/000/008/900/0014/front_en.3.400.jpg';
+      if (t.includes('soap') || t.includes('hamam') || t.includes('lux') || t.includes('cinthol') || t.includes('lifebuoy') || t.includes('dettol') || t.includes('mysore sandal') || t.includes('santoor') || t.includes('pears') || t.includes('medimix') || t.includes('dove') || t.includes('rexona') || t.includes('fiama') || t.includes('body wash') || t.includes('shower gel')) return 'https://images.openbeautyfacts.org/images/products/000/005/015/8980/front_en.3.400.jpg';
+      if (t.includes('shampoo') || t.includes('clinic plus') || t.includes('head & shoulders') || t.includes('head and shoulders') || t.includes('sunsilk') || t.includes('pantene') || t.includes('meera') || t.includes('chik') || t.includes('dove shampoo') || t.includes('tresemme') || t.includes('conditioner')) return 'https://images.openbeautyfacts.org/images/products/890/103/098/4709/front_en.3.400.jpg';
+      if (t.includes('hair oil') || t.includes('parachute') || t.includes('amla') || t.includes('bajaj') || t.includes('almond drops') || t.includes('vatika') || t.includes('navratna') || t.includes('castor') || t.includes('hair cream') || t.includes('serum')) return 'https://images.openbeautyfacts.org/images/products/890/120/705/0466/front_en.9.400.jpg';
+      if (t.includes('powder') && (t.includes('talc') || t.includes('ponds') || t.includes('gokul') || t.includes('cinthol') || t.includes('cuticura') || t.includes('yardley') || t.includes('dermicool') || t.includes('navratna cool') || t.includes('mysore sandal talc'))) return 'https://images.openbeautyfacts.org/images/products/890/103/076/6947/front_en.12.400.jpg';
+      if (t.includes('face') || t.includes('cream') || t.includes('fair & lovely') || t.includes('glow & lovely') || t.includes('vaseline') || t.includes('lotion') || t.includes('cold cream') || t.includes('moisturizer') || t.includes('lip balm') || t.includes('kajal') || t.includes('eyeliner')) return 'https://images.openbeautyfacts.org/images/products/890/103/076/6947/front_en.12.400.jpg';
+      if (t.includes('shaving') || t.includes('blade') || t.includes('razor') || t.includes('gillette') || t.includes('7 o clock') || t.includes('super max') || t.includes('aftershave')) return 'https://5.imimg.com/data5/SELLER/Default/2023/8/337181517/XG/TU/XW/5251707/colgate-strong-teeth-toothpaste-800g-500x500.jpg';
 
-      // Snacks, Biscuits & Confectionery
-      if (t.includes('biscuit') || t.includes('cookie') || t.includes('britannia') || t.includes('parle') || t.includes('marie') || t.includes('rusk') || t.includes('good day') || t.includes('bourbon') || t.includes('50-50') || t.includes('oreo')) return 'https://images.openfoodfacts.org/images/products/890/106/301/2141/front_en.5.400.jpg';
-      if (t.includes('choco') || t.includes('chocolate') || t.includes('cadbury') || t.includes('kitkat') || t.includes('dairy milk') || t.includes('5 star') || t.includes('munch') || t.includes('perk') || t.includes('candy') || t.includes('toffee')) return 'https://images.openfoodfacts.org/images/products/890/106/301/2141/front_en.5.400.jpg';
-      if (t.includes('cake') || t.includes('muffin') || t.includes('pastry') || t.includes('pie') || t.includes('plum cake')) return 'https://images.openfoodfacts.org/images/products/890/600/725/0870/front_en.3.400.jpg';
-      if (t.includes('chips') || t.includes('crisps') || t.includes('mixture') || t.includes('murukku') || t.includes('snack') || t.includes('lays') || t.includes('kurkure') || t.includes('bingo') || t.includes('sev') || t.includes('namkeen')) return 'https://images.openfoodfacts.org/images/products/890/149/110/1837/front_en.4.400.jpg';
-      if (t.includes('dates') || t.includes('lion dates') || t.includes('badam') || t.includes('cashew') || t.includes('nut') || t.includes('pista') || t.includes('almond') || t.includes('walnut') || t.includes('raisin') || t.includes('kishmish')) return 'https://images.openfoodfacts.org/images/products/890/600/672/0039/front_en.4.400.jpg';
+      // Detergents & Home Cleaning
+      if (t.includes('detergent') || t.includes('surf excel') || t.includes('surf') || t.includes('ariel') || t.includes('tide') || t.includes('rin') || t.includes('wheel') || t.includes('ghadi') || t.includes('mr white') || t.includes('washing powder') || t.includes('mat')) return 'https://images.openbeautyfacts.org/images/products/408/450/090/8345/front_en.3.400.jpg';
+      if (t.includes('dishwash') || t.includes('vim') || t.includes('exo') || t.includes('pril') || t.includes('scrub') || t.includes('scotch brite') || t.includes('dish bar') || t.includes('steel wool')) return 'https://images.openbeautyfacts.org/images/products/890/618/977/2429/front_en.3.400.jpg';
+      if (t.includes('cleaner') || t.includes('harpic') || t.includes('lizol') || t.includes('domex') || t.includes('colin') || t.includes('bleach') || t.includes('phenyle') || t.includes('phenyl') || t.includes('floor cleaner') || t.includes('toilet cleaner') || t.includes('mop') || t.includes('broom')) return 'https://images.openbeautyfacts.org/images/products/890/618/977/2429/front_en.3.400.jpg';
+      if (t.includes('fabric') || t.includes('comfort') || t.includes('ujala') || t.includes('stiff') || t.includes('blue') || t.includes('conditioner')) return 'https://images.openbeautyfacts.org/images/products/408/450/090/8345/front_en.3.400.jpg';
+      if (t.includes('mosquito') || t.includes('good knight') || t.includes('goodknight') || t.includes('all out') || t.includes('allout') || t.includes('hit') || t.includes('coil') || t.includes('refill') || t.includes('liquid vaporiser') || t.includes('repellent') || t.includes('mortein')) return 'https://images.openbeautyfacts.org/images/products/890/618/977/2429/front_en.3.400.jpg';
+      if (t.includes('incense') || t.includes('agarbatti') || t.includes('dhoop') || t.includes('sambrani') || t.includes('camphor') || t.includes('karpooram') || t.includes('matchbox') || t.includes('theepetti') || t.includes('wick') || t.includes('thiri') || t.includes('pooja') || t.includes('puja')) return 'https://5.imimg.com/data5/SELLER/Default/2021/6/YQ/ZB/VC/52481281/ponni-boiled-rice-500x500.jpg';
 
-      // Cleaning & Household
-      if (t.includes('detergent') || t.includes('surf') || t.includes('ariel') || t.includes('rin') || t.includes('tide') || t.includes('washing') || t.includes('wheel') || t.includes('ala') || t.includes('comfort') || t.includes('revive') || t.includes('ujala') || t.includes('fabric')) return 'https://images.openfoodfacts.org/images/products/890/910/600/7123/front_en.3.400.jpg';
-      if (t.includes('dishwash') || t.includes('vim') || t.includes('pril') || t.includes('exo') || t.includes('scrub') || t.includes('utensil') || t.includes('scouring')) return 'https://images.openfoodfacts.org/images/products/890/910/600/7123/front_en.3.400.jpg';
-      if (t.includes('cleaner') || t.includes('harpic') || t.includes('lizol') || t.includes('colin') || t.includes('phenyl') || t.includes('bleach') || t.includes('floor') || t.includes('toilet') || t.includes('glass cleaner')) return 'https://images.openfoodfacts.org/images/products/890/910/600/7123/front_en.3.400.jpg';
-      if (t.includes('hit') || t.includes('all out') || t.includes('good knight') || t.includes('mortein') || t.includes('mosquito') || t.includes('coil') || t.includes('cockroach') || t.includes('chalk')) return 'https://5.imimg.com/data5/SELLER/Default/2023/9/347492193/YV/RF/OC/58276089/714vzdjkr6l-sl1500-500x500.jpg';
-      if (t.includes('agarbatti') || t.includes('agarbathi') || t.includes('sambrani') || t.includes('camphor') || t.includes('pooja') || t.includes('dhoop') || t.includes('mangaldeep') || t.includes('cycle') || t.includes('karpooram')) return 'https://5.imimg.com/data5/SELLER/Default/2023/9/347492193/YV/RF/OC/58276089/714vzdjkr6l-sl1500-500x500.jpg';
-
-      // Default Retail Stand-up Clear Grocery Pouch
-      return 'https://5.imimg.com/data5/SELLER/Default/2023/11/363842183/LM/TL/WW/175405/bopp-toor-dal-bag-500x500.jpg';
+      return 'https://images.openfoodfacts.org/images/products/890/103/053/5895/front_en.3.400.jpg';
     }
 
+    // Live BroadcastChannel Listener for Real-Time Image Studio updates
+    try {
+      if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+        const studioSyncChannel = new BroadcastChannel('sks_market_sync');
+        studioSyncChannel.onmessage = function(event) {
+          if (event.data && event.data.type === 'PRODUCT_IMAGE_UPDATED') {
+            const { productId, imageUrl } = event.data;
+            if (productId && imageUrl) {
+              if (typeof allProducts !== 'undefined' && Array.isArray(allProducts)) {
+                const p = allProducts.find(x => String(x.id) === String(productId));
+                if (p) {
+                  p.image_url = imageUrl;
+                  p.image = imageUrl;
+                }
+              }
+              const cardImgs = document.querySelectorAll('[data-product-id="' + productId + '"] img, #product-img-' + productId);
+              cardImgs.forEach(img => { img.src = imageUrl; });
+              if (typeof renderProductsList === 'function') renderProductsList();
+              console.log('⚡ Storefront live-updated image for product #' + productId);
+            }
+          }
+        };
+
+        const nsnChannel = new BroadcastChannel('nsn_product_updates');
+        nsnChannel.onmessage = function(event) {
+          if (event.data && event.data.type === 'PRODUCT_IMAGE_UPDATED') {
+            const { productId, imageUrl } = event.data;
+            if (productId && imageUrl) {
+              if (typeof allProducts !== 'undefined' && Array.isArray(allProducts)) {
+                const p = allProducts.find(x => String(x.id) === String(productId));
+                if (p) {
+                  p.image_url = imageUrl;
+                  p.image = imageUrl;
+                }
+              }
+              const cardImgs = document.querySelectorAll('[data-product-id="' + productId + '"] img, #product-img-' + productId);
+              cardImgs.forEach(img => { img.src = imageUrl; });
+              if (typeof renderProductsList === 'function') renderProductsList();
+            }
+          }
+        };
+      }
+    } catch(e) {}
     function renderStepperHtml(productId, qty) {
       if (qty > 0) {
         return `
@@ -2686,7 +2741,7 @@
       const p = allProducts.find(x => String(x.id) === idStr);
       if (!p) return;
 
-      const finalImg = getRelevantProductImage(p.title, p.image_url);
+      const finalImg = getRelevantProductImage(p.title, p.image_url, p.id);
       const existing = cart.find(x => String(x.id) === idStr);
       if (existing) {
         existing.quantity += 1;
@@ -2745,7 +2800,7 @@
       const mrp = parseFloat(p.mrp) || (sellRate * 1.25);
       const savings = mrp > sellRate ? (mrp - sellRate) : 0;
       const discountPct = mrp > sellRate ? Math.round(((mrp - sellRate) / mrp) * 100) : 0;
-      const finalImg = getRelevantProductImage(p.title, p.image_url);
+      const finalImg = getRelevantProductImage(p.title, p.image_url, p.id);
       const isNonVeg = /egg|chicken|mutton|fish|meat|prawn/i.test(p.title);
 
       document.getElementById('qv-img').src = finalImg;
@@ -2841,7 +2896,7 @@
       if (!p) return;
 
       const qtyToAdd = currentQvQty;
-      const finalImg = getRelevantProductImage(p.title, p.image_url);
+      const finalImg = getRelevantProductImage(p.title, p.image_url, p.id);
       const existing = cart.find(x => String(x.id) === String(p.id));
       if (existing) {
         existing.quantity += qtyToAdd;
@@ -2965,7 +3020,7 @@
         const discountPct = mrp > sellRate ? Math.round(((mrp - sellRate) / mrp) * 100) : 0;
         const cartItem = cart.find(x => String(x.id) === String(p.id));
         const cartQty = cartItem ? (parseInt(cartItem.quantity, 10) || 1) : 0;
-        const finalImg = getRelevantProductImage(p.title, p.image_url);
+        const finalImg = getRelevantProductImage(p.title, p.image_url, p.id);
         const isNonVeg = /egg|chicken|mutton|fish|meat|prawn/i.test(p.title);
         const isWishlisted = wishlist.includes(String(p.id));
 
@@ -3339,7 +3394,7 @@
 
       container.innerHTML = wishProducts.map(p => {
         const sellRate = parseFloat(p.price) || 0;
-        const finalImg = getRelevantProductImage(p.title, p.image_url);
+        const finalImg = getRelevantProductImage(p.title, p.image_url, p.id);
         return `
           <div class="p-3 bg-white rounded-2xl border border-gray-150 flex items-center justify-between gap-3 shadow-xs">
             <img src="${finalImg}" alt="${p.title}" class="w-14 h-14 object-contain rounded-xl bg-gray-50 border p-1 flex-shrink-0">
@@ -3375,7 +3430,7 @@
               name: p.title,
               price: parseFloat(p.price) || 0,
               mrp: parseFloat(p.mrp) || parseFloat(p.price) || 0,
-              image_url: getRelevantProductImage(p.title, p.image_url),
+              image_url: getRelevantProductImage(p.title, p.image_url, p.id),
               unit: p.unit || '1 unit',
               quantity: 1
             });
@@ -3570,7 +3625,7 @@
       }
 
       container.innerHTML = candidates.map(p => {
-        const finalImg = getRelevantProductImage(p.title, p.image_url);
+        const finalImg = getRelevantProductImage(p.title, p.image_url, p.id);
         return `
           <div class="flex-shrink-0 w-32 bg-white p-2 rounded-xl border border-gray-200 shadow-xs flex flex-col justify-between">
             <div class="w-full h-16 rounded-lg overflow-hidden bg-gray-50 mb-1.5 flex items-center justify-center">
@@ -4175,7 +4230,7 @@
             <div class="space-y-2">
               ${addedResults.map(res => {
                 const p = res.product;
-                const finalImg = getRelevantProductImage(p.title, p.image_url);
+                const finalImg = getRelevantProductImage(p.title, p.image_url, p.id);
                 const price = parseFloat(p.price);
                 const mrp = parseFloat(p.mrp || (price * 1.25));
                 const savings = mrp > price ? (mrp - price) * res.quantity : 0;
@@ -4309,7 +4364,7 @@
       addItemToCart: function(p, qtyToAdd) {
         const idStr = String(p.id);
         const existing = cart.find(x => String(x.id) === idStr);
-        const finalImg = getRelevantProductImage(p.title, p.image_url);
+        const finalImg = getRelevantProductImage(p.title, p.image_url, p.id);
 
         if (existing) {
           existing.quantity += qtyToAdd;

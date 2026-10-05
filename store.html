@@ -486,6 +486,249 @@
       border-color: #fda4af;
     }
 
+  
+    /* ================================================================
+       📱 MOBILE-FIRST RESPONSIVE OVERRIDES — Rani Hyper Market
+       ================================================================ */
+
+    /* Prevent iOS auto-zoom on input focus (must be 16px) */
+    @media (max-width: 767px) {
+      input, select, textarea, .glass-input {
+        font-size: 16px !important;
+      }
+
+      /* Compact header on mobile */
+      header {
+        padding: 10px 12px !important;
+      }
+      #store-title {
+        font-size: 15px !important;
+        line-height: 1.1 !important;
+      }
+      #store-tagline {
+        display: none !important;
+      }
+
+      /* Hero section mobile */
+      .hero-section-mobile {
+        padding: 12px !important;
+      }
+
+      /* Full-width sections on mobile */
+      .max-w-7xl {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+      }
+
+      /* Side cart toast — bottom centered on mobile */
+      #side-cart-toast {
+        top: auto !important;
+        bottom: 80px !important;
+        right: 8px !important;
+        left: 8px !important;
+        width: auto !important;
+        border-radius: 16px !important;
+        transform: translateY(120%) !important;
+      }
+      #side-cart-toast.show {
+        transform: translateY(0) !important;
+      }
+
+      /* Cart drawer — full-width on mobile */
+      #cart-drawer {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 20px 20px 0 0 !important;
+        top: auto !important;
+        bottom: 0 !important;
+        height: 90vh !important;
+        right: 0 !important;
+        left: 0 !important;
+      }
+
+      /* Modals — full width on mobile */
+      .modal-card {
+        border-radius: 20px !important;
+        padding: 16px !important;
+        max-height: 96vh !important;
+      }
+
+      /* Product card image height reduced on mobile */
+      .nhm-thumb-box {
+        height: 130px !important;
+      }
+
+      /* Brand card smaller on mobile */
+      .brand-card-item {
+        width: 96px !important;
+        padding: 8px 6px !important;
+      }
+      .brand-card-logo-wrap {
+        width: 48px !important;
+        height: 48px !important;
+      }
+
+      /* Category pills — touch friendly */
+      .cat-pill {
+        padding: 8px 14px !important;
+        font-size: 12px !important;
+        border-radius: 12px !important;
+        white-space: nowrap !important;
+      }
+
+      /* Product section heading smaller */
+      #product-grid .nhm-product-card {
+        padding: 10px !important;
+      }
+
+      /* Flash sale countdown bar */
+      #flash-deal-timer {
+        font-size: 11px !important;
+      }
+
+      /* Mobile search bar (hidden by default, toggled by search icon) */
+      #mobile-search-bar {
+        display: none;
+        position: sticky;
+        top: 58px;
+        z-index: 39;
+        padding: 8px 12px;
+        background: rgba(255,255,255,0.92);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(16,185,129,0.15);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      }
+      #mobile-search-bar.open {
+        display: block;
+      }
+      #mobile-search-bar input {
+        width: 100%;
+        border-radius: 14px;
+        padding: 10px 14px 10px 38px;
+        border: 1.5px solid rgba(16,185,129,0.3);
+        background: rgba(255,255,255,0.95);
+        font-size: 16px !important;
+        font-weight: 500;
+        outline: none;
+        color: #111827;
+      }
+      #mobile-search-bar input:focus {
+        border-color: #10b981;
+        box-shadow: 0 0 0 3px rgba(16,185,129,0.12);
+      }
+      #mobile-search-bar .search-icon {
+        position: absolute;
+        left: 24px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        font-size: 13px;
+        pointer-events: none;
+      }
+
+      /* Sticky Bottom Nav on mobile */
+      #mobile-bottom-nav {
+        display: flex !important;
+      }
+
+      /* Push body up to not hide behind bottom nav */
+      body {
+        padding-bottom: 68px !important;
+      }
+
+      /* AI launcher repositioned on mobile */
+      #cust-ai-launcher-container {
+        bottom: 76px !important;
+        right: 12px !important;
+      }
+
+      /* Announcement banner smaller text */
+      #announcement-banner {
+        font-size: 10px !important;
+        padding: 6px 8px !important;
+      }
+
+      /* Hero banner image hidden on mobile (save space) */
+      #hero-banner-img {
+        display: none !important;
+      }
+      .md\:w-3\/5 {
+        width: 100% !important;
+      }
+
+      /* Deals promo grid — 1 col on very small, 2 col auto */
+      .md\:grid-cols-3 {
+        grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+      }
+    }
+
+    @media (min-width: 480px) and (max-width: 767px) {
+      .md\:grid-cols-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+    }
+
+    /* ── Mobile Bottom Navigation Bar ────────────────────────────── */
+    #mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px);
+      border-top: 1.5px solid rgba(229,231,235,0.8);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+      padding: 6px 0 max(6px, env(safe-area-inset-bottom));
+    }
+    #mobile-bottom-nav .mob-nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 4px 2px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: #6b7280;
+      font-size: 10px;
+      font-weight: 700;
+      font-family: inherit;
+      transition: color 0.2s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #mobile-bottom-nav .mob-nav-item:active {
+      transform: scale(0.92);
+    }
+    #mobile-bottom-nav .mob-nav-item.active {
+      color: #059669;
+    }
+    #mobile-bottom-nav .mob-nav-item i {
+      font-size: 18px;
+      line-height: 1;
+    }
+    #mobile-bottom-nav .mob-cart-badge {
+      position: absolute;
+      top: 2px;
+      right: calc(50% - 18px);
+      background: #f59e0b;
+      color: #064e3b;
+      font-size: 9px;
+      font-weight: 900;
+      min-width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 3px;
+      border: 1.5px solid #fff;
+    }
+    
   </style>
 </head>
 <body class="relative min-h-screen flex flex-col justify-between">
@@ -531,7 +774,7 @@
 
   <div class="relative z-10 flex-1 flex flex-col">
     <!-- NAVBAR -->
-    <header class="glass sticky top-0 z-40 px-6 py-4 border-b border-white/60">
+    <header class="glass sticky top-0 z-40 px-3 sm:px-6 py-3 sm:py-4 border-b border-white/60">
       <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
         
         <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
@@ -545,6 +788,9 @@
         </div>
 
         <div class="flex items-center gap-3">
+          <button type="button" onclick="toggleMobileSearch()" class="sm:hidden w-9 h-9 rounded-xl glass flex items-center justify-center text-gray-600 hover:text-emerald-700 border border-white/80 shadow-sm active:scale-90 transition cursor-pointer" aria-label="Search" title="Search products">
+            <i class="fa-solid fa-magnifying-glass text-sm"></i>
+          </button>
           <div class="relative hidden sm:block w-64">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-xs"></i>
             <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="Search vegetables, fruits, dairy..." class="glass-input text-xs pl-9 py-2">
@@ -572,7 +818,7 @@
     </header>
 
     <!-- HERO BANNER -->
-    <section class="max-w-7xl mx-auto w-full px-6 py-6">
+    <section class="max-w-7xl mx-auto w-full px-3 sm:px-6 py-4 sm:py-6">
       <div class="glass p-6 sm:p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
         <div class="md:w-3/5 space-y-3">
           <div class="flex items-center gap-2 flex-wrap">
@@ -606,7 +852,7 @@
     </section>
 
     <!-- PROMOTIONAL DEALS & FLASH SALE SHOWCASE (BLINKIT / ZEPTO STYLE) -->
-    <section class="max-w-7xl mx-auto w-full px-6 mb-5">
+    <section class="max-w-7xl mx-auto w-full px-3 sm:px-6 mb-5">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
         <!-- Deal Card 1: Express Delivery -->
         <div class="glass p-4 rounded-2xl flex items-center justify-between gap-3 bg-gradient-to-br from-emerald-500/15 via-teal-500/10 to-transparent border border-emerald-300/60 hover:border-emerald-400 transition cursor-pointer shadow-xs" onclick="selectCategory('milk')">
@@ -657,7 +903,7 @@
 
     
     <!-- BRANDS YOU LOVE (LIVELY INFINITE MOVING MARQUEE - NATIONAL HYPER MART STYLE) -->
-    <section class="max-w-7xl mx-auto w-full px-6 mb-7" id="brands-section">
+    <section class="max-w-7xl mx-auto w-full px-3 sm:px-6 mb-7" id="brands-section">
       <div class="glass p-5 sm:p-6 rounded-3xl shadow-xl border border-white/95">
         <div class="flex items-center justify-between mb-4">
           <div>
@@ -1027,7 +1273,7 @@
     </section>
 
     <!-- CATEGORY PILLS -->
-    <section class="max-w-7xl mx-auto w-full px-6 mb-6">
+    <section class="max-w-7xl mx-auto w-full px-3 sm:px-6 mb-6">
       <div class="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-none">
         <button class="cat-pill active" onclick="selectCategory('all', this)"><i class="fa-solid fa-layer-group mr-1"></i> All Products</button>
         <button class="cat-pill" onclick="selectCategory('tea', this)"><i class="fa-solid fa-mug-hot mr-1"></i> Tea &amp; Coffee</button>
@@ -1043,7 +1289,7 @@
     </section>
 
     <!-- PRODUCTS GRID -->
-    <main class="max-w-7xl mx-auto w-full px-6 pb-12 flex-1">
+    <main class="max-w-7xl mx-auto w-full px-3 sm:px-6 pb-12 flex-1">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
         <div>
           <h3 class="text-2xl font-black text-gray-900 flex items-center gap-2">
@@ -1107,7 +1353,7 @@
     </main>
 
     <!-- ABOUT US & CONTACT INFO -->
-    <section class="max-w-7xl mx-auto w-full px-6 pb-14">
+    <section class="max-w-7xl mx-auto w-full px-3 sm:px-6 pb-14">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         <div class="glass p-7 rounded-3xl space-y-3">

@@ -53,6 +53,44 @@
       }
     ],
     "priceRange": "₹₹"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I order groceries on WhatsApp from Rani Hyper Market?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Simply message +91 77088 34547 on WhatsApp. You can type your items, send an audio message, or snap a picture of your handwritten grocery list. Our team confirms availability and delivers to your doorstep."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How fast is grocery delivery in Bodinayakanur?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We deliver groceries within 30 to 45 minutes across Bodinayakanur town. Free delivery is available on orders above ₹500."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are Rani Hyper Market operating hours?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We are open daily from 7:00 AM to 10:30 PM, including all Sundays, festival days, and holidays."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What payment methods do you accept?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We accept Cash on Delivery (COD), UPI (Google Pay, PhonePe, Paytm), and Credit/Debit cards upon delivery or in-store."
+        }
+      }
+    ]
   }
   </script>
 
@@ -330,6 +368,7 @@
         <a href="#categories" class="hover:text-emerald-700 transition">Categories</a>
         <a href="#features" class="hover:text-emerald-700 transition">Why Rani</a>
         <a href="#brands" class="hover:text-emerald-700 transition">Top Brands</a>
+        <a href="#faq" class="hover:text-emerald-700 transition">FAQ</a>
         <a href="#contact" class="hover:text-emerald-700 transition">Location & Hours</a>
       </nav>
 
@@ -339,10 +378,14 @@
           <i class="fa-solid fa-phone text-emerald-600"></i>
           <span>77088 34547</span>
         </a>
-        <a href="/store" class="btn-emerald py-2.5 px-5 text-sm rounded-xl">
+        <a href="/store" class="btn-emerald py-2.5 px-4 sm:px-5 text-xs sm:text-sm rounded-xl">
           <i class="fa-solid fa-basket-shopping"></i>
           <span>Shop Online</span>
         </a>
+        <!-- Mobile Menu Toggle Button -->
+        <button type="button" onclick="toggleLandingMobileMenu()" class="lg:hidden w-10 h-10 rounded-xl bg-gray-100 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 flex items-center justify-center transition border border-gray-200 cursor-pointer" aria-label="Toggle Navigation Menu">
+          <i class="fa-solid fa-bars text-base"></i>
+        </button>
       </div>
     </div>
   </header>
@@ -709,7 +752,7 @@
         </a>
 
         <!-- Category 8: Home & Cleaning -->
-        <a href="/store?category=detergent" class="bento-card category-card p-5 no-underline group flex flex-col justify-between">
+        <a href="/store?category=cleaner" class="bento-card category-card p-5 no-underline group flex flex-col justify-between">
           <div>
             <div class="w-14 h-14 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
               🧹
@@ -1364,6 +1407,114 @@
   </section>
 
   <!-- ══════════════════════════════════════════════════════════
+       10. FREQUENTLY ASKED QUESTIONS (FAQ ACCORDION)
+  ══════════════════════════════════════════════════════════ -->
+  <section id="faq" class="py-18 sm:py-24 bg-white border-t border-gray-200/80">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-3">
+          <i class="fa-solid fa-circle-question text-emerald-600"></i>
+          <span>Help & Answers</span>
+        </span>
+        <h2 class="font-heading font-black text-3xl sm:text-4xl text-gray-900 leading-tight">
+          Frequently Asked <span class="text-emerald-600">Questions</span>
+        </h2>
+        <p class="text-gray-500 text-sm mt-2">Everything you need to know about shopping, delivery & ordering at Rani Hyper Market.</p>
+      </div>
+
+      <div class="space-y-3.5">
+        
+        <!-- FAQ 1 -->
+        <div class="bento-card overflow-hidden border border-gray-200">
+          <button type="button" onclick="toggleFaqAccordion(1)" class="w-full p-5 text-left flex items-center justify-between gap-4 font-heading font-bold text-gray-900 text-sm sm:text-base hover:text-emerald-700 transition cursor-pointer">
+            <span class="flex items-center gap-3">
+              <i class="fa-brands fa-whatsapp text-green-500 text-lg flex-shrink-0"></i>
+              <span>How do I order groceries on WhatsApp?</span>
+            </span>
+            <i id="faq-icon-1" class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-200"></i>
+          </button>
+          <div id="faq-ans-1" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-gray-600 leading-relaxed border-t border-gray-100">
+            Ordering is effortless! Send a WhatsApp message to <a href="https://wa.me/917708834547" class="text-emerald-700 font-bold underline">+91 77088 34547</a>. You can type your grocery list, send a voice note, or take a photo of your handwritten paper list. Our team verifies the items, sends your computerized bill, packs everything securely, and delivers right to your door.
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="bento-card overflow-hidden border border-gray-200">
+          <button type="button" onclick="toggleFaqAccordion(2)" class="w-full p-5 text-left flex items-center justify-between gap-4 font-heading font-bold text-gray-900 text-sm sm:text-base hover:text-emerald-700 transition cursor-pointer">
+            <span class="flex items-center gap-3">
+              <i class="fa-solid fa-truck-fast text-emerald-600 text-lg flex-shrink-0"></i>
+              <span>How fast is delivery and what are the delivery charges?</span>
+            </span>
+            <i id="faq-icon-2" class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-200"></i>
+          </button>
+          <div id="faq-ans-2" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-gray-600 leading-relaxed border-t border-gray-100">
+            We provide swift 30-to-45-minute delivery within Bodinayakanur town. All orders above <strong>₹500</strong> enjoy <strong>Free Doorstep Delivery</strong>! For smaller emergency orders below ₹500, a nominal delivery charge of ₹20 applies.
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="bento-card overflow-hidden border border-gray-200">
+          <button type="button" onclick="toggleFaqAccordion(3)" class="w-full p-5 text-left flex items-center justify-between gap-4 font-heading font-bold text-gray-900 text-sm sm:text-base hover:text-emerald-700 transition cursor-pointer">
+            <span class="flex items-center gap-3">
+              <i class="fa-solid fa-clock text-amber-500 text-lg flex-shrink-0"></i>
+              <span>What are the supermarket operating hours?</span>
+            </span>
+            <i id="faq-icon-3" class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-200"></i>
+          </button>
+          <div id="faq-ans-3" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-gray-600 leading-relaxed border-t border-gray-100">
+            Rani Hyper Market is open daily from <strong>7:00 AM to 10:30 PM</strong>, all 7 days a week. We remain fully open and operational on all Sundays, government holidays, Pongal, and Diwali to serve our community.
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="bento-card overflow-hidden border border-gray-200">
+          <button type="button" onclick="toggleFaqAccordion(4)" class="w-full p-5 text-left flex items-center justify-between gap-4 font-heading font-bold text-gray-900 text-sm sm:text-base hover:text-emerald-700 transition cursor-pointer">
+            <span class="flex items-center gap-3">
+              <i class="fa-solid fa-hand-holding-dollar text-emerald-600 text-lg flex-shrink-0"></i>
+              <span>What payment options do you support?</span>
+            </span>
+            <i id="faq-icon-4" class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-200"></i>
+          </button>
+          <div id="faq-ans-4" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-gray-600 leading-relaxed border-t border-gray-100">
+            We support multiple payment methods for your convenience: Cash on Delivery (COD), UPI QR scan on delivery (Google Pay, PhonePe, Paytm, BHIM), and Debit/Credit cards at our store counter.
+          </div>
+        </div>
+
+        <!-- FAQ 5 -->
+        <div class="bento-card overflow-hidden border border-gray-200">
+          <button type="button" onclick="toggleFaqAccordion(5)" class="w-full p-5 text-left flex items-center justify-between gap-4 font-heading font-bold text-gray-900 text-sm sm:text-base hover:text-emerald-700 transition cursor-pointer">
+            <span class="flex items-center gap-3">
+              <i class="fa-solid fa-shield-check text-blue-500 text-lg flex-shrink-0"></i>
+              <span>Are all products original, authentic and fresh?</span>
+            </span>
+            <i id="faq-icon-5" class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-200"></i>
+          </button>
+          <div id="faq-ans-5" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-gray-600 leading-relaxed border-t border-gray-100">
+            Yes, 100%! We source all packaged FMCG goods directly from verified manufacturer distributors (HUL, ITC, Nestle, Britannia, Amul, Parle). Rice, pulses, and spices are directly sourced from registered agricultural mills to guarantee premium grain grade and pure taste.
+          </div>
+        </div>
+
+        <!-- FAQ 6 -->
+        <div class="bento-card overflow-hidden border border-gray-200">
+          <button type="button" onclick="toggleFaqAccordion(6)" class="w-full p-5 text-left flex items-center justify-between gap-4 font-heading font-bold text-gray-900 text-sm sm:text-base hover:text-emerald-700 transition cursor-pointer">
+            <span class="flex items-center gap-3">
+              <i class="fa-solid fa-map-pin text-rose-500 text-lg flex-shrink-0"></i>
+              <span>Where is Rani Hyper Market located in Bodinayakanur?</span>
+            </span>
+            <i id="faq-icon-6" class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-200"></i>
+          </button>
+          <div id="faq-ans-6" class="hidden px-5 pb-5 pt-1 text-xs sm:text-sm text-gray-600 leading-relaxed border-t border-gray-100">
+            We are located centrally on Main Road, Bodinayakanur, Theni District (PIN: 625513). You can view our exact verified Google Maps location and get turn-by-turn driving directions by <a href="https://maps.app.goo.gl/V4CtDbvk66CXf6Xk8" target="_blank" rel="noopener noreferrer" class="text-emerald-700 font-bold underline">clicking here</a>.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
        10. FINAL BOTTOM CALL TO ACTION
   ══════════════════════════════════════════════════════════ -->
   <section class="hero-gradient py-16 sm:py-20 text-white relative">
@@ -1506,5 +1657,106 @@
     }
   </script>
 
+  <!-- ══════════════════════════════════════════════════════════
+       14. MOBILE NAVIGATION DRAWER
+  ══════════════════════════════════════════════════════════ -->
+  <div id="landing-mobile-menu" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden transition-opacity duration-300">
+    <div class="fixed top-0 right-0 w-80 max-w-[85vw] h-full bg-white shadow-2xl flex flex-col justify-between p-6 transform translate-x-full transition-transform duration-300" id="landing-mobile-drawer">
+      
+      <div>
+        <div class="flex items-center justify-between pb-4 border-b border-gray-100">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center text-base shadow-sm">
+              <i class="fa-solid fa-store"></i>
+            </div>
+            <div>
+              <span class="font-heading font-black text-gray-900 text-sm leading-tight block">Rani Hyper Market</span>
+              <span class="text-[10px] font-bold text-emerald-700 block">Bodinayakanur</span>
+            </div>
+          </div>
+          <button type="button" onclick="toggleLandingMobileMenu()" class="w-8 h-8 rounded-lg bg-gray-100 text-gray-500 hover:text-gray-900 flex items-center justify-center text-sm font-bold cursor-pointer" aria-label="Close Menu">
+            &times;
+          </button>
+        </div>
+
+        <nav class="mt-6 space-y-1">
+          <a href="#about" onclick="toggleLandingMobileMenu()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-emerald-50 hover:text-emerald-800 font-bold text-sm transition">
+            <i class="fa-solid fa-heart text-emerald-600 w-5"></i>
+            <span>About Store</span>
+          </a>
+          <a href="#categories" onclick="toggleLandingMobileMenu()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-emerald-50 hover:text-emerald-800 font-bold text-sm transition">
+            <i class="fa-solid fa-layer-group text-emerald-600 w-5"></i>
+            <span>Departments</span>
+          </a>
+          <a href="#features" onclick="toggleLandingMobileMenu()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-emerald-50 hover:text-emerald-800 font-bold text-sm transition">
+            <i class="fa-solid fa-shield-halved text-emerald-600 w-5"></i>
+            <span>Why Rani Market</span>
+          </a>
+          <a href="#brands" onclick="toggleLandingMobileMenu()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-emerald-50 hover:text-emerald-800 font-bold text-sm transition">
+            <i class="fa-solid fa-tags text-emerald-600 w-5"></i>
+            <span>Top Brands</span>
+          </a>
+          <a href="#faq" onclick="toggleLandingMobileMenu()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-emerald-50 hover:text-emerald-800 font-bold text-sm transition">
+            <i class="fa-solid fa-circle-question text-emerald-600 w-5"></i>
+            <span>FAQ & Delivery</span>
+          </a>
+          <a href="#contact" onclick="toggleLandingMobileMenu()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-emerald-50 hover:text-emerald-800 font-bold text-sm transition">
+            <i class="fa-solid fa-location-dot text-emerald-600 w-5"></i>
+            <span>Location & Hours</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="pt-6 border-t border-gray-100 space-y-2.5">
+        <a href="/store" class="btn-emerald w-full py-3 text-xs font-bold text-center">
+          <i class="fa-solid fa-basket-shopping"></i>
+          <span>Shop Online (7,000+ Items)</span>
+        </a>
+        <a href="https://wa.me/917708834547" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-hero w-full py-3 text-xs font-bold text-center">
+          <i class="fa-brands fa-whatsapp text-sm"></i>
+          <span>WhatsApp: +91 77088 34547</span>
+        </a>
+        <a href="tel:+917708834547" class="w-full py-2.5 rounded-xl border border-gray-200 text-gray-700 text-xs font-bold flex items-center justify-center gap-2 hover:bg-gray-50 transition">
+          <i class="fa-solid fa-phone text-emerald-600"></i>
+          <span>Call: +91 77088 34547</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ── Mobile Menu Toggle ────────────────────────────────────
+    function toggleLandingMobileMenu() {
+      var modal = document.getElementById('landing-mobile-menu');
+      var drawer = document.getElementById('landing-mobile-drawer');
+      if (!modal || !drawer) return;
+      if (modal.classList.contains('hidden')) {
+        modal.classList.remove('hidden');
+        setTimeout(function() {
+          drawer.classList.remove('translate-x-full');
+        }, 10);
+      } else {
+        drawer.classList.add('translate-x-full');
+        setTimeout(function() {
+          modal.classList.add('hidden');
+        }, 300);
+      }
+    }
+
+    // ── FAQ Accordion Toggle ─────────────────────────────────
+    function toggleFaqAccordion(id) {
+      var ans = document.getElementById('faq-ans-' + id);
+      var icon = document.getElementById('faq-icon-' + id);
+      if (!ans || !icon) return;
+      if (ans.classList.contains('hidden')) {
+        ans.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      } else {
+        ans.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+      }
+    }
+  </script>
 </body>
 </html>

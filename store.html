@@ -46,7 +46,7 @@
     "description": "Bodinayakanur's premier supermarket offering fresh groceries, fruits, vegetables, dairy, FMCG, and household essentials with instant WhatsApp delivery.",
     "image": "https://5.imimg.com/data5/SELLER/Default/2021/6/YQ/ZB/VC/52481281/ponni-boiled-rice-500x500.jpg",
     "url": "https://rani-hyper-market.vercel.app/",
-    "telephone": "+91-+91 77088 34547",
+    "telephone": "+91 77088 34547",
     "priceRange": "₹₹",
     "currenciesAccepted": "INR",
     "paymentAccepted": "Cash, Credit Card, UPI, GPay, PhonePe, Paytm",
@@ -740,7 +740,7 @@
       }
     }
 
-  </style>>
+  </style>
 </head>
 <body class="relative min-h-screen flex flex-col justify-between">
   <div class="orb o1"></div>
@@ -813,6 +813,10 @@
           </button>
 
           
+          <a href="/" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 bg-white/80 hover:bg-white text-gray-700 hover:text-emerald-700 border border-gray-200 rounded-xl text-xs font-bold transition shadow-xs no-underline" title="Store Info, Timings & Directions">
+            <i class="fa-solid fa-circle-info text-emerald-600"></i>
+            <span class="hidden md:inline">Store Info</span>
+          </a>
           <button type="button" onclick="toggleWishlistDrawer()" class="px-3 py-2 bg-white/80 hover:bg-white text-gray-700 hover:text-rose-600 border border-gray-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer" title="View Saved Wishlist">
             <i class="fa-solid fa-heart text-rose-500"></i>
             <span class="hidden sm:inline">Wishlist</span>
@@ -1429,8 +1433,34 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="text-center py-6 text-xs text-gray-500 glass border-t border-white/60">
-      &copy; 2026 Rani Hyper Market • Bodinayakanur, Theni • Powered by SNS Marketing Retail OS
+    <footer class="py-8 px-4 text-xs text-gray-600 glass border-t border-white/80">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+        <div>
+          <div class="flex items-center justify-center md:justify-start gap-2 mb-1">
+            <span class="font-black text-gray-900 text-sm">Rani Hyper Market</span>
+            <span class="text-[11px] text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded-full">Open Daily 7AM – 10:30PM</span>
+          </div>
+          <p class="text-gray-500 text-[11px]">
+            Main Road, Bodinayakanur, Theni – 625513 • Ph: +91 77088 34547
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-3 font-bold text-xs">
+          <a href="/" class="text-emerald-700 hover:text-emerald-800 transition flex items-center gap-1">
+            <i class="fa-solid fa-house text-emerald-600"></i> Store Info & About
+          </a>
+          <span>•</span>
+          <a href="https://maps.app.goo.gl/V4CtDbvk66CXf6Xk8" target="_blank" rel="noopener noreferrer" class="text-emerald-700 hover:text-emerald-800 transition flex items-center gap-1">
+            <i class="fa-solid fa-location-dot text-emerald-600"></i> Google Maps
+          </a>
+          <span>•</span>
+          <a href="https://wa.me/917708834547" target="_blank" rel="noopener noreferrer" class="text-emerald-700 hover:text-emerald-800 transition flex items-center gap-1">
+            <i class="fa-brands fa-whatsapp text-emerald-600"></i> WhatsApp Help
+          </a>
+        </div>
+      </div>
+      <div class="max-w-7xl mx-auto mt-4 pt-4 border-t border-gray-200/50 text-center text-[11px] text-gray-400">
+        &copy; 2026 Rani Hyper Market • Bodinayakanur, Theni • Powered by SNS Marketing Retail OS
+      </div>
     </footer>
   </div>
 
@@ -1850,9 +1880,13 @@
 
   <!-- MOBILE BOTTOM NAVIGATION DOCK (VISIBLE ON MOBILE ONLY) -->
   <nav id="mobile-bottom-dock" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-gray-200/90 shadow-2xl px-3 py-2 flex items-center justify-around">
+    <a href="/" class="flex flex-col items-center gap-0.5 text-gray-500 hover:text-emerald-700 font-bold text-[10px] active:scale-95 transition no-underline">
+      <i class="fa-solid fa-circle-info text-base text-emerald-600"></i>
+      <span>Store Info</span>
+    </a>
     <button type="button" onclick="handleMobileNav('home')" class="flex flex-col items-center gap-0.5 text-emerald-700 font-bold text-[10px] active:scale-95 transition">
-      <i class="fa-solid fa-house text-base"></i>
-      <span>Store</span>
+      <i class="fa-solid fa-store text-base"></i>
+      <span>Catalog</span>
     </button>
     <button type="button" onclick="handleMobileNav('categories')" class="flex flex-col items-center gap-0.5 text-gray-500 hover:text-emerald-700 font-bold text-[10px] active:scale-95 transition">
       <i class="fa-solid fa-layer-group text-base"></i>
@@ -2646,11 +2680,19 @@
     }
 
     function selectCategory(cat, btn) {
-      currentCategory = cat;
-      document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+    currentCategory = cat;
+    document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+    if (btn) {
       btn.classList.add('active');
-      applyFiltersAndSearch();
+    } else {
+      const pills = document.querySelectorAll('.cat-pill');
+      pills.forEach(p => {
+        const oc = p.getAttribute('onclick') || '';
+        if (oc.includes("'" + cat + "'")) p.classList.add('active');
+      });
     }
+    applyFiltersAndSearch();
+  }
 
     function filterProducts() {
       applyFiltersAndSearch();
@@ -3002,7 +3044,8 @@
           oil: ['oil', 'sunflower', 'gingelly', 'deepam', 'coconut oil', 'dalda', 'vanaspati'],
           biscuit: ['biscuit', 'cookie', 'britannia', 'parle', 'marie', 'rusk', 'choco', 'chocolate', 'cake', 'chips', 'snack', 'mixture', 'murukku', 'dates'],
           soap: ['soap', 'shampoo', 'paste', 'brush', 'sensodyne', 'colgate', 'hamam', 'lifebuoy', 'medimix', 'cream', 'hair', 'iodex', 'balm', 'karthicka'],
-          cleaner: ['cleaner', 'detergent', 'surf', 'ariel', 'rin', 'tide', 'dishwash', 'vim', 'harpic', 'lizol', 'agarbatti', 'sambrani', 'hit', 'good knight']
+          detergent: ['cleaner', 'detergent', 'surf', 'ariel', 'rin', 'tide', 'dishwash', 'vim', 'harpic', 'lizol', 'agarbatti', 'sambrani', 'hit', 'good knight'],
+        cleaner: ['cleaner', 'detergent', 'surf', 'ariel', 'rin', 'tide', 'dishwash', 'vim', 'harpic', 'lizol', 'agarbatti', 'sambrani', 'hit', 'good knight']
         };
 
         const keys = keywordsMap[currentCategory] || [currentCategory.toLowerCase()];
@@ -4058,14 +4101,22 @@
     }
 
   
-    // Handle URL query parameters for direct brand/search routing
+    // Handle URL query parameters for direct brand/category/search routing
     (function handleUrlSearchRouting() {
       try {
         const params = new URLSearchParams(window.location.search);
         const searchQ = params.get('search') || params.get('q');
         const brandQ = params.get('brand');
+        const categoryQ = params.get('category') || params.get('cat');
         if (brandQ) {
           setTimeout(() => { if (typeof filterByBrand === 'function') filterByBrand(brandQ); }, 350);
+        } else if (categoryQ) {
+          setTimeout(() => {
+            if (typeof selectCategory === 'function') {
+              const normalizedCat = (categoryQ === 'detergent') ? 'cleaner' : categoryQ;
+              selectCategory(normalizedCat);
+            }
+          }, 350);
         } else if (searchQ) {
           setTimeout(() => {
             const input = document.getElementById('search-input');

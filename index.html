@@ -942,7 +942,52 @@
     }
     if (statusEl) statusEl.style.background = isOpen ? '#22c55e' : '#f59e0b';
   })();
-</script>
+
+    /* ════════════════════════════════════════════════════════════════
+       📱 MOBILE FUNCTIONS — toggleMobileSearch, syncMobileSearch
+       ════════════════════════════════════════════════════════════════ */
+    function toggleMobileSearch() {
+      var bar = document.getElementById('mobile-search-bar');
+      if (!bar) {
+        // If bar doesn't exist yet, scroll to desktop search & focus
+        var desktopSearch = document.getElementById('search-input');
+        if (desktopSearch) {
+          desktopSearch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setTimeout(function() { desktopSearch.focus(); }, 400);
+        }
+        return;
+      }
+      bar.classList.toggle('open');
+      if (bar.classList.contains('open')) {
+        var inp = document.getElementById('mobile-search-input');
+        if (inp) {
+          setTimeout(function() { inp.focus(); }, 120);
+          // Sync current search value to mobile input
+          var desktopVal = document.getElementById('search-input');
+          if (desktopVal) inp.value = desktopVal.value;
+        }
+        // Update bottom nav active state
+        document.querySelectorAll('.mob-nav-item').forEach(function(i) {
+          i.classList.remove('active');
+        });
+        var searchNavBtn = document.querySelectorAll('.mob-nav-item')[1];
+        if (searchNavBtn) searchNavBtn.classList.add('active');
+      } else {
+        // Restore Home as active
+        var homeBtn = document.querySelectorAll('.mob-nav-item')[0];
+        if (homeBtn) homeBtn.classList.add('active');
+      }
+    }
+
+    function syncMobileSearch(val) {
+      var desktopInput = document.getElementById('search-input');
+      if (desktopInput) {
+        desktopInput.value = val || '';
+      }
+      if (typeof filterProducts === 'function') filterProducts();
+    }
+
+  </script>
 
 </body>
 </html>

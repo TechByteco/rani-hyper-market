@@ -729,7 +729,19 @@
       border: 1.5px solid #fff;
     }
     
-  </style>
+
+    /* ── Cart drawer mobile animation ──────────────────────── */
+    @media (max-width: 767px) {
+      #cart-drawer:not(.hidden) {
+        animation: slideUpDrawer 0.25s ease-out forwards;
+      }
+      @keyframes slideUpDrawer {
+        from { transform: translateY(20px); opacity: 0.7; }
+        to   { transform: translateY(0);    opacity: 1; }
+      }
+    }
+
+  </style>>
 </head>
 <body class="relative min-h-screen flex flex-col justify-between">
   <div class="orb o1"></div>
@@ -3229,10 +3241,11 @@
         const catSection = document.querySelector('.cat-pill');
         if (catSection) catSection.scrollIntoView({ behavior: 'smooth' });
       } else if (action === 'search') {
-        const s = document.getElementById('search-input');
-        if (s) {
-          s.focus();
-          window.scrollTo({ top: s.offsetTop - 80, behavior: 'smooth' });
+        if (typeof toggleMobileSearch === 'function') {
+          toggleMobileSearch();
+        } else {
+          const s = document.getElementById('search-input');
+          if (s) { s.focus(); window.scrollTo({ top: s.offsetTop - 80, behavior: 'smooth' }); }
         }
       } else if (action === 'ai') {
         toggleCustomerAiChat();
@@ -3897,6 +3910,9 @@
         badge.classList.add('scale-125');
         setTimeout(() => badge.classList.remove('scale-125'), 200);
       }
+      // Sync mobile bottom nav cart badge
+      const mobBadge = document.getElementById('mob-cart-badge');
+      if (mobBadge) mobBadge.textContent = totalCount > 0 ? String(totalCount) : '0';
 
       const container = document.getElementById('cart-items-container');
       if (!container) return;
@@ -4003,7 +4019,12 @@
     }
 
     function toggleCart() {
-      document.getElementById('cart-drawer').classList.toggle('hidden');
+      const drawer = document.getElementById('cart-drawer');
+      if (!drawer) return;
+      drawer.classList.toggle('hidden');
+      // Close mobile search bar when cart opens
+      const mbar = document.getElementById('mobile-search-bar');
+      if (mbar && mbar.classList.contains('open')) mbar.classList.remove('open');
     }
 
     function openCheckoutModal() {
@@ -4743,6 +4764,51 @@
         } catch(e) {}
       }
     };
+  
+    /* ════════════════════════════════════════════════════════════════
+       📱 MOBILE FUNCTIONS — toggleMobileSearch, syncMobileSearch
+       ════════════════════════════════════════════════════════════════ */
+    function toggleMobileSearch() {
+      var bar = document.getElementById('mobile-search-bar');
+      if (!bar) {
+        // If bar doesn't exist yet, scroll to desktop search & focus
+        var desktopSearch = document.getElementById('search-input');
+        if (desktopSearch) {
+          desktopSearch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setTimeout(function() { desktopSearch.focus(); }, 400);
+        }
+        return;
+      }
+      bar.classList.toggle('open');
+      if (bar.classList.contains('open')) {
+        var inp = document.getElementById('mobile-search-input');
+        if (inp) {
+          setTimeout(function() { inp.focus(); }, 120);
+          // Sync current search value to mobile input
+          var desktopVal = document.getElementById('search-input');
+          if (desktopVal) inp.value = desktopVal.value;
+        }
+        // Update bottom nav active state
+        document.querySelectorAll('.mob-nav-item').forEach(function(i) {
+          i.classList.remove('active');
+        });
+        var searchNavBtn = document.querySelectorAll('.mob-nav-item')[1];
+        if (searchNavBtn) searchNavBtn.classList.add('active');
+      } else {
+        // Restore Home as active
+        var homeBtn = document.querySelectorAll('.mob-nav-item')[0];
+        if (homeBtn) homeBtn.classList.add('active');
+      }
+    }
+
+    function syncMobileSearch(val) {
+      var desktopInput = document.getElementById('search-input');
+      if (desktopInput) {
+        desktopInput.value = val || '';
+      }
+      if (typeof filterProducts === 'function') filterProducts();
+    }
+
   </script>
 </body>
 </html>

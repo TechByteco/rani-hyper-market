@@ -3,7 +3,7 @@
   "username": "rani",
   "store_name": "RANI HYPER MARKET",
   "tagline": "Fresh Farm Groceries & Everyday Supermarket",
-  "announcement": "🎉 Welcome to RANI HYPER MARKET! Delivery Free!! Best wholesale & retail rates.",
+  "announcement": "ðŸŽ‰ Welcome to RANI HYPER MARKET! Delivery Free!! Best wholesale & retail rates.",
   "address": "93, Sundara pandian street,, Anwar complex, Near Kottai Karuppasamy Kovil, Bodinayakanur",
   "phone": "77088 34547, 88073 34547",
   "email": "rani.hypermarket@gmail.com",
@@ -11,13 +11,7 @@
   "hours": "Mon - Sun: 7:00 AM - 10:00 PM",
   "about": "Welcome to RANI HYPER MARKET! Located at Anwar Complex, Sundara Pandian Street, Bodinayakanur. We offer complete grocery, dairy, and household essentials at the best rates with free delivery.",
   "hero_img": "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=800",
-  "backup_info": {
-    "name": "Full Backup RANI HYPER MARKET on 12-Sep-2026.zip",
-    "sizeBytes": 143226717,
-    "sizeMb": "136.59 MB",
-    "modified": "2026-09-12T07:48:30.272Z",
-    "path": "G:/dell intel core i7 pc data/SKS new fetchable/Full Backup RANI HYPER MARKET on 12-Sep-2026.zip"
-  },
+  "backup_info": null,
   "source_database": "9bcfb0b0-2cd2-11f1-9b4b-6fef85f604f9_2026-2027.db",
   "financial_year": "2026-2027"
 }

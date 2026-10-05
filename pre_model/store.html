@@ -4057,6 +4057,27 @@
       if (typeof filterProducts === 'function') filterProducts();
     }
 
+  
+    // Handle URL query parameters for direct brand/search routing
+    (function handleUrlSearchRouting() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const searchQ = params.get('search') || params.get('q');
+        const brandQ = params.get('brand');
+        if (brandQ) {
+          setTimeout(() => { if (typeof filterByBrand === 'function') filterByBrand(brandQ); }, 350);
+        } else if (searchQ) {
+          setTimeout(() => {
+            const input = document.getElementById('search-input');
+            if (input) {
+              input.value = searchQ;
+              if (typeof filterProducts === 'function') filterProducts();
+            }
+          }, 350);
+        }
+      } catch(e) {}
+    })();
+
   </script>
 </body>
 </html>

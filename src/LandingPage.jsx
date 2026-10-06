@@ -42,10 +42,12 @@ export const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-18 sm:h-20 flex items-center justify-between gap-3 sm:gap-4">
           
           {/* Brand Logo & Name */}
-          <a href="/" className="flex items-center gap-3.5 no-underline group flex-shrink-0">
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-[#214A38] text-white flex items-center justify-center text-lg border border-[#18372A]">
-              <i className="fa-solid fa-store"></i>
-            </div>
+          <a href="/" className="flex items-center gap-3 sm:gap-3.5 no-underline group flex-shrink-0">
+            <img 
+              src="/images/rani_logo.png" 
+              alt="Rani Hyper Market Official Logo" 
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover border border-[#214A38]/30 shadow-xs group-hover:scale-105 transition-transform bg-white"
+            />
             <div>
               <span className={`text-xl sm:text-2xl text-[#1D2921] block leading-tight ${isTamil ? 'font-tamil font-bold' : 'font-serif'}`}>
                 Rani Hyper Market
@@ -499,9 +501,11 @@ export const LandingPage = () => {
             
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 rounded bg-[#214A38] text-white flex items-center justify-center text-sm border border-emerald-600">
-                  <i className="fa-solid fa-store"></i>
-                </div>
+                <img 
+                  src="/images/rani_logo.png" 
+                  alt="Rani Hyper Market Official Logo" 
+                  className="w-8 h-8 rounded-full object-cover border border-emerald-600/60 bg-white"
+                />
                 <span className={`text-xl text-white ${isTamil ? 'font-tamil font-bold' : 'font-serif'}`}>Rani Hyper Market</span>
               </div>
               <p className="text-xs text-gray-400 max-w-sm leading-relaxed mb-4">
@@ -564,13 +568,20 @@ export const LandingPage = () => {
           >
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-[#E5DCCF]">
-                <div>
-                  <span className={`text-lg text-[#1D2921] block leading-tight ${isTamil ? 'font-tamil font-bold' : 'font-serif'}`}>
-                    {t.mobDrawerTitle}
-                  </span>
-                  <span className="text-[10px] font-bold text-[#214A38] uppercase block">
-                    {t.mobDrawerSubtitle}
-                  </span>
+                <div className="flex items-center gap-2.5">
+                  <img 
+                    src="/images/rani_logo.png" 
+                    alt="Rani Hyper Market Official Logo" 
+                    className="w-9 h-9 rounded-full object-cover border border-[#214A38]/30 bg-white"
+                  />
+                  <div>
+                    <span className={`text-lg text-[#1D2921] block leading-tight ${isTamil ? 'font-tamil font-bold' : 'font-serif'}`}>
+                      {t.mobDrawerTitle}
+                    </span>
+                    <span className="text-[10px] font-bold text-[#214A38] uppercase block">
+                      {t.mobDrawerSubtitle}
+                    </span>
+                  </div>
                 </div>
                 <button 
                   type="button" 

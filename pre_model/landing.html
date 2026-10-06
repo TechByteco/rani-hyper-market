@@ -15,6 +15,10 @@
   <meta name="geo.region" content="IN-TN">
   <meta name="geo.placename" content="Bodinayakanur, Theni, Tamil Nadu">
 
+  <!-- Favicon & Official Logo -->
+  <link rel="icon" type="image/png" href="/images/rani_logo.png">
+  <link rel="apple-touch-icon" href="/images/rani_logo.png">
+
   <!-- Editorial Typography & Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -129,10 +133,12 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 h-18 sm:h-20 flex items-center justify-between gap-3 sm:gap-4">
       
       <!-- Brand & Location -->
-      <a href="/" class="flex items-center gap-3.5 no-underline group flex-shrink-0">
-        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-[#214A38] text-white flex items-center justify-center text-lg border border-[#18372A]">
-          <i class="fa-solid fa-store"></i>
-        </div>
+      <a href="/" class="flex items-center gap-3 sm:gap-3.5 no-underline group flex-shrink-0">
+        <img 
+          src="/images/rani_logo.png" 
+          alt="Rani Hyper Market Official Logo" 
+          class="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover border border-[#214A38]/30 shadow-xs group-hover:scale-105 transition-transform bg-white"
+        >
         <div>
           <span class="font-serif text-xl sm:text-2xl text-[#1D2921] tracking-tight block leading-tight">Rani Hyper Market</span>
           <span data-i18n="brandSubtitle" class="text-[11px] font-bold text-[#214A38] uppercase tracking-wider block">மெயின் ரோடு, போடிநாயக்கனூர்</span>
@@ -859,9 +865,11 @@
         <!-- Col 1: Store Bio -->
         <div class="md:col-span-2">
           <div class="flex items-center gap-3 mb-2">
-            <div class="w-8 h-8 rounded bg-[#214A38] text-white flex items-center justify-center text-sm border border-emerald-600">
-              <i class="fa-solid fa-store"></i>
-            </div>
+            <img 
+              src="/images/rani_logo.png" 
+              alt="Rani Hyper Market Official Logo" 
+              class="w-8 h-8 rounded-full object-cover border border-emerald-600/60 bg-white"
+            >
             <span class="font-serif text-xl text-white">Rani Hyper Market</span>
           </div>
           <p data-i18n="footerBio" class="text-xs text-gray-400 max-w-sm leading-relaxed mb-4">
@@ -921,9 +929,16 @@
       
       <div>
         <div class="flex items-center justify-between pb-4 border-b border-[#E5DCCF]">
-          <div>
-            <span class="font-serif text-lg text-[#1D2921] block leading-tight">Rani Hyper Market</span>
-            <span class="text-[10px] font-bold text-[#214A38] uppercase block">Bodinayakanur</span>
+          <div class="flex items-center gap-2.5">
+            <img 
+              src="/images/rani_logo.png" 
+              alt="Rani Hyper Market Official Logo" 
+              class="w-9 h-9 rounded-full object-cover border border-[#214A38]/30 bg-white"
+            >
+            <div>
+              <span class="font-serif text-lg text-[#1D2921] block leading-tight">Rani Hyper Market</span>
+              <span class="text-[10px] font-bold text-[#214A38] uppercase block">Bodinayakanur</span>
+            </div>
           </div>
           <button type="button" onclick="toggleLandingMobileMenu()" class="w-8 h-8 rounded bg-white border border-[#E5DCCF] text-[#1D2921] flex items-center justify-center text-sm font-bold cursor-pointer" aria-label="Close Navigation Menu">
             &times;

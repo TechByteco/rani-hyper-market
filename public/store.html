@@ -2264,6 +2264,195 @@
     function getDoubleSidedMatch(title) { return null; }
     function getDoubleSidedBack(title) { return null; }
 
+    function initStore() {
+      applyStoreCustomizations();
+      renderBrandMarquee();
+      startFlashDealTimer();
+      updateWishlistBadge();
+
+      try {
+        const saved = localStorage.getItem('nsn_cart');
+        if (saved) cart = JSON.parse(saved);
+      } catch(e) {}
+      updateCartUI();
+
+      applyStoreCustomizations();
+      window.addEventListener('storage', () => { applyStoreCustomizations(); });
+
+      // Immediate 0ms first render with preloaded initial products
+      if (Array.isArray(INITIAL_PRODUCTS) && INITIAL_PRODUCTS.length > 0) {
+        allProducts = INITIAL_PRODUCTS.map(p => ({
+          ...p,
+          mrp: parseFloat(p.mrp || (p.price * 1.25))
+        }));
+        currentFilteredList = allProducts;
+        displayedCount = BATCH_SIZE;
+        renderProductsList();
+      }
+
+      checkStoreLicense();
+      loadStoreProducts();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initStore);
+    } else {
+      initStore();
+    }
+
+    function checkStoreLicense() {
+      // Safe no-op or verification
+      const badge = document.getElementById('store-badge-license');
+      if (badge) badge.classList.remove('hidden');
+    }
+
+    function applyStoreCustomizations() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const qDate = params.get('date');
+
+        if (qDate) {
+          activeStoreDate = qDate;
+          localStorage.setItem('nsn_active_store_date', qDate);
+        } else {
+          activeStoreDate = localStorage.getItem('nsn_active_store_date') || '05-Sep-2026';
+        }
+
+        const raniDefaults = {
+          name: 'Rani Hyper Market',
+          tagline: 'Fresh Farm Groceries & Everyday Supermarket',
+          announcement: '🎉 Welcome to Rani Hyper Market! Free Delivery in Bodinayakanur & Best Wholesale Rates!',
+          phone: '77088 34547',
+          email: 'rani.hypermarket@gmail.com',
+          hours: 'Mon - Sun: 7:00 AM - 10:00 PM',
+          address: 'Main Road, Bodinayakanur, Theni District, TN 625513'
+        };
+
+        let stored = localStorage.getItem('nsn_store_custom_active');
+        let d = raniDefaults;
+        if (stored) {
+          try {
+            d = { ...raniDefaults, ...JSON.parse(stored) };
+          } catch(e) {}
+        }
+
+        const heroStoreName = document.getElementById('hero-store-name');
+        if (heroStoreName && d.name) heroStoreName.innerText = 'Welcome to ' + d.name;
+      } catch(e) {}
+    }
+
+    async function loadStoreProducts() {
+      const grid = document.getElementById('product-grid');
+      let products = [];
+
+      // Multi-source resilient catalog fetch with absolute paths
+      const sources = [
+        '/products_catalog.json?v=' + Date.now(),
+        'products_catalog.json?v=' + Date.now(),
+        '/rani_products.json?v=' + Date.now(),
+        'rani_products.json?v=' + Date.now(),
+        '/api/pos/products?limit=1000'
+      ];
+
+      for (const src of sources) {
+        try {
+          const res = await fetch(src, { cache: 'no-cache' });
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+              products = data;
+              break;
+            }
+          }
+        } catch (e) {}
+      }
+
+      // If network fetch failed but we have initial products in memory, keep them!
+      if ((!products || products.length === 0) && allProducts.length > 0) {
+        products = allProducts;
+      }
+
+      // Filter out deleted products
+      try {
+        const deletedIds = new Set(JSON.parse(localStorage.getItem('nsn_deleted_product_ids') || '[]'));
+        if (deletedIds.size > 0) {
+          products = products.filter(p => !deletedIds.has(String(p.id)));
+        }
+      } catch(e) {}
+
+      // Apply custom product image overrides from Image Studio
+      try {
+        const imageOverrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+        products.forEach(p => {
+          if (imageOverrides[p.id]) {
+            p.image_url = imageOverrides[p.id];
+            p.image = imageOverrides[p.id];
+          }
+        });
+      } catch(e) {}
+
+      // Apply price/mrp/availability overrides from Admin
+      try {
+        const priceOverrides = JSON.parse(localStorage.getItem('nsn_product_price_overrides') || '{}');
+        products.forEach(p => {
+          if (priceOverrides[p.id]) {
+            Object.assign(p, priceOverrides[p.id]);
+          }
+        });
+        products = products.filter(p => p.is_available !== false);
+      } catch(e) {}
+
+      // Check any custom added/updated products by Admin
+      try {
+        const customProds = JSON.parse(localStorage.getItem('nsn_custom_added_products') || '[]');
+        if (customProds && customProds.length > 0) {
+          const existingIds = new Set(products.map(p => String(p.id)));
+          customProds.forEach(cp => {
+            if (!existingIds.has(String(cp.id)) && cp.is_available !== false) {
+              products.unshift(cp);
+            }
+          });
+        }
+      } catch(e) {}
+
+      // Non-blocking merge of Supabase products (1500ms timeout)
+      if (sb) {
+        try {
+          const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 1500));
+          const fetchPromise = sb.from('products').select('*').eq('is_available', true).order('created_at', { ascending: false });
+          const { data: sbProds } = await Promise.race([fetchPromise, timeoutPromise]);
+          if (sbProds && sbProds.length > 0) {
+            const existingIds = new Set(products.map(p => String(p.id)));
+            sbProds.forEach(sp => {
+              if (!existingIds.has(String(sp.id))) {
+                products.unshift(sp);
+              }
+            });
+          }
+        } catch(e) {}
+      }
+
+      if (!products || products.length === 0) {
+        if (grid && allProducts.length === 0) {
+          grid.innerHTML = '<div class="col-span-full text-center py-12 glass rounded-3xl text-gray-500 font-medium">No products listed. Add items in Store Admin!</div>';
+          const pc = document.getElementById('product-count');
+          if (pc) pc.innerText = '0 items';
+        }
+        return;
+      }
+
+      const localMrps = JSON.parse(localStorage.getItem('nsn_product_mrps') || '{}');
+      allProducts = products.map(p => ({
+        ...p,
+        mrp: parseFloat(p.mrp || localMrps[p.id] || (p.price * 1.25))
+      }));
+
+      currentFilteredList = allProducts;
+      displayedCount = BATCH_SIZE;
+      renderProductsList();
+      syncAllCardSteppers();
+    }
+
     function getRelevantProductImage(title, existingUrl, productId) {
       // 1. HIGHEST & EXCLUSIVE USER PRIORITY: Custom image updated via Image Studio
       try {

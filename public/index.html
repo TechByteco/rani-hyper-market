@@ -27,11 +27,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/landing.css">
 
-  <!-- GSAP & ScrollTrigger for Refined Editorial Scroll-Linked Motion -->
+  <!-- GSAP & ScrollTrigger for Subtle Editorial Reveals -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <!-- Lenis for Butter-Smooth Inertia Scrolling (60-120fps) -->
-  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
 
   <!-- Schema.org Structured Data -->
   <script type="application/ld+json">
@@ -1332,137 +1330,46 @@
       }
     }
 
-    // ── PRIMARY TASK 2: REFINED GSAP SCROLL-LINKED MOVEMENT & SMOOTH SCROLLING ───
+    // ── REFINED EDITORIAL ENTRANCE ANIMATIONS (NATURAL BROWSER SCROLLING) ───
     document.addEventListener('DOMContentLoaded', function() {
       // Respect prefers-reduced-motion
       var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // ── Initialize Lenis Smooth Scrolling ──
-      var lenis = null;
-      if (!prefersReducedMotion && typeof Lenis !== 'undefined') {
-        lenis = new Lenis({
-          duration: 1.2,
-          easing: function(t) {
-            return Math.min(1, 1.001 - Math.pow(2, -10 * t));
-          },
-          orientation: 'vertical',
-          gestureOrientation: 'vertical',
-          smoothWheel: true,
-          touchMultiplier: 1.5,
-          wheelMultiplier: 1.0,
-        });
-
-        window.lenisInstance = lenis;
-
-        // Synchronize Lenis scroll with GSAP ScrollTrigger
-        if (typeof ScrollTrigger !== 'undefined') {
-          lenis.on('scroll', ScrollTrigger.update);
-        }
-
-        // Drive Lenis RAF loop via GSAP ticker for perfect 60-120fps frame-pacing
-        if (typeof gsap !== 'undefined') {
-          gsap.ticker.add(function(time) {
-            lenis.raf(time * 1000);
-          });
-          gsap.ticker.lagSmoothing(0);
-        } else {
-          function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-          }
-          requestAnimationFrame(raf);
-        }
-
-        // Smooth in-page anchor link interception
-        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
-          anchor.addEventListener('click', function(e) {
-            var targetId = this.getAttribute('href');
-            if (targetId && targetId !== '#') {
-              var targetEl = document.querySelector(targetId);
-              if (targetEl) {
-                e.preventDefault();
-                // Close mobile menu if open
-                var mobileMenu = document.getElementById('landing-mobile-menu');
-                if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
-                  mobileMenu.classList.add('hidden');
-                }
-                lenis.scrollTo(targetEl, { offset: -70, duration: 1.2 });
+      // Smooth in-page anchor navigation using native browser scroll
+      document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+          var targetId = this.getAttribute('href');
+          if (targetId && targetId !== '#') {
+            var targetEl = document.querySelector(targetId);
+            if (targetEl) {
+              e.preventDefault();
+              var mobileMenu = document.getElementById('landing-mobile-menu');
+              if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
               }
+              targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-          });
+          }
         });
-      }
+      });
 
-      if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+      if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined' || prefersReducedMotion) return;
 
       gsap.registerPlugin(ScrollTrigger);
 
-      if (prefersReducedMotion) return;
-
-      var isDesktop = window.innerWidth >= 768;
-
-      if (isDesktop) {
-        // Desktop Hero Pinning & Layered Scrub Movement
-        var heroTimeline = gsap.timeline({
-          scrollTrigger: {
-            trigger: '#hero-section',
-            start: 'top top',
-            end: '+=95%',
-            pin: true,
-            scrub: 0.7,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          }
-        });
-
-        // Hero image: scale gradually 1.00 -> 1.10 & translate vertically by ~-6%
-        heroTimeline.to('.anim-hero-img', {
-          scale: 1.10,
-          yPercent: -6,
-          ease: 'none'
-        }, 0);
-
-        // Subtle dark image overlay transition
-        heroTimeline.to('.anim-hero-overlay', {
-          opacity: 0.35,
-          ease: 'none'
-        }, 0);
-
-        // Hero text group: translate upward by ~-48px and fade from 1 to 0.15
-        heroTimeline.to('.anim-hero-text-group', {
-          y: -48,
-          opacity: 0.15,
-          ease: 'none'
-        }, 0);
-
-        // Layered parallax speeds for text group elements
-        heroTimeline.to('.anim-hero-eyebrow', { y: -20, ease: 'none' }, 0);
-        heroTimeline.to('.anim-hero-heading', { y: -36, ease: 'none' }, 0);
-        heroTimeline.to('.anim-hero-desc', { y: -52, ease: 'none' }, 0);
-        heroTimeline.to('.anim-hero-actions', { y: -64, ease: 'none' }, 0);
-        heroTimeline.to('.anim-hero-trust', { y: -76, ease: 'none' }, 0);
-
-        // Offer card: translate upward around -70px & rotate <= 1 degree
-        heroTimeline.to('.anim-offer-card', {
-          y: -70,
-          rotate: -0.75,
-          ease: 'none'
-        }, 0);
-      }
-
-      // Department items entrance: staggered fade-and-rise (y: 24 to 0, opacity 0 to 1, stagger: 0.08)
+      // Department items entrance: gentle fade-and-rise on scroll
       gsap.fromTo(
         '.anim-dept-card',
-        { y: 24, opacity: 0 },
+        { y: 20, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          stagger: 0.08,
-          duration: 0.6,
+          stagger: 0.06,
+          duration: 0.5,
           ease: 'power2.out',
           scrollTrigger: {
             trigger: '#departments',
-            start: 'top 82%',
+            start: 'top 85%',
             once: true
           }
         }

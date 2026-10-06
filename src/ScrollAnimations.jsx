@@ -1,24 +1,62 @@
 import { useEffect, useRef } from 'react';
 
 /**
- * High-performance GSAP ScrollTrigger movement hook.
- * Fully respects prefers-reduced-motion, cleans up via gsap.context(),
- * and disables pinning on mobile viewports (< 768px).
+ * High-performance GSAP ScrollTrigger & Lenis smooth scroll hook.
+ * Integrates momentum inertia scrolling (60-120fps),
+ * respects prefers-reduced-motion, cleans up via gsap.context() and lenis.destroy(),
+ * and disables desktop pinning on mobile viewports (< 768px).
  */
 export const useScrollAnimations = ({ heroPinRef, nextSectionRef }) => {
   useEffect(() => {
-    // Check if GSAP and ScrollTrigger are loaded in browser environment
     if (typeof window === 'undefined') return;
-    const gsap = window.gsap;
-    const ScrollTrigger = window.ScrollTrigger;
-    if (!gsap || !ScrollTrigger) return;
-
-    // Register plugin safely on client
-    gsap.registerPlugin(ScrollTrigger);
 
     // Respect user's motion preferences
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
+
+    let lenis = null;
+
+    // Initialize Lenis smooth scroll if available and reduced-motion not requested
+    const LenisClass = window.Lenis;
+    if (!prefersReducedMotion && LenisClass) {
+      lenis = new LenisClass({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        touchMultiplier: 1.5,
+        wheelMultiplier: 1.0,
+      });
+
+      window.lenisInstance = lenis;
+
+      if (window.ScrollTrigger) {
+        lenis.on('scroll', window.ScrollTrigger.update);
+      }
+
+      if (window.gsap) {
+        window.gsap.ticker.add((time) => {
+          lenis.raf(time * 1000);
+        });
+        window.gsap.ticker.lagSmoothing(0);
+      }
+    }
+
+    const gsap = window.gsap;
+    const ScrollTrigger = window.ScrollTrigger;
+    if (!gsap || !ScrollTrigger) {
+      return () => {
+        if (lenis) lenis.destroy();
+      };
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    if (prefersReducedMotion) {
+      return () => {
+        if (lenis) lenis.destroy();
+      };
+    }
 
     // Use gsap.context for clean component lifecycle scoping & teardown
     const ctx = gsap.context(() => {
@@ -96,6 +134,10 @@ export const useScrollAnimations = ({ heroPinRef, nextSectionRef }) => {
 
     return () => {
       ctx.revert(); // Automatically kills and cleans up all GSAP timelines & ScrollTriggers
+      if (lenis) {
+        lenis.destroy();
+        window.lenisInstance = null;
+      }
     };
   }, [heroPinRef, nextSectionRef]);
 };

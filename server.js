@@ -34,6 +34,15 @@ const server = http.createServer((req, res) => {
 
   // API Endpoints: Live Desktop POS Bridge
     // API Endpoints: System Diagnostics & Health Suite
+  // Google Merchant Center Feed
+  if (reqPath === '/api/feed/google-merchant.xml' || reqPath === '/api/feed/google-merchant' || reqPath === '/google-merchant-feed.xml') {
+    const feedFile = path.join(__dirname, 'google-merchant-feed.xml');
+    if (fs.existsSync(feedFile)) {
+      res.writeHead(200, { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=86400' });
+      return res.end(fs.readFileSync(feedFile, 'utf8'));
+    }
+  }
+
   // National Hypermarket Backend API v1
   if (reqPath === '/api/v1/products') {
     const search = queryParams.get('search') || '';

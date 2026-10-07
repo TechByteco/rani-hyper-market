@@ -82,6 +82,30 @@ module.exports = async (req, res) => {
   };
 
   try {
+    // Google Merchant Center RSS / XML Feed
+    if (reqPath === '/api/feed/google-merchant.xml' || reqPath === '/api/feed/google-merchant' || reqPath === '/google-merchant-feed.xml') {
+      const feedPaths = [
+        path.join(process.cwd(), 'public', 'google-merchant-feed.xml'),
+        path.join(process.cwd(), 'google-merchant-feed.xml'),
+        path.join(__dirname, '..', 'public', 'google-merchant-feed.xml'),
+        path.join(__dirname, '..', 'google-merchant-feed.xml')
+      ];
+      for (const fp of feedPaths) {
+        if (fs.existsSync(fp)) {
+          const xml = fs.readFileSync(fp, 'utf8');
+          if (res.setHeader) {
+            res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+            res.setHeader('Cache-Control', 'public, max-age=86400');
+          }
+          if (res.writeHead) {
+            res.writeHead(200, { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=86400' });
+            return res.end(xml);
+          }
+          return res.send ? res.send(xml) : res.end(xml);
+        }
+      }
+    }
+
     // 1. POS Status & Bridge
         // API Endpoints: System Diagnostics & Health Suite
     if (reqPath === '/api/diagnostics') {

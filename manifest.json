@@ -1,0 +1,51 @@
+{
+  "name": "Rani Hyper Market",
+  "short_name": "Rani Market",
+  "description": "Bodinayakanur's Premier Supermarket for Fresh Groceries, Daily Staples, FMCG & Household Essentials.",
+  "start_url": "/store",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#064e3b",
+  "theme_color": "#059669",
+  "orientation": "portrait-primary",
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48 64x64 128x128 256x256",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/images/rani_logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/rani_logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "food", "lifestyle"],
+  "shortcuts": [
+    {
+      "name": "Browse Supermarket",
+      "short_name": "Store",
+      "description": "Open Rani Hyper Market online catalog",
+      "url": "/store",
+      "icons": [{ "src": "/images/rani_logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "In-Store Barcode Scanner",
+      "short_name": "Scanner",
+      "description": "Scan physical product barcodes in-store",
+      "url": "/store?scan=1",
+      "icons": [{ "src": "/images/rani_logo.png", "sizes": "192x192" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

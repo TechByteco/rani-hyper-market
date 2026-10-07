@@ -47,6 +47,14 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/images/rani_logo.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/rani_logo.png">
 
+  <!-- Progressive Web App (PWA) Manifest & Mobile OS Theme -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#059669">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Rani Market">
+
   <!-- Schema.org JSON-LD Structured Data for Google Supermarket & Rich Snippets -->
   <script type="application/ld+json">
   {
@@ -233,6 +241,23 @@
       pointer-events: none;
     }
     #side-cart-toast.show { transform: translateX(0); opacity: 1; pointer-events: auto; }
+
+    /* Laser Scan Animation for In-Store Barcode Scanner */
+    @keyframes laserSweep {
+      0% { transform: translateY(-70px); opacity: 0.25; }
+      50% { transform: translateY(70px); opacity: 1; }
+      100% { transform: translateY(-70px); opacity: 0.25; }
+    }
+    .animate-laser-sweep {
+      animation: laserSweep 2s ease-in-out infinite;
+    }
+    @keyframes slideUpSmooth {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .animate-slide-up {
+      animation: slideUpSmooth 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
 
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.35);
@@ -816,6 +841,9 @@
         </div>
 
         <div class="flex items-center gap-3">
+          <button type="button" onclick="openBarcodeScanner()" class="sm:hidden w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 active:scale-90 transition cursor-pointer" aria-label="Scan Barcode" title="Scan in-store product barcode">
+            <i class="fa-solid fa-barcode text-sm"></i>
+          </button>
           <button type="button" onclick="toggleMobileSearch()" class="sm:hidden w-9 h-9 rounded-xl glass flex items-center justify-center text-gray-600 hover:text-emerald-700 border border-white/80 shadow-sm active:scale-90 transition cursor-pointer" aria-label="Search" title="Search products">
             <i class="fa-solid fa-magnifying-glass text-sm"></i>
           </button>
@@ -823,6 +851,11 @@
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-xs"></i>
             <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="Search vegetables, fruits, dairy..." class="glass-input text-xs pl-9 py-2">
           </div>
+          <!-- In-Store Barcode Scanner Button -->
+          <button type="button" onclick="openBarcodeScanner()" class="hidden sm:flex px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-xl text-xs font-black transition items-center gap-1.5 shadow-xs cursor-pointer active:scale-95" title="Scan In-Store Product Barcode (Camera)">
+            <i class="fa-solid fa-barcode text-emerald-600 text-sm"></i>
+            <span class="hidden lg:inline">Scan Barcode</span>
+          </button>
           <button type="button" onclick="toggleCustomerAiChat()" class="px-3.5 py-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-emerald-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl text-xs font-black transition flex items-center gap-1.5 shadow-md hover:shadow-lg transform active:scale-95 cursor-pointer">
             <i class="fa-solid fa-wand-magic-sparkles text-amber-300 animate-pulse"></i>
             <span class="hidden md:inline">AI Voice &amp; Quick Cart</span>
@@ -1924,6 +1957,13 @@
       <i class="fa-solid fa-magnifying-glass text-base"></i>
       <span>Search</span>
     </button>
+    <button type="button" onclick="openBarcodeScanner()" class="flex flex-col items-center gap-0.5 text-emerald-600 hover:text-emerald-800 font-bold text-[10px] active:scale-95 transition cursor-pointer" title="Scan Barcode In-Store">
+      <div class="relative">
+        <i class="fa-solid fa-barcode text-base"></i>
+        <span class="absolute -top-1 -right-1.5 w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+      </div>
+      <span>Scan</span>
+    </button>
     <button type="button" onclick="handleMobileNav('ai')" class="flex flex-col items-center gap-0.5 text-purple-600 hover:text-purple-800 font-bold text-[10px] active:scale-95 transition">
       <div class="relative">
         <i class="fa-solid fa-wand-magic-sparkles text-base animate-pulse"></i>
@@ -2324,6 +2364,25 @@
     async function loadStoreProducts() {
       const grid = document.getElementById('product-grid');
       let products = [];
+      // ⚡ STEP 0: INSTANT OFFLINE LOAD FROM INDEXEDDB (<20ms)
+      try {
+        if (typeof RaniCatalogDB !== 'undefined') {
+          const cached = await RaniCatalogDB.getCatalog();
+          if (cached && Array.isArray(cached) && cached.length > 0 && allProducts.length === 0) {
+            const localMrps = JSON.parse(localStorage.getItem('nsn_product_mrps') || '{}');
+            allProducts = cached.map(p => ({
+              ...p,
+              mrp: parseFloat(p.mrp || localMrps[p.id] || (p.price * 1.25))
+            }));
+            currentFilteredList = allProducts;
+            displayedCount = BATCH_SIZE;
+            renderProductsList();
+            syncAllCardSteppers();
+            console.log('⚡ Loaded ' + allProducts.length + ' products instantly from IndexedDB cache!');
+          }
+        }
+      } catch(e) {}
+
 
       // Multi-source resilient catalog fetch with absolute paths
       const sources = [
@@ -2430,7 +2489,14 @@
       currentFilteredList = allProducts;
       displayedCount = BATCH_SIZE;
       renderProductsList();
+      
       syncAllCardSteppers();
+      // Silently save freshest catalog into IndexedDB
+      try {
+        if (typeof RaniCatalogDB !== 'undefined' && products && products.length > 0) {
+          RaniCatalogDB.saveCatalog(products);
+        }
+      } catch(e) {}
     }
 
     function getRelevantProductImage(title, existingUrl, productId) {
@@ -4394,6 +4460,23 @@
         const searchQ = params.get('search') || params.get('q');
         const brandQ = params.get('brand');
         const categoryQ = params.get('category') || params.get('cat');
+        const scanQ = params.get('scan') || params.get('scanner');
+        const productQ = params.get('product') || params.get('id');
+        const barcodeQ = params.get('barcode');
+
+        if (scanQ) {
+          setTimeout(() => { if (typeof openBarcodeScanner === 'function') openBarcodeScanner(); }, 400);
+        } else if (productQ) {
+          setTimeout(() => {
+            const p = allProducts.find(x => String(x.id) === String(productQ));
+            if (p && typeof openProductQuickView === 'function') openProductQuickView(p.id);
+          }, 450);
+        } else if (barcodeQ) {
+          setTimeout(() => {
+            const p = allProducts.find(x => String(x.barcode) === String(barcodeQ));
+            if (p && typeof openProductQuickView === 'function') openProductQuickView(p.id);
+          }, 450);
+        }
         if (brandQ) {
           setTimeout(() => { if (typeof filterByBrand === 'function') filterByBrand(brandQ); }, 350);
         } else if (categoryQ) {
@@ -4416,6 +4499,93 @@
     })();
 
   </script>
+
+  <!-- IN-STORE MOBILE BARCODE SCANNER MODAL -->
+  <div id="barcode-scanner-modal" class="fixed inset-0 z-[120] hidden bg-black/90 backdrop-blur-md flex flex-col items-center justify-between p-4 sm:p-6 text-white select-none">
+    <!-- Top Bar -->
+    <div class="w-full max-w-md flex items-center justify-between z-10 pt-2 pb-3">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shadow-sm">
+          <i class="fa-solid fa-barcode text-lg"></i>
+        </div>
+        <div>
+          <h3 class="text-sm font-extrabold tracking-wide text-white">In-Store Barcode Scanner</h3>
+          <p class="text-[11px] text-emerald-300/80">Scan physical products inside Rani Hyper Market</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button type="button" id="scanner-torch-btn" onclick="toggleScannerTorch()" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 active:scale-90 transition flex items-center justify-center text-white/90 border border-white/20 cursor-pointer" title="Toggle Flash / Torch">
+          <i class="fa-solid fa-bolt text-xs"></i>
+        </button>
+        <button type="button" id="scanner-flip-btn" onclick="switchScannerCamera()" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 active:scale-90 transition flex items-center justify-center text-white/90 border border-white/20 cursor-pointer" title="Switch Camera">
+          <i class="fa-solid fa-camera-rotate text-xs"></i>
+        </button>
+        <button type="button" onclick="closeBarcodeScanner()" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-red-500/80 active:scale-90 transition flex items-center justify-center text-white/90 border border-white/20 cursor-pointer" title="Close Scanner">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Scanner Viewport Frame -->
+    <div class="relative w-full max-w-sm aspect-[4/5] sm:aspect-square rounded-3xl overflow-hidden border-2 border-emerald-500/40 shadow-2xl bg-black flex items-center justify-center">
+      <video id="barcode-video" playsinline muted autoplay class="w-full h-full object-cover"></video>
+      <canvas id="barcode-canvas" class="hidden"></canvas>
+
+      <!-- Viewfinder Overlay Guide Corners -->
+      <div class="absolute inset-8 sm:inset-12 pointer-events-none flex flex-col justify-between">
+        <div class="flex justify-between">
+          <div class="w-8 h-8 border-t-4 border-l-4 border-emerald-400 rounded-tl-xl shadow-lg"></div>
+          <div class="w-8 h-8 border-t-4 border-r-4 border-emerald-400 rounded-tr-xl shadow-lg"></div>
+        </div>
+        <!-- Animated Laser Line -->
+        <div class="w-full h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_15px_#10b981] animate-laser-sweep"></div>
+        <div class="flex justify-between">
+          <div class="w-8 h-8 border-b-4 border-l-4 border-emerald-400 rounded-bl-xl shadow-lg"></div>
+          <div class="w-8 h-8 border-b-4 border-r-4 border-emerald-400 rounded-br-xl shadow-lg"></div>
+        </div>
+      </div>
+
+      <!-- Live Scan Status Banner -->
+      <div id="scanner-status" class="absolute bottom-3 left-4 right-4 bg-black/60 backdrop-blur-md border border-white/10 py-1.5 px-3 rounded-full text-center text-xs text-emerald-300 font-semibold shadow-md">
+        <i class="fa-solid fa-crosshairs animate-pulse mr-1"></i> Align barcode inside the frame
+      </div>
+    </div>
+
+    <!-- Scanned Product Result Card (Hidden until detected) -->
+    <div id="scanned-product-card" class="hidden w-full max-w-md bg-white text-gray-900 rounded-3xl p-4 shadow-2xl border border-emerald-500/30 flex flex-col gap-3 my-2 z-20 animate-slide-up">
+    </div>
+
+    <!-- Bottom Controls & Manual Input Fallback -->
+    <div class="w-full max-w-md flex flex-col gap-2 z-10 pb-2">
+      <div class="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-3 py-1.5">
+        <i class="fa-solid fa-keyboard text-emerald-400 text-xs"></i>
+        <input type="text" id="manual-barcode-input" placeholder="Type barcode if unreadable..." class="bg-transparent text-xs text-white placeholder-gray-400 outline-none flex-1 font-mono">
+        <button type="button" onclick="submitManualBarcode()" class="px-3 py-1 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white text-xs font-bold rounded-xl transition shadow-sm cursor-pointer">Look Up</button>
+      </div>
+      <p class="text-[10px] text-center text-gray-400">Supports standard Indian FMCG 8-digit, 12-digit & 13-digit EAN/UPC barcodes</p>
+    </div>
+  </div>
+
+  <!-- PWA INSTALL PROMPT BANNER -->
+  <div id="pwa-install-banner" class="hidden fixed bottom-20 md:bottom-6 left-4 right-4 md:left-auto md:right-6 md:w-96 z-50 bg-white/95 backdrop-blur-xl border border-emerald-300 rounded-3xl p-4 shadow-2xl flex items-center justify-between gap-3 text-gray-900 animate-slide-up">
+    <img src="/images/rani_logo.png" alt="Rani Hyper Market" class="w-12 h-12 rounded-2xl object-contain shadow-md shrink-0 border border-emerald-100 bg-white p-0.5">
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center gap-1.5">
+        <h4 class="text-xs font-extrabold text-emerald-950 truncate">Install Rani Market App</h4>
+        <span class="bg-emerald-100 text-emerald-800 text-[9px] font-black px-1.5 py-0.5 rounded-full">FAST</span>
+      </div>
+      <p class="text-[11px] text-gray-600 line-clamp-1">Install to your phone for instant shopping & barcode scanner</p>
+    </div>
+    <div class="flex items-center gap-1.5 shrink-0">
+      <button type="button" onclick="installPWAApp()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold rounded-xl transition shadow-sm cursor-pointer">Install</button>
+      <button type="button" onclick="dismissPWABanner()" class="w-7 h-7 text-gray-400 hover:text-gray-600 flex items-center justify-center rounded-lg active:scale-90 cursor-pointer" title="Dismiss">
+        <i class="fa-solid fa-xmark text-xs"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- PWA, Barcode Scanner & IndexedDB Engine Module -->
+  <script src="/store_upgrade_module.js"></script>
 </body>
 </html>
 

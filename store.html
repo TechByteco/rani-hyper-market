@@ -780,6 +780,153 @@
       }
     }
 
+  
+    /* ================================================================
+       🛍️ FLIPKART / AMAZON 4-COLUMN MOBILE STOREFRONT THEME & STRUCTURE
+       ================================================================ */
+    .nhm-product-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    .nhm-product-card:hover {
+      border-color: #059669;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.15);
+      transform: translateY(-2px);
+    }
+    .nhm-thumb-box {
+      position: relative;
+      width: 100%;
+      height: 140px;
+      border-radius: 8px;
+      background: #f8fafc;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+      cursor: pointer;
+    }
+    .nhm-thumb-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 4px;
+      transition: transform 0.25s ease;
+    }
+    .nhm-product-card:hover .nhm-thumb-img {
+      transform: scale(1.05);
+    }
+
+    /* 4-Columns Flipkart/Amazon Mobile Card Compactness */
+    @media (max-width: 639px) {
+      #product-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 6px !important;
+      }
+      .nhm-product-card {
+        padding: 5px !important;
+        border-radius: 8px !important;
+      }
+      .nhm-thumb-box {
+        height: 72px !important;
+        border-radius: 6px !important;
+        margin-bottom: 4px !important;
+      }
+      .nhm-thumb-img {
+        padding: 2px !important;
+      }
+      .nhm-second-img, .nhm-double-badge {
+        display: none !important; /* Disable double hover on mobile to conserve performance */
+      }
+      .nhm-discount-badge {
+        font-size: 7.5px !important;
+        padding: 1px 4px !important;
+        top: 2px !important;
+        left: 2px !important;
+        letter-spacing: 0 !important;
+      }
+      .nhm-action-top {
+        top: 2px !important;
+        right: 2px !important;
+        gap: 2px !important;
+      }
+      .nhm-btn-wishlist {
+        width: 18px !important;
+        height: 18px !important;
+        font-size: 8px !important;
+      }
+      .nhm-veg-dot {
+        width: 12px !important;
+        height: 12px !important;
+      }
+      .nhm-veg-dot span {
+        width: 4px !important;
+        height: 4px !important;
+      }
+      .nhm-card-category {
+        display: none !important; /* Save vertical space */
+      }
+      .nhm-card-unit {
+        font-size: 8px !important;
+        padding: 0 3px !important;
+        line-height: 1.2 !important;
+      }
+      .nhm-card-title {
+        font-size: 9.5px !important;
+        line-height: 1.15 !important;
+        min-height: 22px !important;
+        max-height: 22px !important;
+        -webkit-line-clamp: 2 !important;
+        margin-bottom: 2px !important;
+        font-weight: 700 !important;
+      }
+      .nhm-card-rating {
+        display: none !important; /* Cleaner Amazon/Flipkart mobile grid */
+      }
+      .nhm-card-price-row {
+        margin-top: 2px !important;
+        padding-top: 2px !important;
+        border-top: 1px solid #f1f5f9 !important;
+        margin-bottom: 3px !important;
+      }
+      .nhm-card-mrp {
+        font-size: 8px !important;
+        line-height: 1 !important;
+      }
+      .nhm-card-sell-price {
+        font-size: 11px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+      }
+      .nhm-card-save-badge {
+        display: none !important;
+      }
+      .nhm-stepper-btn {
+        padding: 3px 2px !important;
+        font-size: 9px !important;
+        border-radius: 6px !important;
+      }
+      .nhm-stepper-btn i {
+        font-size: 7px !important;
+      }
+      .nhm-stepper-qty {
+        font-size: 9px !important;
+      }
+      .nhm-stepper-counter-btn {
+        width: 18px !important;
+        height: 18px !important;
+        font-size: 9px !important;
+      }
+    }
+
   </style>
 </head>
 <body class="relative min-h-screen flex flex-col justify-between">
@@ -1401,7 +1548,7 @@
         </div>
       </div>
 
-      <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+      <div id="product-grid" class="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3.5 lg:gap-4">
         <div class="glass p-5 rounded-3xl animate-pulse h-64"></div>
         <div class="glass p-5 rounded-3xl animate-pulse h-64"></div>
         <div class="glass p-5 rounded-3xl animate-pulse h-64"></div>
@@ -2527,16 +2674,16 @@
     function renderStepperHtml(productId, qty) {
       if (qty > 0) {
         return `
-          <div class="w-full flex items-center justify-between bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white rounded-xl p-1 shadow-md">
-            <button type="button" onclick="handleCardStep('${productId}', -1, event)" class="w-7 h-7 rounded-lg bg-black/20 hover:bg-black/40 text-white font-black text-sm flex items-center justify-center transition active:scale-90" title="Decrease Qty">&minus;</button>
-            <span class="font-black text-xs px-1 select-none tracking-wide">${qty} in Cart</span>
-            <button type="button" onclick="handleCardStep('${productId}', 1, event)" class="w-7 h-7 rounded-lg bg-black/20 hover:bg-black/40 text-white font-black text-sm flex items-center justify-center transition active:scale-90" title="Increase Qty">&plus;</button>
+          <div class="w-full flex items-center justify-between bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white rounded-lg p-0.5 shadow-xs">
+            <button type="button" onclick="handleCardStep('${productId}', -1, event)" class="nhm-stepper-counter-btn w-5 h-5 rounded bg-black/20 hover:bg-black/40 text-white font-black text-xs flex items-center justify-center transition active:scale-90" title="Decrease Qty">&minus;</button>
+            <span class="nhm-stepper-qty font-black text-[10px] px-0.5 select-none tracking-tight">${qty}</span>
+            <button type="button" onclick="handleCardStep('${productId}', 1, event)" class="nhm-stepper-counter-btn w-5 h-5 rounded bg-black/20 hover:bg-black/40 text-white font-black text-xs flex items-center justify-center transition active:scale-90" title="Increase Qty">&plus;</button>
           </div>
         `;
       } else {
         return `
-          <button type="button" onclick="handleCardAdd('${productId}', event)" class="w-full py-2 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white border-2 border-emerald-600 font-black text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all duration-200 transform active:scale-95 group/btn">
-            <i class="fa-solid fa-plus text-[10px] group-hover/btn:rotate-90 transition-transform"></i>
+          <button type="button" onclick="handleCardAdd('${productId}', event)" class="nhm-stepper-btn w-full py-1.5 px-2 rounded-lg bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white border border-emerald-600 font-extrabold text-[11px] flex items-center justify-center gap-1 shadow-xs transition-all duration-200 transform active:scale-95 group/btn">
+            <i class="fa-solid fa-plus text-[8px] group-hover/btn:rotate-90 transition-transform"></i>
             <span>ADD</span>
           </button>
         `;

@@ -104,11 +104,37 @@
   <script src="/initial_products.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
+    
+    /* PAYMENT OPTIONS & RAZORPAY STYLES */
+    .pay-option-card {
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      border-width: 2px;
+    }
+    .pay-option-card:hover {
+      transform: translateY(-1.5px);
+    }
+    .pay-option-card.active-cod {
+      border-color: #059669 !important;
+      background: linear-gradient(135deg, rgba(236, 253, 245, 0.95), rgba(209, 250, 229, 0.8)) !important;
+      box-shadow: 0 4px 12px -2px rgba(5, 150, 105, 0.18);
+    }
+    .pay-option-card.active-razorpay {
+      border-color: #2563eb !important;
+      background: linear-gradient(135deg, rgba(239, 246, 255, 0.95), rgba(219, 234, 254, 0.8)) !important;
+      box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.18);
+    }
+    .pay-option-card.active-upi {
+      border-color: #7c3aed !important;
+      background: linear-gradient(135deg, rgba(245, 243, 255, 0.95), rgba(237, 233, 254, 0.8)) !important;
+      box-shadow: 0 4px 12px -2px rgba(124, 58, 237, 0.18);
+    }
+
     *, ::before, ::after {
       box-sizing: border-box;
       margin: 0;
@@ -2159,32 +2185,174 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block font-bold text-gray-700 mb-1">Preferred Delivery Slot</label>
-            <select id="ord-timeslot" class="glass-input text-xs font-semibold">
-              <option value="Express 30-45 Mins">⚡ Express Delivery (30 - 45 Mins)</option>
-              <option value="Morning (7 AM - 10 AM)">🌅 Morning (7:00 AM - 10:00 AM)</option>
-              <option value="Afternoon (12 PM - 3 PM)">☀️ Afternoon (12:00 PM - 3:00 PM)</option>
-              <option value="Evening (5 PM - 8:30 PM)">🌇 Evening (5:00 PM - 8:30 PM)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block font-bold text-gray-700 mb-1">Payment Method</label>
-            <select id="ord-payment" onchange="handlePaymentMethodChange(this.value)" class="glass-input text-xs font-semibold">
-              <option value="Cash On Delivery (COD)">💵 Cash On Delivery (COD)</option>
-              <option value="UPI / QR Code on Delivery">📱 Instant UPI Scan &amp; Pay (GPay / PhonePe)</option>
-              <option value="Card on Delivery">💳 Credit / Debit Card on Delivery</option>
-            </select>
-          </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Preferred Delivery Slot</label>
+          <select id="ord-timeslot" class="glass-input text-xs font-semibold">
+            <option value="Express 30-45 Mins">⚡ Express Delivery (30 - 45 Mins)</option>
+            <option value="Morning (7 AM - 10 AM)">🌅 Morning (7:00 AM - 10:00 AM)</option>
+            <option value="Afternoon (12 PM - 3 PM)">☀️ Afternoon (12:00 PM - 3:00 PM)</option>
+            <option value="Evening (5 PM - 8:30 PM)">🌇 Evening (5:00 PM - 8:30 PM)</option>
+          </select>
         </div>
 
-        <!-- DYNAMIC UPI PROMPT CALLOUT -->
-        <div id="checkout-upi-hint" class="hidden p-2.5 bg-purple-50 rounded-xl border border-purple-200 text-purple-900 text-[11px] flex items-center justify-between">
-          <span class="flex items-center gap-1.5 font-bold">
-            <i class="fa-solid fa-qrcode text-purple-600"></i> Dynamic QR will be generated for instant payment.
-          </span>
-          <button type="button" onclick="previewCheckoutUpiQr()" class="text-[10px] bg-purple-600 text-white font-black px-2 py-1 rounded-lg">Preview QR</button>
+        <!-- PAYMENT METHOD SELECTION -->
+        <div class="space-y-2 pt-1 border-t border-gray-100">
+          <div class="flex items-center justify-between">
+            <label class="block font-extrabold text-gray-900 text-xs flex items-center gap-1.5">
+              <i class="fa-solid fa-wallet text-emerald-600"></i> Select Payment Option *
+            </label>
+            <button type="button" onclick="openRazorpaySettingsModal()" class="text-[11px] font-bold text-emerald-700 hover:text-emerald-900 flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded-lg border border-emerald-200 transition">
+              <i class="fa-solid fa-gear"></i> Connect Razorpay
+            </button>
+          </div>
+
+          <!-- Hidden input storing active payment method for order persistence -->
+          <input type="hidden" id="ord-payment" value="Cash On Delivery (COD)">
+
+          <!-- 3 Visual Payment Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2" id="payment-options-grid">
+            
+            <!-- 1. Cash On Delivery (COD) -->
+            <div id="pay-opt-cod" onclick="selectPaymentOption('cod')" class="pay-option-card active-cod cursor-pointer p-2.5 rounded-xl border-gray-200 bg-white transition flex flex-col justify-between relative">
+              <div class="flex items-start justify-between gap-1">
+                <div class="flex items-center gap-1.5 font-black text-gray-900 text-xs">
+                  <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs">💵</span>
+                  <span>COD</span>
+                </div>
+                <span id="check-icon-cod" class="text-emerald-600 font-bold text-xs"><i class="fa-solid fa-circle-check"></i></span>
+              </div>
+              <p class="text-[10px] text-gray-600 font-semibold mt-1">Cash / UPI on arrival</p>
+              <span class="text-[9px] font-bold text-emerald-800 bg-emerald-100/70 px-1.5 py-0.5 rounded mt-1.5 self-start">Pay at Doorstep</span>
+            </div>
+
+            <!-- 2. Razorpay Gateway -->
+            <div id="pay-opt-razorpay" onclick="selectPaymentOption('razorpay')" class="pay-option-card cursor-pointer p-2.5 rounded-xl border-gray-200 bg-white hover:border-blue-400 transition flex flex-col justify-between relative">
+              <div class="flex items-start justify-between gap-1">
+                <div class="flex items-center gap-1.5 font-black text-gray-900 text-xs">
+                  <span class="w-6 h-6 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs">💳</span>
+                  <span>Razorpay</span>
+                </div>
+                <span id="check-icon-razorpay" class="text-gray-300 font-bold text-xs"><i class="fa-regular fa-circle"></i></span>
+              </div>
+              <p class="text-[10px] text-gray-600 font-semibold mt-1">Cards &bull; NetBanking</p>
+              <span class="text-[9px] font-bold text-blue-800 bg-blue-100/70 px-1.5 py-0.5 rounded mt-1.5 self-start">Instant &amp; 100% Safe</span>
+            </div>
+
+            <!-- 3. Direct UPI & QR -->
+            <div id="pay-opt-upi" onclick="selectPaymentOption('upi')" class="pay-option-card cursor-pointer p-2.5 rounded-xl border-gray-200 bg-white hover:border-purple-400 transition flex flex-col justify-between relative">
+              <div class="flex items-start justify-between gap-1">
+                <div class="flex items-center gap-1.5 font-black text-gray-900 text-xs">
+                  <span class="w-6 h-6 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center text-xs">📱</span>
+                  <span>UPI / QR</span>
+                </div>
+                <span id="check-icon-upi" class="text-gray-300 font-bold text-xs"><i class="fa-regular fa-circle"></i></span>
+              </div>
+              <p class="text-[10px] text-gray-600 font-semibold mt-1">GPay, PhonePe, Paytm</p>
+              <span class="text-[9px] font-bold text-purple-800 bg-purple-100/70 px-1.5 py-0.5 rounded mt-1.5 self-start">App Redirect / QR</span>
+            </div>
+
+          </div>
+
+          <!-- CONTEXTUAL PANELS -->
+
+          <!-- Panel 1: COD Details -->
+          <div id="panel-pay-cod" class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-xl text-[11px] text-emerald-950 flex items-start gap-2">
+            <i class="fa-solid fa-circle-check text-emerald-600 text-sm mt-0.5"></i>
+            <div>
+              <span class="font-extrabold">Zero advance payment required.</span>
+              <p class="text-gray-600 text-[10px] mt-0.5">Pay with cash or scan the delivery person's QR upon doorstep delivery in Bodinayakanur.</p>
+            </div>
+          </div>
+
+          <!-- Panel 2: Razorpay Details -->
+          <div id="panel-pay-razorpay" class="hidden p-3 bg-blue-50/80 border border-blue-200/80 rounded-xl space-y-2">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5 text-blue-900 font-extrabold text-xs">
+                <i class="fa-solid fa-shield-halved text-blue-600"></i> Razorpay Payment Gateway
+              </div>
+              <span id="razorpay-key-status-badge" class="text-[9px] font-black bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full border border-blue-300">
+                Connected
+              </span>
+            </div>
+            <p class="text-[10px] text-gray-600 leading-relaxed">
+              Pay securely via <strong>Credit / Debit Cards (Visa, MasterCard, RuPay), NetBanking (50+ banks), UPI, or Wallets</strong>. 
+              Protected with 256-bit bank-grade encryption.
+            </p>
+            <div class="flex items-center justify-between pt-1 border-t border-blue-100 text-[10px]">
+              <span class="text-gray-500 font-semibold">Merchant Key: <span id="display-razorpay-key-id" class="font-mono font-bold text-gray-800">rzp_...</span></span>
+              <button type="button" onclick="openRazorpaySettingsModal()" class="text-blue-700 hover:underline font-bold flex items-center gap-1">
+                <i class="fa-solid fa-pen-to-square"></i> Change Account Key
+              </button>
+            </div>
+          </div>
+
+          <!-- Panel 3: UPI Apps & QR Details -->
+          <div id="panel-pay-upi" class="hidden p-3 bg-purple-50/90 border border-purple-200 rounded-xl space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-extrabold text-purple-950 text-xs flex items-center gap-1.5">
+                <i class="fa-solid fa-qrcode text-purple-700"></i> Instant UPI Pay (Apps &amp; QR)
+              </span>
+              <span class="text-[10px] font-black text-purple-700 bg-purple-100 px-2 py-0.5 rounded-full">
+                Zero Convenience Fee
+              </span>
+            </div>
+
+            <!-- Mobile 1-Tap App Redirect Buttons -->
+            <div>
+              <div class="text-[10px] font-bold text-gray-600 mb-1.5 flex items-center justify-between">
+                <span>1-Tap to pay via mobile app:</span>
+                <span class="text-purple-700 font-black text-[9px] uppercase tracking-wide">Instant Redirect</span>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                <button type="button" onclick="redirectToUpiApp('gpay')" class="p-2 bg-white rounded-lg border border-purple-200 hover:border-purple-500 hover:shadow-sm flex items-center justify-center gap-1.5 text-xs font-bold text-gray-800 active:scale-95 transition">
+                  <i class="fa-brands fa-google text-blue-600"></i> GPay
+                </button>
+                <button type="button" onclick="redirectToUpiApp('phonepe')" class="p-2 bg-white rounded-lg border border-purple-200 hover:border-purple-500 hover:shadow-sm flex items-center justify-center gap-1.5 text-xs font-bold text-purple-700 active:scale-95 transition">
+                  <i class="fa-solid fa-mobile-screen-button text-purple-600"></i> PhonePe
+                </button>
+                <button type="button" onclick="redirectToUpiApp('paytm')" class="p-2 bg-white rounded-lg border border-purple-200 hover:border-purple-500 hover:shadow-sm flex items-center justify-center gap-1.5 text-xs font-bold text-blue-700 active:scale-95 transition">
+                  <i class="fa-solid fa-wallet text-cyan-600"></i> Paytm
+                </button>
+                <button type="button" onclick="redirectToUpiApp('bhim')" class="p-2 bg-white rounded-lg border border-purple-200 hover:border-purple-500 hover:shadow-sm flex items-center justify-center gap-1.5 text-xs font-bold text-emerald-700 active:scale-95 transition">
+                  <i class="fa-solid fa-bolt text-emerald-600"></i> Any UPI
+                </button>
+              </div>
+            </div>
+
+            <!-- QR Code Scan Section -->
+            <div class="pt-2 border-t border-purple-200/70">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[11px] font-bold text-gray-700">Or Scan QR from another device:</span>
+                <div class="inline-flex rounded-lg border border-purple-300 p-0.5 bg-white text-[10px] font-bold">
+                  <button type="button" id="qr-tab-dynamic" onclick="switchUpiQrTab('dynamic')" class="px-2 py-0.5 rounded-md bg-purple-600 text-white">Dynamic (₹ Amt)</button>
+                  <button type="button" id="qr-tab-fixed" onclick="switchUpiQrTab('fixed')" class="px-2 py-0.5 rounded-md text-gray-600 hover:text-purple-700">Fixed Store QR</button>
+                </div>
+              </div>
+
+              <div class="flex flex-col sm:flex-row items-center gap-3 bg-white p-2.5 rounded-xl border border-purple-100 shadow-sm">
+                <div class="relative shrink-0">
+                  <img id="checkout-upi-qr-img" src="" alt="UPI QR" class="w-28 h-28 object-contain rounded-lg border border-gray-100">
+                  <div id="qr-badge-indicator" class="absolute -bottom-1 -right-1 bg-purple-700 text-white text-[8px] font-black px-1.5 py-0.5 rounded-full shadow">
+                    PREFILLED ₹
+                  </div>
+                </div>
+                <div class="text-left space-y-1.5 flex-1 w-full">
+                  <div class="text-[10px] text-gray-500 font-semibold" id="qr-instructions-text">
+                    Exact payable amount is embedded. Scan with GPay, PhonePe, or Paytm to pay directly.
+                  </div>
+                  <div class="flex items-center justify-between bg-purple-50 p-1.5 rounded-lg border border-purple-100">
+                    <span class="font-mono font-bold text-purple-950 text-[11px]" id="checkout-upi-vpa-display">7708834547@okaxis</span>
+                    <button type="button" onclick="copyUpiVpa()" class="text-[10px] font-extrabold text-purple-700 hover:text-purple-900 bg-white px-2 py-0.5 rounded shadow-xs border border-purple-200">
+                      Copy
+                    </button>
+                  </div>
+                  <div>
+                    <input type="text" id="ord-upi-ref" placeholder="Enter 12-digit UPI UTR / Ref No (Optional)" class="glass-input text-[11px] py-1">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div>
@@ -2267,9 +2435,13 @@
             <span>Delivery &amp; Handling Charge:</span>
             <span class="text-emerald-700 font-bold">FREE</span>
           </div>
-          <div class="flex justify-between text-gray-700 font-bold">
-            <span>Payment Method:</span>
-            <span id="bill-pay-method" class="font-black text-gray-900">Cash on Delivery</span>
+          <div class="flex justify-between items-center text-gray-700 font-bold">
+            <span>Payment Method &amp; Status:</span>
+            <span id="bill-pay-method" class="font-black text-gray-900 text-right">Cash on Delivery</span>
+          </div>
+          <div id="bill-txn-row" class="hidden flex justify-between text-[11px] text-gray-500 font-mono">
+            <span>Payment Reference / ID:</span>
+            <span id="bill-txn-id" class="font-bold text-emerald-800">pay_...</span>
           </div>
           <div class="flex justify-between text-sm font-black text-gray-900 border-t border-gray-200 pt-2 text-base">
             <span>Net Paid Amount:</span>
@@ -2381,6 +2553,55 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  
+  <!-- RAZORPAY & MERCHANT PAYMENT SETTINGS MODAL -->
+  <div id="razorpay-settings-modal" class="modal-overlay hidden">
+    <div class="modal-card max-w-md p-5 space-y-4">
+      <div class="flex items-center justify-between border-b border-gray-100 pb-2.5">
+        <h3 class="font-black text-gray-900 text-sm flex items-center gap-2">
+          <i class="fa-solid fa-link text-blue-600"></i> Connect Razorpay &amp; Payment Accounts
+        </h3>
+        <button type="button" onclick="closeRazorpaySettingsModal()" class="text-gray-400 hover:text-gray-700 text-xl font-bold">&times;</button>
+      </div>
+
+      <div class="bg-blue-50/70 border border-blue-200 p-3 rounded-xl text-[11px] text-blue-900 leading-relaxed">
+        <strong>⚡ Direct Merchant Settlement:</strong> Connect your Razorpay Key ID so customer payments (Cards, NetBanking, UPI) deposit directly into your business bank account.
+      </div>
+
+      <form onsubmit="savePaymentSettings(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Razorpay Key ID (Key ID) *</label>
+          <input type="text" id="setting-razorpay-key" placeholder="rzp_live_xxxxxxxxxxxxxx or rzp_test_xxxxxxxxxxxxxx" required class="glass-input text-xs font-mono font-semibold">
+          <p class="text-[10px] text-gray-500 mt-1">
+            Find in: <a href="https://dashboard.razorpay.com/#/access/api_keys" target="_blank" class="text-blue-600 underline font-bold">Razorpay Dashboard &rarr; Settings &rarr; API Keys</a>
+          </p>
+        </div>
+
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Store UPI VPA / ID (For QR &amp; App Redirect) *</label>
+          <input type="text" id="setting-merchant-vpa" placeholder="7708834547@okaxis or ranihypermarket@upi" required class="glass-input text-xs font-mono font-semibold">
+          <p class="text-[10px] text-gray-500 mt-1">
+            Your Google Pay, PhonePe, or BHIM merchant UPI ID linked to your bank account.
+          </p>
+        </div>
+
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Store / Business Name *</label>
+          <input type="text" id="setting-merchant-name" placeholder="RANI HYPER MARKET" required class="glass-input text-xs font-semibold">
+        </div>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-gray-100">
+          <button type="submit" class="btn-emerald flex-1 py-2.5 text-xs font-black shadow-md flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-check"></i> Save &amp; Connect Account
+          </button>
+          <button type="button" onclick="resetPaymentSettingsToDefault()" class="px-3 py-2.5 text-xs font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl">
+            Reset Demo
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -3226,8 +3447,63 @@
       closeProductQuickView();
     }
 
-    // CHECKOUT LOGISTICS & UPI MODAL CONTROLLERS
+    // CHECKOUT LOGISTICS & PAYMENT CONTROLLERS
     let selectedAddressTag = 'Home';
+    let selectedPaymentOption = 'cod'; // 'cod' | 'razorpay' | 'upi'
+    let currentUpiQrTab = 'dynamic'; // 'dynamic' | 'fixed'
+
+    // Configuration Accessors
+    function getRazorpayKey() {
+      return (localStorage.getItem('rhm_razorpay_key_id') || '').trim() || 'rzp_test_51aA1g3yXbE8e4';
+    }
+
+    function getMerchantVpa() {
+      return (localStorage.getItem('rhm_merchant_vpa') || '').trim() || '7708834547@okaxis';
+    }
+
+    function getMerchantName() {
+      return (localStorage.getItem('rhm_merchant_name') || '').trim() || 'Rani Hyper Market';
+    }
+
+    function openRazorpaySettingsModal() {
+      const keyInput = document.getElementById('setting-razorpay-key');
+      const vpaInput = document.getElementById('setting-merchant-vpa');
+      const nameInput = document.getElementById('setting-merchant-name');
+      if (keyInput) keyInput.value = localStorage.getItem('rhm_razorpay_key_id') || '';
+      if (vpaInput) vpaInput.value = getMerchantVpa();
+      if (nameInput) nameInput.value = getMerchantName();
+      const modal = document.getElementById('razorpay-settings-modal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeRazorpaySettingsModal() {
+      const modal = document.getElementById('razorpay-settings-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function savePaymentSettings(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const key = (document.getElementById('setting-razorpay-key')?.value || '').trim();
+      const vpa = (document.getElementById('setting-merchant-vpa')?.value || '').trim();
+      const name = (document.getElementById('setting-merchant-name')?.value || '').trim();
+
+      if (key) localStorage.setItem('rhm_razorpay_key_id', key);
+      if (vpa) localStorage.setItem('rhm_merchant_vpa', vpa);
+      if (name) localStorage.setItem('rhm_merchant_name', name);
+
+      closeRazorpaySettingsModal();
+      updatePaymentDisplayUI();
+      alert('✓ Payment accounts updated successfully! Customer transactions will now connect to this account.');
+    }
+
+    function resetPaymentSettingsToDefault() {
+      localStorage.removeItem('rhm_razorpay_key_id');
+      localStorage.removeItem('rhm_merchant_vpa');
+      localStorage.removeItem('rhm_merchant_name');
+      closeRazorpaySettingsModal();
+      updatePaymentDisplayUI();
+      alert('Reset to default demo account settings.');
+    }
 
     function setAddressTag(tag) {
       selectedAddressTag = tag;
@@ -3242,29 +3518,198 @@
       });
     }
 
-    function handlePaymentMethodChange(val) {
-      const hint = document.getElementById('checkout-upi-hint');
-      if (!hint) return;
-      if (val.includes('UPI')) {
-        hint.classList.remove('hidden');
-      } else {
-        hint.classList.add('hidden');
+    function selectPaymentOption(opt) {
+      selectedPaymentOption = opt;
+      const opts = ['cod', 'razorpay', 'upi'];
+
+      opts.forEach(o => {
+        const card = document.getElementById('pay-opt-' + o);
+        const icon = document.getElementById('check-icon-' + o);
+        const panel = document.getElementById('panel-pay-' + o);
+
+        if (o === opt) {
+          if (card) {
+            card.className = 'pay-option-card active-' + o + ' cursor-pointer p-2.5 rounded-xl transition flex flex-col justify-between relative';
+          }
+          if (icon) {
+            icon.className = (o === 'cod' ? 'text-emerald-600' : o === 'razorpay' ? 'text-blue-600' : 'text-purple-600') + ' font-bold text-xs';
+            icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+          }
+          if (panel) panel.classList.remove('hidden');
+        } else {
+          if (card) {
+            card.className = 'pay-option-card cursor-pointer p-2.5 rounded-xl border-gray-200 bg-white transition flex flex-col justify-between relative';
+          }
+          if (icon) {
+            icon.className = 'text-gray-300 font-bold text-xs';
+            icon.innerHTML = '<i class="fa-regular fa-circle"></i>';
+          }
+          if (panel) panel.classList.add('hidden');
+        }
+      });
+
+      // Update hidden input
+      const ordPaymentInput = document.getElementById('ord-payment');
+      if (ordPaymentInput) {
+        if (opt === 'cod') ordPaymentInput.value = 'Cash On Delivery (COD)';
+        else if (opt === 'razorpay') ordPaymentInput.value = 'Razorpay Payment Gateway';
+        else if (opt === 'upi') ordPaymentInput.value = 'Instant UPI Apps & QR Code';
       }
+
+      // Refresh total and QR
+      updatePaymentDisplayUI();
+    }
+
+    function updatePaymentDisplayUI() {
+      const total = cart.reduce((sum, i) => sum + (parseFloat(i.price) * i.quantity), 0);
+      const amtStr = '₹' + total.toFixed(2);
+
+      // Update button text
+      const btn = document.getElementById('btn-submit-order');
+      if (btn) {
+        if (selectedPaymentOption === 'cod') {
+          btn.className = 'btn-emerald w-full py-3.5 text-sm flex items-center justify-center gap-2 shadow-md';
+          btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>Confirm Order (Cash on Delivery) &bull; ' + amtStr + '</span>';
+        } else if (selectedPaymentOption === 'razorpay') {
+          btn.className = 'w-full py-3.5 text-sm flex items-center justify-center gap-2 shadow-md bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl transition';
+          btn.innerHTML = '<i class="fa-solid fa-shield-halved"></i> <span>Proceed to Razorpay Secure Pay &bull; ' + amtStr + '</span>';
+        } else if (selectedPaymentOption === 'upi') {
+          btn.className = 'w-full py-3.5 text-sm flex items-center justify-center gap-2 shadow-md bg-purple-600 hover:bg-purple-700 text-white font-extrabold rounded-xl transition';
+          btn.innerHTML = '<i class="fa-solid fa-qrcode"></i> <span>Confirm UPI Payment &amp; Generate Bill &bull; ' + amtStr + '</span>';
+        }
+      }
+
+      // Update Razorpay Account Details
+      const customKey = localStorage.getItem('rhm_razorpay_key_id');
+      const badge = document.getElementById('razorpay-key-status-badge');
+      const displayKey = document.getElementById('display-razorpay-key-id');
+      if (badge && displayKey) {
+        if (customKey) {
+          badge.innerText = 'Connected (Custom Key)';
+          badge.className = 'text-[9px] font-black bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full border border-emerald-300';
+          displayKey.innerText = customKey.slice(0, 8) + '...' + customKey.slice(-4);
+        } else {
+          badge.innerText = 'Demo/Test Key Active';
+          badge.className = 'text-[9px] font-black bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full border border-blue-300';
+          displayKey.innerText = 'rzp_test_... (Click Change to link Live key)';
+        }
+      }
+
+      // Update UPI VPA displays
+      const vpa = getMerchantVpa();
+      const vpaDisp = document.getElementById('checkout-upi-vpa-display');
+      if (vpaDisp) vpaDisp.innerText = vpa;
+      const modalVpaText = document.getElementById('upi-modal-vpa-text');
+      if (modalVpaText) modalVpaText.innerText = 'VPA: ' + vpa;
+
+      // Update UPI QR Code in checkout
+      refreshUpiQrCodes(total);
+    }
+
+    function refreshUpiQrCodes(total) {
+      const amt = (total !== undefined ? total : cart.reduce((sum, i) => sum + (parseFloat(i.price) * i.quantity), 0)).toFixed(2);
+      const vpa = getMerchantVpa();
+      const name = encodeURIComponent(getMerchantName());
+
+      let upiUrl = '';
+      if (currentUpiQrTab === 'dynamic') {
+        upiUrl = `upi://pay?pa=${vpa}&pn=${name}&am=${amt}&cu=INR&tn=${encodeURIComponent('Rani Market Order')}`;
+      } else {
+        // Fixed Merchant QR without static amount
+        upiUrl = `upi://pay?pa=${vpa}&pn=${name}&cu=INR`;
+      }
+
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUrl)}`;
+
+      const checkoutQr = document.getElementById('checkout-upi-qr-img');
+      if (checkoutQr) checkoutQr.src = qrUrl;
+
+      const modalQr = document.getElementById('dynamic-upi-qr-img');
+      if (modalQr) modalQr.src = qrUrl;
+
+      const modalAmt = document.getElementById('upi-modal-amount');
+      if (modalAmt) modalAmt.innerText = 'Payable: ₹' + amt;
+    }
+
+    function switchUpiQrTab(tab) {
+      currentUpiQrTab = tab;
+      const tabDyn = document.getElementById('qr-tab-dynamic');
+      const tabFix = document.getElementById('qr-tab-fixed');
+      const modalTabDyn = document.getElementById('modal-qr-tab-dynamic');
+      const modalTabFix = document.getElementById('modal-qr-tab-fixed');
+      const badge = document.getElementById('qr-badge-indicator');
+      const instructions = document.getElementById('qr-instructions-text');
+
+      const total = cart.reduce((sum, i) => sum + (parseFloat(i.price) * i.quantity), 0);
+
+      if (tab === 'dynamic') {
+        if (tabDyn) tabDyn.className = 'px-2 py-0.5 rounded-md bg-purple-600 text-white';
+        if (tabFix) tabFix.className = 'px-2 py-0.5 rounded-md text-gray-600 hover:text-purple-700';
+        if (modalTabDyn) modalTabDyn.className = 'px-1.5 py-0.5 rounded bg-purple-600 text-white';
+        if (modalTabFix) modalTabFix.className = 'px-1.5 py-0.5 rounded text-gray-600';
+        if (badge) { badge.innerText = 'PREFILLED ₹'; badge.classList.remove('hidden'); }
+        if (instructions) instructions.innerText = 'Exact payable amount (₹' + total.toFixed(2) + ') is prefilled in this QR. Point camera to pay.';
+      } else {
+        if (tabDyn) tabDyn.className = 'px-2 py-0.5 rounded-md text-gray-600 hover:text-purple-700';
+        if (tabFix) tabFix.className = 'px-2 py-0.5 rounded-md bg-purple-600 text-white';
+        if (modalTabDyn) modalTabDyn.className = 'px-1.5 py-0.5 rounded text-gray-600';
+        if (modalTabFix) modalTabFix.className = 'px-1.5 py-0.5 rounded bg-purple-600 text-white';
+        if (badge) { badge.innerText = 'STORE QR'; }
+        if (instructions) instructions.innerText = 'Official Store Counter QR. Scan with any UPI app and enter bill total: ₹' + total.toFixed(2);
+      }
+
+      refreshUpiQrCodes(total);
+    }
+
+    function redirectToUpiApp(appName) {
+      const total = cart.reduce((sum, i) => sum + (parseFloat(i.price) * i.quantity), 0);
+      if (total <= 0) {
+        alert('Cart is empty. Add items to proceed with payment.');
+        return;
+      }
+      const amt = total.toFixed(2);
+      const vpa = getMerchantVpa();
+      const name = encodeURIComponent(getMerchantName());
+      const note = encodeURIComponent('Rani Market Order');
+
+      let targetUrl = `upi://pay?pa=${vpa}&pn=${name}&am=${amt}&cu=INR&tn=${note}`;
+
+      if (appName === 'gpay') {
+        targetUrl = `tez://upi/pay?pa=${vpa}&pn=${name}&am=${amt}&cu=INR&tn=${note}`;
+      } else if (appName === 'phonepe') {
+        targetUrl = `phonepe://pay?pa=${vpa}&pn=${name}&am=${amt}&cu=INR&tn=${note}`;
+      } else if (appName === 'paytm') {
+        targetUrl = `paytmmp://pay?pa=${vpa}&pn=${name}&am=${amt}&cu=INR&tn=${note}`;
+      }
+
+      window.location.href = targetUrl;
+
+      // Fallback timer if custom scheme is not registered
+      setTimeout(() => {
+        if (appName !== 'bhim') {
+          window.location.href = `upi://pay?pa=${vpa}&pn=${name}&am=${amt}&cu=INR&tn=${note}`;
+        }
+      }, 1000);
+    }
+
+    function copyUpiVpa() {
+      const vpa = getMerchantVpa();
+      navigator.clipboard.writeText(vpa).then(() => {
+        alert('✓ Copied UPI ID: ' + vpa);
+      }).catch(() => {
+        prompt('Copy Store UPI ID:', vpa);
+      });
     }
 
     function previewCheckoutUpiQr() {
+      selectPaymentOption('upi');
       const total = cart.reduce((sum, i) => sum + (parseFloat(i.price) * i.quantity), 0);
       openUpiPaymentModal(total);
     }
 
     function openUpiPaymentModal(amount) {
       const amt = (amount || cart.reduce((sum, i) => sum + (parseFloat(i.price) * i.quantity), 0)).toFixed(2);
-      document.getElementById('upi-modal-amount').innerText = 'Payable: ₹' + amt;
-      const storeVpa = 'sksmarket@upi';
-      const storeName = encodeURIComponent('SKS Market');
-      const upiUrl = `upi://pay?pa=${storeVpa}&pn=${storeName}&am=${amt}&cu=INR`;
-      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUrl)}`;
-      document.getElementById('dynamic-upi-qr-img').src = qrUrl;
+      refreshUpiQrCodes(parseFloat(amt));
       document.getElementById('upi-payment-modal').classList.remove('hidden');
     }
 
@@ -3274,7 +3719,7 @@
 
     function confirmUpiPaymentCompleted() {
       closeUpiPaymentModal();
-      alert('UPI payment registered! Generating your invoice and order confirmation now.');
+      selectPaymentOption('upi');
       const form = document.querySelector('#checkout-modal form');
       if (form) {
         form.requestSubmit();
@@ -4125,6 +4570,7 @@
       document.getElementById('checkout-payable').innerText = '₹' + total.toFixed(2);
 
       loadSavedCustomerInfo();
+      updatePaymentDisplayUI();
       document.getElementById('checkout-modal').classList.remove('hidden');
     }
 
@@ -4147,7 +4593,6 @@
       const landmark = (document.getElementById('ord-landmark') ? document.getElementById('ord-landmark').value : '').trim();
       const pincode = (document.getElementById('ord-pincode') ? document.getElementById('ord-pincode').value : '').trim() || '625513';
       const timeslot = document.getElementById('ord-timeslot') ? document.getElementById('ord-timeslot').value : '⚡ Express 30 Mins';
-      const paymentMethod = document.getElementById('ord-payment') ? document.getElementById('ord-payment').value : 'Cash on Delivery';
       const instructions = (document.getElementById('ord-instructions') ? document.getElementById('ord-instructions').value : '').trim();
 
       // Persist customer info for instant autofill on future orders
@@ -4157,44 +4602,124 @@
       const grossMrp = cart.reduce((sum, i) => sum + (parseFloat(i.mrp || i.price * 1.25) * i.quantity), 0);
       const totalSavings = Math.max(0, grossMrp - totalAmount);
 
+      const randomNum = Math.floor(100000 + Math.random() * 900000);
+      const invId = '#RHM-INV-' + randomNum;
+      const orderId = 'ORD-' + Date.now().toString(36).toUpperCase() + '-' + randomNum;
+      const fullAddress = `${name} | Ph: ${phone} | Addr: ${addressLine}${landmark ? ', ' + landmark : ''}, ${pincode} | Slot: ${timeslot} | Notes: ${instructions || 'None'}`;
+
+      const orderDraft = {
+        id: orderId,
+        invId: invId,
+        date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
+        time: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+        customerName: name,
+        customerPhone: phone,
+        customerEmail: email,
+        shippingAddress: `${addressLine}${landmark ? ', ' + landmark : ''}, ${pincode}`,
+        fullAddress: fullAddress,
+        timeslot: timeslot,
+        instructions: instructions,
+        items: cart.map(i => ({
+          id: i.id,
+          title: i.title,
+          price: parseFloat(i.price),
+          mrp: parseFloat(i.mrp || i.price * 1.25),
+          quantity: i.quantity,
+          unit: i.unit || '1 item',
+          total: parseFloat(i.price) * i.quantity
+        })),
+        grossMrp: grossMrp,
+        totalSavings: totalSavings,
+        totalAmount: totalAmount,
+        status: 'confirmed'
+      };
+
+      const btn = document.getElementById('btn-submit-order');
+
+      // 1. RAZORPAY GATEWAY CHECKOUT PATH
+      if (selectedPaymentOption === 'razorpay') {
+        if (typeof window.Razorpay !== 'function') {
+          alert('Razorpay Checkout SDK is still loading. Please check internet connection or choose Cash on Delivery (COD).');
+          return;
+        }
+
+        if (btn) btn.disabled = true;
+
+        const rzpKey = getRazorpayKey();
+        const amtInPaise = Math.round(totalAmount * 100);
+
+        const rzpOptions = {
+          key: rzpKey,
+          amount: amtInPaise,
+          currency: 'INR',
+          name: getMerchantName(),
+          description: 'Order ' + invId + ' - Rani Hyper Market',
+          image: 'https://rani-hyper-market.vercel.app/images/rani_logo.png',
+          prefill: {
+            name: name,
+            contact: phone,
+            email: email || 'customer@ranihypermarket.com'
+          },
+          notes: {
+            invoice_id: invId,
+            order_id: orderId,
+            shipping_address: fullAddress
+          },
+          theme: {
+            color: '#059669'
+          },
+          handler: function (response) {
+            orderDraft.paymentMethod = 'Online via Razorpay';
+            orderDraft.paymentStatus = 'PAID';
+            orderDraft.razorpayPaymentId = response.razorpay_payment_id;
+            orderDraft.transactionId = response.razorpay_payment_id;
+            completeAndRenderOrder(orderDraft);
+          },
+          modal: {
+            ondismiss: function () {
+              if (btn) btn.disabled = false;
+              alert('Notice: Razorpay payment window was dismissed. You can retry payment or choose Cash on Delivery (COD).');
+            }
+          }
+        };
+
+        try {
+          const rzpInstance = new window.Razorpay(rzpOptions);
+          rzpInstance.on('payment.failed', function (resp) {
+            if (btn) btn.disabled = false;
+            alert('Payment Failed: ' + (resp.error ? resp.error.description : 'Transaction error. Please try again or use COD.'));
+          });
+          rzpInstance.open();
+        } catch (rzpErr) {
+          if (btn) btn.disabled = false;
+          alert('Could not initiate Razorpay: ' + rzpErr.message);
+        }
+        return;
+      }
+
+      // 2. INSTANT UPI & QR PATH
+      if (selectedPaymentOption === 'upi') {
+        const upiRef = (document.getElementById('ord-upi-ref')?.value || '').trim();
+        orderDraft.paymentMethod = upiRef ? ('Instant UPI (Ref: ' + upiRef + ')') : 'Instant UPI / QR Code';
+        orderDraft.paymentStatus = 'PAID (UPI)';
+        orderDraft.upiReference = upiRef || 'Direct Transfer';
+        orderDraft.transactionId = upiRef || ('UPI-' + Date.now().toString(36).toUpperCase());
+        completeAndRenderOrder(orderDraft);
+        return;
+      }
+
+      // 3. CASH ON DELIVERY (COD) PATH
+      orderDraft.paymentMethod = 'Cash On Delivery (COD)';
+      orderDraft.paymentStatus = 'UNPAID (Collect at Doorstep)';
+      orderDraft.transactionId = 'COD-' + randomNum;
+      completeAndRenderOrder(orderDraft);
+    }
+
+    async function completeAndRenderOrder(orderRecord) {
       const btn = document.getElementById('btn-submit-order');
       if (btn) btn.disabled = true;
 
       try {
-        // Generate authentic unique Invoice ID & Order ID instantly
-        const randomNum = Math.floor(100000 + Math.random() * 900000);
-        const invId = '#RHM-INV-' + randomNum;
-        const orderId = 'ORD-' + Date.now().toString(36).toUpperCase() + '-' + randomNum;
-        const fullAddress = `${name} | Ph: ${phone} | Addr: ${addressLine}${landmark ? ', ' + landmark : ''}, ${pincode} | Slot: ${timeslot} | Notes: ${instructions || 'None'}`;
-
-        const orderRecord = {
-          id: orderId,
-          invId: invId,
-          date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
-          time: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
-          customerName: name,
-          customerPhone: phone,
-          customerEmail: email,
-          shippingAddress: `${addressLine}${landmark ? ', ' + landmark : ''}, ${pincode}`,
-          fullAddress: fullAddress,
-          timeslot: timeslot,
-          paymentMethod: paymentMethod,
-          instructions: instructions,
-          items: cart.map(i => ({
-            id: i.id,
-            title: i.title,
-            price: parseFloat(i.price),
-            mrp: parseFloat(i.mrp || i.price * 1.25),
-            quantity: i.quantity,
-            unit: i.unit || '1 item',
-            total: parseFloat(i.price) * i.quantity
-          })),
-          grossMrp: grossMrp,
-          totalSavings: totalSavings,
-          totalAmount: totalAmount,
-          status: 'confirmed'
-        };
-
         // Cache last order for WhatsApp sharing & local record
         window.lastCompletedOrder = orderRecord;
 
@@ -4219,9 +4744,9 @@
           if (sb && typeof sb.from === 'function') {
             sb.from('orders').insert({
               tenant_id: '11111111-1111-1111-1111-111111111111',
-              total_amount: totalAmount,
-              shipping_address: fullAddress,
-              payment_method: paymentMethod,
+              total_amount: orderRecord.totalAmount,
+              shipping_address: orderRecord.fullAddress,
+              payment_method: orderRecord.paymentMethod,
               status: 'confirmed'
             }).catch(() => {});
           }
@@ -4252,7 +4777,27 @@
         if (billSlotEl) billSlotEl.innerText = timeslot;
 
         const billPayEl = document.getElementById('bill-pay-method');
-        if (billPayEl) billPayEl.innerText = paymentMethod;
+        const txnRow = document.getElementById('bill-txn-row');
+        const txnIdEl = document.getElementById('bill-txn-id');
+
+        if (billPayEl) {
+          if (orderRecord.paymentStatus === 'PAID') {
+            billPayEl.innerHTML = '<span class="text-emerald-700 font-extrabold flex items-center justify-end gap-1"><i class="fa-solid fa-circle-check text-emerald-600"></i> ' + orderRecord.paymentMethod + ' (PAID)</span>';
+          } else if (orderRecord.paymentStatus === 'PAID (UPI)') {
+            billPayEl.innerHTML = '<span class="text-purple-700 font-extrabold flex items-center justify-end gap-1"><i class="fa-solid fa-circle-check text-purple-600"></i> ' + orderRecord.paymentMethod + '</span>';
+          } else {
+            billPayEl.innerHTML = '<span class="text-amber-800 font-extrabold flex items-center justify-end gap-1"><i class="fa-solid fa-clock text-amber-600"></i> Cash On Delivery (Doorstep)</span>';
+          }
+        }
+
+        if (txnRow && txnIdEl) {
+          if (orderRecord.transactionId) {
+            txnIdEl.innerText = orderRecord.transactionId;
+            txnRow.classList.remove('hidden');
+          } else {
+            txnRow.classList.add('hidden');
+          }
+        }
 
         const tbody = document.getElementById('bill-items-tbody');
         if (tbody) {
@@ -4315,6 +4860,8 @@
       msg += '📍 *Delivery Address:* ' + o.shippingAddress + '\n';
       msg += '⚡ *Delivery Slot:* ' + o.timeslot + '\n';
       msg += '💳 *Payment Method:* ' + o.paymentMethod + '\n';
+      if (o.paymentStatus) msg += '💰 *Payment Status:* ' + o.paymentStatus + '\n';
+      if (o.transactionId) msg += '🔖 *Txn Ref / ID:* ' + o.transactionId + '\n';
       if (o.instructions) msg += '📝 *Special Notes:* ' + o.instructions + '\n';
       msg += '\n*ORDERED ITEMS:*\n';
       o.items.forEach((item, idx) => {

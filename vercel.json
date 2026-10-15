@@ -2,7 +2,9 @@
   "version": 2,
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/", "destination": "/index" }
+    { "source": "/", "destination": "/index" },
+    { "source": "/orders", "destination": "/orders" },
+    { "source": "/online-orders", "destination": "/orders" }
   ],
   "functions": {
     "api/**/*.js": {

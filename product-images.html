@@ -237,14 +237,23 @@
         <div class="flex items-center gap-2">
           <select id="category-filter" onchange="renderProductsGrid()" class="px-3.5 py-3 bg-white border border-gray-200 rounded-2xl text-xs font-bold text-gray-700 focus:outline-none focus:border-emerald-500">
             <option value="all">All Categories</option>
-            <option value="tea">Tea &amp; Coffee</option>
-            <option value="rice">Rice &amp; Dhall</option>
-            <option value="masala">Spices &amp; Masala</option>
-            <option value="milk">Dairy &amp; Milk</option>
-            <option value="oil">Cooking Oils</option>
-            <option value="biscuit">Snacks &amp; Biscuits</option>
-            <option value="soap">Personal Care</option>
-            <option value="cleaner">Cleaning &amp; Home</option>
+            <option value="rice">🌾 Rice &amp; Dhall</option>
+            <option value="atta">🍞 Atta &amp; Flours</option>
+            <option value="oil">🌻 Cooking Oils &amp; Ghee</option>
+            <option value="masala">🌶️ Spices &amp; Masala</option>
+            <option value="tea">☕ Tea &amp; Coffee</option>
+            <option value="milk">🥛 Dairy &amp; Milk</option>
+            <option value="biscuit">🍪 Biscuits &amp; Bakery</option>
+            <option value="snacks">🍿 Snacks &amp; Namkeen</option>
+            <option value="instant">🍜 Noodles &amp; Instant</option>
+            <option value="soap">🧼 Personal Care &amp; Soaps</option>
+            <option value="haircare">🧴 Hair Care &amp; Shampoos</option>
+            <option value="oralcare">🪥 Oral Care</option>
+            <option value="cleaner">🧹 Cleaning &amp; Home</option>
+            <option value="beverages">🥤 Beverages &amp; Cold Drinks</option>
+            <option value="pooja">🪔 Pooja Needs</option>
+            <option value="baby">👶 Baby Care</option>
+            <option value="health">💊 Health &amp; Wellness</option>
           </select>
 
           <select id="image-status-filter" onchange="renderProductsGrid()" class="px-3.5 py-3 bg-white border border-gray-200 rounded-2xl text-xs font-bold text-gray-700 focus:outline-none focus:border-emerald-500">
@@ -302,6 +311,7 @@
           <tr class="border-b border-gray-200 text-gray-400 font-extrabold uppercase text-[10px]">
             <th class="py-3 px-3">Preview</th>
             <th class="py-3 px-3">Product Name</th>
+            <th class="py-3 px-3">Category</th>
             <th class="py-3 px-3">Barcode / GTIN</th>
             <th class="py-3 px-3">Price / MRP</th>
             <th class="py-3 px-3">Unit</th>
@@ -341,6 +351,46 @@
         <button onclick="closeStudioModal()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center transition">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
+      </div>
+
+      <!-- DEDICATED PRODUCT CATEGORY SELECTOR -->
+      <div class="p-3.5 bg-emerald-50/80 border border-emerald-200 rounded-2xl shadow-2xs">
+        <div class="flex items-center justify-between mb-1.5">
+          <label class="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+            <i class="fa-solid fa-tags text-emerald-600"></i> Product Category
+          </label>
+          <button
+            type="button"
+            onclick="autoDetectCategoryForModal()"
+            class="text-[10px] font-black text-emerald-700 bg-white hover:bg-emerald-100 border border-emerald-300 px-2.5 py-1 rounded-lg flex items-center gap-1 transition shadow-2xs cursor-pointer"
+            title="Auto-detect category from product title"
+          >
+            <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Auto-Detect Category
+          </button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div>
+            <select
+              id="modal-category-select"
+              onchange="handleModalCategoryChange(this.value)"
+              class="w-full px-3 py-2 bg-white border border-emerald-300 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:border-emerald-600 shadow-2xs cursor-pointer"
+            >
+              <!-- Filled via JS -->
+            </select>
+          </div>
+          <div id="modal-custom-category-wrap" class="hidden">
+            <input
+              type="text"
+              id="modal-custom-category-input"
+              oninput="checkModalCanSave()"
+              placeholder="Type custom category name..."
+              class="w-full px-3 py-2 bg-white border border-emerald-300 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:border-emerald-600"
+            >
+          </div>
+        </div>
+        <p class="text-[10px] text-emerald-700/80 mt-1.5 font-medium">
+          Select or modify the category for this item. Updates instantly reflect in Storefront category pills, search filters, and backend inventory.
+        </p>
       </div>
 
       <!-- Live Side-by-Side Visual Comparison -->
@@ -544,6 +594,181 @@
     const broadcastChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('nsn_product_updates') : null;
 
     
+    
+    const STANDARD_CATEGORIES = [
+      { id: 'rice', name: 'Rice & Dhall', icon: '🌾' },
+      { id: 'atta', name: 'Atta & Flours', icon: '🍞' },
+      { id: 'oil', name: 'Cooking Oils & Ghee', icon: '🌻' },
+      { id: 'masala', name: 'Spices & Masala', icon: '🌶️' },
+      { id: 'tea', name: 'Tea & Coffee', icon: '☕' },
+      { id: 'milk', name: 'Dairy & Milk', icon: '🥛' },
+      { id: 'biscuit', name: 'Biscuits & Bakery', icon: '🍪' },
+      { id: 'snacks', name: 'Snacks & Namkeen', icon: '🍿' },
+      { id: 'instant', name: 'Noodles & Instant Food', icon: '🍜' },
+      { id: 'soap', name: 'Personal Care & Soaps', icon: '🧼' },
+      { id: 'haircare', name: 'Hair Care & Shampoos', icon: '🧴' },
+      { id: 'oralcare', name: 'Oral Care & Toothpastes', icon: '🪥' },
+      { id: 'cleaner', name: 'Cleaning & Detergents', icon: '🧹' },
+      { id: 'beverages', name: 'Beverages & Soft Drinks', icon: '🥤' },
+      { id: 'pooja', name: 'Pooja Needs & Agarbatti', icon: '🪔' },
+      { id: 'baby', name: 'Baby Care', icon: '👶' },
+      { id: 'health', name: 'Health & Wellness', icon: '💊' },
+      { id: 'grocery', name: 'General Grocery & Staples', icon: '🛒' },
+      { id: 'custom', name: '+ Custom Category...', icon: '✏️' }
+    ];
+
+    function detectCategoryByTitle(title) {
+      if (!title) return 'General Grocery & Staples';
+      const t = title.toLowerCase();
+      if (t.includes('tea') || t.includes('coffee') || t.includes('bru') || t.includes('nescafe') || t.includes('chai') || t.includes('avt') || t.includes('sunrise')) return 'Tea & Coffee';
+      if (t.includes('rice') || t.includes('dhall') || t.includes('dhal') || t.includes('paruppu') || t.includes('gram') || t.includes('urad') || t.includes('chana') || t.includes('toor') || t.includes('moong') || t.includes('lentil') || t.includes('ponni')) return 'Rice & Dhall';
+      if (t.includes('atta') || t.includes('flour') || t.includes('maida') || t.includes('rava') || t.includes('sooji') || t.includes('besan') || t.includes('wheat') || t.includes('mavu')) return 'Atta & Flours';
+      if (t.includes('oil') || t.includes('ghee') || t.includes('sunflower') || t.includes('gingelly') || t.includes('dalda') || t.includes('vanaspati') || t.includes('butter') || t.includes('deepam')) return 'Cooking Oils & Ghee';
+      if (t.includes('masala') || t.includes('chilli') || t.includes('chilly') || t.includes('turmeric') || t.includes('pepper') || t.includes('sambar') || t.includes('rasam') || t.includes('garam') || t.includes('aachi') || t.includes('sakthi') || t.includes('powder') || t.includes('salt') || t.includes('sugar') || t.includes('jeera') || t.includes('mustard')) return 'Spices & Masala';
+      if (t.includes('milk') || t.includes('curd') || t.includes('paneer') || t.includes('cheese') || t.includes('arokya') || t.includes('amul') || t.includes('cavin') || t.includes('dairy')) return 'Dairy & Milk';
+      if (t.includes('biscuit') || t.includes('cookie') || t.includes('rusk') || t.includes('marie') || t.includes('bourbon') || t.includes('britannia') || t.includes('parle') || t.includes('cake')) return 'Biscuits & Bakery';
+      if (t.includes('snack') || t.includes('chips') || t.includes('lays') || t.includes('kurkure') || t.includes('mixture') || t.includes('murukku') || t.includes('dates') || t.includes('namkeen')) return 'Snacks & Namkeen';
+      if (t.includes('maggi') || t.includes('noodle') || t.includes('pasta') || t.includes('vermicelli') || t.includes('semia') || t.includes('soup') || t.includes('yippee')) return 'Noodles & Instant Food';
+      if (t.includes('shampoo') || t.includes('conditioner') || t.includes('hair oil') || t.includes('clinic plus') || t.includes('sunsilk') || t.includes('meera') || t.includes('vatika')) return 'Hair Care & Shampoos';
+      if (t.includes('toothpaste') || t.includes('colgate') || t.includes('sensodyne') || t.includes('close up') || t.includes('brush') || t.includes('dabur red') || t.includes('pepsodent')) return 'Oral Care & Toothpastes';
+      if (t.includes('soap') || t.includes('dettol') || t.includes('lifebuoy') || t.includes('hamam') || t.includes('medimix') || t.includes('body wash') || t.includes('lux') || t.includes('cinthol') || t.includes('santoor')) return 'Personal Care & Soaps';
+      if (t.includes('surf') || t.includes('ariel') || t.includes('rin') || t.includes('tide') || t.includes('detergent') || t.includes('vim') || t.includes('harpic') || t.includes('lizol') || t.includes('cleaner') || t.includes('wash') || t.includes('dishwash') || t.includes('comfort') || t.includes('hit') || t.includes('good knight')) return 'Cleaning & Detergents';
+      if (t.includes('coke') || t.includes('pepsi') || t.includes('sprite') || t.includes('juice') || t.includes('bovonto') || t.includes('drink') || t.includes('soda') || t.includes('maaza') || t.includes('frooti') || t.includes('beverage')) return 'Beverages & Soft Drinks';
+      if (t.includes('agarbatti') || t.includes('camphor') || t.includes('dhoop') || t.includes('pooja') || t.includes('sambrani') || t.includes('incense') || t.includes('viboothi')) return 'Pooja Needs & Agarbatti';
+      if (t.includes('pampers') || t.includes('baby') || t.includes('mamy poko') || t.includes('cerelac') || t.includes('diaper') || t.includes('huggies')) return 'Baby Care';
+      if (t.includes('iodex') || t.includes('balm') || t.includes('vicks') || t.includes('bandage') || t.includes('tablet') || t.includes('zandu') || t.includes('amrutanjan') || t.includes('chyawanprash')) return 'Health & Wellness';
+      return 'General Grocery & Staples';
+    }
+
+    function renderCategoryOptionsHtml(selectedCat) {
+      const current = (selectedCat || '').trim();
+      let hasMatch = false;
+      let html = '';
+
+      STANDARD_CATEGORIES.forEach(c => {
+        const isSel = (current.toLowerCase() === c.name.toLowerCase() || current.toLowerCase() === c.id.toLowerCase());
+        if (isSel) hasMatch = true;
+        html += '<option value="' + c.name + '" ' + (isSel ? 'selected' : '') + '>' + c.icon + ' ' + c.name + '</option>';
+      });
+
+      if (!hasMatch && current && current !== 'custom') {
+        html = '<option value="' + current + '" selected>🏷️ ' + current + '</option>' + html;
+      }
+      return html;
+    }
+
+    function getSelectedModalCategory() {
+      const select = document.getElementById('modal-category-select');
+      if (!select) return '';
+      if (select.value === '+ Custom Category...' || select.value === 'custom') {
+        const customInput = document.getElementById('modal-custom-category-input');
+        return (customInput && customInput.value.trim()) ? customInput.value.trim() : 'General Grocery & Staples';
+      }
+      return select.value;
+    }
+
+    function handleModalCategoryChange(val) {
+      const customWrap = document.getElementById('modal-custom-category-wrap');
+      if (val === '+ Custom Category...' || val === 'custom') {
+        customWrap.classList.remove('hidden');
+        document.getElementById('modal-custom-category-input').focus();
+      } else {
+        customWrap.classList.add('hidden');
+      }
+      checkModalCanSave();
+    }
+
+    function autoDetectCategoryForModal() {
+      if (!activeProductForModal) return;
+      const detected = detectCategoryByTitle(activeProductForModal.title);
+      const select = document.getElementById('modal-category-select');
+      const customWrap = document.getElementById('modal-custom-category-wrap');
+      
+      select.innerHTML = renderCategoryOptionsHtml(detected);
+      select.value = detected;
+      customWrap.classList.add('hidden');
+      checkModalCanSave();
+
+      const statusText = document.getElementById('modal-status-text');
+      statusText.className = 'text-xs font-bold text-center text-emerald-700 bg-emerald-50 p-2 rounded-xl border border-emerald-200';
+      statusText.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Auto-detected category: <strong>' + detected + '</strong>';
+      statusText.classList.remove('hidden');
+    }
+
+    function checkModalCanSave() {
+      const saveBtn = document.getElementById('btn-save-image');
+      if (!saveBtn || !activeProductForModal) return;
+      
+      const currentCat = activeProductForModal.category || detectCategoryByTitle(activeProductForModal.title);
+      const selectedCat = getSelectedModalCategory();
+      const catChanged = Boolean(selectedCat && selectedCat !== currentCat);
+      const imgChanged = Boolean(proposedImageUrl || proposedImageBase64);
+
+      if (catChanged || imgChanged) {
+        saveBtn.disabled = false;
+      }
+    }
+
+    async function handleQuickCategoryChange(productId, newCat) {
+      const p = allProducts.find(x => x.id === productId);
+      if (!p) return;
+
+      let finalCategory = newCat;
+      if (newCat === '+ Custom Category...' || newCat === 'custom') {
+        const customPrompt = prompt('Enter custom category name for "' + p.title + '":', p.category || '');
+        if (!customPrompt || !customPrompt.trim()) {
+          renderProductsGrid();
+          return;
+        }
+        finalCategory = customPrompt.trim();
+      }
+
+      p.category = finalCategory;
+
+      // 1. Save in local storage
+      const catOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
+      catOverrides[productId] = finalCategory;
+      localStorage.setItem('nsn_custom_categories', JSON.stringify(catOverrides));
+
+      // 2. Show green saved feedback badge
+      const badge = document.getElementById('cat-saved-badge-' + productId);
+      if (badge) {
+        badge.classList.remove('hidden');
+        setTimeout(() => badge.classList.add('hidden'), 2000);
+      }
+
+      // 3. Broadcast to all open tabs (storefront, admin)
+      const broadcastPayload = {
+        type: 'PRODUCT_CATEGORY_UPDATED',
+        productId: p.id,
+        barcode: p.barcode,
+        category: finalCategory
+      };
+      try {
+        if (broadcastChannel) broadcastChannel.postMessage(broadcastPayload);
+        const sksChannel = new BroadcastChannel('sks_market_sync');
+        sksChannel.postMessage(broadcastPayload);
+      } catch(e) {}
+
+      // 4. Update in server backend
+      try {
+        await fetch('/api/products/update-category', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            authUser: sessionStorage.getItem('nsn_image_studio_user') || 'admin',
+            authPass: 'admin123',
+            productId: p.id,
+            barcode: p.barcode,
+            category: finalCategory
+          })
+        });
+      } catch (err) {
+        console.warn('Background category sync:', err.message);
+      }
+    }
+
+
     // Front Protection Gate Authentication Credentials
     const GATE_USER = 'admin';
     const GATE_PASS = 'admin123';
@@ -609,10 +834,16 @@
           
           // Apply any local custom overrides
           const overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+          const catOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
           allProducts.forEach(p => {
             if (overrides[p.id]) {
               p.image_url = overrides[p.id];
               p.isCustomUpdated = true;
+            }
+            if (catOverrides[p.id]) {
+              p.category = catOverrides[p.id];
+            } else if (!p.category) {
+              p.category = detectCategoryByTitle(p.title);
             }
           });
 
@@ -666,14 +897,26 @@
         if (cat !== 'all') {
           const t = (p.title || '').toLowerCase();
           const c = (p.category || '').toLowerCase();
-          if (cat === 'rice' && !t.includes('rice') && !t.includes('dhall') && !t.includes('dal')) return false;
-          if (cat === 'oil' && !t.includes('oil') && !t.includes('ghee')) return false;
-          if (cat === 'tea' && !t.includes('tea') && !t.includes('coffee')) return false;
-          if (cat === 'masala' && !t.includes('masala') && !t.includes('powder') && !t.includes('chilli')) return false;
-          if (cat === 'milk' && !t.includes('milk') && !t.includes('curd') && !t.includes('paneer')) return false;
-          if (cat === 'biscuit' && !t.includes('biscuit') && !t.includes('cookies') && !t.includes('rusk')) return false;
-          if (cat === 'soap' && !t.includes('soap') && !t.includes('shampoo') && !t.includes('paste')) return false;
-          if (cat === 'cleaner' && !t.includes('clean') && !t.includes('wash') && !t.includes('surf')) return false;
+          const directMatch = c && (c.includes(cat) || cat.includes(c));
+          if (!directMatch) {
+            if (cat === 'rice' && !t.includes('rice') && !t.includes('dhall') && !t.includes('dal') && !t.includes('gram')) return false;
+            if (cat === 'atta' && !t.includes('atta') && !t.includes('flour') && !t.includes('maida') && !t.includes('rava')) return false;
+            if (cat === 'oil' && !t.includes('oil') && !t.includes('ghee') && !t.includes('sunflower')) return false;
+            if (cat === 'tea' && !t.includes('tea') && !t.includes('coffee') && !t.includes('bru') && !t.includes('chai')) return false;
+            if (cat === 'masala' && !t.includes('masala') && !t.includes('powder') && !t.includes('chilli') && !t.includes('pepper')) return false;
+            if (cat === 'milk' && !t.includes('milk') && !t.includes('curd') && !t.includes('paneer') && !t.includes('dairy')) return false;
+            if (cat === 'biscuit' && !t.includes('biscuit') && !t.includes('cookies') && !t.includes('rusk')) return false;
+            if (cat === 'snacks' && !t.includes('snack') && !t.includes('chips') && !t.includes('mixture') && !t.includes('namkeen')) return false;
+            if (cat === 'instant' && !t.includes('noodle') && !t.includes('maggi') && !t.includes('pasta') && !t.includes('vermicelli')) return false;
+            if (cat === 'soap' && !t.includes('soap') && !t.includes('hamam') && !t.includes('lifebuoy') && !t.includes('dettol')) return false;
+            if (cat === 'haircare' && !t.includes('shampoo') && !t.includes('hair') && !t.includes('conditioner')) return false;
+            if (cat === 'oralcare' && !t.includes('toothpaste') && !t.includes('colgate') && !t.includes('sensodyne') && !t.includes('brush')) return false;
+            if (cat === 'cleaner' && !t.includes('clean') && !t.includes('wash') && !t.includes('surf') && !t.includes('detergent')) return false;
+            if (cat === 'beverages' && !t.includes('juice') && !t.includes('drink') && !t.includes('coke') && !t.includes('soda')) return false;
+            if (cat === 'pooja' && !t.includes('agarbatti') && !t.includes('camphor') && !t.includes('dhoop') && !t.includes('pooja')) return false;
+            if (cat === 'baby' && !t.includes('baby') && !t.includes('diaper') && !t.includes('pampers')) return false;
+            if (cat === 'health' && !t.includes('iodex') && !t.includes('balm') && !t.includes('vicks') && !t.includes('tablet')) return false;
+          }
         }
 
         // Status match
@@ -734,6 +977,24 @@
             <h3 class="text-xs font-black text-gray-900 line-clamp-2 mt-0.5 leading-snug" title="${p.title}">
               ${p.title}
             </h3>
+
+            <!-- PRODUCT CATEGORY SELECTOR ON CARD -->
+            <div class="mt-2 pt-2 border-t border-gray-100">
+              <div class="flex items-center justify-between text-[10px] text-gray-400 font-bold mb-1">
+                <span class="flex items-center gap-1"><i class="fa-solid fa-tag text-[9px] text-emerald-600"></i> Category:</span>
+                <span id="cat-saved-badge-${p.id}" class="hidden text-emerald-600 font-black text-[9px]">
+                  <i class="fa-solid fa-check"></i> Saved
+                </span>
+              </div>
+              <select
+                id="card-category-select-${p.id}"
+                onchange="handleQuickCategoryChange(${p.id}, this.value)"
+                class="w-full px-2 py-1.5 bg-gray-50 hover:bg-emerald-50/50 focus:bg-white border border-gray-200 focus:border-emerald-500 rounded-lg text-[11px] font-bold text-gray-800 focus:outline-none transition cursor-pointer"
+                title="Select category for this product"
+              >
+                ${renderCategoryOptionsHtml(p.category || detectCategoryByTitle(p.title))}
+              </select>
+            </div>
           </div>
 
           <div class="mt-3 pt-2 border-t border-gray-100 flex items-center justify-between gap-1">
@@ -761,6 +1022,15 @@
             </div>
           </td>
           <td class="py-2.5 px-3 font-bold text-gray-900">${p.title}</td>
+          <td class="py-2.5 px-3">
+            <select
+              id="table-category-select-${p.id}"
+              onchange="handleQuickCategoryChange(${p.id}, this.value)"
+              class="px-2 py-1 bg-white border border-gray-200 rounded-lg text-xs font-bold text-gray-800 focus:outline-none focus:border-emerald-500 cursor-pointer"
+            >
+              ${renderCategoryOptionsHtml(p.category || detectCategoryByTitle(p.title))}
+            </select>
+          </td>
           <td class="py-2.5 px-3 font-mono-code text-[11px] text-gray-500">${p.barcode || 'N/A'}</td>
           <td class="py-2.5 px-3 font-mono-code font-bold text-emerald-700">₹${p.price || 0}</td>
           <td class="py-2.5 px-3 text-gray-500">${p.unit || '1 unit'}</td>
@@ -798,11 +1068,22 @@
       document.getElementById('modal-product-price').textContent = `₹${p.price || p.mrp || 0}`;
       document.getElementById('modal-current-img').src = p.image_url || '';
 
-      // Reset preview
+      // Reset preview and setup category
       document.getElementById('modal-new-img').classList.add('hidden');
       document.getElementById('modal-new-placeholder').classList.remove('hidden');
       document.getElementById('btn-save-image').disabled = true;
       document.getElementById('modal-status-text').classList.add('hidden');
+
+      // Populate Modal Category Selector
+      const modalCatSelect = document.getElementById('modal-category-select');
+      const customWrap = document.getElementById('modal-custom-category-wrap');
+      const customInput = document.getElementById('modal-custom-category-input');
+      const currentCat = p.category || detectCategoryByTitle(p.title);
+      
+      modalCatSelect.innerHTML = renderCategoryOptionsHtml(currentCat);
+      modalCatSelect.value = currentCat;
+      customWrap.classList.add('hidden');
+      if (customInput) customInput.value = '';
 
       // Open modal
       document.getElementById('image-studio-modal').classList.remove('hidden');
@@ -1003,9 +1284,18 @@
       a.click();
     }
 
-    // 4. SAVE & APPLY IMAGE (Lively to Backend & Storefront)
+    // 4. SAVE & APPLY IMAGE & CATEGORY (Lively to Backend & Storefront)
     async function saveAndApplyProductImage() {
-      if (!activeProductForModal || (!proposedImageUrl && !proposedImageBase64)) return;
+      if (!activeProductForModal) return;
+
+      const selectedCategory = getSelectedModalCategory();
+      const hasImageUpdate = Boolean(proposedImageUrl || proposedImageBase64);
+      const hasCategoryUpdate = Boolean(selectedCategory && selectedCategory !== activeProductForModal.category);
+
+      if (!hasImageUpdate && !hasCategoryUpdate) {
+        alert('Please choose a new image or change the product category before saving.');
+        return;
+      }
 
       const btn = document.getElementById('btn-save-image');
       const statusText = document.getElementById('modal-status-text');
@@ -1014,7 +1304,7 @@
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving to Database...';
       statusText.classList.remove('hidden', 'text-red-600', 'text-emerald-600');
       statusText.classList.add('text-blue-600');
-      statusText.textContent = 'Updating product image in catalog, store, and SQLite database...';
+      statusText.textContent = 'Updating product details in catalog, store, and SQLite database...';
 
       const payload = {
         authUser: sessionStorage.getItem('nsn_image_studio_user') || localStorage.getItem('nsn_image_studio_user') || 'admin',
@@ -1022,7 +1312,8 @@
         productId: activeProductForModal.id,
         barcode: activeProductForModal.barcode,
         imageUrl: proposedImageUrl,
-        imageBase64: proposedImageBase64
+        imageBase64: proposedImageBase64,
+        category: selectedCategory
       };
 
       try {
@@ -1037,20 +1328,28 @@
           const finalUrl = data.imageUrl || proposedImageUrl;
           
           // 1. Update in-memory product
-          activeProductForModal.image_url = finalUrl;
-          activeProductForModal.isCustomUpdated = true;
+          if (finalUrl) {
+            activeProductForModal.image_url = finalUrl;
+            activeProductForModal.isCustomUpdated = true;
+            const overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+            overrides[activeProductForModal.id] = finalUrl;
+            localStorage.setItem('nsn_custom_images', JSON.stringify(overrides));
+          }
 
-          // 2. Update localStorage overrides
-          const overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
-          overrides[activeProductForModal.id] = finalUrl;
-          localStorage.setItem('nsn_custom_images', JSON.stringify(overrides));
+          if (selectedCategory) {
+            activeProductForModal.category = selectedCategory;
+            const catOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
+            catOverrides[activeProductForModal.id] = selectedCategory;
+            localStorage.setItem('nsn_custom_categories', JSON.stringify(catOverrides));
+          }
 
           // 3. Broadcast to all open tabs (storefront, admin pos, rani hub) on dual channels
           const broadcastPayload = {
-            type: 'PRODUCT_IMAGE_UPDATED',
+            type: 'PRODUCT_UPDATED',
             productId: activeProductForModal.id,
             barcode: activeProductForModal.barcode,
-            imageUrl: finalUrl
+            imageUrl: finalUrl || activeProductForModal.image_url,
+            category: selectedCategory || activeProductForModal.category
           };
 
           try {

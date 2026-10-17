@@ -187,15 +187,15 @@ if (reqPath === '/api/pos/status') {
     // ----------------------------------------------------
   // Dedicated Product Image Updating API
   // ----------------------------------------------------
-  if (reqPath === '/api/products/update-image' && req.method === 'POST') {
+  if ((reqPath === '/api/products/update-image' || reqPath === '/api/products/update-category') && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => body += chunk);
     req.on('end', () => {
       try {
         const parsed = JSON.parse(body || '{}');
-        const { authUser, authPass, productId, barcode, imageUrl, imageBase64 } = parsed;
+        const { authUser, authPass, productId, barcode, imageUrl, imageBase64, category } = parsed;
 
-        // Security check for updating images
+        // Security check for updating images / category
         const isValidAdmin = (authUser && authUser.toLowerCase() === 'admin' && authPass === 'admin123') ||
                             (req.headers['x-admin-key'] === 'admin123');
         if (!isValidAdmin) {
@@ -235,9 +235,9 @@ if (reqPath === '/api/pos/status') {
           }
         }
 
-        if (!finalUrl) {
+        if (!finalUrl && !category) {
           res.writeHead(400, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ error: 'No imageUrl or imageBase64 provided' }));
+          res.end(JSON.stringify({ error: 'No imageUrl, imageBase64, or category provided to update' }));
           return;
         }
 
@@ -263,12 +263,18 @@ if (reqPath === '/api/pos/status') {
                 for (const item of data) {
                   if ((productId && String(item.id) === String(productId)) ||
                       (barcode && String(item.barcode) === String(barcode))) {
-                    item.image_url = finalUrl;
-                    item.image = finalUrl;
-                    if (item.canonical_record) item.canonical_record.image_url = finalUrl;
+                    if (finalUrl) {
+                      item.image_url = finalUrl;
+                      item.image = finalUrl;
+                      if (item.canonical_record) item.canonical_record.image_url = finalUrl;
+                    }
+                    if (category) {
+                      item.category = category;
+                      if (item.canonical_record) item.canonical_record.category = category;
+                    }
                     modified = true;
                     updatedInCatalog = true;
-                    if (!matchedItem) matchedItem = { id: item.id, title: item.title, barcode: item.barcode };
+                    if (!matchedItem) matchedItem = { id: item.id, title: item.title, barcode: item.barcode, category: item.category };
                   }
                 }
                 if (modified) {
@@ -289,14 +295,15 @@ if (reqPath === '/api/pos/status') {
             const dbPath = 'C:/SKS Market/Data/database/37a64e83-514d-4b00-b90a-9af172dacdd6/9bcfb0b0-2cd2-11f1-9b4b-6fef85f604f9_2026-2027.db';
             if (fs.existsSync(sqliteExe) && fs.existsSync(dbPath)) {
               const { execFileSync } = require('child_process');
-              const initTableSql = 'CREATE TABLE IF NOT EXISTS ProductImageMaster (id INTEGER PRIMARY KEY AUTOINCREMENT, product_id INTEGER UNIQUE, barcode TEXT, image_url TEXT, updated_at TEXT);';
+              const initTableSql = 'CREATE TABLE IF NOT EXISTS ProductImageMaster (id INTEGER PRIMARY KEY AUTOINCREMENT, product_id INTEGER UNIQUE, barcode TEXT, image_url TEXT, category TEXT, updated_at TEXT);';
               execFileSync(sqliteExe, [dbPath, initTableSql]);
 
-              const safeUrl = finalUrl.replace(/'/g, "''");
+              const safeUrl = (finalUrl || '').replace(/'/g, "''");
+              const safeCat = (category || '').replace(/'/g, "''");
               const safeBc = (barcode || '').replace(/'/g, "''");
               const now = new Date().toISOString();
               const pIdVal = productId ? String(productId) : 'NULL';
-              const upsertSql = 'INSERT INTO ProductImageMaster (product_id, barcode, image_url, updated_at) VALUES (' + pIdVal + ", '" + safeBc + "', '" + safeUrl + "', '" + now + "') ON CONFLICT(product_id) DO UPDATE SET image_url='" + safeUrl + "', barcode='" + safeBc + "', updated_at='" + now + "';";
+              const upsertSql = "INSERT INTO ProductImageMaster (product_id, barcode, image_url, category, updated_at) VALUES (" + pIdVal + ", '" + safeBc + "', '" + safeUrl + "', '" + safeCat + "', '" + now + "') ON CONFLICT(product_id) DO UPDATE SET " + (finalUrl ? "image_url='" + safeUrl + "', " : "") + (category ? "category='" + safeCat + "', " : "") + "barcode='" + safeBc + "', updated_at='" + now + "';";
               execFileSync(sqliteExe, [dbPath, upsertSql]);
               dbUpdated = true;
             }
@@ -311,10 +318,11 @@ if (reqPath === '/api/pos/status') {
           productId,
           barcode,
           imageUrl: finalUrl,
+          category,
           product: matchedItem,
           updatedInCatalog,
           dbUpdated,
-          message: 'Product image updated successfully across catalog, store, and database!'
+          message: 'Product updated successfully across catalog, store, and database!'
         }));
       } catch (e) {
         res.writeHead(500, { 'Content-Type': 'application/json' });

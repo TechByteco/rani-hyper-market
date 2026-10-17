@@ -3178,13 +3178,17 @@
         }
       } catch(e) {}
 
-      // Apply custom product image overrides from Image Studio
+      // Apply custom product image & category overrides from Image Studio
       try {
         const imageOverrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+        const categoryOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
         products.forEach(p => {
           if (imageOverrides[p.id]) {
             p.image_url = imageOverrides[p.id];
             p.image = imageOverrides[p.id];
+          }
+          if (categoryOverrides[p.id]) {
+            p.category = categoryOverrides[p.id];
           }
         });
       } catch(e) {}
@@ -4428,6 +4432,8 @@
 
         const keys = keywordsMap[currentCategory] || [currentCategory.toLowerCase()];
         list = list.filter(p => {
+          const cat = (p.category || '').toLowerCase();
+          if (cat && (keys.some(k => cat.includes(k)) || cat.includes(currentCategory.toLowerCase()))) return true;
           const text = (p.title + ' ' + (p.description || '')).toLowerCase();
           return keys.some(k => text.includes(k));
         });
@@ -5725,6 +5731,27 @@
             }
           }, 350);
         }
+      } catch(e) {}
+
+      // Real-time synchronization from Product Image Studio & Admin
+      try {
+        const syncChannels = ['nsn_product_updates', 'sks_market_sync'];
+        syncChannels.forEach(chName => {
+          if (typeof BroadcastChannel !== 'undefined') {
+            const bc = new BroadcastChannel(chName);
+            bc.onmessage = (event) => {
+              if (event.data && (event.data.type === 'PRODUCT_UPDATED' || event.data.type === 'PRODUCT_CATEGORY_UPDATED' || event.data.type === 'PRODUCT_IMAGE_UPDATED')) {
+                const { productId, imageUrl, category } = event.data;
+                const p = (typeof allProducts !== 'undefined') ? allProducts.find(x => String(x.id) === String(productId)) : null;
+                if (p) {
+                  if (imageUrl) { p.image_url = imageUrl; p.image = imageUrl; }
+                  if (category) p.category = category;
+                  if (typeof filterProducts === 'function') filterProducts();
+                }
+              }
+            };
+          }
+        });
       } catch(e) {}
     })();
 

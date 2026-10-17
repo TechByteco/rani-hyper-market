@@ -4742,6 +4742,7 @@
       const orderDraft = {
         id: orderId,
         invId: invId,
+        createdAt: Date.now(),
         date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
         time: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
         customerName: name,
@@ -4867,11 +4868,12 @@
         // Cache last order for WhatsApp sharing & local record
         window.lastCompletedOrder = orderRecord;
 
-        // Save order to localStorage permanently
+        // Save order to localStorage permanently (with strict deduplication)
         try {
           const existingOrders = JSON.parse(localStorage.getItem('nsn_orders') || '[]');
-          existingOrders.unshift(orderRecord);
-          localStorage.setItem('nsn_orders', JSON.stringify(existingOrders.slice(0, 50)));
+          const cleanExisting = Array.isArray(existingOrders) ? existingOrders.filter(o => o && o.id !== orderRecord.id && o.invId !== orderRecord.invId) : [];
+          cleanExisting.unshift(orderRecord);
+          localStorage.setItem('nsn_orders', JSON.stringify(cleanExisting.slice(0, 100)));
         } catch(e) {
           console.warn('Local storage order cache skipped:', e);
         }

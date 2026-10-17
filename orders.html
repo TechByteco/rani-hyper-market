@@ -150,14 +150,19 @@
 
       <!-- Header Actions -->
       <div class="flex items-center gap-2 flex-wrap">
-        <button type="button" onclick="refreshOrdersData()" class="px-3 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs flex items-center gap-1.5 transition active:scale-95">
+        <button type="button" onclick="refreshOrdersData()" class="px-3 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs flex items-center gap-1.5 transition active:scale-95" title="Refresh orders">
           <i class="fa-solid fa-rotate text-emerald-600"></i>
           <span>Refresh</span>
         </button>
 
-        <button type="button" onclick="exportOrdersToCsv()" class="px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs flex items-center gap-1.5 transition active:scale-95">
+        <button type="button" onclick="exportOrdersToCsv()" class="px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs flex items-center gap-1.5 transition active:scale-95" title="Export daywise CSV">
           <i class="fa-solid fa-file-excel text-emerald-600"></i>
           <span>Export CSV</span>
+        </button>
+
+        <button type="button" onclick="purgeDemoAndDuplicates()" class="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs flex items-center gap-1.5 transition active:scale-95" title="Purge mock data & clean duplicates">
+          <i class="fa-solid fa-broom text-rose-600"></i>
+          <span>Purge Duplicates</span>
         </button>
 
         <button type="button" onclick="window.print()" class="px-3 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 no-print">
@@ -279,7 +284,7 @@
             <i class="fa-solid fa-calendar-day text-emerald-600"></i>
             <span>Browse Daywise:</span>
           </span>
-          <span class="text-[11px] text-gray-500 font-semibold" id="active-day-label">All Days Selected</span>
+          <span class="text-[11px] text-gray-500 font-semibold" id="active-day-label">Showing Orders Placed Today</span>
         </div>
 
         <!-- Custom Date Range Picker -->
@@ -296,19 +301,19 @@
 
       <!-- Quick Preset Date Pills -->
       <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none" id="date-pills-bar">
-        <button type="button" onclick="filterByScope('all', this)" class="date-pill active">
-          🌟 All Days
-        </button>
-        <button type="button" onclick="filterByScope('today', this)" class="date-pill" id="pill-today">
+        <button type="button" onclick="filterByScope('today', this)" class="date-pill active" id="pill-today">
           ⚡ Today (<span id="pill-today-count">0</span>)
         </button>
         <button type="button" onclick="filterByScope('yesterday', this)" class="date-pill" id="pill-yesterday">
-          Yesterday
+          Yesterday (<span id="pill-yesterday-count">0</span>)
         </button>
-        <button type="button" onclick="filterByScope('7days', this)" class="date-pill">
+        <button type="button" onclick="filterByScope('all', this)" class="date-pill" id="pill-all">
+          🌟 All Days
+        </button>
+        <button type="button" onclick="filterByScope('7days', this)" class="date-pill" id="pill-7days">
           Last 7 Days
         </button>
-        <button type="button" onclick="filterByScope('30days', this)" class="date-pill">
+        <button type="button" onclick="filterByScope('30days', this)" class="date-pill" id="pill-30days">
           This Month
         </button>
       </div>
@@ -336,7 +341,7 @@
     </div>
 
     <!-- SEARCH & MULTI-FILTER BAR -->
-    <div id="filter-section" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-gray-200 shadow-xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 no-print">
+    <div id="filter-section" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-gray-200 shadow-xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 no-print">
       
       <!-- Search Input -->
       <div class="relative">
@@ -372,6 +377,14 @@
           <option value="out_for_delivery">Out for Delivery</option>
           <option value="delivered">Delivered</option>
           <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+
+      <!-- Order Chronological Sorting -->
+      <div>
+        <select id="filter-sort-direction" onchange="handleSortChange(this.value)" class="glass-input w-full text-xs font-bold text-emerald-800 bg-emerald-50/50 border-emerald-200">
+          <option value="asc" selected>⏳ 1st Order Today First (#1 ➔ Latest)</option>
+          <option value="desc">⚡ Latest Order First (Newest ➔ #1)</option>
         </select>
       </div>
 
@@ -596,7 +609,8 @@
   <script>
     let allOrders = [];
     let filteredOrders = [];
-    let currentScope = 'all'; // 'all' | 'today' | 'yesterday' | '7days' | '30days' | 'custom'
+    let currentScope = 'today'; // Default directly to Today!
+    let sortDirection = 'asc'; // 'asc' = Start from 1st Order Today (#1 ➔ Latest)
     let currentModalOrder = null;
 
     // Standard Store Profile Constants
@@ -622,12 +636,18 @@
         console.warn('Error reading nsn_orders:', e);
       }
 
-      // 2. If fewer than 6 orders exist, seed realistic sample daywise online orders for demonstration
-      if (orders.length < 6) {
-        orders = generateSampleDaywiseOrders(orders);
-        try {
-          localStorage.setItem('nsn_orders', JSON.stringify(orders));
-        } catch(e) {}
+      // 2. Deduplicate loaded orders strictly by unique ID, invoice, or composite key
+      orders = deduplicateOrders(orders);
+
+      // Clean up localStorage immediately if duplicates existed
+      try {
+        localStorage.setItem('nsn_orders', JSON.stringify(orders));
+      } catch(e) {}
+
+      // 3. If zero orders exist, provide realistic sample orders for in-memory demonstration
+      // (NEVER write mock data to localStorage so live store orders remain 100% clean and unpolluted)
+      if (orders.length === 0) {
+        orders = generateSampleDaywiseOrders();
       }
 
       allOrders = normalizeOrders(orders);
@@ -640,8 +660,8 @@
       showToast('✓ Orders refreshed with latest transactions!');
     }
 
-    // 2. Generate Realistic Sample Daywise Orders if empty
-    function generateSampleDaywiseOrders(existing) {
+        // 2. Generate Realistic Sample Daywise Orders if empty
+    function generateSampleDaywiseOrders() {
       const now = new Date();
       const formatDate = (daysAgo) => {
         const d = new Date(now);
@@ -650,35 +670,61 @@
       };
 
       const samples = [
+        // TODAY'S ORDERS (Chronological starting from 1st Order of the Day)
+        {
+          id: 'ORD-RHMTODAY-8920',
+          invId: '#RHM-INV-982101',
+          date: formatDate(0),
+          time: '08:30 AM',
+          customerName: 'Priya Sundaram',
+          customerPhone: '9443217890',
+          customerEmail: 'priya.s@gmail.com',
+          shippingAddress: '12, North Car Street, Bodinayakanur, 625513',
+          fullAddress: 'Priya Sundaram | Ph: 9443217890 | North Car St | Bodinayakanur',
+          timeslot: '🌅 Morning (7 AM - 10 AM)',
+          paymentMethod: 'Instant UPI (Ref: 428901112233)',
+          paymentStatus: 'PAID (UPI)',
+          transactionId: '428901112233',
+          upiReference: '428901112233',
+          instructions: 'Call upon arrival',
+          items: [
+            { id: 1, title: 'Aashirvaad Superior MP Whole Wheat Atta 5kg', price: 340, mrp: 395, quantity: 1, unit: '5 kg', total: 340 },
+            { id: 2, title: 'Fortune Sunlite Refined Sunflower Oil 1L Pouch', price: 145, mrp: 175, quantity: 2, unit: '1 L', total: 290 },
+            { id: 5, title: 'Amul Pure Ghee 500ml Tin', price: 320, mrp: 350, quantity: 1, unit: '500 ml', total: 320 }
+          ],
+          grossMrp: 1115,
+          totalSavings: 165,
+          totalAmount: 950,
+          status: 'delivered'
+        },
         {
           id: 'ORD-RHMTODAY-8921',
-          invId: '#RHM-INV-982104',
+          invId: '#RHM-INV-982102',
           date: formatDate(0),
-          time: '02:45 PM',
-          customerName: 'Rahul Sharma',
+          time: '10:15 AM',
+          customerName: 'Meenakshi Raman',
           customerPhone: '9842145678',
-          customerEmail: 'rahul.s@gmail.com',
-          shippingAddress: 'Flat 4B, Greenfield Apartments, Bodinayakanur, 625513',
-          fullAddress: 'Rahul Sharma | Ph: 9842145678 | Greenfield Apts | Bodinayakanur',
+          customerEmail: 'meenakshi.r@gmail.com',
+          shippingAddress: '28/A, Perumal Kovil Street, Bodinayakanur, 625513',
+          fullAddress: 'Meenakshi Raman | Ph: 9842145678 | Perumal Kovil St | Bodinayakanur',
           timeslot: '⚡ Express 30-45 Mins',
-          paymentMethod: 'Online via Razorpay',
-          paymentStatus: 'PAID',
-          transactionId: 'pay_P19xA823K49mQ',
-          razorpayPaymentId: 'pay_P19xA823K49mQ',
-          instructions: 'Ring doorbell twice, leave at door if busy',
+          paymentMethod: 'Cash On Delivery (COD)',
+          paymentStatus: 'UNPAID (Collect at Doorstep)',
+          transactionId: 'COD-982102',
+          instructions: 'Keep exact change ready',
           items: [
-            { id: 1, title: 'Aashirvaad Superior MP Whole Wheat Atta 5kg', price: 340, mrp: 395, quantity: 2, unit: '5 kg', total: 680 },
-            { id: 2, title: 'Fortune Sunlite Refined Sunflower Oil 1L Pouch', price: 145, mrp: 175, quantity: 2, unit: '1 L', total: 290 },
-            { id: 3, title: 'Tata Salt Vacuum Evaporated Iodized 1kg', price: 28, mrp: 30, quantity: 2, unit: '1 kg', total: 56 }
+            { id: 6, title: 'Maggi 2-Minute Instant Noodles 12-Pack', price: 168, mrp: 190, quantity: 1, unit: '12 pk', total: 168 },
+            { id: 7, title: 'Bru Instant Coffee Gold 100g Jar', price: 245, mrp: 280, quantity: 1, unit: '100 g', total: 245 },
+            { id: 8, title: 'Parle-G Gold Glucose Biscuits 1kg Pack', price: 110, mrp: 130, quantity: 1, unit: '1 kg', total: 110 }
           ],
-          grossMrp: 1195,
-          totalSavings: 169,
-          totalAmount: 1026,
-          status: 'preparing'
+          grossMrp: 600,
+          totalSavings: 77,
+          totalAmount: 523,
+          status: 'out_for_delivery'
         },
         {
           id: 'ORD-RHMTODAY-8922',
-          invId: '#RHM-INV-982105',
+          invId: '#RHM-INV-982103',
           date: formatDate(0),
           time: '01:15 PM',
           customerName: 'Karthik Raja',
@@ -703,104 +749,86 @@
         },
         {
           id: 'ORD-RHMTODAY-8923',
-          invId: '#RHM-INV-982106',
+          invId: '#RHM-INV-982104',
           date: formatDate(0),
-          time: '11:30 AM',
-          customerName: 'Meenakshi Sundaram',
-          customerPhone: '9443217890',
-          customerEmail: 'meena.sundaram@gmail.com',
-          shippingAddress: '28/A, Perumal Kovil Street, Bodinayakanur, 625513',
-          fullAddress: 'Meenakshi Sundaram | Ph: 9443217890 | Perumal Kovil St | Bodinayakanur',
-          timeslot: '🌅 Morning (7 AM - 10 AM)',
-          paymentMethod: 'Cash On Delivery (COD)',
-          paymentStatus: 'UNPAID (Collect at Doorstep)',
-          transactionId: 'COD-982106',
-          instructions: 'Keep exact change ready',
-          items: [
-            { id: 6, title: 'Maggi 2-Minute Instant Noodles 12-Pack', price: 168, mrp: 190, quantity: 1, unit: '12 pk', total: 168 },
-            { id: 7, title: 'Bru Instant Coffee Gold 100g Jar', price: 245, mrp: 280, quantity: 1, unit: '100 g', total: 245 },
-            { id: 8, title: 'Parle-G Gold Glucose Biscuits 1kg Pack', price: 110, mrp: 130, quantity: 1, unit: '1 kg', total: 110 }
-          ],
-          grossMrp: 600,
-          totalSavings: 77,
-          totalAmount: 523,
-          status: 'out_for_delivery'
-        },
-        {
-          id: 'ORD-RHMYEST-8840',
-          invId: '#RHM-INV-981980',
-          date: formatDate(1),
-          time: '06:10 PM',
-          customerName: 'Priya Dharshini',
-          customerPhone: '9944123890',
-          customerEmail: 'priya.d@gmail.com',
-          shippingAddress: '88, Subburaj Nagar, Near Bus Stand, Bodinayakanur, 625513',
-          fullAddress: 'Priya Dharshini | Ph: 9944123890 | Subburaj Nagar | Bodinayakanur',
-          timeslot: '🌇 Evening (5 PM - 8:30 PM)',
+          time: '02:45 PM',
+          customerName: 'Rahul Sharma',
+          customerPhone: '9842145678',
+          customerEmail: 'rahul.s@gmail.com',
+          shippingAddress: 'Flat 4B, Greenfield Apartments, Bodinayakanur, 625513',
+          fullAddress: 'Rahul Sharma | Ph: 9842145678 | Greenfield Apts | Bodinayakanur',
+          timeslot: '⚡ Express 30-45 Mins',
           paymentMethod: 'Online via Razorpay',
           paymentStatus: 'PAID',
-          transactionId: 'pay_P18vB918M38xR',
-          razorpayPaymentId: 'pay_P18vB918M38xR',
-          instructions: 'Call before reaching',
+          transactionId: 'pay_P19xA823K49mQ',
+          razorpayPaymentId: 'pay_P19xA823K49mQ',
+          instructions: 'Ring doorbell twice, leave at door if busy',
           items: [
-            { id: 9, title: 'Surf Excel Quick Wash Detergent Powder 2kg', price: 375, mrp: 430, quantity: 1, unit: '2 kg', total: 375 },
-            { id: 10, title: 'Dettol Original Germ Protection Bathing Soap (Pack of 5)', price: 220, mrp: 260, quantity: 1, unit: '5 pcs', total: 220 },
-            { id: 11, title: 'Colgate Strong Teeth Dental Cream Toothpaste 500g Value Pack', price: 195, mrp: 235, quantity: 1, unit: '500 g', total: 195 }
+            { id: 1, title: 'Aashirvaad Superior MP Whole Wheat Atta 5kg', price: 340, mrp: 395, quantity: 2, unit: '5 kg', total: 680 },
+            { id: 2, title: 'Fortune Sunlite Refined Sunflower Oil 1L Pouch', price: 145, mrp: 175, quantity: 2, unit: '1 L', total: 290 },
+            { id: 3, title: 'Tata Salt Vacuum Evaporated Iodized 1kg', price: 28, mrp: 30, quantity: 2, unit: '1 kg', total: 56 }
           ],
-          grossMrp: 925,
-          totalSavings: 135,
-          totalAmount: 790,
+          grossMrp: 1195,
+          totalSavings: 169,
+          totalAmount: 1026,
+          status: 'preparing'
+        },
+
+        // YESTERDAY'S ORDERS
+        {
+          id: 'ORD-RHMYEST-8840',
+          invId: '#RHM-INV-981902',
+          date: formatDate(1),
+          time: '05:20 PM',
+          customerName: 'Ananya Krishnan',
+          customerPhone: '9840192837',
+          customerEmail: 'ananya.k@outlook.com',
+          shippingAddress: '7, Subban Street, Bodinayakanur, 625513',
+          fullAddress: 'Ananya Krishnan | Ph: 9840192837 | Subban St | Bodinayakanur',
+          timeslot: '🌆 Evening (4 PM - 7 PM)',
+          paymentMethod: 'Online via Razorpay',
+          paymentStatus: 'PAID',
+          transactionId: 'pay_P18bX912M44rS',
+          razorpayPaymentId: 'pay_P18bX912M44rS',
+          instructions: 'Leave with security guard',
+          items: [
+            { id: 11, title: 'Surf Excel Quick Wash Detergent Powder 2kg', price: 395, mrp: 450, quantity: 1, unit: '2 kg', total: 395 },
+            { id: 12, title: 'Comfort Fabric Conditioner Morning Fresh 860ml', price: 210, mrp: 245, quantity: 1, unit: '860 ml', total: 210 },
+            { id: 13, title: 'Dettol Original Germ Protection Liquid Soap 250ml', price: 95, mrp: 105, quantity: 2, unit: '250 ml', total: 190 }
+          ],
+          grossMrp: 990,
+          totalSavings: 190,
+          totalAmount: 800,
           status: 'delivered'
         },
+
+        // 2 DAYS AGO
         {
-          id: 'ORD-RHMYEST-8841',
-          invId: '#RHM-INV-981981',
-          date: formatDate(1),
-          time: '03:40 PM',
-          customerName: 'Anand Kumar',
-          customerPhone: '9655123456',
-          customerEmail: 'anand.k@rediffmail.com',
-          shippingAddress: '5/12, Chettiar Street, Bodinayakanur, 625513',
-          fullAddress: 'Anand Kumar | Ph: 9655123456 | Chettiar St | Bodinayakanur',
-          timeslot: '☀️ Afternoon (12 PM - 3 PM)',
+          id: 'ORD-RHM2DAYS-8715',
+          invId: '#RHM-INV-981701',
+          date: formatDate(2),
+          time: '04:10 PM',
+          customerName: 'Muthukumar S.',
+          customerPhone: '9442187654',
+          customerEmail: 'muthu.kumar@gmail.com',
+          shippingAddress: '31, West Street, Near Bus Stand, Bodinayakanur, 625513',
+          fullAddress: 'Muthukumar S | Ph: 9442187654 | Near Bus Stand | Bodinayakanur',
+          timeslot: '🌆 Evening (4 PM - 7 PM)',
           paymentMethod: 'Cash On Delivery (COD)',
           paymentStatus: 'UNPAID (Collect at Doorstep)',
-          transactionId: 'COD-981981',
-          instructions: '',
+          transactionId: 'COD-981701',
+          instructions: 'Call 10 minutes before delivery',
           items: [
-            { id: 12, title: 'Everest Turmeric + Chilli + Coriander Powder Combo 500g', price: 285, mrp: 330, quantity: 1, unit: '3x500g', total: 285 },
-            { id: 13, title: 'Catch Kitchen King Spices Masala 100g', price: 78, mrp: 90, quantity: 2, unit: '100 g', total: 156 }
-          ],
-          grossMrp: 510,
-          totalSavings: 69,
-          totalAmount: 441,
-          status: 'delivered'
-        },
-        {
-          id: 'ORD-RHM2DAYS-8710',
-          invId: '#RHM-INV-981710',
-          date: formatDate(2),
-          time: '05:20 PM',
-          customerName: 'Suresh Babu',
-          customerPhone: '9788123901',
-          customerEmail: 'suresh.babu@outlook.com',
-          shippingAddress: 'Anwar Complex 2nd Floor, Sundara Pandian St, Bodinayakanur',
-          fullAddress: 'Suresh Babu | Ph: 9788123901 | Anwar Complex | Bodinayakanur',
-          timeslot: '🌇 Evening (5 PM - 8:30 PM)',
-          paymentMethod: 'Instant UPI (Ref: 428812984102)',
-          paymentStatus: 'PAID (UPI)',
-          transactionId: '428812984102',
-          upiReference: '428812984102',
-          instructions: 'Deliver to shop office',
-          items: [
-            { id: 14, title: 'Gemini Pure Filter Coffee Blend 500g', price: 290, mrp: 340, quantity: 2, unit: '500 g', total: 580 },
-            { id: 15, title: 'Nandini Dairy Pure Buffalo Ghee 500ml', price: 340, mrp: 385, quantity: 1, unit: '500 ml', total: 340 }
+            { id: 14, title: 'Tata Tea Gold Leaf Pouch 500g', price: 310, mrp: 350, quantity: 2, unit: '500 g', total: 620 },
+            { id: 15, title: 'Dabur Honey 100% Pure 500g Squeezy', price: 210, mrp: 245, quantity: 1, unit: '500 g', total: 210 }
           ],
           grossMrp: 1065,
           totalSavings: 145,
           totalAmount: 920,
           status: 'delivered'
         },
+
+        // 3 DAYS AGO
         {
           id: 'ORD-RHM3DAYS-8601',
           invId: '#RHM-INV-981601',
@@ -828,12 +856,125 @@
         }
       ];
 
-      return [...existing, ...samples];
+      return samples;
     }
 
-    // 3. Normalize Order Records for Uniform Display
+    // 3. Strict Deduplication Logic to Prevent Repeated Records
+    function deduplicateOrders(orders) {
+      if (!Array.isArray(orders)) return [];
+      const seen = new Set();
+      const deduped = [];
+
+      for (const o of orders) {
+        if (!o) continue;
+        const id = (o.id || '').toString().trim().toUpperCase();
+        const inv = (o.invId || '').toString().trim().toUpperCase();
+        const primaryKey = id.length > 3 ? id : (inv.length > 3 ? inv : null);
+        const fallbackKey = (o.date || '') + '_' + (o.time || '') + '_' + (o.customerPhone || '') + '_' + (o.totalAmount || o.total_amount || '');
+        const key = primaryKey || fallbackKey;
+
+        if (seen.has(key)) {
+          continue; // Duplicate record skipped!
+        }
+        seen.add(key);
+        deduped.push(o);
+      }
+      return deduped;
+    }
+
+    // Helper: Compute Order Timestamp for Chronological Sequence Sorting
+    function getOrderTimestamp(order) {
+      if (!order) return 0;
+      if (order.createdAt && !isNaN(Number(order.createdAt))) {
+        return Number(order.createdAt);
+      }
+      if (order.created_at) {
+        const t = new Date(order.created_at).getTime();
+        if (!isNaN(t)) return t;
+      }
+      if (order.date) {
+        const timeStr = order.time || '12:00 AM';
+        const combined = order.date + ' ' + timeStr;
+        const t = new Date(combined).getTime();
+        if (!isNaN(t)) return t;
+        const dOnly = new Date(order.date).getTime();
+        if (!isNaN(dOnly)) return dOnly;
+      }
+      return 0;
+    }
+
+    // Helper: Compare whether two date strings or date objects refer to the same calendar day
+    function isSameDay(d1, d2) {
+      if (!d1 || !d2) return false;
+      if (d1 === d2) return true;
+      const dt1 = new Date(d1);
+      const dt2 = new Date(d2);
+      if (!isNaN(dt1.getTime()) && !isNaN(dt2.getTime())) {
+        return dt1.getFullYear() === dt2.getFullYear() &&
+               dt1.getMonth() === dt2.getMonth() &&
+               dt1.getDate() === dt2.getDate();
+      }
+      return String(d1).trim().toLowerCase() === String(d2).trim().toLowerCase();
+    }
+
+    function getDayTimestamp(dateStr) {
+      if (!dateStr) return 0;
+      const t = new Date(dateStr).getTime();
+      return isNaN(t) ? 0 : t;
+    }
+
+    // Purge mock demo orders and clear any duplicates in localStorage
+    function purgeDemoAndDuplicates() {
+      try {
+        let local = JSON.parse(localStorage.getItem('nsn_orders') || '[]');
+        if (!Array.isArray(local)) local = [];
+
+        // Remove mock demo records
+        const mockPrefixes = ['ORD-RHMTODAY', 'ORD-RHMYEST', 'ORD-RHM-YEST', 'ORD-RHM2DAYS', 'ORD-RHM3DAYS'];
+        const cleanOrders = local.filter(o => {
+          if (!o) return false;
+          const id = (o.id || '').toUpperCase();
+          const inv = (o.invId || '').toUpperCase();
+          const isMock = mockPrefixes.some(p => id.startsWith(p)) || 
+                         inv.includes('982101') || inv.includes('982102') || inv.includes('982103') || inv.includes('982104') || 
+                         inv.includes('981902') || inv.includes('981701') || inv.includes('981601');
+          return !isMock;
+        });
+
+        const dedupedOrders = deduplicateOrders(cleanOrders);
+        localStorage.setItem('nsn_orders', JSON.stringify(dedupedOrders));
+
+        allOrders = normalizeOrders(dedupedOrders);
+        applyFilters();
+        updatePillsCount();
+
+        showToast('✓ Cleaned! ' + dedupedOrders.length + ' live store order(s) active. Duplicates and demo records removed.');
+      } catch(e) {
+        showToast('Error purging orders: ' + e.message);
+      }
+    }
+
+    // Load demo orders explicitly
+    function loadDemoOrders() {
+      const samples = generateSampleDaywiseOrders();
+      localStorage.setItem('nsn_orders', JSON.stringify(samples));
+      allOrders = normalizeOrders(samples);
+      applyFilters();
+      updatePillsCount();
+      showToast('✓ Demo daywise orders loaded.');
+    }
+
+    // Sort Direction Controller
+    function handleSortChange(dir) {
+      sortDirection = dir || 'asc';
+      applyFilters();
+      showToast(sortDirection === 'asc' ? 'Order Sequence: 1st Order Today First (#1 ➔ Latest)' : 'Order Sequence: Latest Order First');
+    }
+
+    // 4. Normalize Order Records for Uniform Display
     function normalizeOrders(orders) {
-      return orders.map(o => {
+      const deduped = deduplicateOrders(orders);
+      return deduped.map(o => {
         const rawDate = o.date || (o.created_at ? new Date(o.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '15 Oct 2026');
         const total = parseFloat(o.totalAmount || o.total_amount || 0);
         const gross = parseFloat(o.grossMrp || (total * 1.2));
@@ -850,6 +991,7 @@
 
         return {
           id: o.id || 'ORD-' + Math.random().toString(36).substring(7).toUpperCase(),
+          createdAt: o.createdAt || (o.created_at ? new Date(o.created_at).getTime() : null),
           invId: o.invId || o.voucher_no ? ('#RHM-INV-' + (o.voucher_no || '1001')) : '#RHM-INV-849201',
           date: rawDate,
           time: o.time || (o.created_at ? new Date(o.created_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : '12:00 PM'),
@@ -885,7 +1027,12 @@
     function filterByScope(scope, btnEl) {
       currentScope = scope;
       document.querySelectorAll('#date-pills-bar .date-pill').forEach(b => b.classList.remove('active'));
-      if (btnEl) btnEl.classList.add('active');
+      if (btnEl) {
+        btnEl.classList.add('active');
+      } else {
+        const targetBtn = document.getElementById('pill-' + scope);
+        if (targetBtn) targetBtn.classList.add('active');
+      }
 
       const label = document.getElementById('active-day-label');
       if (label) {
@@ -928,9 +1075,26 @@
       const yesterdayStr = yesterday.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
 
       filteredOrders = allOrders.filter(o => {
-        // Scope Date filter
-        if (currentScope === 'today' && o.date !== todayStr) return false;
-        if (currentScope === 'yesterday' && o.date !== yesterdayStr) return false;
+        // Scope Date filter (Calendar day matching)
+        if (currentScope === 'today') {
+          if (!isSameDay(o.date, new Date())) return false;
+        } else if (currentScope === 'yesterday') {
+          const yest = new Date();
+          yest.setDate(yest.getDate() - 1);
+          if (!isSameDay(o.date, yest)) return false;
+        } else if (currentScope === '7days') {
+          const sevenDaysAgo = new Date();
+          sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+          sevenDaysAgo.setHours(0,0,0,0);
+          const oDate = new Date(o.date);
+          if (isNaN(oDate.getTime()) || oDate < sevenDaysAgo) return false;
+        } else if (currentScope === '30days') {
+          const thirtyDaysAgo = new Date();
+          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+          thirtyDaysAgo.setHours(0,0,0,0);
+          const oDate = new Date(o.date);
+          if (isNaN(oDate.getTime()) || oDate < thirtyDaysAgo) return false;
+        }
 
         // Custom range filter
         if (currentScope === 'custom' && (dateFrom || dateTo)) {
@@ -968,6 +1132,13 @@
         }
 
         return true;
+      });
+
+      // Sort filtered orders chronologically
+      filteredOrders.sort((a, b) => {
+        const tA = getOrderTimestamp(a);
+        const tB = getOrderTimestamp(b);
+        return sortDirection === 'asc' ? (tA - tB) : (tB - tA);
       });
 
       renderKPIs();
@@ -1043,10 +1214,15 @@
     }
 
     function updatePillsCount() {
-      const todayStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-      const todayCount = allOrders.filter(o => o.date === todayStr).length;
+      const todayCount = allOrders.filter(o => isSameDay(o.date, new Date())).length;
       const pillTodayCount = document.getElementById('pill-today-count');
       if (pillTodayCount) pillTodayCount.innerText = todayCount;
+
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayCount = allOrders.filter(o => isSameDay(o.date, yesterday)).length;
+      const pillYesterdayCount = document.getElementById('pill-yesterday-count');
+      if (pillYesterdayCount) pillYesterdayCount.innerText = yesterdayCount;
     }
 
     // 6. Render Daywise Grouped Orders
@@ -1055,18 +1231,30 @@
       if (!container) return;
 
       if (filteredOrders.length === 0) {
+        const todayStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+        const isTodayScope = (currentScope === 'today');
         container.innerHTML = `
-          <div class="bg-white p-12 text-center rounded-2xl border border-gray-200 shadow-xs space-y-3">
-            <div class="w-16 h-16 bg-gray-50 text-gray-400 rounded-full flex items-center justify-center mx-auto text-2xl">
-              <i class="fa-solid fa-receipt"></i>
+          <div class="bg-white p-10 sm:p-14 text-center rounded-2xl border border-gray-200 shadow-xs space-y-4">
+            <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto text-2xl shadow-xs">
+              <i class="fa-solid fa-${isTodayScope ? 'clipboard-list' : 'receipt'}"></i>
             </div>
-            <h3 class="text-base font-black text-gray-800">No Orders Found</h3>
-            <p class="text-xs text-gray-500 max-w-sm mx-auto">
-              No online orders match your active search and date filters. Try selecting "All Days" or clearing filter parameters.
-            </p>
-            <button type="button" onclick="clearDateFilter()" class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-xs">
-              View All Orders
-            </button>
+            <div class="space-y-1">
+              <h3 class="text-base font-black text-gray-900">${isTodayScope ? 'No Orders Placed Yet Today (' + todayStr + ')' : 'No Orders Found'}</h3>
+              <p class="text-xs text-gray-500 max-w-md mx-auto leading-relaxed">
+                ${isTodayScope ? 'Your today\'s order queue is ready. Any order placed by customers in the store will appear here in real-time, starting from Order #1.' : 'No online orders match your active search and date filters. Try selecting All Days or clearing filter parameters.'}
+              </p>
+            </div>
+            <div class="flex items-center justify-center gap-2 flex-wrap pt-2">
+              <button type="button" onclick="filterByScope('all', document.getElementById('pill-all'))" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-xs transition active:scale-95">
+                View All Days
+              </button>
+              <button type="button" onclick="loadDemoOrders()" class="px-3.5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-xs font-bold transition active:scale-95">
+                Load Demo Sample Orders
+              </button>
+              <a href="/store" target="_blank" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-bold transition active:scale-95 no-underline">
+                <i class="fa-solid fa-cart-shopping mr-1"></i> Place Test Order in Store
+              </a>
+            </div>
           </div>
         `;
         return;
@@ -1075,22 +1263,32 @@
       // Group orders by date string
       const groupedByDay = {};
       filteredOrders.forEach(o => {
-        const d = o.date;
+        const d = o.date || 'Today';
         if (!groupedByDay[d]) groupedByDay[d] = [];
         groupedByDay[d].push(o);
       });
 
-      const todayStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+      // Sort day groups so Today / most recent day is at the top
+      const dayKeys = Object.keys(groupedByDay).sort((a, b) => {
+        return getDayTimestamp(b) - getDayTimestamp(a);
+      });
 
       let html = '';
 
-      Object.keys(groupedByDay).forEach((dayDate, dayIdx) => {
+      dayKeys.forEach((dayDate, dayIdx) => {
         const dayOrders = groupedByDay[dayDate];
+        // Sort orders inside day according to sortDirection
+        dayOrders.sort((a, b) => {
+          const tA = getOrderTimestamp(a);
+          const tB = getOrderTimestamp(b);
+          return sortDirection === 'asc' ? (tA - tB) : (tB - tA);
+        });
+
         const dayTotal = dayOrders.reduce((sum, o) => sum + o.totalAmount, 0);
         const dayOnline = dayOrders.filter(o => o.payCategory === 'razorpay' || o.payCategory === 'upi').reduce((sum, o) => sum + o.totalAmount, 0);
         const dayCod = dayOrders.filter(o => o.payCategory === 'cod').reduce((sum, o) => sum + o.totalAmount, 0);
 
-        const isToday = (dayDate === todayStr);
+        const isToday = isSameDay(dayDate, new Date());
 
         html += `
           <section class="day-group space-y-3" id="day-group-${dayIdx}">
@@ -1105,9 +1303,13 @@
                   <div class="flex items-center gap-2">
                     <h3 class="text-base font-extrabold tracking-tight text-white">${dayDate}</h3>
                     ${isToday ? '<span class="bg-emerald-500 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded-full shadow-xs">TODAY</span>' : ''}
+                    <span class="text-xs bg-slate-700/80 text-slate-200 px-2 py-0.5 rounded-md font-bold">
+                      ${sortDirection === 'asc' ? 'Sequence: #1 ➔ #' + dayOrders.length : 'Sequence: Latest ➔ #1'}
+                    </span>
                   </div>
                   <p class="text-[11px] text-gray-300 font-semibold">
                     ${dayOrders.length} Order${dayOrders.length > 1 ? 's' : ''} Placed &bull; Total Day Revenue: <span class="text-emerald-400 font-extrabold font-mono-num">₹${dayTotal.toFixed(2)}</span>
+                    ${dayOrders.length > 0 && sortDirection === 'asc' ? '&bull; 1st Order at <strong class="text-white">' + dayOrders[0].time + '</strong>' : ''}
                   </p>
                 </div>
               </div>
@@ -1125,7 +1327,7 @@
 
             <!-- List of Order Cards for this Day -->
             <div class="grid grid-cols-1 gap-3.5">
-              ${dayOrders.map(order => renderOrderCardHtml(order)).join('')}
+              ${dayOrders.map((order, orderIdx) => renderOrderCardHtml(order, orderIdx, dayOrders.length)).join('')}
             </div>
 
           </section>
@@ -1136,7 +1338,7 @@
     }
 
     // 7. Render Individual Order Card HTML
-    function renderOrderCardHtml(order) {
+    function renderOrderCardHtml(order, orderIdx, totalDayOrders) {
       // Payment badge styling
       let payBadge = '';
       if (order.payCategory === 'razorpay') {
@@ -1178,6 +1380,9 @@
           <!-- Top Row: Invoice ID, Timestamp, Delivery Slot, & Status -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-gray-100 gap-2">
             <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-black ${orderIdx === 0 && sortDirection === 'asc' ? 'bg-amber-400 text-slate-950 ring-2 ring-amber-300' : 'bg-emerald-600 text-white'} shadow-2xs" title="Day Order Sequence Number">
+                ${orderIdx === 0 && sortDirection === 'asc' ? '⭐ 1st Order' : '#' + ((typeof orderIdx === 'number' ? orderIdx : 0) + 1)}
+              </span>
               <button type="button" onclick="openInvoiceModal('${order.id}')" class="font-mono font-black text-gray-900 text-sm hover:text-emerald-700 flex items-center gap-1">
                 <span>${order.invId}</span>
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-gray-400"></i>

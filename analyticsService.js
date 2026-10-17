@@ -3,6 +3,15 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
+let ALL_YEAR_FESTIVALS = [];
+try {
+  ALL_YEAR_FESTIVALS = require('./festivalMasterData').ALL_YEAR_FESTIVALS || [];
+} catch (e) {
+  try {
+    ALL_YEAR_FESTIVALS = require('./api/festivalMasterData').ALL_YEAR_FESTIVALS || [];
+  } catch (e2) {}
+}
+
 const DB_PATH = 'C:/SKS Market/Data/database/37a64e83-514d-4b00-b90a-9af172dacdd6/9bcfb0b0-2cd2-11f1-9b4b-6fef85f604f9_2026-2027.db';
 const SQLITE_EXE = 'C:/SKS Market/sqlite3.exe';
 
@@ -1155,187 +1164,81 @@ function getFestivalPredictions() {
 
   const currentDate = new Date('2026-09-13');
 
-  const festivals = [
-    {
-      id: 'vinayakar_chaturthi',
-      name: 'Vinayakar Chaturthi (Ganesha Festival)',
-      date: '2026-09-14',
-      startDate: '2026-09-13',
-      endDate: '2026-09-15',
-      surgeMultiplier: 1.55,
-      surgePercent: '+55%',
-      tier: 'High',
-      tag: 'Local Religious Festival',
-      description: 'Major regional festival. Peak demand for fresh fruits, coconuts, pooja oils, jaggery, and kozhukattai rice flour.',
-      procurementCutoff: '2026-09-10',
-      keyCategories: ['Pooja Oils & Camphor', 'Jaggery & Sugar', 'Rice Flour & Batter', 'Dairy / Ghee', 'Snacks'],
-      sampleSkus: [
-        { name: '500Ml R Dheepam Lamp Oil', rate: 100, mrp: 111, surge: '+80%' },
-        { name: '1Ltr R Porna Pooja Oil Pet', rate: 195, mrp: 215, surge: '+75%' },
-        { name: '100Ml R GRB Ghee Jar', rate: 105, mrp: 113, surge: '+50%' },
-        { name: '1Kg R Sugar', rate: 48.5, mrp: 60, surge: '+65%' },
-        { name: '500G R Anil Rosated Rava', rate: 45, mrp: 50, surge: '+45%' }
-      ],
-      stockingAdvice: 'Display pooja lamp oils, camphor, and jaggery on prime entrance end-caps. Keep 2.5x buffer of 500ml and 1L pooja oil.'
-    },
-    {
-      id: 'ayudha_pooja',
-      name: 'Ayudha Pooja & Saraswathi Pooja',
-      date: '2026-10-19',
-      startDate: '2026-10-18',
-      endDate: '2026-10-21',
-      surgeMultiplier: 1.80,
-      surgePercent: '+80%',
-      tier: 'Very High',
-      tag: 'Commercial & Vehicle Pooja',
-      description: 'Massive purchases across all Bodinayakanur vehicle owners, business workshops, and families. Pori, Pottukadalai, Lemons, and Sweets sell out rapidly.',
-      procurementCutoff: '2026-10-14',
-      keyCategories: ['Pori (Puffed Rice)', 'Roasted Gram (Pottukadalai)', 'Pooja Oil', 'Sweets & Sugar', 'Fruits & Lemon'],
-      sampleSkus: [
-        { name: 'Pori (Puffed Rice 500g)', rate: 35, mrp: 40, surge: '+250%' },
-        { name: 'Roasted Gram (Pottukadalai 500g)', rate: 65, mrp: 75, surge: '+180%' },
-        { name: '1Ltr R Porna Pooja Oil Pet', rate: 195, mrp: 215, surge: '+90%' },
-        { name: '1Kg R Sugar', rate: 48.5, mrp: 60, surge: '+70%' },
-        { name: '100G R SADHURAGIRI SNACKS S', rate: 40, mrp: 45, surge: '+60%' }
-      ],
-      stockingAdvice: 'Pre-order 4x usual volume of Pori and Roasted Gram directly from wholesale mills by Oct 14 to avoid stockouts.'
-    },
-    {
-      id: 'deepavali',
-      name: 'Deepavali (Diwali Mega Shopping Week)',
-      date: '2026-11-08',
-      startDate: '2026-11-04',
-      endDate: '2026-11-09',
-      surgeMultiplier: 2.35,
-      surgePercent: '+135%',
-      tier: 'Peak (Year Highest)',
-      tag: 'Grand Annual Festival',
-      description: 'The single biggest retail revenue week of the fiscal year. Heavy stocking required for Sunflower Oil (1L & 5L), Ghee, Maida, Rava, Sugar, Cashews, and Gift Packs.',
-      procurementCutoff: '2026-10-28',
-      keyCategories: ['Refined Cooking Oils (1L & 5L)', 'Pure Ghee Jars', 'Sugar & Sweeteners', 'Maida & Rava', 'Dry Fruits & Sweets'],
-      sampleSkus: [
-        { name: '1Ltr R Gold Winner Sunflower Oil', rate: 142, mrp: 155, surge: '+220%' },
-        { name: '500Ml Hat Ghee Jar', rate: 480, mrp: 500, surge: '+160%' },
-        { name: '500G R Anil Maida', rate: 38, mrp: 42, surge: '+140%' },
-        { name: '1Kg R Naga Rava', rate: 76, mrp: 85, surge: '+130%' },
-        { name: 'R AJWA Snacks & Savouries', rate: 42, mrp: 45, surge: '+110%' }
-      ],
-      stockingAdvice: 'Book bulk 5L Sunflower Oil cans and Ghee inventory 10 days in advance. Package ready-to-buy "Diwali Sweet Maker Combos".'
-    },
-    {
-      id: 'karthigai_deepam',
-      name: 'Karthigai Deepam (Festival of Lamps)',
-      date: '2026-11-24',
-      startDate: '2026-11-23',
-      endDate: '2026-11-25',
-      surgeMultiplier: 1.40,
-      surgePercent: '+40%',
-      tier: 'Moderate-High',
-      tag: 'Traditional Lighting Festival',
-      description: 'High lighting oil consumption. Steady surges in Gingelly / Sesame oil, Dheepam lamp oil, and jaggery pori urundai ingredients.',
-      procurementCutoff: '2026-11-20',
-      keyCategories: ['Gingelly / Sesame Oil', 'Lamp Oil', 'Clay Lamps & Wicks', 'Jaggery & Pori'],
-      sampleSkus: [
-        { name: '500Ml R Dheepam Lamp Oil', rate: 100, mrp: 111, surge: '+95%' },
-        { name: '1Ltr Gingelly Oil', rate: 240, mrp: 265, surge: '+85%' },
-        { name: 'Jaggery / Vellam (1Kg)', rate: 60, mrp: 70, surge: '+50%' }
-      ],
-      stockingAdvice: 'Create center stack for Dheepam Lamp Oil and cotton wicks. Offer discount on 1L Gingelly oil.'
-    },
-    {
-      id: 'christmas_newyear',
-      name: 'Christmas & New Year Celebration Week',
-      date: '2026-12-25',
-      startDate: '2026-12-24',
-      endDate: '2027-01-01',
-      surgeMultiplier: 1.50,
-      surgePercent: '+50%',
-      tier: 'High',
-      tag: 'Holiday Season',
-      description: 'Year-end festive surge in Bakery Cakes, Biscuits, Chocolates, Butter, Soft Drinks, and Party Snacks.',
-      procurementCutoff: '2026-12-18',
-      keyCategories: ['Plum Cakes & Bakery', 'Butter & Cream', 'Soft Drinks & Juices', 'Chocolates & Gifts', 'Chips & Snacks'],
-      sampleSkus: [
-        { name: 'Plum Cake (500g)', rate: 180, mrp: 200, surge: '+190%' },
-        { name: 'Butter (500g)', rate: 275, mrp: 290, surge: '+65%' },
-        { name: 'Cold Beverages & Juices', rate: 45, mrp: 50, surge: '+80%' },
-        { name: 'Chocolates & Gift Boxes', rate: 120, mrp: 150, surge: '+75%' }
-      ],
-      stockingAdvice: 'Ensure beverage refrigeration is fully stocked. Set up front-of-store Christmas Cake and gift hamper display.'
-    },
-    {
-      id: 'pongal_harvest',
-      name: 'Pongal & Makar Sankranti (Tamil Harvest Festival)',
-      date: '2027-01-14',
-      startDate: '2027-01-13',
-      endDate: '2027-01-17',
-      surgeMultiplier: 2.20,
-      surgePercent: '+120%',
-      tier: 'Peak (Tamil Mega Festival)',
-      tag: 'Harvest & Cultural Festival',
-      description: 'Tamil Nadus premier harvest festival. Mandatory customer grocery lists for Raw Rice (Pacharisi), Jaggery (Vellam), Ghee, Cashews, Cardamom, and Sambar vegetables.',
-      procurementCutoff: '2027-01-08',
-      keyCategories: ['Raw Rice (Pacharisi)', 'Jaggery (Vellam)', 'Ghee & Dairy', 'Cashews & Raisins', 'Cardamom & Spices'],
-      sampleSkus: [
-        { name: 'Pacharisi Raw Rice (5Kg)', rate: 260, mrp: 290, surge: '+210%' },
-        { name: 'Traditional Jaggery (Vellam 1Kg)', rate: 65, mrp: 75, surge: '+195%' },
-        { name: '500Ml Hat Ghee Jar', rate: 480, mrp: 500, surge: '+130%' },
-        { name: 'Cashew (100g) & Kismis (100g)', rate: 145, mrp: 165, surge: '+120%' },
-        { name: 'Turmeric Plant Bunch', rate: 30, mrp: 35, surge: '+300%' }
-      ],
-      stockingAdvice: 'Setup a decorated "Pongal Thirunaal Bazaar" kiosk. Provide pre-packed 5-in-1 Pongal Ingredient Kits.'
-    },
-    {
-      id: 'payday_cycle',
-      name: 'Monthly Payday Grocery Cycle (1st–5th of every month)',
-      date: 'Monthly',
-      startDate: '2026-10-01',
-      endDate: '2026-10-05',
-      surgeMultiplier: 1.30,
-      surgePercent: '+30%',
-      tier: 'Recurring High',
-      tag: 'Monthly Salary & Pension Cycle',
-      description: 'Bodinayakanur families make their primary monthly ration purchase. Heavy demand for 25kg Rice bags, 5L Oil cans, washing detergents, and monthly spices.',
-      procurementCutoff: 'Last 2 days of every month',
-      keyCategories: ['25kg Rice Bags', '5L Cooking Oil Cans', 'Toor Dal (5kg)', 'Detergents & Soaps'],
-      sampleSkus: [
-        { name: '25Kg Sona Masoori Rice Bag', rate: 1450, mrp: 1600, surge: '+50%' },
-        { name: '5Ltr Sunflower Oil Can', rate: 690, mrp: 750, surge: '+45%' },
-        { name: '5Kg Surf Excel / Detergent', rate: 580, mrp: 625, surge: '+40%' }
-      ],
-      stockingAdvice: 'Keep warehouse bags of Rice and Oil easily accessible. Ready extra carry boxes for bulk shopping.'
-    }
-  ];
+  const sourceFestivals = (ALL_YEAR_FESTIVALS && ALL_YEAR_FESTIVALS.length > 0) ? ALL_YEAR_FESTIVALS : [];
 
-  // Calculate days remaining and dynamic revenue projection
-  const enhancedFestivals = festivals.map(f => {
+  // Calculate days remaining and dynamic revenue projection across all 12 months (365 days)
+  const enhancedFestivals = sourceFestivals.map(f => {
+    const d2026 = f.datesByYear?.['2026'] || {};
+    const d2027 = f.datesByYear?.['2027'] || {};
+    const activeDateStr = d2026.date || d2027.date || '2026-10-01';
+    const startDateStr = d2026.window?.start || d2027.window?.start || activeDateStr;
+    const endDateStr = d2026.window?.end || d2027.window?.end || activeDateStr;
+    const cutoffStr = d2026.cutoff || d2027.cutoff || f.procurementCutoff || '7 days prior';
+
     let daysRemaining = null;
-    if (f.date !== 'Monthly') {
-      const target = new Date(f.startDate);
+    if (activeDateStr && activeDateStr !== 'Monthly') {
+      const target = new Date(startDateStr);
       const diffMs = target - currentDate;
-      daysRemaining = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+      daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+      // Normalize past events to show positive distance to next annual occurrence
+      if (daysRemaining < 0) {
+        if (d2027.window?.start) {
+          const nextTarget = new Date(d2027.window.start);
+          daysRemaining = Math.max(0, Math.ceil((nextTarget - currentDate) / (1000 * 60 * 60 * 24)));
+        } else {
+          daysRemaining = daysRemaining + 365;
+        }
+      }
     } else {
-      daysRemaining = Math.max(0, 18); // ~18 days until next payday
+      daysRemaining = 18; // ~18 days until next payday
     }
 
-    const projectedDailySales = Math.round(baselineDailyTurnover * f.surgeMultiplier);
-    const durationDays = (new Date(f.endDate) - new Date(f.startDate)) / (1000 * 60 * 60 * 24) + 1 || 3;
+    const surgeMultiplier = f.surgeMultiplier || 1.35;
+    const projectedDailySales = Math.round(baselineDailyTurnover * surgeMultiplier);
+    const durationDays = Math.max(1, Math.round((new Date(endDateStr) - new Date(startDateStr)) / (1000 * 60 * 60 * 24)) + 1 || 3);
     const estimatedTotalSurgeRevenue = Math.round((projectedDailySales - baselineDailyTurnover) * durationDays);
 
     return {
-      ...f,
+      id: f.id,
+      name: f.name,
+      tamilName: f.tamilName || '',
+      fullName: f.fullName,
+      month: f.month,
+      monthName: f.monthName,
+      quarter: f.quarter,
+      date: activeDateStr,
+      startDate: startDateStr,
+      endDate: endDateStr,
+      surgeMultiplier,
+      surgePercent: f.surgePercent || `+${Math.round((surgeMultiplier - 1) * 100)}%`,
+      tier: f.tier || 'Standard',
+      tag: f.tag || 'Regional Celebration',
+      description: f.description,
+      stockingAdvice: f.stockingAdvice,
+      procurementCutoff: cutoffStr,
+      calendarRule: f.calendarRule,
+      keyCategories: f.keyCategories || [],
+      sampleSkus: f.sampleSkus || [],
       daysRemaining,
       projectedDailySales,
       estimatedTotalSurgeRevenue
     };
   });
 
+  // Sort upcoming events: closest upcoming first
+  const sorted = [...enhancedFestivals].sort((a, b) => {
+    if (a.daysRemaining === null && b.daysRemaining === null) return 0;
+    if (a.daysRemaining === null) return 1;
+    if (b.daysRemaining === null) return -1;
+    return a.daysRemaining - b.daysRemaining;
+  });
+
   return {
     asOfDate: '2026-09-13',
     baselineDailyTurnover,
-    totalUpcomingEvents: enhancedFestivals.length,
-    nextImmediateEvent: enhancedFestivals[0],
-    festivals: enhancedFestivals
+    totalUpcomingEvents: sorted.length,
+    nextImmediateEvent: sorted[0],
+    festivals: sorted
   };
 }
 
@@ -1477,124 +1380,7 @@ const HISTORICAL_DB_PATHS = {
   '2026': 'C:/SKS Market/Data/database/37a64e83-514d-4b00-b90a-9af172dacdd6/9bcfb0b0-2cd2-11f1-9b4b-6fef85f604f9_2026-2027.db'
 };
 
-const FESTIVAL_CALENDAR_CONFIG = [
-  {
-    id: 'vinayakar_chaturthi',
-    name: 'Vinayakar Chaturthi',
-    fullName: 'Vinayakar Chaturthi (Ganesha Festival)',
-    calendarRule: 'Avani Shukla Chaturthi (Lunisolar Tamil/Hindu calendar - shifts between August & September)',
-    description: 'Major regional festival. Peak demand for Kozhukattai rice flour, white sundal, jaggery, pooja oils, and camphor.',
-    surgeExpected: '+55%',
-    tag: 'Religious Festival',
-    datesByYear: {
-      '2022': { date: '2022-08-31', window: { start: '2022-08-28', end: '2022-09-01' } },
-      '2023': { date: '2023-09-18', window: { start: '2023-09-15', end: '2023-09-19' } },
-      '2024': { date: '2024-09-07', window: { start: '2024-09-04', end: '2024-09-08' } },
-      '2025': { date: '2025-08-27', window: { start: '2025-08-24', end: '2025-08-28' } },
-      '2026': { date: '2026-09-14', window: { start: '2026-09-11', end: '2026-09-15' }, cutoff: '2026-09-08' },
-      '2027': { date: '2027-09-04', window: { start: '2027-09-01', end: '2027-09-05' }, cutoff: '2027-08-28' }
-    }
-  },
-  {
-    id: 'ayudha_pooja',
-    name: 'Ayudha Pooja',
-    fullName: 'Ayudha Pooja & Saraswathi Pooja',
-    calendarRule: 'Purattasi Mahanavami (Lunisolar Tamil calendar - shifts between September & October)',
-    description: 'Commercial, vehicle, and office blessing festival. Huge demand for Pori, Pottukadalai, Lemons, Sunflower Oils, and Sweets.',
-    surgeExpected: '+80%',
-    tag: 'Vehicle & Business Pooja',
-    datesByYear: {
-      '2022': { date: '2022-10-04', window: { start: '2022-10-01', end: '2022-10-05' } },
-      '2023': { date: '2023-10-23', window: { start: '2023-10-19', end: '2023-10-24' } },
-      '2024': { date: '2024-10-11', window: { start: '2024-10-08', end: '2024-10-13' } },
-      '2025': { date: '2025-10-01', window: { start: '2025-09-27', end: '2025-10-02' } },
-      '2026': { date: '2026-10-19', window: { start: '2026-10-16', end: '2026-10-20' }, cutoff: '2026-10-14' },
-      '2027': { date: '2027-10-09', window: { start: '2027-10-06', end: '2027-10-10' }, cutoff: '2027-10-03' }
-    }
-  },
-  {
-    id: 'deepavali',
-    name: 'Deepavali',
-    fullName: 'Deepavali (Diwali Mega Shopping Week)',
-    calendarRule: 'Aipasi Naraka Chaturdashi / Amavasya (Lunisolar calendar - swings by up to 25 days between October & November)',
-    description: 'The single biggest retail revenue week of the entire fiscal year. Highest demand for Refined Cooking Oils, Ghee, Butter, Maida, Rava, Sugar, and Gift Packs.',
-    surgeExpected: '+135%',
-    tag: 'Annual Peak Retail Week',
-    datesByYear: {
-      '2022': { date: '2022-10-24', window: { start: '2022-10-20', end: '2022-10-25' } },
-      '2023': { date: '2023-11-12', window: { start: '2023-11-07', end: '2023-11-12' } },
-      '2024': { date: '2024-10-31', window: { start: '2024-10-26', end: '2024-10-31' } },
-      '2025': { date: '2025-10-20', window: { start: '2025-10-15', end: '2025-10-20' } },
-      '2026': { date: '2026-11-08', window: { start: '2026-11-03', end: '2026-11-08' }, cutoff: '2026-10-28' },
-      '2027': { date: '2027-10-29', window: { start: '2027-10-24', end: '2027-10-29' }, cutoff: '2027-10-19' }
-    }
-  },
-  {
-    id: 'karthigai_deepam',
-    name: 'Karthigai Deepam',
-    fullName: 'Karthigai Deepam (Festival of Lamps)',
-    calendarRule: 'Karthigai Pournami Krittika Nakshatra (Lunisolar - shifts between November & December)',
-    description: 'Lighting oil and jaggery pori festival. Surges in Dheepam Lamp Oil, Gingelly/Sesame Oil, Clay Wicks, and Jaggery.',
-    surgeExpected: '+40%',
-    tag: 'Traditional Lighting Festival',
-    datesByYear: {
-      '2022': { date: '2022-12-06', window: { start: '2022-12-03', end: '2022-12-07' } },
-      '2023': { date: '2023-11-26', window: { start: '2023-11-24', end: '2023-11-27' } },
-      '2024': { date: '2024-12-13', window: { start: '2024-12-11', end: '2024-12-14' } },
-      '2025': { date: '2025-12-04', window: { start: '2025-12-02', end: '2025-12-05' } },
-      '2026': { date: '2026-11-24', window: { start: '2026-11-22', end: '2026-11-25' }, cutoff: '2026-11-18' },
-      '2027': { date: '2027-12-13', window: { start: '2027-12-11', end: '2027-12-14' }, cutoff: '2027-12-07' }
-    }
-  },
-  {
-    id: 'pongal_harvest',
-    name: 'Pongal Harvest',
-    fullName: 'Pongal & Makar Sankranti (Tamil Harvest Festival)',
-    calendarRule: 'Thai 1-4 (Solar calendar with minor astronomical shift between Jan 13-17)',
-    description: 'Tamil Nadu premier 4-day harvest celebration (Bhogi, Thai Pongal, Mattu Pongal). Mandatory grocery lists for Raw Rice (Pacharisi), Jaggery (Vellam), Ghee, Cashews, Cardamom, and Cooking Oils.',
-    surgeExpected: '+120%',
-    tag: 'Mega Harvest Festival',
-    datesByYear: {
-      '2023': { date: '2023-01-15', window: { start: '2023-01-12', end: '2023-01-17' } },
-      '2024': { date: '2024-01-15', window: { start: '2024-01-12', end: '2024-01-17' } },
-      '2025': { date: '2025-01-14', window: { start: '2025-01-11', end: '2025-01-16' } },
-      '2026': { date: '2026-01-15', window: { start: '2026-01-12', end: '2026-01-17' }, cutoff: '2026-01-08' },
-      '2027': { date: '2027-01-15', window: { start: '2027-01-12', end: '2027-01-17' }, cutoff: '2027-01-08' }
-    }
-  },
-  {
-    id: 'tamil_new_year',
-    name: 'Tamil New Year',
-    fullName: 'Tamil New Year (Puthandu / Chithirai 1)',
-    calendarRule: 'Chithirai 1 (Solar calendar - Fixed on April 14 every year)',
-    description: 'Tamil calendar New Year celebration. Surges in Raw Mangoes, Neem flowers, Jaggery, Payasam ingredients, and fresh fruits.',
-    surgeExpected: '+45%',
-    tag: 'Tamil Cultural Celebration',
-    datesByYear: {
-      '2023': { date: '2023-04-14', window: { start: '2023-04-12', end: '2023-04-15' } },
-      '2024': { date: '2024-04-14', window: { start: '2024-04-12', end: '2024-04-15' } },
-      '2025': { date: '2025-04-14', window: { start: '2025-04-12', end: '2025-04-15' } },
-      '2026': { date: '2026-04-14', window: { start: '2026-04-12', end: '2026-04-15' }, cutoff: '2026-04-08' },
-      '2027': { date: '2027-04-14', window: { start: '2027-04-12', end: '2027-04-15' }, cutoff: '2027-04-08' }
-    }
-  },
-  {
-    id: 'ramzan_eid',
-    name: 'Ramzan (Eid-ul-Fitr)',
-    fullName: 'Ramzan (Eid-ul-Fitr Celebration)',
-    calendarRule: 'Shawwal 1 (Islamic lunar calendar - shifts ~10-11 days earlier each solar year)',
-    description: 'Islamic festival marking the end of Ramadan. High demand for Sevai (Vermicelli), Milk, Dry Fruits, Ghee, Sugar, and Basmati Biryani Rice.',
-    surgeExpected: '+60%',
-    tag: 'Religious Holiday & Feast',
-    datesByYear: {
-      '2023': { date: '2023-04-22', window: { start: '2023-04-19', end: '2023-04-23' } },
-      '2024': { date: '2024-04-11', window: { start: '2024-04-08', end: '2024-04-12' } },
-      '2025': { date: '2025-03-31', window: { start: '2025-03-28', end: '2025-04-01' } },
-      '2026': { date: '2026-03-20', window: { start: '2026-03-17', end: '2026-03-21' }, cutoff: '2026-03-14' },
-      '2027': { date: '2027-03-10', window: { start: '2027-03-07', end: '2027-03-11' }, cutoff: '2027-03-04' }
-    }
-  }
-];
+const FESTIVAL_CALENDAR_CONFIG = ALL_YEAR_FESTIVALS;
 
 let _festivalAnalysisCache = new Map();
 let _festivalCacheTime = 0;
@@ -1637,9 +1423,12 @@ function getHistoricalFestivalAnalysis(targetId) {
   });
 
   const allAnalyses = [];
+  const festivalsToProcess = (targetId && targetId !== 'all')
+    ? FESTIVAL_CALENDAR_CONFIG.filter(f => f.id === targetId || f.name.toLowerCase().includes(targetId.toLowerCase()))
+    : FESTIVAL_CALENDAR_CONFIG;
 
-  FESTIVAL_CALENDAR_CONFIG.forEach(fest => {
-    const dByYear = fest.datesByYear;
+  festivalsToProcess.forEach(fest => {
+    const dByYear = fest.datesByYear || {};
     const w23 = dByYear['2023']?.window;
     const w24 = dByYear['2024']?.window;
     const w25 = dByYear['2025']?.window;
@@ -1716,33 +1505,69 @@ function getHistoricalFestivalAnalysis(targetId) {
 
     stockNeedList.sort((a, b) => (b.qty2023 + b.qty2024 + b.qty2025) - (a.qty2023 + a.qty2024 + a.qty2025));
 
-    const topItems = stockNeedList.slice(0, 20);
-    const totalRecommendedBudget = topItems.reduce((acc, c) => acc + c.estPurchaseBudget, 0);
-    const totalProjectedRevenue = topItems.reduce((acc, c) => acc + c.estGrossRevenue, 0);
+    let finalStockList = stockNeedList.slice(0, 20);
+    // If SQLite has no rows for this window, fall back directly to the curated stockNeedList
+    if (finalStockList.length === 0 && Array.isArray(fest.stockNeedList) && fest.stockNeedList.length > 0) {
+      finalStockList = fest.stockNeedList.map(item => {
+        const lookup = currentStockMap.get(item.name.toLowerCase()) || {};
+        const curStock = lookup.stock !== undefined ? lookup.stock : (item.currentStock || 0);
+        const price = lookup.price || item.price || 100;
+        const cost = lookup.cost || item.cost || Math.round(price * 0.75);
+        const recOrder = item.recommendedOrderQty || 50;
+        const netToOrder = Math.max(0, recOrder - curStock);
+        const estPurchaseBudget = item.estPurchaseBudget || Math.round(recOrder * cost);
+        const estGrossRevenue = Math.round(recOrder * price);
+        const estProfit = Math.round(estGrossRevenue - estPurchaseBudget);
+        return {
+          name: item.name,
+          unit: item.unit || lookup.unit || 'Unit',
+          price,
+          cost,
+          currentStock: curStock,
+          qty2023: item.qty2023 || Math.round(recOrder * 0.7),
+          qty2024: item.qty2024 || Math.round(recOrder * 0.85),
+          qty2025: item.qty2025 || Math.round(recOrder * 0.95),
+          avgHistoricalQty: Math.round(((item.qty2023 || 0) + (item.qty2024 || 0) + (item.qty2025 || 0)) / 3) || Math.round(recOrder * 0.8),
+          recommendedOrderQty: recOrder,
+          netToOrder,
+          estPurchaseBudget,
+          estGrossRevenue,
+          estProfit,
+          priority: item.priority || 'NORMAL'
+        };
+      });
+    }
 
-    const activeYearConfig = fest.datesByYear['2026'] || fest.datesByYear['2027'] || {};
+    const totalRecommendedBudget = finalStockList.reduce((acc, c) => acc + (c.estPurchaseBudget || 0), 0);
+    const totalProjectedRevenue = finalStockList.reduce((acc, c) => acc + (c.estGrossRevenue || 0), 0);
+
+    const activeYearConfig = fest.datesByYear?.['2026'] || fest.datesByYear?.['2027'] || {};
 
     const analysis = {
       festivalId: fest.id,
       name: fest.name,
+      tamilName: fest.tamilName || '',
       fullName: fest.fullName,
+      month: fest.month,
+      monthName: fest.monthName,
+      quarter: fest.quarter,
       calendarRule: fest.calendarRule,
       date2026: activeYearConfig.date || '2026-11-08',
-      cutoff2026: activeYearConfig.cutoff || '2026-10-28',
+      cutoff2026: activeYearConfig.cutoff || fest.procurementCutoff || '2026-10-28',
       datesByYear: {
-        '2023': fest.datesByYear['2023']?.date || '-',
-        '2024': fest.datesByYear['2024']?.date || '-',
-        '2025': fest.datesByYear['2025']?.date || '-',
-        '2026': fest.datesByYear['2026']?.date || '-',
-        '2027': fest.datesByYear['2027']?.date || '-'
+        '2023': fest.datesByYear?.['2023']?.date || '-',
+        '2024': fest.datesByYear?.['2024']?.date || '-',
+        '2025': fest.datesByYear?.['2025']?.date || '-',
+        '2026': fest.datesByYear?.['2026']?.date || '-',
+        '2027': fest.datesByYear?.['2027']?.date || '-'
       },
-      surgeExpected: fest.surgeExpected,
+      surgeExpected: fest.surgePercent || fest.surgeExpected,
       tag: fest.tag,
-      totalProductsAnalyzed: stockNeedList.length,
+      totalProductsAnalyzed: finalStockList.length,
       totalRecommendedBudget,
       totalProjectedRevenue,
       estProfit: totalProjectedRevenue - totalRecommendedBudget,
-      stockNeedList: topItems
+      stockNeedList: finalStockList
     };
 
     _festivalAnalysisCache.set(fest.id, analysis);
@@ -1761,18 +1586,23 @@ function getFestivalCalendarMatrix() {
   return FESTIVAL_CALENDAR_CONFIG.map(f => ({
     id: f.id,
     name: f.name,
+    tamilName: f.tamilName || '',
     fullName: f.fullName,
+    month: f.month,
+    monthName: f.monthName,
+    quarter: f.quarter,
     calendarRule: f.calendarRule,
     tag: f.tag,
-    surgeExpected: f.surgeExpected,
+    tier: f.tier || 'Standard',
+    surgeExpected: f.surgePercent || f.surgeExpected,
     dates: {
-      '2023': f.datesByYear['2023']?.date || '-',
-      '2024': f.datesByYear['2024']?.date || '-',
-      '2025': f.datesByYear['2025']?.date || '-',
-      '2026': f.datesByYear['2026']?.date || '-',
-      '2027': f.datesByYear['2027']?.date || '-'
+      '2023': f.datesByYear?.['2023']?.date || '-',
+      '2024': f.datesByYear?.['2024']?.date || '-',
+      '2025': f.datesByYear?.['2025']?.date || '-',
+      '2026': f.datesByYear?.['2026']?.date || '-',
+      '2027': f.datesByYear?.['2027']?.date || '-'
     },
-    cutoff2026: f.datesByYear['2026']?.cutoff || f.datesByYear['2027']?.cutoff || '-'
+    cutoff2026: f.datesByYear?.['2026']?.cutoff || f.datesByYear?.['2027']?.cutoff || f.procurementCutoff || '-'
   }));
 }
 

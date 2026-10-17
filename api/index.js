@@ -14,6 +14,14 @@ try {
 } catch (e) {
   console.warn('generativeAiAdvisor load warning:', e.message);
 }
+let festivalMaster = null;
+try {
+  festivalMaster = require('./festivalMasterData');
+} catch (e) {
+  try {
+    festivalMaster = require('../festivalMasterData');
+  } catch (e2) {}
+}
 
 // Cached JSON fallbacks for cloud environment
 function readLocalJson(filename, defaultValue = null) {
@@ -479,6 +487,81 @@ if (reqPath === '/api/pos/status') {
       if (analyticsService && typeof analyticsService.getFestivalPredictions === 'function') {
         try { return sendJson(200, analyticsService.getFestivalPredictions()); } catch {}
       }
+      if (festivalMaster && festivalMaster.ALL_YEAR_FESTIVALS) {
+        const currentDate = new Date('2026-09-13');
+        const baselineDailyTurnover = 16500;
+        const enhancedFestivals = festivalMaster.ALL_YEAR_FESTIVALS.map(f => {
+          const d2026 = f.datesByYear?.['2026'] || {};
+          const d2027 = f.datesByYear?.['2027'] || {};
+          const activeDateStr = d2026.date || d2027.date || '2026-10-01';
+          const startDateStr = d2026.window?.start || d2027.window?.start || activeDateStr;
+          const endDateStr = d2026.window?.end || d2027.window?.end || activeDateStr;
+          const cutoffStr = d2026.cutoff || d2027.cutoff || f.procurementCutoff || '7 days prior';
+
+          let daysRemaining = null;
+          if (activeDateStr && activeDateStr !== 'Monthly') {
+            const target = new Date(startDateStr);
+            const diffMs = target - currentDate;
+            daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+            if (daysRemaining < 0) {
+              if (d2027.window?.start) {
+                const nextTarget = new Date(d2027.window.start);
+                daysRemaining = Math.max(0, Math.ceil((nextTarget - currentDate) / (1000 * 60 * 60 * 24)));
+              } else {
+                daysRemaining = daysRemaining + 365;
+              }
+            }
+          } else {
+            daysRemaining = 18;
+          }
+
+          const surgeMultiplier = f.surgeMultiplier || 1.35;
+          const projectedDailySales = Math.round(baselineDailyTurnover * surgeMultiplier);
+          const durationDays = Math.max(1, Math.round((new Date(endDateStr) - new Date(startDateStr)) / (1000 * 60 * 60 * 24)) + 1 || 3);
+          const estimatedTotalSurgeRevenue = Math.round((projectedDailySales - baselineDailyTurnover) * durationDays);
+
+          return {
+            id: f.id,
+            name: f.name,
+            tamilName: f.tamilName || '',
+            fullName: f.fullName,
+            month: f.month,
+            monthName: f.monthName,
+            quarter: f.quarter,
+            date: activeDateStr,
+            startDate: startDateStr,
+            endDate: endDateStr,
+            surgeMultiplier,
+            surgePercent: f.surgePercent || `+${Math.round((surgeMultiplier - 1) * 100)}%`,
+            tier: f.tier || 'Standard',
+            tag: f.tag || 'Regional Celebration',
+            description: f.description,
+            stockingAdvice: f.stockingAdvice,
+            procurementCutoff: cutoffStr,
+            calendarRule: f.calendarRule,
+            keyCategories: f.keyCategories || [],
+            sampleSkus: f.sampleSkus || [],
+            daysRemaining,
+            projectedDailySales,
+            estimatedTotalSurgeRevenue
+          };
+        });
+
+        const sorted = [...enhancedFestivals].sort((a, b) => {
+          if (a.daysRemaining === null && b.daysRemaining === null) return 0;
+          if (a.daysRemaining === null) return 1;
+          if (b.daysRemaining === null) return -1;
+          return a.daysRemaining - b.daysRemaining;
+        });
+
+        return sendJson(200, {
+          asOfDate: '2026-09-13',
+          baselineDailyTurnover,
+          totalUpcomingEvents: sorted.length,
+          nextImmediateEvent: sorted[0],
+          festivals: sorted
+        });
+      }
       return sendJson(200, []);
     }
 
@@ -523,23 +606,46 @@ if (reqPath === '/api/pos/status') {
       if (analyticsService && typeof analyticsService.getHistoricalFestivalAnalysis === 'function') {
         try { return sendJson(200, analyticsService.getHistoricalFestivalAnalysis(festivalId)); } catch {}
       }
-      return sendJson(200, {
-        id: festivalId,
-        name: festivalId === 'deepavali' ? 'Deepavali' : (festivalId === 'pongal' ? 'Thai Pongal' : 'Karthigai Deepam'),
-        fullName: festivalId === 'deepavali' ? 'Deepavali Festival' : (festivalId === 'pongal' ? 'Thai Pongal & Mattu Pongal' : 'Karthigai Deepam'),
-        surgeExpected: '+85%',
-        totalRecommendedBudget: 185000,
-        totalProjectedRevenue: 342000,
-        cutoff2026: '18-Oct-2026',
-        datesByYear: { '2023': '12 Nov 2023', '2024': '31 Oct 2024', '2025': '20 Oct 2025', '2026': '08 Nov 2026', '2027': '29 Oct 2027' },
-        stockNeedList: [
-          { name: '1KG R PONNI PACHAARISI', unit: '1 unit', price: 60, currentStock: 50, recommendedOrderQty: 250, estPurchaseBudget: 12500, priority: 'CRITICAL', qty2023: 180, qty2024: 210, qty2025: 235 },
-          { name: '50G R Aachi Sambar Masala', unit: '1 unit', price: 18, currentStock: 45, recommendedOrderQty: 200, estPurchaseBudget: 2800, priority: 'CRITICAL', qty2023: 140, qty2024: 175, qty2025: 190 },
-          { name: '500ML R Idhayam Sesame Oil', unit: '1 unit', price: 215, currentStock: 30, recommendedOrderQty: 120, estPurchaseBudget: 21600, priority: 'CRITICAL', qty2023: 95, qty2024: 110, qty2025: 115 },
-          { name: '1KG R Gold Winner Sunflower Oil', unit: '1 unit', price: 140, currentStock: 40, recommendedOrderQty: 180, estPurchaseBudget: 20700, priority: 'HIGH', qty2023: 130, qty2024: 155, qty2025: 170 },
-          { name: '1KG R Sugar M', unit: '1 unit', price: 44, currentStock: 60, recommendedOrderQty: 300, estPurchaseBudget: 11400, priority: 'CRITICAL', qty2023: 220, qty2024: 260, qty2025: 290 }
-        ]
-      });
+      if (festivalMaster && festivalMaster.ALL_YEAR_FESTIVALS) {
+        const fest = festivalMaster.ALL_YEAR_FESTIVALS.find(f => f.id === festivalId || f.name.toLowerCase().includes(festivalId.toLowerCase())) || festivalMaster.ALL_YEAR_FESTIVALS[0];
+        const stockList = (fest.stockNeedList || []).map(item => ({
+          ...item,
+          avgHistoricalQty: Math.round(((item.qty2023 || 0) + (item.qty2024 || 0) + (item.qty2025 || 0)) / 3) || Math.round((item.recommendedOrderQty || 50) * 0.8),
+          netToOrder: Math.max(0, (item.recommendedOrderQty || 50) - (item.currentStock || 0)),
+          estGrossRevenue: Math.round((item.recommendedOrderQty || 50) * (item.price || 100)),
+          estProfit: Math.round(((item.recommendedOrderQty || 50) * (item.price || 100)) - (item.estPurchaseBudget || 0))
+        }));
+        const totalBudget = stockList.reduce((acc, c) => acc + (c.estPurchaseBudget || 0), 0);
+        const totalRev = stockList.reduce((acc, c) => acc + (c.estGrossRevenue || 0), 0);
+        const d2026 = fest.datesByYear?.['2026'] || {};
+        return sendJson(200, {
+          festivalId: fest.id,
+          name: fest.name,
+          tamilName: fest.tamilName || '',
+          fullName: fest.fullName,
+          month: fest.month,
+          monthName: fest.monthName,
+          quarter: fest.quarter,
+          calendarRule: fest.calendarRule,
+          date2026: d2026.date || '2026-11-08',
+          cutoff2026: d2026.cutoff || fest.procurementCutoff || '2026-10-28',
+          datesByYear: {
+            '2023': fest.datesByYear?.['2023']?.date || '-',
+            '2024': fest.datesByYear?.['2024']?.date || '-',
+            '2025': fest.datesByYear?.['2025']?.date || '-',
+            '2026': fest.datesByYear?.['2026']?.date || '-',
+            '2027': fest.datesByYear?.['2027']?.date || '-'
+          },
+          surgeExpected: fest.surgePercent || fest.surgeExpected || '+45%',
+          tag: fest.tag,
+          totalProductsAnalyzed: stockList.length,
+          totalRecommendedBudget: totalBudget,
+          totalProjectedRevenue: totalRev,
+          estProfit: totalRev - totalBudget,
+          stockNeedList: stockList
+        });
+      }
+      return sendJson(200, { festivalId, name: festivalId, stockNeedList: [] });
     }
 
     // Festival Calendar Matrix
@@ -547,11 +653,30 @@ if (reqPath === '/api/pos/status') {
       if (analyticsService && typeof analyticsService.getFestivalCalendarMatrix === 'function') {
         try { return sendJson(200, analyticsService.getFestivalCalendarMatrix()); } catch {}
       }
-      return sendJson(200, [
-        { id: 'deepavali', name: 'Deepavali', fullName: 'Deepavali (Festival of Lights)', surgeExpected: '+85%', calendarRule: 'Amavasya of Ashvina/Kartika', cutoff2026: '18-Oct-2026', dates: { '2023': '12 Nov 2023', '2024': '31 Oct 2024', '2025': '20 Oct 2025', '2026': '08 Nov 2026', '2027': '29 Oct 2027' } },
-        { id: 'pongal', name: 'Pongal', fullName: 'Thai Pongal & Mattu Pongal', surgeExpected: '+110%', calendarRule: '1st Day of Tamil Month Thai (Solar Ingress)', cutoff2026: '07-Jan-2027', dates: { '2023': '15 Jan 2023', '2024': '15 Jan 2024', '2025': '14 Jan 2025', '2026': '15 Jan 2026', '2027': '15 Jan 2027' } },
-        { id: 'karthigai', name: 'Karthigai Deepam', fullName: 'Thiruvannamalai Karthigai Deepam', surgeExpected: '+55%', calendarRule: 'Pournami with Krittika nakshatra in Karthigai month', cutoff2026: '15-Nov-2026', dates: { '2023': '26 Nov 2023', '2024': '13 Dec 2024', '2025': '03 Dec 2025', '2026': '23 Nov 2026', '2027': '12 Dec 2027' } }
-      ]);
+      if (festivalMaster && festivalMaster.ALL_YEAR_FESTIVALS) {
+        return sendJson(200, festivalMaster.ALL_YEAR_FESTIVALS.map(f => ({
+          id: f.id,
+          name: f.name,
+          tamilName: f.tamilName || '',
+          fullName: f.fullName,
+          month: f.month,
+          monthName: f.monthName,
+          quarter: f.quarter,
+          calendarRule: f.calendarRule,
+          tag: f.tag,
+          tier: f.tier || 'Standard',
+          surgeExpected: f.surgePercent || f.surgeExpected,
+          dates: {
+            '2023': f.datesByYear?.['2023']?.date || '-',
+            '2024': f.datesByYear?.['2024']?.date || '-',
+            '2025': f.datesByYear?.['2025']?.date || '-',
+            '2026': f.datesByYear?.['2026']?.date || '-',
+            '2027': f.datesByYear?.['2027']?.date || '-'
+          },
+          cutoff2026: f.datesByYear?.['2026']?.cutoff || f.datesByYear?.['2027']?.cutoff || f.procurementCutoff || '-'
+        })));
+      }
+      return sendJson(200, []);
     }
 
     // POS Launch Endpoint

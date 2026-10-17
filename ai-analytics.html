@@ -298,6 +298,25 @@
       </div>
 
       <!-- Festival Cards Grid -->
+      <!-- Festival Filter & Search Controls Bar -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4 bg-gray-950/70 p-3 rounded-2xl border border-gray-800/80">
+        <!-- Quarter/Season Filter Pills -->
+        <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1 md:pb-0 text-xs">
+          <button onclick="setFestivalFilter('all', this)" class="fest-filter-pill px-3 py-1.5 rounded-xl font-bold bg-purple-600 text-white shadow-sm transition whitespace-nowrap">🌟 All 12 Months (<span id="fest-count-all">34</span>)</button>
+          <button onclick="setFestivalFilter('Q1', this)" class="fest-filter-pill px-3 py-1.5 rounded-xl font-medium bg-gray-900 hover:bg-gray-800 text-gray-300 hover:text-white border border-gray-800 transition whitespace-nowrap">Q1 (Jan–Mar)</button>
+          <button onclick="setFestivalFilter('Q2', this)" class="fest-filter-pill px-3 py-1.5 rounded-xl font-medium bg-gray-900 hover:bg-gray-800 text-gray-300 hover:text-white border border-gray-800 transition whitespace-nowrap">Q2 (Apr–Jun)</button>
+          <button onclick="setFestivalFilter('Q3', this)" class="fest-filter-pill px-3 py-1.5 rounded-xl font-medium bg-gray-900 hover:bg-gray-800 text-gray-300 hover:text-white border border-gray-800 transition whitespace-nowrap">Q3 (Jul–Sep)</button>
+          <button onclick="setFestivalFilter('Q4', this)" class="fest-filter-pill px-3 py-1.5 rounded-xl font-medium bg-gray-900 hover:bg-gray-800 text-gray-300 hover:text-white border border-gray-800 transition whitespace-nowrap">Q4 (Oct–Dec)</button>
+          <button onclick="setFestivalFilter('recurring', this)" class="fest-filter-pill px-3 py-1.5 rounded-xl font-medium bg-gray-900 hover:bg-gray-800 text-gray-300 hover:text-white border border-gray-800 transition whitespace-nowrap">🔄 Recurring & Seasons</button>
+        </div>
+
+        <!-- Realtime Search Input -->
+        <div class="relative w-full md:w-72 shrink-0">
+          <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+          <input type="text" id="festival-search-input" oninput="handleFestivalSearch(this.value)" placeholder="Search 34 festivals, Tamil name, SKU..." class="w-full bg-gray-900 border border-gray-700/80 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition">
+        </div>
+      </div>
+
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="festivals-grid-container">
         <div class="col-span-full py-8 text-center text-gray-500 text-xs flex items-center justify-center gap-2">
           <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>
@@ -327,13 +346,68 @@
             <p class="text-xs text-gray-400 mt-0.5">Mined across genuine checkout transactions on exact lunisolar dates that change every year</p>
           </div>
 
-          <!-- Festival Selector Tabs -->
-          <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1">
-            <button onclick="switchFestivalTab('deepavali', this)" class="fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition bg-amber-500/20 text-amber-300 border border-amber-500/40">🪔 Deepavali</button>
-            <button onclick="switchFestivalTab('pongal_harvest', this)" class="fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-800/60 border border-gray-700/60 transition">🌾 Pongal</button>
-            <button onclick="switchFestivalTab('ayudha_pooja', this)" class="fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-800/60 border border-gray-700/60 transition">🛠️ Ayudha Pooja</button>
-            <button onclick="switchFestivalTab('vinayakar_chaturthi', this)" class="fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-800/60 border border-gray-700/60 transition">🐘 Vinayakar</button>
-            <button onclick="switchFestivalTab('karthigai_deepam', this)" class="fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-800/60 border border-gray-700/60 transition">🕯️ Karthigai</button>
+          <!-- Festival Selector Tabs & Comprehensive Dropdown -->
+          <div class="flex items-center gap-2 flex-wrap lg:flex-nowrap">
+            <!-- Quick Access Event Pills -->
+            <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1">
+              <button onclick="switchFestivalTab('deepavali', this)" class="fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition bg-amber-500/20 text-amber-300 border border-amber-500/40">🪔 Deepavali</button>
+              <button onclick="switchFestivalTab('pongal_harvest', this)" class="fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-800/60 border border-gray-700/60 transition">🌾 Pongal</button>
+              <button onclick="switchFestivalTab('ayudha_pooja', this)" class="fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-800/60 border border-gray-700/60 transition">🛠️ Ayudha Pooja</button>
+              <button onclick="switchFestivalTab('vinayakar_chaturthi', this)" class="fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-800/60 border border-gray-700/60 transition">🐘 Vinayakar</button>
+              <button onclick="switchFestivalTab('tamil_new_year', this)" class="fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-800/60 border border-gray-700/60 transition">🥭 Puthandu</button>
+              <button onclick="switchFestivalTab('karthigai_deepam', this)" class="fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-800/60 border border-gray-700/60 transition">🕯️ Karthigai</button>
+            </div>
+
+            <!-- Complete 34-Event Categorized Dropdown Selector -->
+            <div class="relative shrink-0">
+              <select id="all-festivals-dropdown" onchange="handleFestivalDropdownChange(this.value)" class="bg-gray-900 border border-purple-500/50 hover:border-purple-400 text-amber-300 font-bold rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-purple-500 cursor-pointer">
+                <option value="" disabled selected>📅 Select any of 34 Year Events...</option>
+                <optgroup label="✨ Q1: January – March">
+                  <option value="new_year_day">🎉 New Year's Day (Jan 1)</option>
+                  <option value="bhogi_festival">🔥 Bhogi Festival (Jan 14)</option>
+                  <option value="pongal_harvest">🌾 Thai Pongal Harvest (Jan 15)</option>
+                  <option value="mattu_kanum_pongal">🐂 Mattu & Kanum Pongal (Jan 16-17)</option>
+                  <option value="thai_poosam">🔱 Thai Poosam (Lord Murugan)</option>
+                  <option value="republic_day_sale">🇮🇳 Republic Day Super Saver (Jan 26)</option>
+                  <option value="valentines_snack_week">🍫 Valentine's & Youth Week (Feb 14)</option>
+                  <option value="maha_shivaratri">🕉️ Maha Shivaratri Fasting</option>
+                  <option value="thai_masi_weddings">💍 Thai-Masi Wedding Muhurtham Season</option>
+                  <option value="holi_festival">🎨 Holi Festival of Colours</option>
+                  <option value="ugadi_telugu_new_year">🌸 Ugadi (Telugu/Kannada New Year)</option>
+                  <option value="panguni_uthiram">🪘 Panguni Uthiram Temple Festival</option>
+                </optgroup>
+                <optgroup label="✨ Q2: April – June">
+                  <option value="tamil_new_year">🥭 Tamil New Year (Puthandu - Apr 14)</option>
+                  <option value="easter_good_friday">✝️ Good Friday & Easter Feast</option>
+                  <option value="chithirai_thiruvizha">👑 Madurai Chithirai Thiruvizha</option>
+                  <option value="summer_cool_beverage_surge">🥤 Agni Nakshatram Summer Beverages</option>
+                  <option value="mariamman_koozh_thiruvizha">🍲 Mariamman Koozh Thiruvizha</option>
+                  <option value="school_reopening_rush">🎒 School & College Reopening Rush</option>
+                  <option value="bakrid_eid">🌙 Bakrid (Eid-ul-Adha Feast)</option>
+                </optgroup>
+                <optgroup label="✨ Q3: July – September">
+                  <option value="aadi_month_kickoff">🪔 Aadi Month Auspicious Kickoff</option>
+                  <option value="aadi_velli_pooja">🌺 Aadi Velli Amman Poojas</option>
+                  <option value="aadi_18_perukku">🌊 Aadi 18 Perukku River Feast</option>
+                  <option value="independence_day_sale">🇮🇳 Independence Day Mega Grocery Sale (Aug 15)</option>
+                  <option value="varalakshmi_vratham">🪷 Varalakshmi Vratham (Sumangali Pooja)</option>
+                  <option value="krishna_jayanthi">🧈 Krishna Jayanthi (Gokulashtami)</option>
+                  <option value="vinayakar_chaturthi">🐘 Vinayakar Chaturthi (Ganesha Festival)</option>
+                  <option value="onam_sadhya">🍌 Onam Grand Sadhya Feast</option>
+                  <option value="navaratri_sundal_days">🪆 Navarathri (9 Days Golu Celebration)</option>
+                </optgroup>
+                <optgroup label="✨ Q4: October – December">
+                  <option value="ayudha_pooja">🛠️ Ayudha Pooja & Saraswathi Pooja</option>
+                  <option value="deepavali">🪔 Deepavali Mega Shopping Week</option>
+                  <option value="karthigai_deepam">🕯️ Karthigai Deepam (Festival of Lamps)</option>
+                  <option value="margazhi_temple_month">🪷 Margazhi Dawn Temple Bhajan Month</option>
+                  <option value="christmas_newyear">🎄 Christmas & New Year Holiday Week</option>
+                </optgroup>
+                <optgroup label="🔄 Year-Round Recurring">
+                  <option value="payday_cycle">💰 Monthly Payday 1st-5th Grocery Ration Rush</option>
+                </optgroup>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -942,13 +1016,99 @@ Loading live briefing...
       });
     }
 
+    let allFestivalsDataCache = [];
+    let currentQuarterFilter = 'all';
+    let currentSearchTerm = '';
+
+    function handleFestivalSearch(term) {
+      currentSearchTerm = (term || '').toLowerCase().trim();
+      applyFestivalFilters();
+    }
+
+    function setFestivalFilter(quarter, btn) {
+      currentQuarterFilter = quarter;
+      document.querySelectorAll('.fest-filter-pill').forEach(el => {
+        el.className = 'fest-filter-pill px-3 py-1.5 rounded-xl font-medium bg-gray-900 hover:bg-gray-800 text-gray-300 hover:text-white border border-gray-800 transition whitespace-nowrap';
+      });
+      btn.className = 'fest-filter-pill px-3 py-1.5 rounded-xl font-bold bg-purple-600 text-white shadow-sm transition whitespace-nowrap';
+      applyFestivalFilters();
+    }
+
+    function applyFestivalFilters() {
+      if (!allFestivalsDataCache || allFestivalsDataCache.length === 0) return;
+      let filtered = allFestivalsDataCache;
+
+      if (currentQuarterFilter !== 'all') {
+        if (currentQuarterFilter === 'recurring') {
+          filtered = filtered.filter(f => f.quarter === 'Recurring' || f.tag.includes('Recurring') || f.tag.includes('Season') || f.tag.includes('Month') || f.date === 'Monthly');
+        } else {
+          filtered = filtered.filter(f => f.quarter === currentQuarterFilter);
+        }
+      }
+
+      if (currentSearchTerm) {
+        filtered = filtered.filter(f => 
+          (f.name && f.name.toLowerCase().includes(currentSearchTerm)) ||
+          (f.tamilName && f.tamilName.toLowerCase().includes(currentSearchTerm)) ||
+          (f.fullName && f.fullName.toLowerCase().includes(currentSearchTerm)) ||
+          (f.description && f.description.toLowerCase().includes(currentSearchTerm)) ||
+          (f.monthName && f.monthName.toLowerCase().includes(currentSearchTerm)) ||
+          (f.sampleSkus && f.sampleSkus.some(sku => sku.name.toLowerCase().includes(currentSearchTerm)))
+        );
+      }
+
+      renderFilteredFestivalCards(filtered);
+    }
+
+    function selectAndScrollToStockNeeds(festId) {
+      const select = document.getElementById('all-festivals-dropdown');
+      if (select) select.value = festId;
+      document.querySelectorAll('.fest-tab-btn').forEach(btn => {
+        if (btn.getAttribute('onclick')?.includes(festId)) {
+          btn.className = 'fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition bg-amber-500/20 text-amber-300 border border-amber-500/40';
+        } else {
+          btn.className = 'fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-800/60 border border-gray-700/60 transition';
+        }
+      });
+      loadFestivalStockNeeds(festId);
+      const targetEl = document.getElementById('fest-stock-kpi-bar');
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function handleFestivalDropdownChange(festId) {
+      if (!festId) return;
+      document.querySelectorAll('.fest-tab-btn').forEach(btn => {
+        if (btn.getAttribute('onclick')?.includes(festId)) {
+          btn.className = 'fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition bg-amber-500/20 text-amber-300 border border-amber-500/40';
+        } else {
+          btn.className = 'fest-tab-btn px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 hover:text-white bg-gray-800/60 border border-gray-700/60 transition';
+        }
+      });
+      loadFestivalStockNeeds(festId);
+    }
+
     function renderFestivalCards(festData) {
+      if (!festData || !festData.festivals) return;
+      allFestivalsDataCache = festData.festivals;
+      const countEl = document.getElementById('fest-count-all');
+      if (countEl) countEl.innerText = allFestivalsDataCache.length;
+      applyFestivalFilters();
+    }
+
+    function renderFilteredFestivalCards(festivalsList) {
       const container = document.getElementById('festivals-grid-container');
-      if (!container || !festData || !festData.festivals) return;
+      if (!container) return;
       container.innerHTML = '';
 
-      festData.festivals.forEach((f, idx) => {
-        const isNext = idx === 0;
+      if (!festivalsList || festivalsList.length === 0) {
+        container.innerHTML = '<div class="col-span-full py-8 text-center text-gray-500 text-xs">No festivals found matching current search/filter.</div>';
+        return;
+      }
+
+      festivalsList.forEach((f, idx) => {
+        const isNext = idx === 0 && currentQuarterFilter === 'all' && !currentSearchTerm;
         const card = document.createElement('div');
         card.className = `rounded-2xl p-5 border flex flex-col justify-between transition hover:border-purple-500/60 shadow-sm ${
           isNext ? 'bg-gradient-to-br from-purple-950/40 via-gray-900 to-gray-900 border-purple-500/50 ring-1 ring-purple-500/30' : 'bg-gray-800/40 border-gray-800'
@@ -962,20 +1122,27 @@ Loading live briefing...
         card.innerHTML = `
           <div>
             <div class="flex items-start justify-between gap-2">
-              <div>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
-                  f.tier.includes('Peak') ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
-                }">${f.tier}</span>
-                <h4 class="text-sm font-black text-white mt-1.5 line-clamp-1">${f.name}</h4>
+              <div class="flex-1">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                    f.tier && f.tier.includes('Peak') ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                  }">${f.tier || 'Event'}</span>
+                  ${f.quarter ? `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-gray-800 text-gray-400 border border-gray-700/50">${f.quarter}</span>` : ''}
+                  ${f.monthName ? `<span class="text-[9px] font-semibold text-gray-400">${f.monthName}</span>` : ''}
+                </div>
+                <h4 class="text-sm font-black text-white mt-1.5 line-clamp-1">
+                  <span>${f.name}</span>
+                  ${f.tamilName ? `<span class="text-[11px] font-medium text-purple-300 ml-1">(${f.tamilName})</span>` : ''}
+                </h4>
                 <p class="text-[11px] text-gray-400 mt-0.5">${f.date} • <span class="text-purple-300 font-semibold">${f.daysRemaining !== null ? f.daysRemaining + ' days left' : 'Monthly Cycle'}</span></p>
               </div>
-              <div class="text-right">
+              <div class="text-right shrink-0">
                 <span class="text-base font-black text-emerald-400">${f.surgePercent}</span>
                 <p class="text-[9px] text-gray-400 font-medium">Surge</p>
               </div>
             </div>
 
-            <p class="text-xs text-gray-300 mt-3 leading-relaxed line-clamp-2">${f.description}</p>
+            <p class="text-xs text-gray-300 mt-2.5 leading-relaxed line-clamp-2">${f.description}</p>
 
             <div class="mt-3 pt-3 border-t border-gray-800/80 space-y-1.5">
               <div class="flex items-center justify-between text-[11px]">
@@ -997,12 +1164,15 @@ Loading live briefing...
             </div>
           </div>
 
-          <div class="mt-4 pt-3 border-t border-gray-800/80 flex items-center justify-between">
+          <div class="mt-4 pt-3 border-t border-gray-800/80 flex items-center justify-between gap-2">
             <button onclick="sendQuickPrompt('Give me a detailed checklist and stocking plan for ${f.name}')" class="text-xs text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1 transition">
               <i data-lucide="bot" class="w-3.5 h-3.5"></i>
-              <span>Get AI Checklist</span>
+              <span>AI Checklist</span>
             </button>
-            <span class="text-[10px] text-gray-500 font-mono">${f.id}</span>
+            <button onclick="selectAndScrollToStockNeeds('${f.id}')" class="text-xs px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold border border-amber-500/30 flex items-center gap-1 transition">
+              <i data-lucide="boxes" class="w-3.5 h-3.5"></i>
+              <span>Stock Needs</span>
+            </button>
           </div>
         `;
         container.appendChild(card);
@@ -1522,6 +1692,84 @@ Loading live briefing...
     }
 
     
+    let modalMatrixDataCache = [];
+    let modalQuarterFilter = 'all';
+    let modalSearchQuery = '';
+
+    function filterModalMatrix(quarter, btn) {
+      modalQuarterFilter = quarter;
+      document.querySelectorAll('.modal-matrix-pill').forEach(el => {
+        el.className = 'modal-matrix-pill px-2.5 py-1 rounded-lg font-medium bg-gray-800 hover:bg-gray-700 text-gray-300 transition whitespace-nowrap';
+      });
+      btn.className = 'modal-matrix-pill px-2.5 py-1 rounded-lg font-bold bg-purple-600 text-white transition whitespace-nowrap';
+      applyModalMatrixFilters();
+    }
+
+    function handleModalMatrixSearch(val) {
+      modalSearchQuery = (val || '').toLowerCase().trim();
+      applyModalMatrixFilters();
+    }
+
+    function applyModalMatrixFilters() {
+      const tbody = document.getElementById('festival-matrix-tbody');
+      if (!tbody || !modalMatrixDataCache) return;
+      tbody.innerHTML = '';
+
+      let list = modalMatrixDataCache;
+      if (modalQuarterFilter !== 'all') {
+        list = list.filter(f => f.quarter === modalQuarterFilter);
+      }
+      if (modalSearchQuery) {
+        list = list.filter(f => 
+          (f.fullName && f.fullName.toLowerCase().includes(modalSearchQuery)) ||
+          (f.name && f.name.toLowerCase().includes(modalSearchQuery)) ||
+          (f.tamilName && f.tamilName.toLowerCase().includes(modalSearchQuery)) ||
+          (f.calendarRule && f.calendarRule.toLowerCase().includes(modalSearchQuery))
+        );
+      }
+
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="py-6 text-center text-gray-500">No events match filter.</td></tr>';
+        return;
+      }
+
+      list.forEach(f => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-gray-800/40 transition text-xs';
+        tr.innerHTML = `
+          <td class="py-3 px-3">
+            <p class="font-bold text-white flex items-center gap-1.5">
+              <span>${f.name}</span>
+              ${f.tamilName ? `<span class="text-[10px] text-purple-300 font-medium">(${f.tamilName})</span>` : ''}
+            </p>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <span class="text-[10px] text-amber-400 font-semibold">${f.surgeExpected} surge</span>
+              ${f.quarter ? `<span class="text-[9px] text-gray-500 px-1 rounded bg-gray-950 border border-gray-800">${f.quarter}</span>` : ''}
+            </div>
+          </td>
+          <td class="py-3 px-2 text-gray-400 text-[11px] max-w-[170px]">${f.calendarRule}</td>
+          <td class="py-3 px-2 text-center font-mono text-[11px] text-gray-300">${f.dates['2023']}</td>
+          <td class="py-3 px-2 text-center font-mono text-[11px] text-gray-300">${f.dates['2024']}</td>
+          <td class="py-3 px-2 text-center font-mono text-[11px] text-gray-300">${f.dates['2025']}</td>
+          <td class="py-3 px-2 text-center font-mono font-bold text-amber-300 bg-amber-500/10 rounded-lg">${f.dates['2026']}</td>
+          <td class="py-3 px-2 text-center font-mono text-[11px] text-purple-300">${f.dates['2027']}</td>
+          <td class="py-3 px-3 text-right font-mono font-bold text-rose-400 text-[11px]">${f.cutoff2026}</td>
+          <td class="py-3 px-2 text-center">
+            <button onclick="selectFestivalFromModal('${f.id}')" class="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-[11px] font-bold border border-amber-500/40 transition">
+              Stock Needs
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      lucide.createIcons();
+    }
+
+    function selectFestivalFromModal(festId) {
+      closeFestivalCalendarModal();
+      selectAndScrollToStockNeeds(festId);
+    }
+
     async function openFestivalCalendarModal() {
       const modal = document.getElementById('festival-calendar-modal');
       const tbody = document.getElementById('festival-matrix-tbody');
@@ -1531,26 +1779,9 @@ Loading live briefing...
       try {
         const res = await fetch('/api/ai/festival-calendar-matrix');
         const matrix = await res.json();
-        if (tbody && Array.isArray(matrix)) {
-          tbody.innerHTML = '';
-          matrix.forEach(f => {
-            const tr = document.createElement('tr');
-            tr.className = 'hover:bg-gray-800/40 transition text-xs';
-            tr.innerHTML = `
-              <td class="py-3 px-3">
-                <p class="font-bold text-white">${f.fullName}</p>
-                <span class="text-[10px] text-amber-400 font-medium">${f.surgeExpected} surge</span>
-              </td>
-              <td class="py-3 px-2 text-gray-400 text-[11px] max-w-[180px]">${f.calendarRule}</td>
-              <td class="py-3 px-2 text-center font-mono text-[11px] text-gray-300">${f.dates['2023']}</td>
-              <td class="py-3 px-2 text-center font-mono text-[11px] text-gray-300">${f.dates['2024']}</td>
-              <td class="py-3 px-2 text-center font-mono text-[11px] text-gray-300">${f.dates['2025']}</td>
-              <td class="py-3 px-2 text-center font-mono font-bold text-amber-300 bg-amber-500/10 rounded-lg">${f.dates['2026']}</td>
-              <td class="py-3 px-2 text-center font-mono text-[11px] text-purple-300">${f.dates['2027']}</td>
-              <td class="py-3 px-3 text-right font-mono font-bold text-rose-400">${f.cutoff2026}</td>
-            `;
-            tbody.appendChild(tr);
-          });
+        if (Array.isArray(matrix)) {
+          modalMatrixDataCache = matrix;
+          applyModalMatrixFilters();
         }
       } catch (e) {
         console.error('Failed to load festival calendar matrix:', e);

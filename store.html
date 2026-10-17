@@ -851,110 +851,7 @@
       transform: scale(1.05);
     }
 
-    /* 3-Columns Flipkart/Amazon Mobile Balanced Card Layout */
-    @media (max-width: 639px) {
-      #product-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-        gap: 8px !important;
-      }
-      .nhm-product-card {
-        padding: 8px 7px !important;
-        border-radius: 12px !important;
-      }
-      .nhm-thumb-box {
-        height: 105px !important;
-        border-radius: 8px !important;
-        margin-bottom: 6px !important;
-      }
-      .nhm-thumb-img {
-        padding: 4px !important;
-      }
-      .nhm-second-img, .nhm-double-badge {
-        display: none !important;
-      }
-      .nhm-discount-badge {
-        font-size: 8.5px !important;
-        padding: 2px 5px !important;
-        top: 3px !important;
-        left: 3px !important;
-        letter-spacing: 0 !important;
-      }
-      .nhm-action-top {
-        top: 3px !important;
-        right: 3px !important;
-        gap: 3px !important;
-      }
-      .nhm-btn-wishlist {
-        width: 22px !important;
-        height: 22px !important;
-        font-size: 9px !important;
-      }
-      .nhm-veg-dot {
-        width: 14px !important;
-        height: 14px !important;
-      }
-      .nhm-veg-dot span {
-        width: 5px !important;
-        height: 5px !important;
-      }
-      .nhm-card-category {
-        font-size: 8px !important;
-        display: inline-block !important;
-      }
-      .nhm-card-unit {
-        font-size: 8.5px !important;
-        padding: 1px 4px !important;
-      }
-      .nhm-card-title {
-        font-size: 11px !important;
-        line-height: 1.25 !important;
-        min-height: 28px !important;
-        max-height: 28px !important;
-        -webkit-line-clamp: 2 !important;
-        margin-bottom: 3px !important;
-        font-weight: 700 !important;
-      }
-      .nhm-card-rating {
-        display: none !important;
-      }
-      .nhm-card-price-row {
-        margin-top: 3px !important;
-        padding-top: 3px !important;
-        border-top: 1px solid #f1f5f9 !important;
-        margin-bottom: 4px !important;
-      }
-      .nhm-card-mrp {
-        font-size: 9.5px !important;
-        line-height: 1 !important;
-      }
-      .nhm-card-sell-price {
-        font-size: 13px !important;
-        font-weight: 900 !important;
-        line-height: 1 !important;
-      }
-      .nhm-card-save-badge {
-        display: inline-block !important;
-        font-size: 8px !important;
-        padding: 1px 3px !important;
-      }
-      .nhm-stepper-btn {
-        padding: 5px 4px !important;
-        font-size: 10px !important;
-        border-radius: 8px !important;
-        font-weight: 800 !important;
-      }
-      .nhm-stepper-btn i {
-        font-size: 8px !important;
-      }
-      .nhm-stepper-qty {
-        font-size: 10px !important;
-      }
-      .nhm-stepper-counter-btn {
-        width: 22px !important;
-        height: 22px !important;
-        font-size: 10px !important;
-      }
-    }
+    /* Mobile Responsive styles are consolidated in the professional Flipkart/Amazon layout below */
 
   
     /* ================================================================
@@ -1094,139 +991,250 @@
         border-radius: 16px !important;
       }
 
-      /* 3-Column Native Product Grid Container */
+      /* 🌟 2-Column Responsive Grid Container (Flipkart & Amazon Mobile Benchmark) */
       main.max-w-7xl {
-        padding: 0 10px 16px !important;
+        padding: 0 10px 24px !important;
       }
-      #product-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-        gap: 7px !important;
+      
+      #product-grid:not(.list-view) {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px 10px !important;
       }
 
-      /* Standard Mobile Native App Product Card */
-      .nhm-product-card {
+      /* Proportional 2-Column Product Card */
+      #product-grid:not(.list-view) .nhm-product-card {
         background: #FFFFFF !important;
         border: 1px solid #E5E7EB !important;
-        border-radius: 10px !important;
-        padding: 6px !important;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+        border-radius: 14px !important;
+        padding: 10px 10px 12px 10px !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
+        transition: transform 0.15s ease, box-shadow 0.15s ease !important;
       }
-      .nhm-thumb-box {
-        height: 96px !important;
-        border-radius: 8px !important;
+
+      #product-grid:not(.list-view) .nhm-thumb-box {
+        height: 140px !important;
+        border-radius: 10px !important;
         background: #F9FAFB !important;
-        margin-bottom: 5px !important;
         border: 1px solid #F3F4F6 !important;
+        margin-bottom: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        position: relative !important;
       }
-      .nhm-thumb-img {
-        padding: 3px !important;
+
+      #product-grid:not(.list-view) .nhm-thumb-img {
+        max-height: 122px !important;
+        max-width: 90% !important;
+        padding: 4px !important;
         object-fit: contain !important;
       }
 
-      /* App-style Discount & Veg Badges */
+      /* Crisp Discount & Veg Badges */
       .nhm-discount-badge {
-        font-size: 8px !important;
+        font-size: 9.5px !important;
         font-weight: 900 !important;
         background: #DC2626 !important;
         color: #FFFFFF !important;
-        padding: 1px 4px !important;
-        border-radius: 3px !important;
-        top: 2px !important;
-        left: 2px !important;
+        padding: 2px 6px !important;
+        border-radius: 6px !important;
+        top: 4px !important;
+        left: 4px !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.15) !important;
+      }
+      .nhm-action-top {
+        top: 4px !important;
+        right: 4px !important;
+        gap: 4px !important;
       }
       .nhm-veg-dot {
-        width: 13px !important;
-        height: 13px !important;
-        border-radius: 3px !important;
+        width: 16px !important;
+        height: 16px !important;
+        border-radius: 4px !important;
+        border-width: 1px !important;
       }
       .nhm-veg-dot span {
-        width: 4px !important;
-        height: 4px !important;
+        width: 6px !important;
+        height: 6px !important;
       }
       .nhm-btn-wishlist {
-        width: 20px !important;
-        height: 20px !important;
-        font-size: 9px !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+        width: 26px !important;
+        height: 26px !important;
+        font-size: 11px !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.12) !important;
       }
 
-      /* Product Typography tuned for Mobile Displays */
-      .nhm-card-title {
-        font-size: 10.5px !important;
+      /* Legible Product Titles (13px, 2 Lines, Never Cramped) */
+      #product-grid:not(.list-view) .nhm-card-title {
+        font-size: 13px !important;
         font-weight: 700 !important;
-        line-height: 1.25 !important;
-        color: #1F2937 !important;
-        min-height: 26px !important;
-        max-height: 26px !important;
+        line-height: 1.35 !important;
+        color: #111827 !important;
+        min-height: 35px !important;
+        max-height: 35px !important;
         -webkit-line-clamp: 2 !important;
         display: -webkit-box !important;
         -webkit-box-orient: vertical !important;
         overflow: hidden !important;
-        margin-bottom: 2px !important;
+        margin-bottom: 4px !important;
       }
-      .nhm-card-unit {
-        font-size: 8.5px !important;
+      #product-grid:not(.list-view) .nhm-card-unit {
+        font-size: 10px !important;
         font-weight: 600 !important;
-        color: #6B7280 !important;
+        color: #4B5563 !important;
         background: #F3F4F6 !important;
-        border-radius: 3px !important;
-        padding: 0 3px !important;
+        border-radius: 4px !important;
+        padding: 1px 5px !important;
       }
-      .nhm-card-category {
-        display: none !important;
+      #product-grid:not(.list-view) .nhm-card-category {
+        display: inline-block !important;
+        font-size: 9px !important;
+        font-weight: 800 !important;
+        color: #059669 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.3px !important;
       }
-
-      /* Price & Stepper Row */
-      .nhm-card-price-row {
+      #product-grid:not(.list-view) .nhm-card-rating {
+        display: flex !important;
+        font-size: 9.5px !important;
         margin-top: 2px !important;
-        padding-top: 2px !important;
-        border-top: 1px solid #F3F4F6 !important;
         margin-bottom: 3px !important;
       }
-      .nhm-card-sell-price {
-        font-size: 12.5px !important;
+
+      /* Clear Pricing & Savings Hierarchy */
+      #product-grid:not(.list-view) .nhm-card-price-row {
+        margin-top: 4px !important;
+        padding-top: 4px !important;
+        border-top: 1px solid #F3F4F6 !important;
+        margin-bottom: 6px !important;
+      }
+      #product-grid:not(.list-view) .nhm-card-sell-price {
+        font-size: 15.5px !important;
         font-weight: 900 !important;
         color: #111827 !important;
         line-height: 1 !important;
       }
-      .nhm-card-mrp {
-        font-size: 8.5px !important;
+      #product-grid:not(.list-view) .nhm-card-mrp {
+        font-size: 11px !important;
         color: #9CA3AF !important;
         line-height: 1 !important;
+        text-decoration: line-through !important;
       }
-      .nhm-card-save-badge {
-        display: none !important;
+      #product-grid:not(.list-view) .nhm-card-save-badge {
+        display: inline-block !important;
+        font-size: 9px !important;
+        font-weight: 800 !important;
+        color: #065F46 !important;
+        background: #D1FAE5 !important;
+        border-radius: 4px !important;
+        padding: 1px 5px !important;
       }
 
-      /* Native Stepper Button (Flipkart/Amazon Mobile Style) */
-      .nhm-stepper-btn {
+      /* Thumb-Friendly Touch Button (36px Height, Never Miss a Tap) */
+      #product-grid:not(.list-view) .nhm-stepper-btn {
         width: 100% !important;
-        padding: 4px 2px !important;
-        font-size: 10px !important;
+        height: 36px !important;
+        font-size: 12px !important;
         font-weight: 900 !important;
-        border-radius: 6px !important;
+        border-radius: 8px !important;
         background: #ECFDF5 !important;
         color: #065F46 !important;
-        border: 1px solid #059669 !important;
-        height: 26px !important;
+        border: 1.5px solid #059669 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 4px !important;
       }
-      .nhm-stepper-btn:active {
+      #product-grid:not(.list-view) .nhm-stepper-btn:active {
         background: #059669 !important;
         color: #FFFFFF !important;
-        transform: scale(0.96) !important;
+        transform: scale(0.97) !important;
       }
-      .nhm-stepper-counter-btn {
-        width: 22px !important;
-        height: 22px !important;
-        border-radius: 4px !important;
-        font-size: 11px !important;
+      #product-grid:not(.list-view) .nhm-stepper-counter-btn {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 14px !important;
+        border-radius: 6px !important;
       }
-      .nhm-stepper-qty {
-        font-size: 10.5px !important;
+      #product-grid:not(.list-view) .nhm-stepper-qty {
+        font-size: 13px !important;
         font-weight: 900 !important;
+      }
+
+      /* 🌟 1-Column List View Mode (Amazon Pantry / Blinkit Rapid Provision Scan) */
+      #product-grid.list-view {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+      }
+      #product-grid.list-view .nhm-product-card {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 12px !important;
+        padding: 10px 12px !important;
+        border-radius: 14px !important;
+        background: #FFFFFF !important;
+        border: 1px solid #E5E7EB !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+      }
+      #product-grid.list-view .nhm-thumb-box {
+        width: 88px !important;
+        height: 88px !important;
+        flex-shrink: 0 !important;
+        margin-bottom: 0 !important;
+        border-radius: 10px !important;
+        background: #F9FAFB !important;
+        border: 1px solid #F3F4F6 !important;
+        position: relative !important;
+      }
+      #product-grid.list-view .nhm-thumb-img {
+        max-height: 75px !important;
+        padding: 2px !important;
+      }
+      #product-grid.list-view .nhm-card-info {
+        flex: 1 !important;
+        min-width: 0 !important;
+      }
+      #product-grid.list-view .nhm-card-title {
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        line-height: 1.3 !important;
+        color: #111827 !important;
+        min-height: auto !important;
+        max-height: none !important;
+        -webkit-line-clamp: 2 !important;
+        display: -webkit-box !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+      }
+      #product-grid.list-view .nhm-card-footer {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-end !important;
+        gap: 6px !important;
+        flex-shrink: 0 !important;
+        width: 105px !important;
+        border-top: none !important;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+      }
+      #product-grid.list-view .nhm-card-price-row {
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        text-align: right !important;
+      }
+      #product-grid.list-view .nhm-stepper-btn {
+        width: 95px !important;
+        height: 34px !important;
+        font-size: 11px !important;
+        font-weight: 900 !important;
+        border-radius: 8px !important;
       }
 
       /* Native Bottom Dock Bar with Safe Area padding */
@@ -1885,10 +1893,21 @@
           <p id="showing-count-text" class="text-xs text-gray-500 font-bold mt-1">Loading store catalog...</p>
         </div>
 
-        <div class="flex items-center gap-1.5 flex-wrap">
-          <button onclick="sortProducts('popular')" id="btn-sort-pop" class="tab-pill active text-xs">Featured</button>
-          <button onclick="sortProducts('low-high')" id="btn-sort-lh" class="tab-pill text-xs">Price: Low to High</button>
-          <button onclick="sortProducts('high-low')" id="btn-sort-hl" class="tab-pill text-xs">Price: High to Low</button>
+        <div class="flex items-center justify-between sm:justify-start gap-2 flex-wrap w-full sm:w-auto">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button onclick="sortProducts('popular')" id="btn-sort-pop" class="tab-pill active text-xs">Featured</button>
+            <button onclick="sortProducts('low-high')" id="btn-sort-lh" class="tab-pill text-xs">Price: Low to High</button>
+            <button onclick="sortProducts('high-low')" id="btn-sort-hl" class="tab-pill text-xs">Price: High to Low</button>
+          </div>
+          <!-- View Switcher (Flipkart & Amazon 2-Col Grid vs 1-Col List) -->
+          <div class="flex items-center bg-white border border-gray-200/90 rounded-xl p-0.5 shadow-xs ml-auto sm:ml-2" id="view-mode-toggle-group">
+            <button type="button" onclick="setProductViewMode('grid')" id="btn-view-grid" class="px-2.5 py-1 rounded-lg text-xs font-bold transition bg-emerald-600 text-white shadow-xs" title="2-Column Grid View">
+              <i class="fa-solid fa-grip text-xs"></i>
+            </button>
+            <button type="button" onclick="setProductViewMode('list')" id="btn-view-list" class="px-2.5 py-1 rounded-lg text-xs font-bold text-gray-500 hover:text-gray-900 transition" title="1-Column List View">
+              <i class="fa-solid fa-list-ul text-xs"></i>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -1922,7 +1941,7 @@
         </div>
       </div>
 
-      <div id="product-grid" class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 lg:gap-4">
+      <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5 sm:gap-3 lg:gap-4">
         <div class="glass p-5 rounded-3xl animate-pulse h-64"></div>
         <div class="glass p-5 rounded-3xl animate-pulse h-64"></div>
         <div class="glass p-5 rounded-3xl animate-pulse h-64"></div>
@@ -2662,6 +2681,23 @@
   </div>
 
   <!-- MOBILE BOTTOM NAVIGATION DOCK (VISIBLE ON MOBILE ONLY) -->
+  <!-- FLOATING INSTANT MOBILE CHECKOUT BAR (BLINKIT / SWIGGY INSTAMART STYLE) -->
+  <div id="mobile-floating-cart-bar" class="hidden md:hidden fixed bottom-[68px] inset-x-3 z-40 bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-2xl p-3 shadow-2xl border border-emerald-400/40 flex items-center justify-between active:scale-[0.99] transition duration-200 cursor-pointer" onclick="toggleCart()">
+    <div class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center font-bold">
+        <i class="fa-solid fa-cart-shopping text-sm text-white"></i>
+      </div>
+      <div>
+        <p class="text-[11px] uppercase tracking-wider text-emerald-200 font-extrabold leading-tight"><span id="floating-cart-count">0 ITEMS</span> IN BASKET</p>
+        <p class="text-sm font-black text-white leading-tight">₹<span id="floating-cart-total">0.00</span></p>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5 bg-white text-emerald-800 font-black text-xs px-3.5 py-1.5 rounded-xl shadow-sm">
+      <span>View Cart</span>
+      <i class="fa-solid fa-arrow-right text-[10px]"></i>
+    </div>
+  </div>
+
   <nav id="mobile-bottom-dock" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-gray-200/90 shadow-2xl px-3 py-2 flex items-center justify-around">
     <a href="/" class="flex flex-col items-center gap-0.5 text-gray-500 hover:text-emerald-700 font-bold text-[10px] active:scale-95 transition no-underline">
       <i class="fa-solid fa-circle-info text-base text-emerald-600"></i>
@@ -3797,7 +3833,7 @@
 
         return `
           <div class="nhm-product-card group">
-            <div>
+            <div class="nhm-card-body flex-1">
               <!-- THUMBNAIL BOX (NATIONAL HYPER MART STYLE) -->
               <div class="nhm-thumb-box" onclick="openProductQuickView('${p.id}')">
                 <img src="${finalImg}" alt="${p.title}" loading="lazy" class="nhm-thumb-img">
@@ -3836,7 +3872,7 @@
               </div>
 
               <!-- PRODUCT DETAILS -->
-              <div class="cursor-pointer" onclick="openProductQuickView('${p.id}')">
+              <div class="nhm-card-info cursor-pointer" onclick="openProductQuickView('${p.id}')">
                 <div class="flex items-center justify-between text-[10px] text-gray-500 font-bold mb-1">
                   <span class="text-emerald-700 uppercase tracking-wider font-extrabold truncate max-w-[130px]">${p.category || 'GROCERY'}</span>
                   <span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded font-bold">${p.unit || '1 unit'}</span>
@@ -3858,8 +3894,8 @@
             </div>
 
             <!-- PRICING & ADD TO CART STEPPER -->
-            <div class="mt-2.5 pt-2 border-t border-gray-100">
-              <div class="flex items-baseline justify-between mb-2">
+            <div class="nhm-card-footer mt-2.5 pt-2 border-t border-gray-100">
+              <div class="nhm-card-price-row flex items-baseline justify-between mb-2">
                 <div>
                   ${mrp > sellRate ? `<del class="text-[11px] text-gray-400 font-semibold block leading-none">MRP ₹${mrp.toFixed(2)}</del>` : ''}
                   <div class="text-gray-900 font-black text-base sm:text-lg leading-tight">
@@ -4548,6 +4584,23 @@
       if (mobBadge) mobBadge.textContent = totalCount > 0 ? String(totalCount) : '0';
       const mobBadgeAlt = document.getElementById('mobile-cart-badge');
       if (mobBadgeAlt) mobBadgeAlt.textContent = totalCount > 0 ? String(totalCount) : '0';
+
+      // Sync floating mobile cart bar
+      const floatingBar = document.getElementById('mobile-floating-cart-bar');
+      if (floatingBar) {
+        if (totalCount > 0) {
+          floatingBar.classList.remove('hidden');
+          const floatingCount = document.getElementById('floating-cart-count');
+          const floatingTotal = document.getElementById('floating-cart-total');
+          if (floatingCount) floatingCount.innerText = `${totalCount} ${totalCount === 1 ? 'ITEM' : 'ITEMS'}`;
+          if (floatingTotal) {
+            const subtotal = cart.reduce((sum, i) => sum + ((parseFloat(i.price) || 0) * (parseInt(i.quantity, 10) || 1)), 0);
+            floatingTotal.innerText = subtotal.toFixed(2);
+          }
+        } else {
+          floatingBar.classList.add('hidden');
+        }
+      }
 
       const container = document.getElementById('cart-items-container');
       if (!container) return;

@@ -505,17 +505,28 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">
-            Direct Product Packshot Image URL (.jpg / .png)
-          </label>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-bold text-gray-700">
+              Direct Product Packshot Image URL (.jpg / .png)
+            </label>
+            <button
+              type="button"
+              onclick="clearOnlineUrlInput()"
+              class="text-[10px] font-bold text-gray-400 hover:text-red-600 transition flex items-center gap-1 cursor-pointer"
+              title="Clear input"
+            >
+              <i class="fa-solid fa-eraser"></i> Clear
+            </button>
+          </div>
           <div class="flex items-center gap-2">
             <input
               type="url"
               id="input-online-url"
+              autocomplete="off"
               placeholder="https://example.com/product-packshot.jpg"
               class="flex-1 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:border-emerald-500"
             >
-            <button type="button" onclick="previewOnlineUrl()" class="px-4 py-2.5 bg-gray-900 hover:bg-black text-white text-xs font-bold rounded-xl flex items-center gap-1 transition">
+            <button type="button" onclick="previewOnlineUrl()" class="px-4 py-2.5 bg-gray-900 hover:bg-black text-white text-xs font-bold rounded-xl flex items-center gap-1 transition cursor-pointer">
               <i class="fa-solid fa-eye"></i> Preview
             </button>
           </div>
@@ -1068,11 +1079,17 @@
       document.getElementById('modal-product-price').textContent = `₹${p.price || p.mrp || 0}`;
       document.getElementById('modal-current-img').src = p.image_url || '';
 
-      // Reset preview and setup category
+      // Reset preview and setup category (always empty the online URL field)
       document.getElementById('modal-new-img').classList.add('hidden');
       document.getElementById('modal-new-placeholder').classList.remove('hidden');
       document.getElementById('btn-save-image').disabled = true;
       document.getElementById('modal-status-text').classList.add('hidden');
+
+      // Always clear online URL input and file input for every new product update
+      const onlineUrlInput = document.getElementById('input-online-url');
+      if (onlineUrlInput) onlineUrlInput.value = '';
+      const fileInput = document.getElementById('file-input');
+      if (fileInput) fileInput.value = '';
 
       // Populate Modal Category Selector
       const modalCatSelect = document.getElementById('modal-category-select');
@@ -1100,6 +1117,12 @@
       stopCamera();
       document.getElementById('image-studio-modal').classList.add('hidden');
       activeProductForModal = null;
+      proposedImageUrl = null;
+      proposedImageBase64 = null;
+      const onlineUrlInput = document.getElementById('input-online-url');
+      if (onlineUrlInput) onlineUrlInput.value = '';
+      const fileInput = document.getElementById('file-input');
+      if (fileInput) fileInput.value = '';
     }
 
     function switchStudioTab(tab) {
@@ -1119,6 +1142,16 @@
         startCamera();
       } else {
         stopCamera();
+      }
+
+      if (tab === 'link') {
+        const onlineUrlInput = document.getElementById('input-online-url');
+        if (onlineUrlInput) {
+          if (!proposedImageUrl || !proposedImageUrl.startsWith('http')) {
+            onlineUrlInput.value = '';
+          }
+          setTimeout(() => onlineUrlInput.focus(), 80);
+        }
       }
     }
 
@@ -1217,6 +1250,18 @@
       if (!q) return;
       const url = 'https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(q);
       window.open(url, '_blank');
+    }
+
+    function clearOnlineUrlInput() {
+      const onlineUrlInput = document.getElementById('input-online-url');
+      if (onlineUrlInput) {
+        onlineUrlInput.value = '';
+        onlineUrlInput.focus();
+      }
+      proposedImageUrl = null;
+      document.getElementById('modal-new-img').classList.add('hidden');
+      document.getElementById('modal-new-placeholder').classList.remove('hidden');
+      checkModalCanSave();
     }
 
     function previewOnlineUrl() {
@@ -1372,6 +1417,9 @@
             '</a>';
 
           btn.innerHTML = '<i class="fa-solid fa-check"></i> Saved Live!';
+
+          const onlineUrlInput = document.getElementById('input-online-url');
+          if (onlineUrlInput) onlineUrlInput.value = '';
 
           setTimeout(() => {
             closeStudioModal();

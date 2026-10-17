@@ -1340,9 +1340,12 @@
           <button type="button" onclick="toggleMobileSearch()" class="sm:hidden w-9 h-9 rounded-xl glass flex items-center justify-center text-gray-600 hover:text-emerald-700 border border-white/80 shadow-sm active:scale-90 transition cursor-pointer" aria-label="Search" title="Search products">
             <i class="fa-solid fa-magnifying-glass text-sm"></i>
           </button>
-          <div class="relative hidden sm:block w-64">
+          <div class="relative hidden sm:block w-72 lg:w-80">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-xs"></i>
-            <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="Search vegetables, fruits, dairy..." class="glass-input text-xs pl-9 py-2">
+            <input type="text" id="search-input" oninput="handleLiveSearch(this.value)" placeholder="Search vegetables, fruits, dairy..." class="glass-input text-xs pl-9 py-2 w-full" autocomplete="off">
+            <!-- Desktop Live Search Suggestions Dropdown -->
+            <div id="desktop-search-suggestions" class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-2xl z-50 overflow-hidden divide-y divide-gray-100 max-h-96 overflow-y-auto">
+            </div>
           </div>
           <!-- In-Store Barcode Scanner Button -->
           <button type="button" onclick="openBarcodeScanner()" class="hidden sm:flex px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-xl text-xs font-black transition items-center gap-1.5 shadow-xs cursor-pointer active:scale-95" title="Scan In-Store Product Barcode (Camera)">
@@ -1379,19 +1382,23 @@
       </div>
     </header>
     <!-- STANDARD MOBILE APP SEARCH & QUICK BAR -->
-    <div id="mobile-search-bar" class="md:hidden">
+    <div id="mobile-search-bar" class="md:hidden px-3 pt-2">
       <div class="relative flex items-center">
         <i class="fa-solid fa-magnifying-glass search-icon"></i>
         <input 
           type="text" 
           id="mobile-search-input" 
-          onkeyup="syncMobileSearch(this.value)" 
+          oninput="handleLiveSearch(this.value)" 
           placeholder="Search 7,179+ vegetables, rice, dal, oils..."
           aria-label="Search store products"
+          autocomplete="off"
         >
         <button type="button" onclick="openBarcodeScanner()" class="absolute right-2.5 w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center active:scale-90 transition">
           <i class="fa-solid fa-barcode text-sm"></i>
         </button>
+      </div>
+      <!-- Mobile Live Search Suggestions Dropdown -->
+      <div id="mobile-search-suggestions" class="hidden mt-2 bg-white/95 backdrop-blur-xl border border-gray-200/90 rounded-2xl shadow-2xl z-50 overflow-hidden divide-y divide-gray-100 max-h-80 overflow-y-auto">
       </div>
     </div>
 
@@ -3920,6 +3927,118 @@
     function filterProducts() {
       applyFiltersAndSearch();
     }
+
+    function handleLiveSearch(query) {
+      const deskInp = document.getElementById('search-input');
+      const mobInp = document.getElementById('mobile-search-input');
+      if (deskInp && deskInp.value !== query) deskInp.value = query;
+      if (mobInp && mobInp.value !== query) mobInp.value = query;
+
+      applyFiltersAndSearch();
+      renderSearchSuggestions(query);
+    }
+
+    function renderSearchSuggestions(query) {
+      const q = (query || '').toLowerCase().trim();
+      const desktopDrop = document.getElementById('desktop-search-suggestions');
+      const mobileDrop = document.getElementById('mobile-search-suggestions');
+      
+      if (!q || q.length < 2) {
+        if (desktopDrop) desktopDrop.classList.add('hidden');
+        if (mobileDrop) mobileDrop.classList.add('hidden');
+        return;
+      }
+
+      const matches = (allProducts || []).filter(p => {
+        const title = (p.title || p.name || '').toLowerCase();
+        const cat = (p.category || '').toLowerCase();
+        const brand = (p.brand || '').toLowerCase();
+        return title.includes(q) || cat.includes(q) || brand.includes(q);
+      }).slice(0, 5);
+
+      if (matches.length === 0) {
+        const noHtml = `
+          <div class="p-3 text-center text-xs text-gray-500 font-medium">
+            No quick matches found for "<strong>${query}</strong>"
+          </div>
+        `;
+        if (desktopDrop) { desktopDrop.innerHTML = noHtml; desktopDrop.classList.remove('hidden'); }
+        if (mobileDrop) { mobileDrop.innerHTML = noHtml; mobileDrop.classList.remove('hidden'); }
+        return;
+      }
+
+      const itemsHtml = matches.map(p => {
+        const img = p.image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=120&q=80';
+        const price = parseFloat(p.price || 0).toFixed(2);
+        const mrp = parseFloat(p.mrp || p.price * 1.25).toFixed(2);
+        return `
+          <div class="flex items-center justify-between gap-3 p-2.5 hover:bg-emerald-50/60 transition cursor-pointer" onclick="quickSelectSearchProduct('${p.id}')">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <img src="${img}" alt="${p.title}" class="w-10 h-10 rounded-lg object-contain bg-white border border-gray-100 p-0.5 shrink-0" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=120&q=80'">
+              <div class="min-w-0">
+                <h5 class="text-xs font-bold text-gray-900 truncate">${p.title}</h5>
+                <span class="text-[10px] text-gray-500 font-semibold">${p.unit || '1 item'} &bull; <span class="text-emerald-700 font-black">₹${price}</span> <del class="text-gray-400">₹${mrp}</del></span>
+              </div>
+            </div>
+            <button type="button" onclick="event.stopPropagation(); quickAddFromSearch('${p.id}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-black rounded-lg shrink-0 shadow-2xs active:scale-90 transition">
+              + Add
+            </button>
+          </div>
+        `;
+      }).join('');
+
+      const footerHtml = `
+        <div class="p-2 bg-gray-50 text-center border-t border-gray-100">
+          <button type="button" onclick="closeSearchSuggestions()" class="text-[10px] font-extrabold text-gray-500 hover:text-gray-800">
+            Close Suggestions
+          </button>
+        </div>
+      `;
+
+      if (desktopDrop) {
+        desktopDrop.innerHTML = itemsHtml + footerHtml;
+        desktopDrop.classList.remove('hidden');
+      }
+      if (mobileDrop) {
+        mobileDrop.innerHTML = itemsHtml + footerHtml;
+        mobileDrop.classList.remove('hidden');
+      }
+    }
+
+    function quickAddFromSearch(prodId) {
+      const prod = (allProducts || []).find(p => String(p.id) === String(prodId));
+      if (prod) {
+        addToCart(prod.id);
+        const toast = document.createElement('div');
+        toast.className = 'fixed top-4 right-4 z-50 bg-emerald-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-lg';
+        toast.innerText = `Added ${prod.title} to cart!`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+      }
+    }
+
+    function quickSelectSearchProduct(prodId) {
+      closeSearchSuggestions();
+      const el = document.getElementById('prod-card-' + prodId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('ring-4', 'ring-emerald-400');
+        setTimeout(() => el.classList.remove('ring-4', 'ring-emerald-400'), 1500);
+      }
+    }
+
+    function closeSearchSuggestions() {
+      const d = document.getElementById('desktop-search-suggestions');
+      const m = document.getElementById('mobile-search-suggestions');
+      if (d) d.classList.add('hidden');
+      if (m) m.classList.add('hidden');
+    }
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('#search-input') && !e.target.closest('#desktop-search-suggestions') && !e.target.closest('#mobile-search-bar')) {
+        closeSearchSuggestions();
+      }
+    });
 
     
     // =======================================================

@@ -621,10 +621,15 @@
                   <div class="font-bold text-slate-900" id="preview-sku">📦 Ponni Boiled Rice (25kg Sack) + Dals</div>
                   <div class="text-emerald-700 font-bold" id="preview-price">MRP: ₹1,450 | Deal Price: ₹1,160</div>
                 </div>
-                <!-- 1-Click WhatsApp CTA button -->
-                <a id="preview-cta-link" href="https://wa.me/917708834547?text=Hi%20Rani%20Hyper%20Market,%20I%20want%20to%20order%20the%2020%25%20weekly%20grocery%20deal!" target="_blank" class="block w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-center rounded-lg text-xs no-underline shadow-xs mt-2 transition">
-                  <i class="fa-brands fa-whatsapp mr-1"></i> Order Now on WhatsApp
-                </a>
+                <!-- 1-Click WhatsApp CTA and Copy buttons -->
+                <div class="grid grid-cols-2 gap-2 mt-2">
+                  <a id="preview-cta-link" href="https://wa.me/917708834547" target="_blank" class="py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-center rounded-lg text-xs no-underline shadow-xs transition flex items-center justify-center gap-1">
+                    <i class="fa-brands fa-whatsapp"></i> Test Send
+                  </a>
+                  <button type="button" onclick="copyCampaignText()" class="py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold text-center rounded-lg text-xs transition flex items-center justify-center gap-1 cursor-pointer">
+                    <i class="fa-solid fa-copy"></i> <span id="copy-btn-text">Copy Copy</span>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -637,6 +642,121 @@
 
       </div>
 
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TOPIC 2.5: CUSTOMER RFM AUDIENCE SEGMENTATION STUDIO
+  ══════════════════════════════════════════════════════════ -->
+  <section id="rfm-studio" class="py-20 px-4 sm:px-8 max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
+      <span class="text-xs font-black text-gold-800 uppercase tracking-widest bg-gold-500/20 px-3 py-1 rounded-full border border-gold-500/40">
+        Audience Intelligence · 17,548 Audited Retail Bills
+      </span>
+      <h2 class="font-serif text-3xl sm:text-5xl font-black text-navy-gradient">
+        Autonomous Customer RFM Segmentation
+      </h2>
+      <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+        The agentic engine groups every customer into Recency, Frequency &amp; Monetary value clusters. Click a cohort below to view real-time automated intervention workflows.
+      </p>
+    </div>
+
+    <!-- RFM Cohort Selector Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <!-- Cohort 1 -->
+      <div onclick="selectRfmCohort('champions')" id="rfm-card-champions" class="rfm-selector-card p-5 rounded-2xl border-2 border-gold-500 bg-white shadow-magnificent cursor-pointer transition">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-2xl">👑</span>
+          <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-gold-100 text-gold-800">Top 18%</span>
+        </div>
+        <h4 class="font-serif font-black text-royal-950 text-base">VIP Champions</h4>
+        <p class="text-xs text-slate-500 mt-1">High spenders, weekly visits. Average bill ₹1,240.</p>
+        <div class="mt-3 text-xs font-bold text-emerald-700 flex items-center gap-1">
+          <i class="fa-solid fa-arrow-right text-[10px]"></i> View AI Strategy
+        </div>
+      </div>
+
+      <!-- Cohort 2 -->
+      <div onclick="selectRfmCohort('regulars')" id="rfm-card-regulars" class="rfm-selector-card p-5 rounded-2xl border-2 border-transparent bg-white shadow-card-soft hover:border-slate-300 cursor-pointer transition">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-2xl">⚡</span>
+          <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">34% Base</span>
+        </div>
+        <h4 class="font-serif font-black text-royal-950 text-base">Loyal Regulars</h4>
+        <p class="text-xs text-slate-500 mt-1">Staple replenishers. Milk, rice, oil buyers.</p>
+        <div class="mt-3 text-xs font-bold text-emerald-700 flex items-center gap-1">
+          <i class="fa-solid fa-arrow-right text-[10px]"></i> View AI Strategy
+        </div>
+      </div>
+
+      <!-- Cohort 3 -->
+      <div onclick="selectRfmCohort('at_risk')" id="rfm-card-at_risk" class="rfm-selector-card p-5 rounded-2xl border-2 border-transparent bg-white shadow-card-soft hover:border-slate-300 cursor-pointer transition">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-2xl">💤</span>
+          <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">22% At-Risk</span>
+        </div>
+        <h4 class="font-serif font-black text-royal-950 text-base">Dormant Churners</h4>
+        <p class="text-xs text-slate-500 mt-1">No store visits in 45+ days. Churn alert.</p>
+        <div class="mt-3 text-xs font-bold text-emerald-700 flex items-center gap-1">
+          <i class="fa-solid fa-arrow-right text-[10px]"></i> View AI Strategy
+        </div>
+      </div>
+
+      <!-- Cohort 4 -->
+      <div onclick="selectRfmCohort('festivals')" id="rfm-card-festivals" class="rfm-selector-card p-5 rounded-2xl border-2 border-transparent bg-white shadow-card-soft hover:border-slate-300 cursor-pointer transition">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-2xl">🪔</span>
+          <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-purple-100 text-purple-800">26% Surge</span>
+        </div>
+        <h4 class="font-serif font-black text-royal-950 text-base">Festival Surfers</h4>
+        <p class="text-xs text-slate-500 mt-1">High volume sweet &amp; festival buyers.</p>
+        <div class="mt-3 text-xs font-bold text-emerald-700 flex items-center gap-1">
+          <i class="fa-solid fa-arrow-right text-[10px]"></i> View AI Strategy
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Cohort Strategy Deep-Dive Panel -->
+    <div id="rfm-detail-panel" class="glass-light p-6 sm:p-8 rounded-3xl border border-gold-500/30 shadow-magnificent">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+        <div class="space-y-2">
+          <span id="rfm-cohort-badge" class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-gold-100 text-gold-900 border border-gold-300 inline-block">
+            VIP Champions · 1,420 Families
+          </span>
+          <h3 id="rfm-cohort-title" class="font-serif text-2xl font-black text-royal-950">
+            Exclusive Priority Treatment
+          </h3>
+          <p id="rfm-cohort-desc" class="text-xs text-slate-600 leading-relaxed">
+            These customers generate over 42% of monthly store profits. The AI never sends them generic blast messages; instead, it provides white-glove VIP treatment.
+          </p>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border border-cream-300 space-y-2 text-xs">
+          <div class="font-bold text-royal-950 flex items-center gap-1.5">
+            <i class="fa-solid fa-wand-magic-sparkles text-gold-600"></i> Autonomous AI Action Triggers:
+          </div>
+          <ul id="rfm-cohort-actions" class="space-y-1.5 text-slate-600">
+            <li class="flex items-start gap-1.5"><i class="fa-solid fa-check text-emerald-600 text-[11px] mt-0.5"></i> <span>Auto-unlock permanent <strong>Free Express 30-min Delivery</strong></span></li>
+            <li class="flex items-start gap-1.5"><i class="fa-solid fa-check text-emerald-600 text-[11px] mt-0.5"></i> <span>Early reservation for festival sweets &amp; pure country ghee</span></li>
+            <li class="flex items-start gap-1.5"><i class="fa-solid fa-check text-emerald-600 text-[11px] mt-0.5"></i> <span>Direct Store Manager WhatsApp connection for custom orders</span></li>
+          </ul>
+        </div>
+
+        <div class="bg-gradient-to-br from-royal-950 to-royal-900 text-white p-5 rounded-2xl space-y-3 font-mono text-xs">
+          <div class="text-gold-300 font-bold flex items-center justify-between">
+            <span>ANNUAL VALUE CAPTURE</span>
+            <span class="text-[10px] text-emerald-400">ROI: 14.8x</span>
+          </div>
+          <div class="space-y-1 text-slate-300">
+            <div class="flex justify-between"><span>Audience Size:</span><strong class="text-white" id="rfm-cohort-size">1,420 Families</strong></div>
+            <div class="flex justify-between"><span>Average Order Value:</span><strong class="text-emerald-400" id="rfm-cohort-aov">₹1,240 / Order</strong></div>
+            <div class="flex justify-between"><span>Retained Revenue:</span><strong class="text-gold-300" id="rfm-cohort-gmv">₹21.1 Lakhs/yr</strong></div>
+          </div>
+          <button type="button" onclick="loadCohortIntoGenerator()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-sans font-bold text-xs rounded-xl shadow-xs transition cursor-pointer">
+            <i class="fa-brands fa-whatsapp mr-1"></i> Build Campaign for This Cohort &rarr;
+          </button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1029,6 +1149,132 @@
 
       const whatsappText = encodeURIComponent(`Hi Rani Hyper Market, I want to order the offer: ${headline} - ${sku}`);
       ctaEl.href = `https://wa.me/917708834547?text=${whatsappText}`;
+    }
+
+    // 4.5 Copy Campaign Text
+    function copyCampaignText() {
+      const headline = document.getElementById('preview-headline').textContent;
+      const body = document.getElementById('preview-body').textContent;
+      const sku = document.getElementById('preview-sku').textContent;
+      const price = document.getElementById('preview-price').textContent;
+      
+      const fullText = `🛒 *RANI HYPER MARKET — EXCLUSIVE OFFER*\n\n${headline}\n\n${body}\n\n${sku}\n💰 *${price}*\n\n⚡ *Order Now:* https://rani-hyper-market.vercel.app/store\n📞 *Direct Call/WhatsApp:* +91 77088 34547\n📍 *Store:* Bodinayakanur, Theni Dist.`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(fullText).then(() => {
+          const btnText = document.getElementById('copy-btn-text');
+          if (btnText) {
+            btnText.textContent = 'Copied!';
+            setTimeout(() => btnText.textContent = 'Copy Text', 2000);
+          }
+        }).catch(() => {
+          alert('Campaign text ready to copy:\n\n' + fullText);
+        });
+      } else {
+        alert('Campaign text ready to copy:\n\n' + fullText);
+      }
+    }
+
+    // 4.6 RFM Customer Segmentation Studio Controller
+    const RFM_DATA = {
+      champions: {
+        badge: 'VIP Champions · 1,420 Families',
+        title: 'Exclusive Priority Treatment',
+        desc: 'These customers generate over 42% of monthly store profits. The AI never sends them generic blast messages; instead, it provides white-glove VIP treatment.',
+        actions: [
+          'Auto-unlock permanent <strong>Free Express 30-min Delivery</strong>',
+          'Early reservation for festival sweets & pure country ghee',
+          'Direct Store Manager WhatsApp connection for custom bulk orders'
+        ],
+        size: '1,420 Families',
+        aov: '₹1,240 / Order',
+        gmv: '₹21.1 Lakhs/yr'
+      },
+      regulars: {
+        badge: 'Loyal Regulars · 2,680 Families',
+        title: 'Automated Staple Replenishment',
+        desc: 'Consistent bi-weekly staples buyers. They rely on Rani Hyper Market for rice, dals, spices, and cooking oils.',
+        actions: [
+          'Automated Sunday morning <strong>Grocery Restock Reminder</strong>',
+          'Personalized rice sack discounts based on previous brand purchase',
+          'Express 1-tap WhatsApp re-order button with saved household cart'
+        ],
+        size: '2,680 Families',
+        aov: '₹890 / Order',
+        gmv: '₹28.6 Lakhs/yr'
+      },
+      at_risk: {
+        badge: 'Dormant Churners · 1,730 Families',
+        title: 'AI Win-Back & Reactivation Loop',
+        desc: 'Customers who have not shopped in 45+ days. The AI detects the lapse and deploys targeted reactivation incentives.',
+        actions: [
+          'Automated <strong>"We Miss You" ₹50 Instant Voucher</strong> trigger',
+          'Zero-delivery-fee voucher sent via WhatsApp on day 46',
+          'Survey trigger asking if stock availability or service was an issue'
+        ],
+        size: '1,730 Families',
+        aov: '₹680 / Order',
+        gmv: '₹14.1 Lakhs/yr'
+      },
+      festivals: {
+        badge: 'Festival Surfers · 2,050 Families',
+        title: 'Lunisolar Seasonal Surge Capture',
+        desc: 'High-ticket buyers who spend heavily during Deepavali, Pongal, and wedding months for sweets, gifting packs, and cooking oil tins.',
+        actions: [
+          'Pre-festival <strong>Sweet Master Combo Early Access</strong>',
+          'Bulk ghee and cooking oil pre-booking discounts',
+          'Festive pooja and sweet gifting catalog broadcast'
+        ],
+        size: '2,050 Families',
+        aov: '₹1,650 / Order',
+        gmv: '₹40.5 Lakhs/yr'
+      }
+    };
+
+    let activeRfmKey = 'champions';
+
+    function selectRfmCohort(key) {
+      activeRfmKey = key;
+      const data = RFM_DATA[key];
+      if (!data) return;
+
+      document.querySelectorAll('.rfm-selector-card').forEach(c => {
+        c.className = 'rfm-selector-card p-5 rounded-2xl border-2 border-transparent bg-white shadow-card-soft hover:border-slate-300 cursor-pointer transition';
+      });
+      const activeEl = document.getElementById('rfm-card-' + key);
+      if (activeEl) {
+        activeEl.className = 'rfm-selector-card p-5 rounded-2xl border-2 border-gold-500 bg-white shadow-magnificent cursor-pointer transition';
+      }
+
+      document.getElementById('rfm-cohort-badge').textContent = data.badge;
+      document.getElementById('rfm-cohort-title').textContent = data.title;
+      document.getElementById('rfm-cohort-desc').textContent = data.desc;
+      document.getElementById('rfm-cohort-size').textContent = data.size;
+      document.getElementById('rfm-cohort-aov').textContent = data.aov;
+      document.getElementById('rfm-cohort-gmv').textContent = data.gmv;
+
+      const actUl = document.getElementById('rfm-cohort-actions');
+      if (actUl) {
+        actUl.innerHTML = data.actions.map(a => `
+          <li class="flex items-start gap-1.5"><i class="fa-solid fa-check text-emerald-600 text-[11px] mt-0.5"></i> <span>${a}</span></li>
+        `).join('');
+      }
+    }
+
+    function loadCohortIntoGenerator() {
+      const mapCohort = {
+        champions: 'weekly_groceries',
+        regulars: 'weekly_groceries',
+        at_risk: 'dead_stock',
+        festivals: 'festival_families'
+      };
+      const sel = document.getElementById('sim-cohort');
+      if (sel) {
+        sel.value = mapCohort[activeRfmKey] || 'weekly_groceries';
+        generateSimCampaign();
+      }
+      const genSec = document.getElementById('campaign-generator');
+      if (genSec) genSec.scrollIntoView({ behavior: 'smooth' });
     }
 
     // 5. Interactive ROI Calculator Logic

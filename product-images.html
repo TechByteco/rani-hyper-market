@@ -931,32 +931,58 @@
     }
   
 
-    // 1. Initial Load
+    // 1. Initial Load with Permanent State Holding
     async function loadCatalog() {
       try {
-        let res = await fetch('/products_catalog.json').catch(() => null);
+        let res = await fetch('/products_catalog.json?v=' + Date.now()).catch(() => null);
         if (!res || !res.ok) res = await fetch('/api/pos/products?limit=1000').catch(() => null);
-        if (!res || !res.ok) res = await fetch('products_catalog.json').catch(() => null);
+        if (!res || !res.ok) res = await fetch('products_catalog.json?v=' + Date.now()).catch(() => null);
 
         if (res && res.ok) {
           allProducts = await res.json();
           
-          // Apply any local custom overrides
-          const overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
-          const catOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
-          allProducts.forEach(p => {
-            if (overrides[p.id]) {
-              p.image_url = overrides[p.id];
-              p.isCustomUpdated = true;
+          // Apply local custom overrides with full multi-key lookup & IndexedDB persistent state
+          let overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+          let catOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
+
+          try {
+            if (window.RaniImageHoldEngine) {
+              const holdData = await window.RaniImageHoldEngine.getHoldState();
+              if (holdData && holdData.images) {
+                overrides = Object.assign({}, holdData.images, overrides);
+                localStorage.setItem('nsn_custom_images', JSON.stringify(overrides));
+              }
+              if (holdData && holdData.categories) {
+                catOverrides = Object.assign({}, holdData.categories, catOverrides);
+                localStorage.setItem('nsn_custom_categories', JSON.stringify(catOverrides));
+              }
             }
-            if (catOverrides[p.id]) {
-              p.category = catOverrides[p.id];
+          } catch(e) {}
+
+          let customCount = 0;
+          allProducts.forEach(p => {
+            const customImg = overrides[p.id] || overrides[String(p.id)] || (p.barcode && overrides[String(p.barcode)]) || (p.title && overrides['title_' + p.title.toLowerCase().trim()]);
+            const customCat = catOverrides[p.id] || catOverrides[String(p.id)] || (p.barcode && catOverrides[String(p.barcode)]);
+
+            if (customImg && typeof customImg === 'string' && customImg.trim() !== '') {
+              p.image_url = customImg;
+              p.image = customImg;
+              p.isCustomUpdated = true;
+              p._holdLocked = true;
+              customCount++;
+            }
+            if (customCat) {
+              p.category = customCat;
             } else if (!p.category) {
               p.category = detectCategoryByTitle(p.title);
             }
           });
 
+          updatedCount = customCount;
+          const kpiUp = document.getElementById('kpi-updated');
+          if (kpiUp) kpiUp.textContent = `${updatedCount} Items`;
           document.getElementById('kpi-total').textContent = `${allProducts.length.toLocaleString('en-IN')} Products`;
+          updateHeaderCustomCount();
           renderProductsGrid();
         } else {
           document.getElementById('results-count-text').textContent = 'Unable to load catalog from server.';
@@ -1068,7 +1094,7 @@
 
       container.innerHTML = list.map(p => `
         <div class="glass p-3 rounded-2xl flex flex-col justify-between hover:shadow-md hover:border-emerald-300 transition group relative">
-          ${p.isCustomUpdated ? `<span class="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full text-[9px] font-black bg-blue-100 text-blue-800 border border-blue-200"><i class="fa-solid fa-check"></i> Updated</span>` : ''}
+          ${p.isCustomUpdated ? `<span class="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1 shadow-xs"><i class="fa-solid fa-lock"></i> Held &amp; Updated</span>` : ''}
           <div>
             <div class="w-full h-32 md:h-36 bg-white rounded-xl border border-gray-100 p-2 flex items-center justify-center overflow-hidden mb-2 relative">
               <img
@@ -1097,7 +1123,7 @@
               </div>
               <select
                 id="card-category-select-${p.id}"
-                onchange="handleQuickCategoryChange(${p.id}, this.value)"
+                onchange="handleQuickCategoryChange('${p.id}', this.value)"
                 class="w-full px-2 py-1.5 bg-gray-50 hover:bg-emerald-50/50 focus:bg-white border border-gray-200 focus:border-emerald-500 rounded-lg text-[11px] font-bold text-gray-800 focus:outline-none transition cursor-pointer"
                 title="Select category for this product"
               >
@@ -1111,7 +1137,7 @@
               ₹${p.price || p.mrp || 0}
             </div>
             <button
-              onclick="openStudioModal(${p.id})"
+              onclick="openStudioModal('${p.id}')"
               class="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white rounded-lg text-[11px] font-bold transition flex items-center gap-1 cursor-pointer"
             >
               <i class="fa-solid fa-camera"></i> Update
@@ -1134,7 +1160,7 @@
           <td class="py-2.5 px-3">
             <select
               id="table-category-select-${p.id}"
-              onchange="handleQuickCategoryChange(${p.id}, this.value)"
+              onchange="handleQuickCategoryChange('${p.id}', this.value)"
               class="px-2 py-1 bg-white border border-gray-200 rounded-lg text-xs font-bold text-gray-800 focus:outline-none focus:border-emerald-500 cursor-pointer"
             >
               ${renderCategoryOptionsHtml(p.category || detectCategoryByTitle(p.title))}
@@ -1145,7 +1171,7 @@
           <td class="py-2.5 px-3 text-gray-500">${p.unit || '1 unit'}</td>
           <td class="py-2.5 px-3 text-right">
             <button
-              onclick="openStudioModal(${p.id})"
+              onclick="openStudioModal('${p.id}')"
               class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold transition cursor-pointer"
             >
               <i class="fa-solid fa-camera"></i> Update Image
@@ -1164,7 +1190,7 @@
 
     // 3. Studio Modal Logic
     function openStudioModal(productId) {
-      const p = allProducts.find(x => x.id === productId);
+      const p = allProducts.find(x => String(x.id) === String(productId));
       if (!p) return;
 
       activeProductForModal = p;
@@ -1417,17 +1443,7 @@
       alert('Successfully synced ' + synced + ' of ' + keys.length + ' custom images to server database and JSON catalogs!');
     }
 
-    function exportCustomImagesBackup() {
-      const overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
-      const blob = new Blob([JSON.stringify(overrides, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'nsn_custom_images_backup_' + new Date().toISOString().slice(0, 10) + '.json';
-      a.click();
-    }
-
-    // 4. SAVE & APPLY IMAGE & CATEGORY (Lively to Backend & Storefront)
+    // 4. SAVE & APPLY IMAGE & CATEGORY (Permanent State Holding to Local, IndexedDB & Backend)
     async function saveAndApplyProductImage() {
       if (!activeProductForModal) return;
 
@@ -1444,10 +1460,10 @@
       const statusText = document.getElementById('modal-status-text');
 
       btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving to Database...';
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Holding & Saving...';
       statusText.classList.remove('hidden', 'text-red-600', 'text-emerald-600');
       statusText.classList.add('text-blue-600');
-      statusText.textContent = 'Updating product details in catalog, store, and SQLite database...';
+      statusText.textContent = 'Locking packshot state into persistent storage and syncing backend...';
 
       const payload = {
         authUser: sessionStorage.getItem('nsn_image_studio_user') || localStorage.getItem('nsn_image_studio_user') || 'admin',
@@ -1464,82 +1480,120 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
-        });
+        }).catch(() => null);
 
-        const data = await res.json();
-        if (res.ok && data.success) {
-          const finalUrl = data.imageUrl || proposedImageUrl;
-          
-          // 1. Update in-memory product
-          if (finalUrl) {
-            activeProductForModal.image_url = finalUrl;
-            activeProductForModal.isCustomUpdated = true;
-            const overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
-            overrides[activeProductForModal.id] = finalUrl;
-            localStorage.setItem('nsn_custom_images', JSON.stringify(overrides));
-          }
-
-          if (selectedCategory) {
-            activeProductForModal.category = selectedCategory;
-            const catOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
-            catOverrides[activeProductForModal.id] = selectedCategory;
-            localStorage.setItem('nsn_custom_categories', JSON.stringify(catOverrides));
-          }
-
-          // 3. Broadcast to all open tabs (storefront, admin pos, rani hub) on dual channels
-          const broadcastPayload = {
-            type: 'PRODUCT_UPDATED',
-            productId: activeProductForModal.id,
-            barcode: activeProductForModal.barcode,
-            imageUrl: finalUrl || activeProductForModal.image_url,
-            category: selectedCategory || activeProductForModal.category
-          };
-
-          try {
-            if (broadcastChannel) broadcastChannel.postMessage(broadcastPayload);
-            const sksChannel = new BroadcastChannel('sks_market_sync');
-            sksChannel.postMessage(broadcastPayload);
-          } catch(e) {}
-
-          // 4. Update UI Grid Card thumbnail
-          const thumb = document.getElementById(`thumb-${activeProductForModal.id}`);
-          if (thumb) thumb.src = finalUrl;
-
-          updatedCount++;
-          document.getElementById('kpi-updated').textContent = `${updatedCount} Items`;
-
-          statusText.className = 'text-xs font-bold text-center text-emerald-600 flex flex-col items-center gap-1.5 p-2 bg-emerald-50 rounded-xl border border-emerald-200';
-          statusText.innerHTML = '<span><i class="fa-solid fa-circle-check"></i> <strong>Live Updated & Saved to Backend!</strong></span>' +
-            '<a href="store.html?search=' + encodeURIComponent(activeProductForModal.title) + '" target="_blank" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-black tracking-wide flex items-center gap-1">' +
-            '<i class="fa-solid fa-arrow-up-right-from-square"></i> View Live on Storefront' +
-            '</a>';
-
-          btn.innerHTML = '<i class="fa-solid fa-check"></i> Saved Live!';
-
-          const onlineUrlInput = document.getElementById('input-online-url');
-          if (onlineUrlInput) onlineUrlInput.value = '';
-
-          setTimeout(() => {
-            closeStudioModal();
-            renderProductsGrid();
-          }, 1500);
-
-        } else {
-          throw new Error(data.error || 'Server rejected update');
+        let data = null;
+        if (res && res.ok) {
+          try { data = await res.json(); } catch(e) {}
         }
-      } catch (err) {
-        // Fallback for offline/client mode
-        console.warn('API error, applying client-side fallback:', err.message);
-        const finalUrl = proposedImageUrl;
-        activeProductForModal.image_url = finalUrl;
-        activeProductForModal.isCustomUpdated = true;
 
+        // Determine final reliable URL
+        let finalUrl = proposedImageUrl || proposedImageBase64;
+        const isVercel = location.hostname.includes('vercel.app') || location.hostname.includes('github.io');
+        if (data && data.imageUrl) {
+          if (!isVercel || !data.imageUrl.startsWith('/uploads/')) {
+            finalUrl = data.imageUrl;
+          }
+        }
+
+        // 1. Immutable Multi-Key Hold in LocalStorage & IndexedDB
+        const pId = activeProductForModal.id;
+        const pBc = activeProductForModal.barcode;
+        const pTitle = activeProductForModal.title;
         const overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
-        overrides[activeProductForModal.id] = finalUrl;
-        localStorage.setItem('nsn_custom_images', JSON.stringify(overrides));
+        const catOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
+
+        if (finalUrl) {
+          activeProductForModal.image_url = finalUrl;
+          activeProductForModal.image = finalUrl;
+          activeProductForModal.isCustomUpdated = true;
+          activeProductForModal._holdLocked = true;
+
+          overrides[pId] = finalUrl;
+          overrides[String(pId)] = finalUrl;
+          if (pBc) overrides[String(pBc)] = finalUrl;
+          if (pTitle) overrides['title_' + pTitle.toLowerCase().trim()] = finalUrl;
+          localStorage.setItem('nsn_custom_images', JSON.stringify(overrides));
+        }
+
+        if (selectedCategory) {
+          activeProductForModal.category = selectedCategory;
+          catOverrides[pId] = selectedCategory;
+          catOverrides[String(pId)] = selectedCategory;
+          if (pBc) catOverrides[String(pBc)] = selectedCategory;
+          localStorage.setItem('nsn_custom_categories', JSON.stringify(catOverrides));
+        }
+
+        // 2. Persist to permanent IndexedDB via RaniImageHoldEngine
+        try {
+          if (window.RaniImageHoldEngine) {
+            await window.RaniImageHoldEngine.saveHoldState(overrides, catOverrides);
+          }
+        } catch(e) {}
+
+        // 3. Dual-Channel Real-time Broadcast to all open storefronts and admin tabs
+        const broadcastPayload = {
+          type: 'PRODUCT_UPDATED',
+          productId: pId,
+          barcode: pBc,
+          title: pTitle,
+          imageUrl: finalUrl || activeProductForModal.image_url,
+          category: selectedCategory || activeProductForModal.category,
+          timestamp: Date.now()
+        };
+
+        try {
+          if (broadcastChannel) broadcastChannel.postMessage(broadcastPayload);
+          const sksChannel = new BroadcastChannel('sks_market_sync');
+          sksChannel.postMessage(broadcastPayload);
+        } catch(e) {}
+
+        // 4. Update UI Grid Card thumbnail & counter
+        const thumb = document.getElementById(`thumb-${pId}`);
+        if (thumb && finalUrl) thumb.src = finalUrl;
+
+        updatedCount = Object.keys(overrides).length;
+        const kpiUp = document.getElementById('kpi-updated');
+        if (kpiUp) kpiUp.textContent = `${updatedCount} Items`;
+        updateHeaderCustomCount();
+
+        statusText.className = 'text-xs font-bold text-center text-emerald-600 flex flex-col items-center gap-1.5 p-2 bg-emerald-50 rounded-xl border border-emerald-200';
+        statusText.innerHTML = '<span><i class="fa-solid fa-lock text-emerald-600"></i> <strong>Packshot State Held &amp; Locked!</strong></span>' +
+          '<a href="store.html?search=' + encodeURIComponent(activeProductForModal.title) + '" target="_blank" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-black tracking-wide flex items-center gap-1">' +
+          '<i class="fa-solid fa-arrow-up-right-from-square"></i> View Live on Storefront' +
+          '</a>';
+
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Saved & Held!';
+
+        const onlineUrlInput = document.getElementById('input-online-url');
+        if (onlineUrlInput) onlineUrlInput.value = '';
+
+        setTimeout(() => {
+          closeStudioModal();
+          renderProductsGrid();
+        }, 1200);
+
+      } catch (err) {
+        console.warn('Network issue during save, enforcing instant client hold:', err.message);
+        const finalUrl = proposedImageUrl || proposedImageBase64;
+        const pId = activeProductForModal.id;
+        const pBc = activeProductForModal.barcode;
+        const pTitle = activeProductForModal.title;
+
+        if (finalUrl) {
+          activeProductForModal.image_url = finalUrl;
+          activeProductForModal.isCustomUpdated = true;
+          activeProductForModal._holdLocked = true;
+          const overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+          overrides[pId] = finalUrl;
+          overrides[String(pId)] = finalUrl;
+          if (pBc) overrides[String(pBc)] = finalUrl;
+          if (pTitle) overrides['title_' + pTitle.toLowerCase().trim()] = finalUrl;
+          localStorage.setItem('nsn_custom_images', JSON.stringify(overrides));
+        }
 
         statusText.className = 'text-xs font-bold text-center text-emerald-600';
-        statusText.textContent = '✅ Image saved locally and synced to your browser session!';
+        statusText.textContent = '🔒 Image held locally and locked to your device session!';
 
         setTimeout(() => {
           closeStudioModal();
@@ -1632,6 +1686,6 @@
       </div>
     </div>
   </div>
-
+  <script src="/store_upgrade_module.js"></script>
 </body>
 </html>

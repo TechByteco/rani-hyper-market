@@ -44,6 +44,78 @@ const RaniCatalogDB = {
 };
 
 /* ════════════════════════════════════════════════════════════════
+   🔒 1B. UNBREAKABLE IMAGE & CATEGORY STATE HOLD ENGINE
+   ════════════════════════════════════════════════════════════════ */
+const RaniImageHoldEngine = {
+  dbName: 'RaniImageHoldDB_v1',
+  storeName: 'custom_state',
+  _openDB: function() {
+    return new Promise((resolve) => {
+      if (typeof window === 'undefined' || !window.indexedDB) return resolve(null);
+      try {
+        const req = indexedDB.open(this.dbName, 1);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(this.storeName)) {
+            db.createObjectStore(this.storeName, { keyPath: 'key' });
+          }
+        };
+        req.onsuccess = (e) => resolve(e.target.result);
+        req.onerror = () => resolve(null);
+      } catch(e) { resolve(null); }
+    });
+  },
+  getHoldState: async function() {
+    let localImgs = {};
+    let localCats = {};
+    try {
+      localImgs = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+      localCats = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
+    } catch(e) {}
+
+    try {
+      const db = await this._openDB();
+      if (!db) return { images: localImgs, categories: localCats };
+      return new Promise((resolve) => {
+        const tx = db.transaction(this.storeName, 'readonly');
+        const store = tx.objectStore(this.storeName);
+        const req = store.get('bundle');
+        req.onsuccess = () => {
+          const res = req.result ? req.result.data : null;
+          const mergedImgs = Object.assign({}, res?.images || {}, localImgs);
+          const mergedCats = Object.assign({}, res?.categories || {}, localCats);
+          resolve({ images: mergedImgs, categories: mergedCats });
+        };
+        req.onerror = () => resolve({ images: localImgs, categories: localCats });
+      });
+    } catch(e) {
+      return { images: localImgs, categories: localCats };
+    }
+  },
+  saveHoldState: async function(images, categories) {
+    try {
+      if (images) {
+        localStorage.setItem('nsn_custom_images', JSON.stringify(images));
+        if (typeof window !== 'undefined') window._customImgCache = images;
+      }
+      if (categories) {
+        localStorage.setItem('nsn_custom_categories', JSON.stringify(categories));
+      }
+      const db = await this._openDB();
+      if (!db) return;
+      const tx = db.transaction(this.storeName, 'readwrite');
+      const store = tx.objectStore(this.storeName);
+      store.put({ key: 'bundle', data: { images, categories }, timestamp: Date.now() });
+    } catch(e) {}
+  }
+};
+
+if (typeof window !== 'undefined') {
+  window.RaniCatalogDB = RaniCatalogDB;
+  window.RaniImageHoldEngine = RaniImageHoldEngine;
+}
+
+/* ════════════════════════════════════════════════════════════════
    📱 2. IN-STORE MOBILE BARCODE SCANNER CONTROLLER
    ════════════════════════════════════════════════════════════════ */
 let scannerStream = null;

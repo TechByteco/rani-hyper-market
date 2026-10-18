@@ -268,7 +268,7 @@ if (reqPath === '/api/pos/status') {
     // ----------------------------------------------------
     if (reqPath === '/api/products/update-image' && req.method === 'POST') {
       const body = await getBody();
-      const { authUser, authPass, productId, barcode, imageUrl, imageBase64 } = body;
+      const { authUser, authPass, productId, barcode, imageUrl, imageBase64, category } = body;
 
       // Security check for updating images
       const isValidAdmin = (authUser && authUser.toLowerCase() === 'admin' && authPass === 'admin123') ||
@@ -302,8 +302,8 @@ if (reqPath === '/api/pos/status') {
         }
       }
 
-      if (!finalUrl) {
-        return sendJson(400, { error: 'No imageUrl or imageBase64 provided' });
+      if (!finalUrl && !category) {
+        return sendJson(400, { error: 'No imageUrl, imageBase64, or category provided' });
       }
 
       // Update JSON catalogs
@@ -328,9 +328,15 @@ if (reqPath === '/api/pos/status') {
               for (const item of data) {
                 if ((productId && String(item.id) === String(productId)) ||
                     (barcode && String(item.barcode) === String(barcode))) {
-                  item.image_url = finalUrl;
-                  item.image = finalUrl;
-                  if (item.canonical_record) item.canonical_record.image_url = finalUrl;
+                  if (finalUrl) {
+                    item.image_url = finalUrl;
+                    item.image = finalUrl;
+                    if (item.canonical_record) item.canonical_record.image_url = finalUrl;
+                  }
+                  if (category) {
+                    item.category = category;
+                    if (item.canonical_record) item.canonical_record.category = category;
+                  }
                   modified = true;
                   updatedInCatalog = true;
                   if (!matchedItem) matchedItem = { id: item.id, title: item.title, barcode: item.barcode };

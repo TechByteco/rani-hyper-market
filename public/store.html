@@ -3080,12 +3080,27 @@
       applyStoreCustomizations();
       window.addEventListener('storage', () => { applyStoreCustomizations(); });
 
-      // Immediate 0ms first render with preloaded initial products
+      // Immediate 0ms first render with preloaded initial products (with instant custom packshot hold)
       if (Array.isArray(INITIAL_PRODUCTS) && INITIAL_PRODUCTS.length > 0) {
-        allProducts = INITIAL_PRODUCTS.map(p => ({
-          ...p,
-          mrp: parseFloat(p.mrp || (p.price * 1.25))
-        }));
+        let imageOverrides = {};
+        let categoryOverrides = {};
+        try {
+          imageOverrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+          categoryOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
+        } catch(e) {}
+
+        allProducts = INITIAL_PRODUCTS.map(p => {
+          const customImg = imageOverrides[p.id] || imageOverrides[String(p.id)] || (p.barcode && imageOverrides[String(p.barcode)]) || (p.title && imageOverrides['title_' + p.title.toLowerCase().trim()]);
+          const customCat = categoryOverrides[p.id] || categoryOverrides[String(p.id)];
+          return {
+            ...p,
+            image_url: customImg || p.image_url,
+            image: customImg || p.image || p.image_url,
+            category: customCat || p.category,
+            mrp: parseFloat(p.mrp || (p.price * 1.25)),
+            _holdLocked: Boolean(customImg)
+          };
+        });
         currentFilteredList = allProducts;
         displayedCount = BATCH_SIZE;
         renderProductsList();
@@ -3145,34 +3160,44 @@
     async function loadStoreProducts() {
       const grid = document.getElementById('product-grid');
       let products = [];
-      // ⚡ STEP 0: INSTANT OFFLINE LOAD FROM INDEXEDDB (<20ms)
+
+      // ⚡ STEP 0: INSTANT OFFLINE LOAD FROM INDEXEDDB (<20ms) WITH PERSISTENT HOLD LOCK
       try {
         if (typeof RaniCatalogDB !== 'undefined') {
           const cached = await RaniCatalogDB.getCatalog();
-          if (cached && Array.isArray(cached) && cached.length > 0 && allProducts.length === 0) {
+          if (cached && Array.isArray(cached) && cached.length > (allProducts.length <= 60 ? 60 : 0)) {
             const localMrps = JSON.parse(localStorage.getItem('nsn_product_mrps') || '{}');
-            const imageOverrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
-            const categoryOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
+            let imageOverrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+            let categoryOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
+
+            try {
+              if (window.RaniImageHoldEngine) {
+                const holdData = await window.RaniImageHoldEngine.getHoldState();
+                if (holdData?.images) imageOverrides = Object.assign({}, holdData.images, imageOverrides);
+                if (holdData?.categories) categoryOverrides = Object.assign({}, holdData.categories, categoryOverrides);
+              }
+            } catch(e) {}
+
             allProducts = cached.map(p => {
-              const updatedImg = imageOverrides[p.id] || imageOverrides[String(p.id)];
-              const updatedCat = categoryOverrides[p.id] || categoryOverrides[String(p.id)];
+              const customImg = imageOverrides[p.id] || imageOverrides[String(p.id)] || (p.barcode && imageOverrides[String(p.barcode)]) || (p.title && imageOverrides['title_' + p.title.toLowerCase().trim()]);
+              const customCat = categoryOverrides[p.id] || categoryOverrides[String(p.id)];
               return {
                 ...p,
-                image_url: updatedImg || p.image_url,
-                image: updatedImg || p.image || p.image_url,
-                category: updatedCat || p.category,
-                mrp: parseFloat(p.mrp || localMrps[p.id] || (p.price * 1.25))
+                image_url: customImg || p.image_url,
+                image: customImg || p.image || p.image_url,
+                category: customCat || p.category,
+                mrp: parseFloat(p.mrp || localMrps[p.id] || (p.price * 1.25)),
+                _holdLocked: Boolean(customImg)
               };
             });
             currentFilteredList = allProducts;
             displayedCount = BATCH_SIZE;
             renderProductsList();
             syncAllCardSteppers();
-            console.log('⚡ Loaded ' + allProducts.length + ' products instantly from IndexedDB cache!');
+            console.log('⚡ Loaded ' + allProducts.length + ' products instantly from IndexedDB cache with permanent image hold lock!');
           }
         }
       } catch(e) {}
-
 
       // Multi-source resilient catalog fetch with absolute paths
       const sources = [
@@ -3209,19 +3234,29 @@
         }
       } catch(e) {}
 
-      // Apply custom product image & category overrides from Image Studio
+      // Apply custom product image & category overrides from Image Studio with unbreakable hold lock
       try {
-        const imageOverrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
-        const categoryOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
-        products.forEach(p => {
-          const updatedImg = imageOverrides[p.id] || imageOverrides[String(p.id)];
-          const updatedCat = categoryOverrides[p.id] || categoryOverrides[String(p.id)];
-          if (updatedImg) {
-            p.image_url = updatedImg;
-            p.image = updatedImg;
+        let imageOverrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+        let categoryOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
+
+        try {
+          if (window.RaniImageHoldEngine) {
+            const holdData = await window.RaniImageHoldEngine.getHoldState();
+            if (holdData?.images) imageOverrides = Object.assign({}, holdData.images, imageOverrides);
+            if (holdData?.categories) categoryOverrides = Object.assign({}, holdData.categories, categoryOverrides);
           }
-          if (updatedCat) {
-            p.category = updatedCat;
+        } catch(e) {}
+
+        products.forEach(p => {
+          const customImg = imageOverrides[p.id] || imageOverrides[String(p.id)] || (p.barcode && imageOverrides[String(p.barcode)]) || (p.title && imageOverrides['title_' + p.title.toLowerCase().trim()]);
+          const customCat = categoryOverrides[p.id] || categoryOverrides[String(p.id)];
+          if (customImg && typeof customImg === 'string' && customImg.trim() !== '') {
+            p.image_url = customImg;
+            p.image = customImg;
+            p._holdLocked = true;
+          }
+          if (customCat) {
+            p.category = customCat;
           }
         });
       } catch(e) {}
@@ -3287,7 +3322,7 @@
       renderProductsList();
       
       syncAllCardSteppers();
-      // Silently save freshest catalog into IndexedDB
+      // Silently save freshest catalog with locked custom images into IndexedDB
       try {
         if (typeof RaniCatalogDB !== 'undefined' && products && products.length > 0) {
           RaniCatalogDB.saveCatalog(products);
@@ -3295,13 +3330,22 @@
       } catch(e) {}
     }
 
-    function getRelevantProductImage(title, existingUrl, productId) {
-      // 1. HIGHEST & EXCLUSIVE USER PRIORITY: Custom image updated via Image Studio
+    function getRelevantProductImage(title, existingUrl, productId, barcode) {
+      // 1. HIGHEST & EXCLUSIVE USER PRIORITY: Custom image updated via Image Studio (Held state)
       try {
-        if (productId) {
-          const customOverrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
-          const ov = customOverrides[productId] || customOverrides[String(productId)];
-          if (ov && typeof ov === 'string' && ov.trim() !== '' && !ov.startsWith('/uploads/')) return ov;
+        const customOverrides = window._customImgCache || JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+        window._customImgCache = customOverrides;
+
+        let ov = null;
+        if (productId) ov = customOverrides[productId] || customOverrides[String(productId)];
+        if (!ov && barcode) ov = customOverrides[String(barcode)];
+        if (!ov && title) ov = customOverrides['title_' + title.toLowerCase().trim()];
+
+        if (ov && typeof ov === 'string' && ov.trim() !== '') {
+          const isVercel = location.hostname.includes('vercel.app') || location.hostname.includes('github.io');
+          if (!isVercel || !ov.startsWith('/uploads/')) {
+            return ov;
+          }
         }
       } catch(e) {}
 
@@ -3309,7 +3353,6 @@
       if (existingUrl && 
           typeof existingUrl === 'string' &&
           existingUrl.trim() !== '' &&
-          !existingUrl.startsWith('/uploads/') &&
           !existingUrl.includes('apollo247') && 
           !existingUrl.includes('aas0010_1') && 
           !existingUrl.includes('placeholder')) {
@@ -5737,7 +5780,12 @@
         Object.assign(curCats, cats);
         localStorage.setItem('nsn_custom_images', JSON.stringify(curImgs));
         localStorage.setItem('nsn_custom_categories', JSON.stringify(curCats));
-        alert('Applied ' + Object.keys(imgs).length + ' custom images successfully!');
+        try {
+          if (window.RaniImageHoldEngine) {
+            window.RaniImageHoldEngine.saveHoldState(curImgs, curCats);
+          }
+        } catch(e) {}
+        alert('Applied and permanently locked ' + Object.keys(imgs).length + ' custom packshot images into this browser!');
         document.getElementById('store-import-modal').classList.add('hidden');
         location.reload();
       } catch(e) {
@@ -5798,12 +5846,60 @@
             const bc = new BroadcastChannel(chName);
             bc.onmessage = (event) => {
               if (event.data && (event.data.type === 'PRODUCT_UPDATED' || event.data.type === 'PRODUCT_CATEGORY_UPDATED' || event.data.type === 'PRODUCT_IMAGE_UPDATED')) {
-                const { productId, imageUrl, category } = event.data;
-                const p = (typeof allProducts !== 'undefined') ? allProducts.find(x => String(x.id) === String(productId)) : null;
+                const { productId, barcode, title, imageUrl, category } = event.data;
+                
+                // 1. Hold in localStorage & window cache
+                if (imageUrl) {
+                  try {
+                    const overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+                    if (productId) {
+                      overrides[productId] = imageUrl;
+                      overrides[String(productId)] = imageUrl;
+                    }
+                    if (barcode) overrides[String(barcode)] = imageUrl;
+                    if (title) overrides['title_' + title.toLowerCase().trim()] = imageUrl;
+                    localStorage.setItem('nsn_custom_images', JSON.stringify(overrides));
+                    window._customImgCache = overrides;
+
+                    if (window.RaniImageHoldEngine) {
+                      const catOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
+                      window.RaniImageHoldEngine.saveHoldState(overrides, catOverrides);
+                    }
+                  } catch(e) {}
+                }
+
+                if (category) {
+                  try {
+                    const catOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
+                    if (productId) {
+                      catOverrides[productId] = category;
+                      catOverrides[String(productId)] = category;
+                    }
+                    if (barcode) catOverrides[String(barcode)] = category;
+                    localStorage.setItem('nsn_custom_categories', JSON.stringify(catOverrides));
+                  } catch(e) {}
+                }
+
+                // 2. Update matching in-memory product
+                const p = (typeof allProducts !== 'undefined') ? allProducts.find(x => 
+                  (productId && String(x.id) === String(productId)) ||
+                  (barcode && String(x.barcode) === String(barcode)) ||
+                  (title && x.title && x.title.toLowerCase().trim() === title.toLowerCase().trim())
+                ) : null;
+
                 if (p) {
-                  if (imageUrl) { p.image_url = imageUrl; p.image = imageUrl; }
+                  if (imageUrl) { p.image_url = imageUrl; p.image = imageUrl; p._holdLocked = true; }
                   if (category) p.category = category;
+                  
+                  // 3. Persist to IndexedDB
+                  try {
+                    if (typeof RaniCatalogDB !== 'undefined' && allProducts && allProducts.length > 0) {
+                      RaniCatalogDB.saveCatalog(allProducts);
+                    }
+                  } catch(e) {}
+
                   if (typeof filterProducts === 'function') filterProducts();
+                  else if (typeof renderProductsList === 'function') renderProductsList();
                 }
               }
             };

@@ -2698,6 +2698,28 @@
     </div>
   </div>
 
+  
+  <!-- QUICK IMPORT STUDIO PACKSHOTS MODAL -->
+  <div id="store-import-modal" class="fixed inset-0 z-50 modal-overlay hidden flex items-center justify-center p-4">
+    <div class="bg-white border border-gray-200 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+        <h3 class="text-sm font-black text-gray-900 flex items-center gap-2">
+          <i class="fa-solid fa-cloud-arrow-down text-emerald-600"></i> Sync Studio Packshots
+        </h3>
+        <button onclick="document.getElementById('store-import-modal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <p class="text-xs text-gray-500">
+        If you updated packshots on another device using Image Studio, paste the backup JSON here to display them immediately on this phone/computer:
+      </p>
+      <textarea id="store-import-json-text" rows="4" placeholder='Paste backup JSON here...' class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:border-emerald-500"></textarea>
+      <button type="button" onclick="applyStoreStudioJson()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition shadow-xs cursor-pointer">
+        Sync &amp; Apply Images Now
+      </button>
+    </div>
+  </div>
+  
   <nav id="mobile-bottom-dock" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-gray-200/90 shadow-2xl px-3 py-2 flex items-center justify-around">
     <a href="/" class="flex flex-col items-center gap-0.5 text-gray-500 hover:text-emerald-700 font-bold text-[10px] active:scale-95 transition no-underline">
       <i class="fa-solid fa-circle-info text-base text-emerald-600"></i>
@@ -3129,10 +3151,19 @@
           const cached = await RaniCatalogDB.getCatalog();
           if (cached && Array.isArray(cached) && cached.length > 0 && allProducts.length === 0) {
             const localMrps = JSON.parse(localStorage.getItem('nsn_product_mrps') || '{}');
-            allProducts = cached.map(p => ({
-              ...p,
-              mrp: parseFloat(p.mrp || localMrps[p.id] || (p.price * 1.25))
-            }));
+            const imageOverrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+            const categoryOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
+            allProducts = cached.map(p => {
+              const updatedImg = imageOverrides[p.id] || imageOverrides[String(p.id)];
+              const updatedCat = categoryOverrides[p.id] || categoryOverrides[String(p.id)];
+              return {
+                ...p,
+                image_url: updatedImg || p.image_url,
+                image: updatedImg || p.image || p.image_url,
+                category: updatedCat || p.category,
+                mrp: parseFloat(p.mrp || localMrps[p.id] || (p.price * 1.25))
+              };
+            });
             currentFilteredList = allProducts;
             displayedCount = BATCH_SIZE;
             renderProductsList();
@@ -3183,12 +3214,14 @@
         const imageOverrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
         const categoryOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
         products.forEach(p => {
-          if (imageOverrides[p.id]) {
-            p.image_url = imageOverrides[p.id];
-            p.image = imageOverrides[p.id];
+          const updatedImg = imageOverrides[p.id] || imageOverrides[String(p.id)];
+          const updatedCat = categoryOverrides[p.id] || categoryOverrides[String(p.id)];
+          if (updatedImg) {
+            p.image_url = updatedImg;
+            p.image = updatedImg;
           }
-          if (categoryOverrides[p.id]) {
-            p.category = categoryOverrides[p.id];
+          if (updatedCat) {
+            p.category = updatedCat;
           }
         });
       } catch(e) {}
@@ -3267,8 +3300,8 @@
       try {
         if (productId) {
           const customOverrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
-          if (customOverrides[productId]) return customOverrides[productId];
-          if (customOverrides[String(productId)]) return customOverrides[String(productId)];
+          const ov = customOverrides[productId] || customOverrides[String(productId)];
+          if (ov && typeof ov === 'string' && ov.trim() !== '' && !ov.startsWith('/uploads/')) return ov;
         }
       } catch(e) {}
 
@@ -3276,6 +3309,7 @@
       if (existingUrl && 
           typeof existingUrl === 'string' &&
           existingUrl.trim() !== '' &&
+          !existingUrl.startsWith('/uploads/') &&
           !existingUrl.includes('apollo247') && 
           !existingUrl.includes('aas0010_1') && 
           !existingUrl.includes('placeholder')) {
@@ -3840,7 +3874,7 @@
             <div class="nhm-card-body flex-1">
               <!-- THUMBNAIL BOX (NATIONAL HYPER MART STYLE) -->
               <div class="nhm-thumb-box" onclick="openProductQuickView('${p.id}')">
-                <img src="${finalImg}" alt="${p.title}" loading="lazy" class="nhm-thumb-img">
+                <img src="${finalImg}" alt="${p.title}" loading="lazy" onerror="this.onerror=null;this.src='https://images.openfoodfacts.org/images/products/890/103/053/5895/front_en.3.400.jpg';" class="nhm-thumb-img">
 
                 <!-- DOUBLE-SIDED BACK IMAGE (fades in on hover, NHM style) -->
                 ${(() => { const backImg = getDoubleSidedBack(p.title); return backImg ? `<span class="nhm-second-img" style="background-image:url('${backImg}')"></span><span class="nhm-double-badge">↕ See Other Side</span>` : ''; })()}
@@ -5689,6 +5723,29 @@
     }
 
   
+    
+    function applyStoreStudioJson() {
+      const val = document.getElementById('store-import-json-text').value.trim();
+      if (!val) return alert('Please paste JSON first');
+      try {
+        const parsed = JSON.parse(val);
+        let imgs = parsed.images ? parsed.images : parsed;
+        let cats = parsed.categories ? parsed.categories : {};
+        const curImgs = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+        const curCats = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
+        Object.assign(curImgs, imgs);
+        Object.assign(curCats, cats);
+        localStorage.setItem('nsn_custom_images', JSON.stringify(curImgs));
+        localStorage.setItem('nsn_custom_categories', JSON.stringify(curCats));
+        alert('Applied ' + Object.keys(imgs).length + ' custom images successfully!');
+        document.getElementById('store-import-modal').classList.add('hidden');
+        location.reload();
+      } catch(e) {
+        alert('Invalid JSON: ' + e.message);
+      }
+    }
+  
+
     // Handle URL query parameters for direct brand/category/search routing
     (function handleUrlSearchRouting() {
       try {

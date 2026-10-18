@@ -162,11 +162,8 @@
         <button onclick="lockImageStudio()" class="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-bold rounded-xl flex items-center gap-1.5 transition cursor-pointer" title="Lock Studio and Require Sign In">
           <i class="fa-solid fa-lock text-red-500"></i> Lock Studio
         </button>
-        <button onclick="syncAllOverridesToBackend()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold rounded-xl flex items-center gap-1.5 transition cursor-pointer shadow-xs" title="Sync all custom images directly to server catalog & database">
-          <i class="fa-solid fa-cloud-arrow-up text-emerald-600"></i> Sync All to Backend
-        </button>
-        <button onclick="exportCustomImagesBackup()" class="px-3 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 text-xs font-bold rounded-xl flex items-center gap-1.5 transition cursor-pointer shadow-xs" title="Export custom images JSON backup">
-          <i class="fa-solid fa-download text-gray-500"></i> Export
+        <button onclick="openTransferBackupModal()" class="px-3.5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white border border-purple-400/40 text-xs font-black rounded-xl flex items-center gap-1.5 shadow-md shadow-purple-600/20 transition cursor-pointer" title="Export, Copy, or Transfer your updated images to Mobile or Developer">
+          <i class="fa-solid fa-cloud-arrow-up text-amber-300"></i> <span id="header-custom-count-badge">Transfer / Export Images</span>
         </button>
         <button onclick="document.getElementById('quick-scan-modal').classList.remove('hidden')" class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-md shadow-emerald-600/20 transition cursor-pointer">
           <i class="fa-solid fa-barcode"></i> Scan Barcode
@@ -833,6 +830,107 @@
       document.getElementById('protection-gate-screen').classList.remove('hidden');
     }
   
+    
+    function updateHeaderCustomCount() {
+      try {
+        const overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+        const count = Object.keys(overrides).length;
+        const badge = document.getElementById('header-custom-count-badge');
+        if (badge) {
+          badge.textContent = count > 0 ? `Transfer / Export Images (${count})` : 'Transfer / Export Images';
+        }
+        const statusEl = document.getElementById('transfer-status-count');
+        if (statusEl) {
+          statusEl.textContent = `${count} Custom Images Saved in this Browser`;
+        }
+      } catch(e) {}
+    }
+
+    function openTransferBackupModal() {
+      updateHeaderCustomCount();
+      document.getElementById('transfer-backup-modal').classList.remove('hidden');
+    }
+
+    function closeTransferBackupModal() {
+      document.getElementById('transfer-backup-modal').classList.add('hidden');
+    }
+
+    function copyCustomImagesJson() {
+      try {
+        const imgOverrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+        const catOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
+        const bundle = { images: imgOverrides, categories: catOverrides };
+        const jsonStr = JSON.stringify(bundle, null, 2);
+        navigator.clipboard.writeText(jsonStr);
+
+        const btn = document.getElementById('btn-copy-json');
+        if (btn) {
+          btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+          setTimeout(() => {
+            btn.innerHTML = '<i class="fa-solid fa-copy"></i> <span>Copy JSON</span>';
+          }, 2000);
+        }
+      } catch(e) {
+        alert('Unable to copy to clipboard: ' + e.message);
+      }
+    }
+
+    function exportCustomImagesBackup() {
+      const imgOverrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+      const catOverrides = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
+      const bundle = { images: imgOverrides, categories: catOverrides };
+      const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'nsn_custom_images_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+      a.click();
+    }
+
+    function handleImportJsonFile(e) {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        document.getElementById('transfer-paste-json').value = evt.target.result;
+        applyPastedJsonBackup();
+      };
+      reader.readAsText(file);
+    }
+
+    function applyPastedJsonBackup() {
+      const val = document.getElementById('transfer-paste-json').value.trim();
+      if (!val) return alert('Please paste JSON content first.');
+      try {
+        const parsed = JSON.parse(val);
+        let importedImgs = {};
+        let importedCats = {};
+
+        if (parsed.images) {
+          importedImgs = parsed.images;
+          importedCats = parsed.categories || {};
+        } else {
+          importedImgs = parsed;
+        }
+
+        const currentImgs = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');
+        const currentCats = JSON.parse(localStorage.getItem('nsn_custom_categories') || '{}');
+
+        Object.assign(currentImgs, importedImgs);
+        Object.assign(currentCats, importedCats);
+
+        localStorage.setItem('nsn_custom_images', JSON.stringify(currentImgs));
+        localStorage.setItem('nsn_custom_categories', JSON.stringify(currentCats));
+
+        alert('Successfully imported ' + Object.keys(importedImgs).length + ' product images into this browser!');
+        closeTransferBackupModal();
+        loadCatalog();
+      } catch(err) {
+        alert('Invalid JSON: ' + err.message);
+      }
+    }
+  
+
     // 1. Initial Load
     async function loadCatalog() {
       try {
@@ -1468,5 +1566,72 @@
     // Initial Start
     window.addEventListener('DOMContentLoaded', () => { checkProtectionGate(); loadCatalog(); });
   </script>
+
+  <!-- ============================================================ -->
+  <!-- MODAL: TRANSFER, EXPORT & SYNC CUSTOM IMAGES TO ALL DEVICES  -->
+  <!-- ============================================================ -->
+  <div id="transfer-backup-modal" class="fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-3 md:p-6 hidden">
+    <div class="bg-white border border-gray-200 rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-sm font-black">
+            <i class="fa-solid fa-share-nodes"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-black text-gray-900">Transfer &amp; Publish Studio Updates</h3>
+            <p class="text-[11px] text-gray-400">Sync custom images &amp; categories across devices and production</p>
+          </div>
+        </div>
+        <button onclick="closeTransferBackupModal()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Current Status Banner -->
+      <div class="p-3.5 bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-2xl flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-black uppercase tracking-wider text-purple-700">Studio Local Cache</span>
+          <div class="text-base font-black text-gray-900" id="transfer-status-count">0 Custom Images Saved</div>
+        </div>
+        <button type="button" onclick="copyCustomImagesJson()" id="btn-copy-json" class="px-3.5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-black shadow-sm transition flex items-center gap-1.5 cursor-pointer">
+          <i class="fa-solid fa-copy"></i> <span>Copy JSON</span>
+        </button>
+      </div>
+
+      <!-- Action 1: Export JSON File -->
+      <div class="space-y-2">
+        <label class="block text-xs font-bold text-gray-700">1. Download or Share Backup</label>
+        <div class="flex gap-2">
+          <button type="button" onclick="exportCustomImagesBackup()" class="flex-1 py-2.5 bg-gray-900 hover:bg-black text-white text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-xs">
+            <i class="fa-solid fa-download text-emerald-400"></i> Download Backup File (.json)
+          </button>
+        </div>
+        <p class="text-[11px] text-gray-500 leading-relaxed">
+          💡 <strong>To publish permanently for all customers on Vercel:</strong> Click <b>Copy JSON</b> above and paste it in chat. We will bake your custom images directly into the master catalog!
+        </p>
+      </div>
+
+      <!-- Action 2: Import Backup JSON -->
+      <div class="space-y-2 pt-2 border-t border-gray-100">
+        <label class="block text-xs font-bold text-gray-700">2. Import / Paste Backup JSON (from other device)</label>
+        <textarea
+          id="transfer-paste-json"
+          rows="3"
+          placeholder='Paste JSON here (e.g. {"9": "https://...", "10": "https://..."})'
+          class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:border-purple-500"
+        ></textarea>
+        <div class="flex items-center justify-between gap-2">
+          <input type="file" id="import-json-file" accept=".json" onchange="handleImportJsonFile(event)" class="hidden">
+          <button type="button" onclick="document.getElementById('import-json-file').click()" class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold rounded-xl transition cursor-pointer">
+            <i class="fa-solid fa-file-arrow-up"></i> Choose File
+          </button>
+          <button type="button" onclick="applyPastedJsonBackup()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition shadow-xs cursor-pointer">
+            <i class="fa-solid fa-circle-check"></i> Apply to this Browser
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

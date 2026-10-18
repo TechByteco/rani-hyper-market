@@ -1,0 +1,13 @@
+{
+  "localStorage": {
+    "rzp_device_id": "1.d5fe71b81eb4b09a6954846bff077e14e9cdf98c.1792353040114.94818663",
+    "rzp_checkout_anon_id": "f5f8b0ebce31477eb8cd433924a87f0b"
+  },
+  "holdDB": null,
+  "databases": [
+    {
+      "name": "RaniStoreCatalogDB_v1",
+      "version": 1
+    }
+  ]
+}

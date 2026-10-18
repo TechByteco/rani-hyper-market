@@ -1,0 +1,90 @@
+[
+  {
+    "kw": "Eno Lemon",
+    "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMWLBlsZvHLtuegD3kkPf8Yf-xonvTZ9IdkFlD0kpBZA&s=10",
+    "size": "39152",
+    "matchingProductIds": [
+      26,
+      24022
+    ],
+    "sampleMatch": "5G R Eno Lemon"
+  },
+  {
+    "kw": "Idiyappam",
+    "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjxuuFVTKGdDPruo0aJ-EjUK94zB_nF4NinLyZZELEmQ&s=10",
+    "size": "41472",
+    "matchingProductIds": [
+      45,
+      15414,
+      22179,
+      24988,
+      25309,
+      25936
+    ],
+    "sampleMatch": "500G R Anil Idiyappam Mavu"
+  },
+  {
+    "kw": "Sandalum Agarbathi",
+    "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkT5Mbhc0S_Et41wIYXuPKa-B7sfTwzs5PyiT4Fp3u1w&s=10",
+    "size": "10768",
+    "matchingProductIds": [
+      59
+    ],
+    "sampleMatch": "10N R Sandalum Agarbathi Cones"
+  },
+  {
+    "kw": "Quaker Oats",
+    "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwJRNyghjOI_UYALFkU5zcA88mi9SXqAV7ICXFxcfD-N&s=10",
+    "size": "42809",
+    "matchingProductIds": [
+      61,
+      7172
+    ],
+    "sampleMatch": "400G R Quaker Oats (R)"
+  },
+  {
+    "kw": "Lamp Oil",
+    "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyWNSmSzET4Aa8vENXrmg8m8AMxHExpxHjUXDuipNcBV&s=10",
+    "size": "17658",
+    "matchingProductIds": [
+      63,
+      11394,
+      16994,
+      17525,
+      19179,
+      20531,
+      23049,
+      23050,
+      23314,
+      23783,
+      23964,
+      24103,
+      24255,
+      24257,
+      24307,
+      25255,
+      25256,
+      25387,
+      25983
+    ],
+    "sampleMatch": "500Ml R Dheepam Lamp Oil"
+  },
+  {
+    "kw": "Vaseline Aloe",
+    "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcVydGEE5pwKWBp9uWL6fUMlj6tJyFDE1YFhq4k833yR&s=10",
+    "size": "27906",
+    "matchingProductIds": [
+      161
+    ],
+    "sampleMatch": "100Ml R Vaseline Aloe Fresh"
+  },
+  {
+    "kw": "Cavins Chocolate",
+    "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlFg1ayPyhnBZJ8MosgiX-orEoJuHAlDMXlVv8yNvr4N&s=10",
+    "size": "19847",
+    "matchingProductIds": [
+      197
+    ],
+    "sampleMatch": "200Ml Cavins Chocolate"
+  }
+]

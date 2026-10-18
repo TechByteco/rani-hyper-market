@@ -6,9 +6,9 @@
     "mrp": 48,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/000/008/900/3978/front_en.4.400.jpg",
+    "image_url": "images/products/prod_9_8g_iodex.jpg",
     "barcode": "89006245",
-    "image": "https://images.openbeautyfacts.org/images/products/000/008/900/3978/front_en.4.400.jpg"
+    "image": "images/products/prod_9_8g_iodex.jpg"
   },
   {
     "id": 10,
@@ -17,9 +17,9 @@
     "mrp": 92,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/000/008/900/3978/front_en.4.400.jpg",
+    "image_url": "images/products/prod_10_18g_iodex_bodypain.jpg",
     "barcode": "89000014",
-    "image": "https://images.openbeautyfacts.org/images/products/000/008/900/3978/front_en.4.400.jpg"
+    "image": "images/products/prod_10_18g_iodex_bodypain.jpg"
   },
   {
     "id": 16,
@@ -28,9 +28,9 @@
     "mrp": 95,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/490/197/100/4614/front_en.3.400.jpg",
+    "image_url": "images/products/prod_16_40g_sensodyne_freshgel.jpg",
     "barcode": "8901571004089",
-    "image": "https://images.openbeautyfacts.org/images/products/490/197/100/4614/front_en.3.400.jpg"
+    "image": "images/products/prod_16_40g_sensodyne_freshgel.jpg"
   },
   {
     "id": 17,
@@ -61,9 +61,9 @@
     "mrp": 10,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/157/101/1032/front_en.3.400.jpg",
+    "image_url": "images/products/prod_26_5g_eno_lemon.jpg",
     "barcode": "8901571006854",
-    "image": "https://images.openfoodfacts.org/images/products/890/157/101/1032/front_en.3.400.jpg"
+    "image": "images/products/prod_26_5g_eno_lemon.jpg"
   },
   {
     "id": 27,
@@ -156,8 +156,9 @@
     "mrp": 46,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/601/183/1713/front_en.6.400.jpg",
-    "barcode": "8906042151088"
+    "image_url": "images/products/prod_45_500g_anil_idiyappam_mavu.jpg",
+    "barcode": "8906042151088",
+    "image": "images/products/prod_45_500g_anil_idiyappam_mavu.jpg"
   },
   {
     "id": 46,
@@ -218,8 +219,9 @@
     "mrp": 10,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2023/6/319938240/PX/AO/OO/175405/bopp-toor-dal-bag-500x500.jpg",
-    "barcode": "8901751015362"
+    "image_url": "images/products/prod_59_10n_sandalum_agarbathi_cones.jpg",
+    "barcode": "8901751015362",
+    "image": "images/products/prod_59_10n_sandalum_agarbathi_cones.jpg"
   },
   {
     "id": 61,
@@ -228,8 +230,9 @@
     "mrp": 86,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/172/501/6838/front_en.7.400.jpg",
-    "barcode": "8901491103794"
+    "image_url": "images/products/prod_61_400g_quaker_oats.jpg",
+    "barcode": "8901491103794",
+    "image": "images/products/prod_61_400g_quaker_oats.jpg"
   },
   {
     "id": 63,
@@ -238,8 +241,9 @@
     "mrp": 111,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/EG/RF/LH/GLADMIN-81955/mangaldeep-incense-sticks-250x250.jpg",
-    "barcode": "8906010260897"
+    "image_url": "images/products/prod_63_500ml_dheepam_lamp_oil.jpg",
+    "barcode": "8906010260897",
+    "image": "images/products/prod_63_500ml_dheepam_lamp_oil.jpg"
   },
   {
     "id": 65,
@@ -290,8 +294,9 @@
     "mrp": 60,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/901/3008/front_en.5.400.jpg",
-    "barcode": "1234"
+    "image_url": "images/products/prod_55_1kg_r_sugar.jpg",
+    "barcode": "1234",
+    "image": "images/products/prod_55_1kg_r_sugar.jpg"
   },
   {
     "id": 116,
@@ -320,8 +325,9 @@
     "mrp": 125,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg",
-    "barcode": "8901030515521"
+    "image_url": "images/products/prod_161_100ml_vaseline_aloe_fresh.jpg",
+    "barcode": "8901030515521",
+    "image": "images/products/prod_161_100ml_vaseline_aloe_fresh.jpg"
   },
   {
     "id": 197,
@@ -330,8 +336,9 @@
     "mrp": 35,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/297/905/0883/front_en.3.400.jpg",
-    "barcode": "8902979050913"
+    "image_url": "images/products/prod_197_200ml_cavins_chocolate.jpg",
+    "barcode": "8902979050913",
+    "image": "images/products/prod_197_200ml_cavins_chocolate.jpg"
   },
   {
     "id": 198,
@@ -851,9 +858,9 @@
     "mrp": 15,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg",
+    "image_url": "images/products/prod_521_colgate_cibaca_123.jpg",
     "barcode": "8901314088024",
-    "image": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg"
+    "image": "images/products/prod_521_colgate_cibaca_123.jpg"
   },
   {
     "id": 525,
@@ -949,8 +956,9 @@
     "mrp": 10,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/EG/RF/LH/GLADMIN-81955/mangaldeep-incense-sticks-250x250.jpg",
-    "barcode": "8901725710729"
+    "image_url": "images/products/prod_577_10rs_mangaldeep_temple.jpg",
+    "barcode": "8901725710729",
+    "image": "images/products/prod_577_10rs_mangaldeep_temple.jpg"
   },
   {
     "id": 582,
@@ -2781,8 +2789,9 @@
     "mrp": 230,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg",
-    "barcode": "8906014310031"
+    "image_url": "images/products/prod_1504_1ltr_porna_rice_bran_oil.jpg",
+    "barcode": "8906014310031",
+    "image": "images/products/prod_1504_1ltr_porna_rice_bran_oil.jpg"
   },
   {
     "id": 1505,
@@ -3296,8 +3305,9 @@
     "mrp": 10,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/EG/RF/LH/GLADMIN-81955/mangaldeep-incense-sticks-250x250.jpg",
-    "barcode": "8901725710699"
+    "image_url": "images/products/prod_1801_10rs_mangaldeepam_sandal.jpg",
+    "barcode": "8901725710699",
+    "image": "images/products/prod_1801_10rs_mangaldeepam_sandal.jpg"
   },
   {
     "id": 1802,
@@ -4611,8 +4621,9 @@
     "mrp": 20,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/EG/RF/LH/GLADMIN-81955/mangaldeep-incense-sticks-250x250.jpg",
-    "barcode": "8901725710262"
+    "image_url": "images/products/prod_3555_mangaldeep_temple_gold.jpg",
+    "barcode": "8901725710262",
+    "image": "images/products/prod_3555_mangaldeep_temple_gold.jpg"
   },
   {
     "id": 3573,
@@ -4682,9 +4693,9 @@
     "mrp": 22,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg",
+    "image_url": "images/products/prod_3638_colgate_super_flexi_charcoal.jpg",
     "barcode": "8901314524942",
-    "image": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg"
+    "image": "images/products/prod_3638_colgate_super_flexi_charcoal.jpg"
   },
   {
     "id": 3673,
@@ -5684,8 +5695,9 @@
     "mrp": 50,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/EG/RF/LH/GLADMIN-81955/mangaldeep-incense-sticks-250x250.jpg",
-    "barcode": "8901725710460"
+    "image_url": "images/products/prod_5494_mangaldeep_temple_agarpathi.jpg",
+    "barcode": "8901725710460",
+    "image": "images/products/prod_5494_mangaldeep_temple_agarpathi.jpg"
   },
   {
     "id": 5496,
@@ -5705,9 +5717,9 @@
     "mrp": 18,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg",
+    "image_url": "images/products/prod_5504_colgate_sf_toothbrush.jpg",
     "barcode": "8901314200044",
-    "image": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg"
+    "image": "images/products/prod_5504_colgate_sf_toothbrush.jpg"
   },
   {
     "id": 5510,
@@ -7325,9 +7337,9 @@
     "mrp": 90,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg",
+    "image_url": "images/products/prod_7591_colgate_slim_soft_charcoal.jpg",
     "barcode": "8901314305527",
-    "image": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg"
+    "image": "images/products/prod_7591_colgate_slim_soft_charcoal.jpg"
   },
   {
     "id": 7593,
@@ -8446,8 +8458,9 @@
     "mrp": 10,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/EG/RF/LH/GLADMIN-81955/mangaldeep-incense-sticks-250x250.jpg",
-    "barcode": "8901725710835"
+    "image_url": "images/products/prod_9223_mangaldeep_treya_agarbathi.jpg",
+    "barcode": "8901725710835",
+    "image": "images/products/prod_9223_mangaldeep_treya_agarbathi.jpg"
   },
   {
     "id": 9302,
@@ -12596,9 +12609,9 @@
     "mrp": 30,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg",
+    "image_url": "images/products/prod_14731_colgate_kids_brush.jpg",
     "barcode": "8901314542175",
-    "image": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg"
+    "image": "images/products/prod_14731_colgate_kids_brush.jpg"
   },
   {
     "id": 14786,
@@ -12799,9 +12812,9 @@
     "mrp": 81,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg",
+    "image_url": "images/products/prod_14930_colgate_zigzag_anti_bacterial.jpg",
     "barcode": "8901314116420",
-    "image": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg"
+    "image": "images/products/prod_14930_colgate_zigzag_anti_bacterial.jpg"
   },
   {
     "id": 14940,
@@ -18332,9 +18345,9 @@
     "mrp": 20,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg",
+    "image_url": "images/products/prod_17443_colgate_extra_soft.jpg",
     "barcode": "8901314636447",
-    "image": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg"
+    "image": "images/products/prod_17443_colgate_extra_soft.jpg"
   },
   {
     "id": 17444,
@@ -18343,9 +18356,9 @@
     "mrp": 20,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg",
+    "image_url": "images/products/prod_17444_colgate_medium.jpg",
     "barcode": "8901314200044",
-    "image": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg"
+    "image": "images/products/prod_17444_colgate_medium.jpg"
   },
   {
     "id": 17445,
@@ -27704,9 +27717,9 @@
     "mrp": 48,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg",
+    "image_url": "images/products/prod_19766_colgate_super_flexi.jpg",
     "barcode": "8901314779830",
-    "image": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg"
+    "image": "images/products/prod_19766_colgate_super_flexi.jpg"
   },
   {
     "id": 19767,
@@ -35833,9 +35846,9 @@
     "mrp": 20,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg",
+    "image_url": "images/products/prod_21604_colgate_extra_clean.jpg",
     "barcode": "8901314837899",
-    "image": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg"
+    "image": "images/products/prod_21604_colgate_extra_clean.jpg"
   },
   {
     "id": 21605,
@@ -35844,9 +35857,9 @@
     "mrp": 30,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg",
+    "image_url": "images/products/prod_21605_colgate_kids_o2.jpg",
     "barcode": "8901314116123",
-    "image": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg"
+    "image": "images/products/prod_21605_colgate_kids_o2.jpg"
   },
   {
     "id": 21609,
@@ -41162,8 +41175,9 @@
     "mrp": 10,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/EG/RF/LH/GLADMIN-81955/mangaldeep-incense-sticks-250x250.jpg",
-    "barcode": "8901725011529"
+    "image_url": "images/products/prod_22603_mangaldeep_3in1.jpg",
+    "barcode": "8901725011529",
+    "image": "images/products/prod_22603_mangaldeep_3in1.jpg"
   },
   {
     "id": 22605,
@@ -45556,9 +45570,9 @@
     "mrp": 40,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg",
+    "image_url": "images/products/prod_23151_colgate_gentle_clean.jpg",
     "barcode": "8901314560797",
-    "image": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg"
+    "image": "images/products/prod_23151_colgate_gentle_clean.jpg"
   },
   {
     "id": 23152,
@@ -51639,9 +51653,9 @@
     "mrp": 200,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg",
+    "image_url": "images/products/prod_23794_colgate_protect_milk_tooth.jpg",
     "barcode": "8901314611659",
-    "image": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg"
+    "image": "images/products/prod_23794_colgate_protect_milk_tooth.jpg"
   },
   {
     "id": 23795,
@@ -51720,9 +51734,9 @@
     "mrp": 40,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg",
+    "image_url": "images/products/prod_23803_colgate_gentle_clean_brush.jpg",
     "barcode": "8901314878427",
-    "image": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg"
+    "image": "images/products/prod_23803_colgate_gentle_clean_brush.jpg"
   },
   {
     "id": 23804,
@@ -56621,9 +56635,9 @@
     "mrp": 27,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg",
+    "image_url": "images/products/prod_24361_colgate_kids_brush_alt.jpg",
     "barcode": "8901314542175",
-    "image": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg"
+    "image": "images/products/prod_24361_colgate_kids_brush_alt.jpg"
   },
   {
     "id": 24362,

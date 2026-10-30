@@ -9,8 +9,8 @@
     "barcode": "89006245",
     "unit": "1 unit",
     "variant_id": 9,
-    "image_url": "images/products/prod_9_8g_iodex.jpg",
-    "image": "images/products/prod_9_8g_iodex.jpg"
+    "image_url": "images/products/prod_9_8g_r_iodex.jpg",
+    "image": "images/products/prod_9_8g_r_iodex.jpg"
   },
   {
     "id": 10,
@@ -22,8 +22,8 @@
     "barcode": "89000014",
     "unit": "1 unit",
     "variant_id": 10,
-    "image_url": "images/products/prod_10_18g_iodex_bodypain.jpg",
-    "image": "images/products/prod_10_18g_iodex_bodypain.jpg"
+    "image_url": "images/products/prod_10_18g_r_iodex_body_pain.jpg",
+    "image": "images/products/prod_10_18g_r_iodex_body_pain.jpg"
   },
   {
     "id": 16,
@@ -35,8 +35,8 @@
     "barcode": "8901571004089",
     "unit": "1 unit",
     "variant_id": 16,
-    "image_url": "images/products/prod_16_40g_sensodyne_freshgel.jpg",
-    "image": "images/products/prod_16_40g_sensodyne_freshgel.jpg"
+    "image_url": "images/products/prod_16_40g_r_sensodyne_freshgel.jpg",
+    "image": "images/products/prod_16_40g_r_sensodyne_freshgel.jpg"
   },
   {
     "id": 17,
@@ -48,7 +48,8 @@
     "barcode": "8901571004102",
     "unit": "1 unit",
     "variant_id": 17,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_17_40g_r_sensodyne_fresh_mint.jpg",
+    "image": "images/products/prod_17_40g_r_sensodyne_fresh_mint.jpg"
   },
   {
     "id": 20,
@@ -60,7 +61,8 @@
     "barcode": "8901571004614",
     "unit": "1 unit",
     "variant_id": 21,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_20_75g_r_sensodyne_fresh_gel.jpg",
+    "image": "images/products/prod_20_75g_r_sensodyne_fresh_gel.jpg"
   },
   {
     "id": 26,
@@ -72,8 +74,8 @@
     "barcode": "8901571006854",
     "unit": "1 unit",
     "variant_id": 29,
-    "image_url": "images/products/prod_26_5g_eno_lemon.jpg",
-    "image": "images/products/prod_26_5g_eno_lemon.jpg"
+    "image_url": "images/products/prod_26_5g_r_eno_lemon.jpg",
+    "image": "images/products/prod_26_5g_r_eno_lemon.jpg"
   },
   {
     "id": 27,
@@ -85,7 +87,8 @@
     "barcode": "8901571011483",
     "unit": "1 unit",
     "variant_id": 30,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_27_5g_r_eno_orange.jpg",
+    "image": "images/products/prod_27_5g_r_eno_orange.jpg"
   },
   {
     "id": 28,
@@ -97,7 +100,8 @@
     "barcode": "8901571006878",
     "unit": "1 unit",
     "variant_id": 31,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_28_5g_r_eno_cola.jpg",
+    "image": "images/products/prod_28_5g_r_eno_cola.jpg"
   },
   {
     "id": 29,
@@ -109,7 +113,8 @@
     "barcode": "8901571006861",
     "unit": "1 unit",
     "variant_id": 32,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_29_5g_r_eno_fruit_salt.jpg",
+    "image": "images/products/prod_29_5g_r_eno_fruit_salt.jpg"
   },
   {
     "id": 37,
@@ -121,7 +126,8 @@
     "barcode": "8901571011018",
     "unit": "1 unit",
     "variant_id": 41,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_37_r_sensodyne_brush_buy_2_get_1.jpg",
+    "image": "images/products/prod_37_r_sensodyne_brush_buy_2_get_1.jpg"
   },
   {
     "id": 41,
@@ -133,7 +139,8 @@
     "barcode": "8906042150029",
     "unit": "1 unit",
     "variant_id": 45,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_41_180g_r_anil_semia.jpg",
+    "image": "images/products/prod_41_180g_r_anil_semia.jpg"
   },
   {
     "id": 42,
@@ -145,7 +152,8 @@
     "barcode": "8906042150074",
     "unit": "1 unit",
     "variant_id": 46,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_42_180g_r_anil_ragi_semia.jpg",
+    "image": "images/products/prod_42_180g_r_anil_ragi_semia.jpg"
   },
   {
     "id": 43,
@@ -157,7 +165,8 @@
     "barcode": "8908001921022",
     "unit": "1 unit",
     "variant_id": 47,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_43_200g_r_aakka_puttu_flour.jpg",
+    "image": "images/products/prod_43_200g_r_aakka_puttu_flour.jpg"
   },
   {
     "id": 44,
@@ -169,7 +178,8 @@
     "barcode": "8908001921015",
     "unit": "1 unit",
     "variant_id": 48,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_44_500g_r_aakka_puttu_flour.jpg",
+    "image": "images/products/prod_44_500g_r_aakka_puttu_flour.jpg"
   },
   {
     "id": 45,
@@ -181,8 +191,8 @@
     "barcode": "8906042151088",
     "unit": "1 unit",
     "variant_id": 49,
-    "image_url": "images/products/prod_45_500g_anil_idiyappam_mavu.jpg",
-    "image": "images/products/prod_45_500g_anil_idiyappam_mavu.jpg"
+    "image_url": "images/products/prod_45_500g_r_anil_idiyappam_mavu.jpg",
+    "image": "images/products/prod_45_500g_r_anil_idiyappam_mavu.jpg"
   },
   {
     "id": 46,
@@ -194,7 +204,8 @@
     "barcode": "8906042150524",
     "unit": "1 unit",
     "variant_id": 50,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_46_500g_r_anil_samba_wheat.jpg",
+    "image": "images/products/prod_46_500g_r_anil_samba_wheat.jpg"
   },
   {
     "id": 48,
@@ -206,7 +217,8 @@
     "barcode": "8906042151569",
     "unit": "1 unit",
     "variant_id": 52,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_48_500g_r_anil_rosated_rava.jpg",
+    "image": "images/products/prod_48_500g_r_anil_rosated_rava.jpg"
   },
   {
     "id": 49,
@@ -218,7 +230,8 @@
     "barcode": "8906042151538",
     "unit": "1 unit",
     "variant_id": 53,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_49_500g_r_anil_maida.jpg",
+    "image": "images/products/prod_49_500g_r_anil_maida.jpg"
   },
   {
     "id": 51,
@@ -230,7 +243,8 @@
     "barcode": "8902979000444",
     "unit": "1 unit",
     "variant_id": 55,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_51_2rs_20_r_karthicka_strips.jpg",
+    "image": "images/products/prod_51_2rs_20_r_karthicka_strips.jpg"
   },
   {
     "id": 52,
@@ -242,7 +256,8 @@
     "barcode": "8902979000826",
     "unit": "1 unit",
     "variant_id": 57,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_52_1rs_20_karthicka_shampoo.jpg",
+    "image": "images/products/prod_52_1rs_20_karthicka_shampoo.jpg"
   },
   {
     "id": 59,
@@ -254,8 +269,8 @@
     "barcode": "8901751015362",
     "unit": "1 unit",
     "variant_id": 65,
-    "image_url": "images/products/prod_59_10n_sandalum_agarbathi_cones.jpg",
-    "image": "images/products/prod_59_10n_sandalum_agarbathi_cones.jpg"
+    "image_url": "images/products/prod_59_10n_r_sandalum_agarbathi_cones.jpg",
+    "image": "images/products/prod_59_10n_r_sandalum_agarbathi_cones.jpg"
   },
   {
     "id": 61,
@@ -267,8 +282,8 @@
     "barcode": "8901491103794",
     "unit": "1 unit",
     "variant_id": 67,
-    "image_url": "images/products/prod_61_400g_quaker_oats.jpg",
-    "image": "images/products/prod_61_400g_quaker_oats.jpg"
+    "image_url": "images/products/prod_61_400g_r_quaker_oats_r.jpg",
+    "image": "images/products/prod_61_400g_r_quaker_oats_r.jpg"
   },
   {
     "id": 63,
@@ -280,8 +295,8 @@
     "barcode": "8906010260897",
     "unit": "1 unit",
     "variant_id": 69,
-    "image_url": "images/products/prod_63_500ml_dheepam_lamp_oil.jpg",
-    "image": "images/products/prod_63_500ml_dheepam_lamp_oil.jpg"
+    "image_url": "images/products/prod_63_500ml_r_dheepam_lamp_oil.jpg",
+    "image": "images/products/prod_63_500ml_r_dheepam_lamp_oil.jpg"
   },
   {
     "id": 65,
@@ -293,7 +308,8 @@
     "barcode": "8906010262013",
     "unit": "1 unit",
     "variant_id": 71,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_65_50ml_r_gold_winner_vanaspati.jpg",
+    "image": "images/products/prod_65_50ml_r_gold_winner_vanaspati.jpg"
   },
   {
     "id": 76,
@@ -305,7 +321,8 @@
     "barcode": "8901526209910",
     "unit": "1 unit",
     "variant_id": 82,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_76_20ml_r_garnier_black_naturals.jpg",
+    "image": "images/products/prod_76_20ml_r_garnier_black_naturals.jpg"
   },
   {
     "id": 94,
@@ -317,7 +334,8 @@
     "barcode": "8901030904455",
     "unit": "1 unit",
     "variant_id": 100,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_94_80ml_r_lifebuoy_hand_wash.jpg",
+    "image": "images/products/prod_94_80ml_r_lifebuoy_hand_wash.jpg"
   },
   {
     "id": 110,
@@ -329,7 +347,8 @@
     "barcode": "8901030761195",
     "unit": "1 unit",
     "variant_id": 116,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_110_500ml_r_rin_ala.jpg",
+    "image": "images/products/prod_110_500ml_r_rin_ala.jpg"
   },
   {
     "id": 115,
@@ -341,8 +360,8 @@
     "barcode": "1234",
     "unit": "1 unit",
     "variant_id": 123,
-    "image_url": "images/products/prod_55_1kg_r_sugar.jpg",
-    "image": "images/products/prod_55_1kg_r_sugar.jpg"
+    "image_url": "images/products/prod_115_1kg_r_sugar.jpg",
+    "image": "images/products/prod_115_1kg_r_sugar.jpg"
   },
   {
     "id": 116,
@@ -354,7 +373,8 @@
     "barcode": "1233",
     "unit": "1 unit",
     "variant_id": 124,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_116_500g_r_sugar.jpg",
+    "image": "images/products/prod_116_500g_r_sugar.jpg"
   },
   {
     "id": 117,
@@ -366,7 +386,8 @@
     "barcode": "12",
     "unit": "1 unit",
     "variant_id": 125,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_117_250g_sugar.jpg",
+    "image": "images/products/prod_117_250g_sugar.jpg"
   },
   {
     "id": 161,
@@ -378,8 +399,8 @@
     "barcode": "8901030515521",
     "unit": "1 unit",
     "variant_id": 169,
-    "image_url": "images/products/prod_161_100ml_vaseline_aloe_fresh.jpg",
-    "image": "images/products/prod_161_100ml_vaseline_aloe_fresh.jpg"
+    "image_url": "images/products/prod_161_100ml_r_vaseline_aloe_fresh.jpg",
+    "image": "images/products/prod_161_100ml_r_vaseline_aloe_fresh.jpg"
   },
   {
     "id": 197,
@@ -404,7 +425,8 @@
     "barcode": "8902979050906",
     "unit": "1 unit",
     "variant_id": 206,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_198_200ml_r_cavins_butter.jpg",
+    "image": "images/products/prod_198_200ml_r_cavins_butter.jpg"
   },
   {
     "id": 199,
@@ -428,7 +450,8 @@
     "barcode": "8906009990682",
     "unit": "1 unit",
     "variant_id": 212,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_204_140g_r_elite_chocolate_cake.jpg",
+    "image": "images/products/prod_204_140g_r_elite_chocolate_cake.jpg"
   },
   {
     "id": 205,
@@ -440,7 +463,8 @@
     "barcode": "8906009990651",
     "unit": "1 unit",
     "variant_id": 213,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_205_140g_elite_vanilla_cake.jpg",
+    "image": "images/products/prod_205_140g_elite_vanilla_cake.jpg"
   },
   {
     "id": 206,
@@ -452,7 +476,8 @@
     "barcode": "8906009990668",
     "unit": "1 unit",
     "variant_id": 214,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_206_140g_r_elite_pineapple_cake.jpg",
+    "image": "images/products/prod_206_140g_r_elite_pineapple_cake.jpg"
   },
   {
     "id": 207,
@@ -464,7 +489,8 @@
     "barcode": "890600999675",
     "unit": "1 unit",
     "variant_id": 215,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_207_140g_r_elite_choco_orange_cake.jpg",
+    "image": "images/products/prod_207_140g_r_elite_choco_orange_cake.jpg"
   },
   {
     "id": 211,
@@ -476,7 +502,8 @@
     "barcode": "8906007250023",
     "unit": "1 unit",
     "variant_id": 220,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_211_500g_r_elite_puttupodi.jpg",
+    "image": "images/products/prod_211_500g_r_elite_puttupodi.jpg"
   },
   {
     "id": 225,
@@ -488,7 +515,8 @@
     "barcode": "00344",
     "unit": "1 unit",
     "variant_id": 234,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_225_100g_r_bicycle_bleching.jpg",
+    "image": "images/products/prod_225_100g_r_bicycle_bleching.jpg"
   },
   {
     "id": 228,
@@ -500,7 +528,8 @@
     "barcode": "8906014310178",
     "unit": "1 unit",
     "variant_id": 237,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_228_1ltr_r_porna_pooja_oil_pet.jpg",
+    "image": "images/products/prod_228_1ltr_r_porna_pooja_oil_pet.jpg"
   },
   {
     "id": 229,
@@ -512,7 +541,8 @@
     "barcode": "8906001232421",
     "unit": "1 unit",
     "variant_id": 239,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_229_125g_r_nature_pow_sandal.jpg",
+    "image": "images/products/prod_229_125g_r_nature_pow_sandal.jpg"
   },
   {
     "id": 230,
@@ -524,7 +554,8 @@
     "barcode": "8906001232414",
     "unit": "1 unit",
     "variant_id": 240,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_230_125g_r_nature_pow_rose.jpg",
+    "image": "images/products/prod_230_125g_r_nature_pow_rose.jpg"
   },
   {
     "id": 231,
@@ -536,7 +567,8 @@
     "barcode": "8906001232438",
     "unit": "1 unit",
     "variant_id": 243,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_231_125g_r_nature_pow_lavender.jpg",
+    "image": "images/products/prod_231_125g_r_nature_pow_lavender.jpg"
   },
   {
     "id": 232,
@@ -548,7 +580,8 @@
     "barcode": "8906001232384",
     "unit": "1 unit",
     "variant_id": 244,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_232_125g_r_nature_pow_papaya.jpg",
+    "image": "images/products/prod_232_125g_r_nature_pow_papaya.jpg"
   },
   {
     "id": 233,
@@ -560,7 +593,8 @@
     "barcode": "8906001232407",
     "unit": "1 unit",
     "variant_id": 245,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_233_125g_r_nature_pow_lime.jpg",
+    "image": "images/products/prod_233_125g_r_nature_pow_lime.jpg"
   },
   {
     "id": 237,
@@ -572,7 +606,8 @@
     "barcode": "8906002080014",
     "unit": "1 unit",
     "variant_id": 250,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_237_50g_r_sakthi_turmeric_powder.jpg",
+    "image": "images/products/prod_237_50g_r_sakthi_turmeric_powder.jpg"
   },
   {
     "id": 258,
@@ -584,7 +619,8 @@
     "barcode": "8901248701105",
     "unit": "1 unit",
     "variant_id": 273,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_258_8ml_r_zandu_balm_green.jpg",
+    "image": "images/products/prod_258_8ml_r_zandu_balm_green.jpg"
   },
   {
     "id": 269,
@@ -596,7 +632,8 @@
     "barcode": "8906054683416",
     "unit": "1 unit",
     "variant_id": 284,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_269_ajwa_r_garlic_murukku_c.jpg",
+    "image": "images/products/prod_269_ajwa_r_garlic_murukku_c.jpg"
   },
   {
     "id": 287,
@@ -608,7 +645,8 @@
     "barcode": "8906002082445",
     "unit": "1 unit",
     "variant_id": 302,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_287_200g_r_sakthi_bajji_mix.jpg",
+    "image": "images/products/prod_287_200g_r_sakthi_bajji_mix.jpg"
   },
   {
     "id": 291,
@@ -620,7 +658,8 @@
     "barcode": "8908025108010",
     "unit": "1 unit",
     "variant_id": 306,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_291_100g_r_rajam_panagkarkandu.jpg",
+    "image": "images/products/prod_291_100g_r_rajam_panagkarkandu.jpg"
   },
   {
     "id": 300,
@@ -632,7 +671,8 @@
     "barcode": "8901063093409",
     "unit": "1 unit",
     "variant_id": 315,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_300_20rs_r_brita_good_day_cashew.jpg",
+    "image": "images/products/prod_300_20rs_r_brita_good_day_cashew.jpg"
   },
   {
     "id": 301,
@@ -644,7 +684,8 @@
     "barcode": "8901063004061",
     "unit": "1 unit",
     "variant_id": 316,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_301_75g_good_day_choco_chip.jpg",
+    "image": "images/products/prod_301_75g_good_day_choco_chip.jpg"
   },
   {
     "id": 308,
@@ -656,7 +697,8 @@
     "barcode": "8901063012813",
     "unit": "1 unit",
     "variant_id": 324,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_308_10rs_britanina_milk_bikis.jpg",
+    "image": "images/products/prod_308_10rs_britanina_milk_bikis.jpg"
   },
   {
     "id": 317,
@@ -668,7 +710,8 @@
     "barcode": "8901063014145",
     "unit": "1 unit",
     "variant_id": 334,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_317_r_britania_vita_marie.jpg",
+    "image": "images/products/prod_317_r_britania_vita_marie.jpg"
   },
   {
     "id": 323,
@@ -680,7 +723,8 @@
     "barcode": "8901157004243",
     "unit": "1 unit",
     "variant_id": 340,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_323_r_good_knight_maha_jambo_coil.jpg",
+    "image": "images/products/prod_323_r_good_knight_maha_jambo_coil.jpg"
   },
   {
     "id": 325,
@@ -692,7 +736,8 @@
     "barcode": "8901063139336",
     "unit": "1 unit",
     "variant_id": 342,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_325_120g_r_britannia_bourbon.jpg",
+    "image": "images/products/prod_325_120g_r_britannia_bourbon.jpg"
   },
   {
     "id": 327,
@@ -704,7 +749,8 @@
     "barcode": "8901063139329",
     "unit": "1 unit",
     "variant_id": 344,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_327_50g_r_brintannia_bourbon.jpg",
+    "image": "images/products/prod_327_50g_r_brintannia_bourbon.jpg"
   },
   {
     "id": 346,
@@ -716,7 +762,8 @@
     "barcode": "8901058024401",
     "unit": "1 unit",
     "variant_id": 363,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_346_10rs_r_kitkat.jpg",
+    "image": "images/products/prod_346_10rs_r_kitkat.jpg"
   },
   {
     "id": 347,
@@ -728,7 +775,8 @@
     "barcode": "8902042111077",
     "unit": "1 unit",
     "variant_id": 364,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_347_500g_r_avt_premium_tea.jpg",
+    "image": "images/products/prod_347_500g_r_avt_premium_tea.jpg"
   },
   {
     "id": 351,
@@ -740,7 +788,8 @@
     "barcode": "8902042111053",
     "unit": "1 unit",
     "variant_id": 368,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_351_100g_r_avt_premium_tea.jpg",
+    "image": "images/products/prod_351_100g_r_avt_premium_tea.jpg"
   },
   {
     "id": 354,
@@ -752,7 +801,8 @@
     "barcode": "8902042111183",
     "unit": "1 unit",
     "variant_id": 371,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_354_10rs_r_avt_premium_tea.jpg",
+    "image": "images/products/prod_354_10rs_r_avt_premium_tea.jpg"
   },
   {
     "id": 356,
@@ -764,7 +814,8 @@
     "barcode": "8902042163687",
     "unit": "1 unit",
     "variant_id": 373,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_356_10rs_r_avt_gold_cup.jpg",
+    "image": "images/products/prod_356_10rs_r_avt_gold_cup.jpg"
   },
   {
     "id": 359,
@@ -776,7 +827,8 @@
     "barcode": "8901058025095",
     "unit": "1 unit",
     "variant_id": 376,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_359_10rs_r_sunrise.jpg",
+    "image": "images/products/prod_359_10rs_r_sunrise.jpg"
   },
   {
     "id": 361,
@@ -788,7 +840,8 @@
     "barcode": "89081198",
     "unit": "1 unit",
     "variant_id": 378,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_361_2rs_r_sunrise_2_12.jpg",
+    "image": "images/products/prod_361_2rs_r_sunrise_2_12.jpg"
   },
   {
     "id": 368,
@@ -800,7 +853,8 @@
     "barcode": "8904057390331",
     "unit": "1 unit",
     "variant_id": 385,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_368_500ml_hat_ghee_jar.jpg",
+    "image": "images/products/prod_368_500ml_hat_ghee_jar.jpg"
   },
   {
     "id": 370,
@@ -812,7 +866,8 @@
     "barcode": "8901512540102",
     "unit": "1 unit",
     "variant_id": 387,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_370_10rs_r_act_ii_clas_salt.jpg",
+    "image": "images/products/prod_370_10rs_r_act_ii_clas_salt.jpg"
   },
   {
     "id": 404,
@@ -824,7 +879,8 @@
     "barcode": "8901157028003",
     "unit": "1 unit",
     "variant_id": 421,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_404_r_new_hit_chalk_cockroach.jpg",
+    "image": "images/products/prod_404_r_new_hit_chalk_cockroach.jpg"
   },
   {
     "id": 408,
@@ -836,7 +892,8 @@
     "barcode": "8901157027020",
     "unit": "1 unit",
     "variant_id": 426,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_408_r_hit_rats_cake.jpg",
+    "image": "images/products/prod_408_r_hit_rats_cake.jpg"
   },
   {
     "id": 413,
@@ -848,7 +905,8 @@
     "barcode": "8906009512112",
     "unit": "1 unit",
     "variant_id": 432,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_413_100ml_r_vvd_coconut_oil.jpg",
+    "image": "images/products/prod_413_100ml_r_vvd_coconut_oil.jpg"
   },
   {
     "id": 421,
@@ -860,7 +918,8 @@
     "barcode": "8901157025033",
     "unit": "1 unit",
     "variant_id": 440,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_421_200ml_r_hit_black.jpg",
+    "image": "images/products/prod_421_200ml_r_hit_black.jpg"
   },
   {
     "id": 423,
@@ -872,7 +931,8 @@
     "barcode": "8901157025071",
     "unit": "1 unit",
     "variant_id": 442,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_423_200ml_r_hit_fresh_fragrance.jpg",
+    "image": "images/products/prod_423_200ml_r_hit_fresh_fragrance.jpg"
   },
   {
     "id": 441,
@@ -884,7 +944,8 @@
     "barcode": "8901157004342",
     "unit": "1 unit",
     "variant_id": 460,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_441_r_gk_advanced_low_smoke_coil.jpg",
+    "image": "images/products/prod_441_r_gk_advanced_low_smoke_coil.jpg"
   },
   {
     "id": 462,
@@ -896,7 +957,8 @@
     "barcode": "6",
     "unit": "1 unit",
     "variant_id": 481,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_462_1kg_pasi_paruppu_r.jpg",
+    "image": "images/products/prod_462_1kg_pasi_paruppu_r.jpg"
   },
   {
     "id": 463,
@@ -908,7 +970,8 @@
     "barcode": "1204",
     "unit": "1 unit",
     "variant_id": 482,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_463_500g_r_pasi_paruppu.jpg",
+    "image": "images/products/prod_463_500g_r_pasi_paruppu.jpg"
   },
   {
     "id": 471,
@@ -1150,7 +1213,8 @@
     "barcode": "8901023010453",
     "unit": "1 unit",
     "variant_id": 609,
-    "image_url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=200"
+    "image_url": "images/products/prod_586_r_3_100g_r_cinthol_confidence.jpg",
+    "image": "images/products/prod_586_r_3_100g_r_cinthol_confidence.jpg"
   },
   {
     "id": 591,

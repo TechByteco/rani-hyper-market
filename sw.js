@@ -1,9 +1,19 @@
 // Rani Hyper Market - Service Worker (PWA & Offline Resilience)
-const CACHE_NAME = 'rani-market-v1.1';
+const CACHE_NAME = 'rani-market-v1.3';
 const STATIC_ASSETS = [
   '/',
   '/store',
+  '/store.html',
+  '/admin',
+  '/admin.html',
+  '/product-images',
+  '/product-images.html',
+  '/marketing',
+  '/marketing.html',
+  '/orders',
+  '/orders.html',
   '/index',
+  '/index.html',
   '/manifest.json',
   '/favicon.ico',
   '/images/rani_logo.png'
@@ -47,6 +57,7 @@ self.addEventListener('fetch', (event) => {
     req.destination === 'font' ||
     url.pathname.endsWith('.png') ||
     url.pathname.endsWith('.jpg') ||
+    url.pathname.endsWith('.jpeg') ||
     url.pathname.endsWith('.ico') ||
     url.pathname.endsWith('.woff2')
   ) {
@@ -65,7 +76,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Network-first with fallback to cache for HTML / dynamic pages
+  // Network-first with intelligent route fallback
   event.respondWith(
     fetch(req).then((res) => {
       if (res && res.status === 200) {
@@ -77,7 +88,20 @@ self.addEventListener('fetch', (event) => {
       return caches.match(req).then((cached) => {
         if (cached) return cached;
         if (req.mode === 'navigate') {
-          return caches.match('/store') || caches.match('/');
+          const path = url.pathname.toLowerCase();
+          if (path.includes('admin') || path.includes('pos')) {
+            return caches.match('/admin.html') || caches.match('/admin');
+          }
+          if (path.includes('photo') || path.includes('image') || path.includes('studio')) {
+            return caches.match('/product-images.html') || caches.match('/product-images');
+          }
+          if (path.includes('market') || path.includes('sns') || path.includes('markbot')) {
+            return caches.match('/marketing.html') || caches.match('/marketing');
+          }
+          if (path.includes('order')) {
+            return caches.match('/orders.html') || caches.match('/orders');
+          }
+          return caches.match('/store.html') || caches.match('/store') || caches.match('/');
         }
       });
     })

@@ -1,78 +1,80 @@
 const fs = require('fs');
 const path = require('path');
 
-const baseDir = 'C:\\Users\\saali\\AppData\\Local\\Google\\Chrome\\User Data';
+const decomp = fs.readFileSync('scripts/decompressed_blob_c.bin');
+const bakedMap = JSON.parse(fs.readFileSync('scripts/baked_product_images_map.json', 'utf8'));
 
-fs.mkdirSync('public/images/custom_extracted', { recursive: true });
-
-function findBase64Images(filePath, label) {
-  if (!fs.existsSync(filePath)) return [];
-  const buf = fs.readFileSync(filePath);
-  const str = buf.toString('latin1');
-
-  const images = [];
-  let pos = 0;
-  while ((pos = str.indexOf('data:image/', pos)) !== -1) {
-    // Find the end of base64 (quote, null, or non-base64 char)
-    let end = pos;
-    while (end < str.length && (
-      (str[end] >= 'A' && str[end] <= 'Z') ||
-      (str[end] >= 'a' && str[end] <= 'z') ||
-      (str[end] >= '0' && str[end] <= '9') ||
-      str[end] === '+' || str[end] === '/' || str[end] === '=' ||
-      str[end] === ':' || str[end] === ';' || str[end] === ','
-    )) {
-      end++;
+// 1. Act II Clas Salt
+const b1Idx = decomp.indexOf(Buffer.from('8901512540102'));
+if (b1Idx !== -1) {
+  const str = decomp.slice(Math.max(0, b1Idx - 35000), b1Idx).toString('latin1');
+  const tag = 'data:image/jpeg;base64,';
+  const start = str.lastIndexOf(tag);
+  if (start !== -1) {
+    const raw = str.slice(start + tag.length);
+    const end = raw.indexOf('"');
+    if (end !== -1) {
+      const b64 = raw.slice(0, end);
+      const buf = Buffer.from(b64, 'base64');
+      const p1 = 'images/products/prod_370_10rs_r_act_ii_clas_salt.jpg';
+      const p2 = 'public/images/products/prod_370_10rs_r_act_ii_clas_salt.jpg';
+      fs.writeFileSync(p1, buf);
+      fs.writeFileSync(p2, buf);
+      bakedMap[370] = p1;
+      console.log(`Saved Prod 370 image (${buf.length} bytes) to ${p1}`);
     }
-    const dataUri = str.substring(pos, end);
-    const before = str.substring(Math.max(0, pos - 150), pos);
-    images.push({ dataUri, before, label, offset: pos });
-    pos = end + 1;
   }
-  return images;
 }
 
-const allImages = [];
-['Profile 8', 'Profile 12', 'Profile 16', 'Profile 18', 'Profile 2', 'Default'].forEach(p => {
-  const lsDir = path.join(baseDir, p, 'Local Storage', 'leveldb');
-  if (fs.existsSync(lsDir)) {
-    fs.readdirSync(lsDir).forEach(f => {
-      if (f.endsWith('.ldb') || f.endsWith('.log')) {
-        const found = findBase64Images(path.join(lsDir, f), `${p} LS/${f}`);
-        allImages.push(...found);
-      }
-    });
-  }
-});
-
-console.log(`Found ${allImages.length} base64 images total.`);
-allImages.forEach((img, idx) => {
-  console.log(`\n--- Image #${idx + 1} (${img.label}) ---`);
-  console.log(`Data URI length: ${img.dataUri.length}`);
-  const cleanBefore = img.before.replace(/[^\x20-\x7e]/g, ' ');
-  console.log(`Context before: ${cleanBefore.slice(-100)}`);
-
-  // Try extracting product ID or title
-  const idMatch = cleanBefore.match(/(?:\"id\"|\"|\b)(\d{1,6})(?:\"|\b)/);
-  const titleMatch = cleanBefore.match(/title[\"\s:]+([A-Za-z0-9\s\+\-\*\/\.\(\)]+)/i);
-  console.log(`Inferred ID: ${idMatch ? idMatch[1] : 'none'}, Title: ${titleMatch ? titleMatch[1] : 'none'}`);
-
-  // Save to public/images/custom_extracted
-  try {
-    const parts = img.dataUri.split(',');
-    if (parts.length === 2) {
-      const mime = parts[0].match(/data:(image\/[a-z]+);base64/i);
-      const ext = mime ? mime[1].split('/')[1] : 'jpg';
-      const b64Buf = Buffer.from(parts[1], 'base64');
-      const filename = `img_${idx + 1}_${pName(img.label)}_${idMatch ? idMatch[1] : 'unknown'}.${ext}`;
-      fs.writeFileSync(`public/images/custom_extracted/${filename}`, b64Buf);
-      console.log(`Saved as public/images/custom_extracted/${filename} (${b64Buf.length} bytes)`);
+// 2. Cinthol Confidence (barcode 8901023010453)
+const b2Idx = decomp.indexOf(Buffer.from('8901023010453'));
+if (b2Idx !== -1) {
+  const str = decomp.slice(b2Idx, b2Idx + 20000).toString('latin1');
+  const tag = 'data:image/jpeg;base64,';
+  const start = str.indexOf(tag);
+  if (start !== -1) {
+    const raw = str.slice(start + tag.length);
+    const end = raw.indexOf('"');
+    if (end !== -1) {
+      const b64 = raw.slice(0, end);
+      const buf = Buffer.from(b64, 'base64');
+      const p1 = 'images/products/prod_586_r_3_100g_r_cinthol_confidence.jpg';
+      const p2 = 'public/images/products/prod_586_r_3_100g_r_cinthol_confidence.jpg';
+      fs.writeFileSync(p1, buf);
+      fs.writeFileSync(p2, buf);
+      bakedMap[586] = p1;
+      console.log(`Saved Prod 586 image (${buf.length} bytes) to ${p1}`);
     }
-  } catch(e) {
-    console.error('Error saving image:', e.message);
   }
+}
+
+// Save updated bakedMap
+fs.writeFileSync('scripts/baked_product_images_map.json', JSON.stringify(bakedMap, null, 2), 'utf8');
+
+// Bake into all 4 catalogs
+const catalogFiles = [
+  'products_catalog.json',
+  'public/products_catalog.json',
+  'rani_products.json',
+  'public/rani_products.json'
+];
+
+catalogFiles.forEach(filePath => {
+  if (!fs.existsSync(filePath)) return;
+  const list = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  let updatedCatalogCount = 0;
+
+  list.forEach(prod => {
+    const customImg = bakedMap[prod.id] || bakedMap[String(prod.id)];
+    if (customImg) {
+      prod.image_url = customImg;
+      prod.image = customImg;
+      updatedCatalogCount++;
+    }
+  });
+
+  fs.writeFileSync(filePath, JSON.stringify(list, null, 2), 'utf8');
+  console.log(`Baked ${updatedCatalogCount} images into ${filePath}`);
 });
 
-function pName(label) {
-  return label.replace(/[^a-zA-Z0-9]/g, '_');
-}
+console.log('Finished base64 extraction and baking.');

@@ -745,7 +745,37 @@ if (reqPath === '/api/pos/status') {
     return;
   }
 
-  if (reqPath === '/' || reqPath === '') reqPath = '/index.html';
+  const ROUTE_ALIASES = {
+    '/': '/index.html',
+    '/index': '/index.html',
+    '/store': '/store.html',
+    '/admin': '/admin.html',
+    '/pos': '/admin.html',
+    '/photo': '/product-images.html',
+    '/photos': '/product-images.html',
+    '/product-images': '/product-images.html',
+    '/image-studio': '/product-images.html',
+    '/studio': '/product-images.html',
+    '/marketing': '/marketing.html',
+    '/sns-marketing': '/marketing.html',
+    '/sns': '/marketing.html',
+    '/markbot': '/marketing.html',
+    '/rani': '/rani.html',
+    '/master': '/master.html',
+    '/master-login': '/master-login.html',
+    '/ai-analytics': '/ai-analytics.html',
+    '/bill_history': '/bill_history.html',
+    '/diagnostics': '/diagnostics.html',
+    '/login': '/login.html',
+    '/orders': '/orders.html',
+    '/online-orders': '/orders.html'
+  };
+
+  if (ROUTE_ALIASES[reqPath]) {
+    reqPath = ROUTE_ALIASES[reqPath];
+  } else if (reqPath === '/' || reqPath === '') {
+    reqPath = '/index.html';
+  }
   const cleanPath = decodeURIComponent(reqPath);
   let filePath = path.join(__dirname, cleanPath);
   if (!fs.existsSync(filePath) && fs.existsSync(filePath + '.html')) {

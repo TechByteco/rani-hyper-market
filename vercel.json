@@ -2,9 +2,28 @@
   "version": 2,
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/", "destination": "/index" },
-    { "source": "/orders", "destination": "/orders" },
-    { "source": "/online-orders", "destination": "/orders" }
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/store", "destination": "/store.html" },
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/pos", "destination": "/admin.html" },
+    { "source": "/product-images", "destination": "/product-images.html" },
+    { "source": "/photo", "destination": "/product-images.html" },
+    { "source": "/photos", "destination": "/product-images.html" },
+    { "source": "/image-studio", "destination": "/product-images.html" },
+    { "source": "/studio", "destination": "/product-images.html" },
+    { "source": "/marketing", "destination": "/marketing.html" },
+    { "source": "/sns-marketing", "destination": "/marketing.html" },
+    { "source": "/sns", "destination": "/marketing.html" },
+    { "source": "/markbot", "destination": "/marketing.html" },
+    { "source": "/rani", "destination": "/rani.html" },
+    { "source": "/master", "destination": "/master.html" },
+    { "source": "/master-login", "destination": "/master-login.html" },
+    { "source": "/ai-analytics", "destination": "/ai-analytics.html" },
+    { "source": "/bill_history", "destination": "/bill_history.html" },
+    { "source": "/diagnostics", "destination": "/diagnostics.html" },
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/orders", "destination": "/orders.html" },
+    { "source": "/online-orders", "destination": "/orders.html" }
   ],
   "functions": {
     "api/**/*.js": {

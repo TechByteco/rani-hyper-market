@@ -6,9 +6,9 @@
     "mrp": 48,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "images/products/prod_9_8g_iodex.jpg",
+    "image_url": "images/products/prod_9_8g_r_iodex.jpg",
     "barcode": "89006245",
-    "image": "images/products/prod_9_8g_iodex.jpg"
+    "image": "images/products/prod_9_8g_r_iodex.jpg"
   },
   {
     "id": 10,
@@ -17,9 +17,9 @@
     "mrp": 92,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "images/products/prod_10_18g_iodex_bodypain.jpg",
+    "image_url": "images/products/prod_10_18g_r_iodex_body_pain.jpg",
     "barcode": "89000014",
-    "image": "images/products/prod_10_18g_iodex_bodypain.jpg"
+    "image": "images/products/prod_10_18g_r_iodex_body_pain.jpg"
   },
   {
     "id": 16,
@@ -28,9 +28,9 @@
     "mrp": 95,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "images/products/prod_16_40g_sensodyne_freshgel.jpg",
+    "image_url": "images/products/prod_16_40g_r_sensodyne_freshgel.jpg",
     "barcode": "8901571004089",
-    "image": "images/products/prod_16_40g_sensodyne_freshgel.jpg"
+    "image": "images/products/prod_16_40g_r_sensodyne_freshgel.jpg"
   },
   {
     "id": 17,
@@ -39,9 +39,9 @@
     "mrp": 85,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/622/301/353/0744/front_es.4.400.jpg",
+    "image_url": "images/products/prod_17_40g_r_sensodyne_fresh_mint.jpg",
     "barcode": "8901571004102",
-    "image": "https://images.openbeautyfacts.org/images/products/622/301/353/0744/front_es.4.400.jpg"
+    "image": "images/products/prod_17_40g_r_sensodyne_fresh_mint.jpg"
   },
   {
     "id": 20,
@@ -50,9 +50,9 @@
     "mrp": 135,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/490/197/100/4614/front_en.3.400.jpg",
+    "image_url": "images/products/prod_20_75g_r_sensodyne_fresh_gel.jpg",
     "barcode": "8901571004614",
-    "image": "https://images.openbeautyfacts.org/images/products/490/197/100/4614/front_en.3.400.jpg"
+    "image": "images/products/prod_20_75g_r_sensodyne_fresh_gel.jpg"
   },
   {
     "id": 26,
@@ -61,9 +61,9 @@
     "mrp": 10,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "images/products/prod_26_5g_eno_lemon.jpg",
+    "image_url": "images/products/prod_26_5g_r_eno_lemon.jpg",
     "barcode": "8901571006854",
-    "image": "images/products/prod_26_5g_eno_lemon.jpg"
+    "image": "images/products/prod_26_5g_r_eno_lemon.jpg"
   },
   {
     "id": 27,
@@ -72,9 +72,9 @@
     "mrp": 9,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/157/101/1032/front_en.3.400.jpg",
+    "image_url": "images/products/prod_27_5g_r_eno_orange.jpg",
     "barcode": "8901571011483",
-    "image": "https://images.openfoodfacts.org/images/products/890/157/101/1032/front_en.3.400.jpg"
+    "image": "images/products/prod_27_5g_r_eno_orange.jpg"
   },
   {
     "id": 28,
@@ -83,9 +83,9 @@
     "mrp": 9,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/157/101/1032/front_en.3.400.jpg",
+    "image_url": "images/products/prod_28_5g_r_eno_cola.jpg",
     "barcode": "8901571006878",
-    "image": "https://images.openfoodfacts.org/images/products/890/157/101/1032/front_en.3.400.jpg"
+    "image": "images/products/prod_28_5g_r_eno_cola.jpg"
   },
   {
     "id": 29,
@@ -94,9 +94,9 @@
     "mrp": 10,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/157/101/1032/front_en.3.400.jpg",
+    "image_url": "images/products/prod_29_5g_r_eno_fruit_salt.jpg",
     "barcode": "8901571006861",
-    "image": "https://images.openfoodfacts.org/images/products/890/157/101/1032/front_en.3.400.jpg"
+    "image": "images/products/prod_29_5g_r_eno_fruit_salt.jpg"
   },
   {
     "id": 37,
@@ -105,9 +105,9 @@
     "mrp": 130,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg",
+    "image_url": "images/products/prod_37_r_sensodyne_brush_buy_2_get_1.jpg",
     "barcode": "8901571011018",
-    "image": "https://images.openbeautyfacts.org/images/products/628/100/111/2013/front_en.5.400.jpg"
+    "image": "images/products/prod_37_r_sensodyne_brush_buy_2_get_1.jpg"
   },
   {
     "id": 41,
@@ -116,8 +116,9 @@
     "mrp": 23,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/604/215/0029/front_en.16.400.jpg",
-    "barcode": "8906042150029"
+    "image_url": "images/products/prod_41_180g_r_anil_semia.jpg",
+    "barcode": "8906042150029",
+    "image": "images/products/prod_41_180g_r_anil_semia.jpg"
   },
   {
     "id": 42,
@@ -126,8 +127,9 @@
     "mrp": 28,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/604/215/0074/front_en.18.400.jpg",
-    "barcode": "8906042150074"
+    "image_url": "images/products/prod_42_180g_r_anil_ragi_semia.jpg",
+    "barcode": "8906042150074",
+    "image": "images/products/prod_42_180g_r_anil_ragi_semia.jpg"
   },
   {
     "id": 43,
@@ -136,8 +138,9 @@
     "mrp": 44,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/601/183/1713/front_en.6.400.jpg",
-    "barcode": "8908001921022"
+    "image_url": "images/products/prod_43_200g_r_aakka_puttu_flour.jpg",
+    "barcode": "8908001921022",
+    "image": "images/products/prod_43_200g_r_aakka_puttu_flour.jpg"
   },
   {
     "id": 44,
@@ -146,8 +149,9 @@
     "mrp": 100,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/601/183/1713/front_en.6.400.jpg",
-    "barcode": "8908001921015"
+    "image_url": "images/products/prod_44_500g_r_aakka_puttu_flour.jpg",
+    "barcode": "8908001921015",
+    "image": "images/products/prod_44_500g_r_aakka_puttu_flour.jpg"
   },
   {
     "id": 45,
@@ -156,9 +160,9 @@
     "mrp": 46,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "images/products/prod_45_500g_anil_idiyappam_mavu.jpg",
+    "image_url": "images/products/prod_45_500g_r_anil_idiyappam_mavu.jpg",
     "barcode": "8906042151088",
-    "image": "images/products/prod_45_500g_anil_idiyappam_mavu.jpg"
+    "image": "images/products/prod_45_500g_r_anil_idiyappam_mavu.jpg"
   },
   {
     "id": 46,
@@ -167,8 +171,9 @@
     "mrp": 90,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/601/183/1713/front_en.6.400.jpg",
-    "barcode": "8906042150524"
+    "image_url": "images/products/prod_46_500g_r_anil_samba_wheat.jpg",
+    "barcode": "8906042150524",
+    "image": "images/products/prod_46_500g_r_anil_samba_wheat.jpg"
   },
   {
     "id": 48,
@@ -177,8 +182,9 @@
     "mrp": 50,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/601/183/0068/front_en.17.400.jpg",
-    "barcode": "8906042151569"
+    "image_url": "images/products/prod_48_500g_r_anil_rosated_rava.jpg",
+    "barcode": "8906042151569",
+    "image": "images/products/prod_48_500g_r_anil_rosated_rava.jpg"
   },
   {
     "id": 49,
@@ -187,8 +193,9 @@
     "mrp": 42,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/601/183/1713/front_en.6.400.jpg",
-    "barcode": "8906042151538"
+    "image_url": "images/products/prod_49_500g_r_anil_maida.jpg",
+    "barcode": "8906042151538",
+    "image": "images/products/prod_49_500g_r_anil_maida.jpg"
   },
   {
     "id": 51,
@@ -197,9 +204,9 @@
     "mrp": 40,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/890/103/098/4709/front_en.3.400.jpg",
+    "image_url": "images/products/prod_51_2rs_20_r_karthicka_strips.jpg",
     "barcode": "8902979000444",
-    "image": "https://images.openbeautyfacts.org/images/products/890/103/098/4709/front_en.3.400.jpg"
+    "image": "images/products/prod_51_2rs_20_r_karthicka_strips.jpg"
   },
   {
     "id": 52,
@@ -208,9 +215,9 @@
     "mrp": 20,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/890/103/098/4709/front_en.3.400.jpg",
+    "image_url": "images/products/prod_52_1rs_20_karthicka_shampoo.jpg",
     "barcode": "8902979000826",
-    "image": "https://images.openbeautyfacts.org/images/products/890/103/098/4709/front_en.3.400.jpg"
+    "image": "images/products/prod_52_1rs_20_karthicka_shampoo.jpg"
   },
   {
     "id": 59,
@@ -219,9 +226,9 @@
     "mrp": 10,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "images/products/prod_59_10n_sandalum_agarbathi_cones.jpg",
+    "image_url": "images/products/prod_59_10n_r_sandalum_agarbathi_cones.jpg",
     "barcode": "8901751015362",
-    "image": "images/products/prod_59_10n_sandalum_agarbathi_cones.jpg"
+    "image": "images/products/prod_59_10n_r_sandalum_agarbathi_cones.jpg"
   },
   {
     "id": 61,
@@ -230,9 +237,9 @@
     "mrp": 86,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "images/products/prod_61_400g_quaker_oats.jpg",
+    "image_url": "images/products/prod_61_400g_r_quaker_oats_r.jpg",
     "barcode": "8901491103794",
-    "image": "images/products/prod_61_400g_quaker_oats.jpg"
+    "image": "images/products/prod_61_400g_r_quaker_oats_r.jpg"
   },
   {
     "id": 63,
@@ -241,9 +248,9 @@
     "mrp": 111,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "images/products/prod_63_500ml_dheepam_lamp_oil.jpg",
+    "image_url": "images/products/prod_63_500ml_r_dheepam_lamp_oil.jpg",
     "barcode": "8906010260897",
-    "image": "images/products/prod_63_500ml_dheepam_lamp_oil.jpg"
+    "image": "images/products/prod_63_500ml_r_dheepam_lamp_oil.jpg"
   },
   {
     "id": 65,
@@ -252,8 +259,9 @@
     "mrp": 12,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/IOS/Default/2024/2/385576212/LP/RX/EM/38768188/product-jpeg-500x500.png",
-    "barcode": "8906010262013"
+    "image_url": "images/products/prod_65_50ml_r_gold_winner_vanaspati.jpg",
+    "barcode": "8906010262013",
+    "image": "images/products/prod_65_50ml_r_gold_winner_vanaspati.jpg"
   },
   {
     "id": 76,
@@ -262,8 +270,9 @@
     "mrp": 45,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2023/6/314487320/YG/XX/LL/63187278/clinic-plus-shampoo-500x500.png",
-    "barcode": "8901526209910"
+    "image_url": "images/products/prod_76_20ml_r_garnier_black_naturals.jpg",
+    "barcode": "8901526209910",
+    "image": "images/products/prod_76_20ml_r_garnier_black_naturals.jpg"
   },
   {
     "id": 94,
@@ -272,9 +281,9 @@
     "mrp": 30,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/103/053/5895/front_en.3.400.jpg",
+    "image_url": "images/products/prod_94_80ml_r_lifebuoy_hand_wash.jpg",
     "barcode": "8901030904455",
-    "image": "https://images.openfoodfacts.org/images/products/890/103/053/5895/front_en.3.400.jpg"
+    "image": "images/products/prod_94_80ml_r_lifebuoy_hand_wash.jpg"
   },
   {
     "id": 110,
@@ -283,9 +292,9 @@
     "mrp": 89,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/103/053/5895/front_en.3.400.jpg",
+    "image_url": "images/products/prod_110_500ml_r_rin_ala.jpg",
     "barcode": "8901030761195",
-    "image": "https://images.openfoodfacts.org/images/products/890/103/053/5895/front_en.3.400.jpg"
+    "image": "images/products/prod_110_500ml_r_rin_ala.jpg"
   },
   {
     "id": 115,
@@ -294,9 +303,9 @@
     "mrp": 60,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "images/products/prod_55_1kg_r_sugar.jpg",
+    "image_url": "images/products/prod_115_1kg_r_sugar.jpg",
     "barcode": "1234",
-    "image": "images/products/prod_55_1kg_r_sugar.jpg"
+    "image": "images/products/prod_115_1kg_r_sugar.jpg"
   },
   {
     "id": 116,
@@ -305,8 +314,9 @@
     "mrp": 40,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/901/3008/front_en.5.400.jpg",
-    "barcode": "1233"
+    "image_url": "images/products/prod_116_500g_r_sugar.jpg",
+    "barcode": "1233",
+    "image": "images/products/prod_116_500g_r_sugar.jpg"
   },
   {
     "id": 117,
@@ -315,8 +325,9 @@
     "mrp": 12,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/901/3008/front_en.5.400.jpg",
-    "barcode": "12"
+    "image_url": "images/products/prod_117_250g_sugar.jpg",
+    "barcode": "12",
+    "image": "images/products/prod_117_250g_sugar.jpg"
   },
   {
     "id": 161,
@@ -325,9 +336,9 @@
     "mrp": 125,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "images/products/prod_161_100ml_vaseline_aloe_fresh.jpg",
+    "image_url": "images/products/prod_161_100ml_r_vaseline_aloe_fresh.jpg",
     "barcode": "8901030515521",
-    "image": "images/products/prod_161_100ml_vaseline_aloe_fresh.jpg"
+    "image": "images/products/prod_161_100ml_r_vaseline_aloe_fresh.jpg"
   },
   {
     "id": 197,
@@ -347,8 +358,9 @@
     "mrp": 35,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/297/905/0883/front_en.3.400.jpg",
-    "barcode": "8902979050906"
+    "image_url": "images/products/prod_198_200ml_r_cavins_butter.jpg",
+    "barcode": "8902979050906",
+    "image": "images/products/prod_198_200ml_r_cavins_butter.jpg"
   },
   {
     "id": 199,
@@ -367,8 +379,9 @@
     "mrp": 40,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/725/0870/front_en.3.400.jpg",
-    "barcode": "8906009990682"
+    "image_url": "images/products/prod_204_140g_r_elite_chocolate_cake.jpg",
+    "barcode": "8906009990682",
+    "image": "images/products/prod_204_140g_r_elite_chocolate_cake.jpg"
   },
   {
     "id": 205,
@@ -377,8 +390,9 @@
     "mrp": 40,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/604/215/0029/front_en.16.400.jpg",
-    "barcode": "8906009990651"
+    "image_url": "images/products/prod_205_140g_elite_vanilla_cake.jpg",
+    "barcode": "8906009990651",
+    "image": "images/products/prod_205_140g_elite_vanilla_cake.jpg"
   },
   {
     "id": 206,
@@ -387,8 +401,9 @@
     "mrp": 40,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/725/0870/front_en.3.400.jpg",
-    "barcode": "8906009990668"
+    "image_url": "images/products/prod_206_140g_r_elite_pineapple_cake.jpg",
+    "barcode": "8906009990668",
+    "image": "images/products/prod_206_140g_r_elite_pineapple_cake.jpg"
   },
   {
     "id": 207,
@@ -397,8 +412,9 @@
     "mrp": 40,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/725/0870/front_en.3.400.jpg",
-    "barcode": "890600999675"
+    "image_url": "images/products/prod_207_140g_r_elite_choco_orange_cake.jpg",
+    "barcode": "890600999675",
+    "image": "images/products/prod_207_140g_r_elite_choco_orange_cake.jpg"
   },
   {
     "id": 211,
@@ -407,8 +423,9 @@
     "mrp": 67,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/725/0870/front_en.3.400.jpg",
-    "barcode": "8906007250023"
+    "image_url": "images/products/prod_211_500g_r_elite_puttupodi.jpg",
+    "barcode": "8906007250023",
+    "image": "images/products/prod_211_500g_r_elite_puttupodi.jpg"
   },
   {
     "id": 225,
@@ -417,8 +434,9 @@
     "mrp": 14,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/910/600/7123/front_en.3.400.jpg",
-    "barcode": "00344"
+    "image_url": "images/products/prod_225_100g_r_bicycle_bleching.jpg",
+    "barcode": "00344",
+    "image": "images/products/prod_225_100g_r_bicycle_bleching.jpg"
   },
   {
     "id": 228,
@@ -427,8 +445,9 @@
     "mrp": 215,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/EG/RF/LH/GLADMIN-81955/mangaldeep-incense-sticks-250x250.jpg",
-    "barcode": "8906014310178"
+    "image_url": "images/products/prod_228_1ltr_r_porna_pooja_oil_pet.jpg",
+    "barcode": "8906014310178",
+    "image": "images/products/prod_228_1ltr_r_porna_pooja_oil_pet.jpg"
   },
   {
     "id": 229,
@@ -437,8 +456,9 @@
     "mrp": 45,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg",
-    "barcode": "8906001232421"
+    "image_url": "images/products/prod_229_125g_r_nature_pow_sandal.jpg",
+    "barcode": "8906001232421",
+    "image": "images/products/prod_229_125g_r_nature_pow_sandal.jpg"
   },
   {
     "id": 230,
@@ -447,8 +467,9 @@
     "mrp": 40,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg",
-    "barcode": "8906001232414"
+    "image_url": "images/products/prod_230_125g_r_nature_pow_rose.jpg",
+    "barcode": "8906001232414",
+    "image": "images/products/prod_230_125g_r_nature_pow_rose.jpg"
   },
   {
     "id": 231,
@@ -457,8 +478,9 @@
     "mrp": 40,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg",
-    "barcode": "8906001232438"
+    "image_url": "images/products/prod_231_125g_r_nature_pow_lavender.jpg",
+    "barcode": "8906001232438",
+    "image": "images/products/prod_231_125g_r_nature_pow_lavender.jpg"
   },
   {
     "id": 232,
@@ -467,8 +489,9 @@
     "mrp": 50,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg",
-    "barcode": "8906001232384"
+    "image_url": "images/products/prod_232_125g_r_nature_pow_papaya.jpg",
+    "barcode": "8906001232384",
+    "image": "images/products/prod_232_125g_r_nature_pow_papaya.jpg"
   },
   {
     "id": 233,
@@ -477,8 +500,9 @@
     "mrp": 45,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg",
-    "barcode": "8906001232407"
+    "image_url": "images/products/prod_233_125g_r_nature_pow_lime.jpg",
+    "barcode": "8906001232407",
+    "image": "images/products/prod_233_125g_r_nature_pow_lime.jpg"
   },
   {
     "id": 237,
@@ -487,9 +511,9 @@
     "mrp": 25,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/208/0014/front_en.3.400.jpg",
+    "image_url": "images/products/prod_237_50g_r_sakthi_turmeric_powder.jpg",
     "barcode": "8906002080014",
-    "image": "https://images.openfoodfacts.org/images/products/890/600/208/0014/front_en.3.400.jpg"
+    "image": "images/products/prod_237_50g_r_sakthi_turmeric_powder.jpg"
   },
   {
     "id": 258,
@@ -498,9 +522,9 @@
     "mrp": 46,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/890/124/870/1488/front_en.8.400.jpg",
+    "image_url": "images/products/prod_258_8ml_r_zandu_balm_green.jpg",
     "barcode": "8901248701105",
-    "image": "https://images.openbeautyfacts.org/images/products/890/124/870/1488/front_en.8.400.jpg"
+    "image": "images/products/prod_258_8ml_r_zandu_balm_green.jpg"
   },
   {
     "id": 269,
@@ -509,8 +533,9 @@
     "mrp": 43,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/NSDMERP/Default/2022/4/KE/KP/QY/131265089/a2b-om-podi-1650694455796-250x250.jpg",
-    "barcode": "8906054683416"
+    "image_url": "images/products/prod_269_ajwa_r_garlic_murukku_c.jpg",
+    "barcode": "8906054683416",
+    "image": "images/products/prod_269_ajwa_r_garlic_murukku_c.jpg"
   },
   {
     "id": 287,
@@ -519,9 +544,9 @@
     "mrp": 42,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/208/0014/front_en.3.400.jpg",
+    "image_url": "images/products/prod_287_200g_r_sakthi_bajji_mix.jpg",
     "barcode": "8906002082445",
-    "image": "https://images.openfoodfacts.org/images/products/890/600/208/0014/front_en.3.400.jpg"
+    "image": "images/products/prod_287_200g_r_sakthi_bajji_mix.jpg"
   },
   {
     "id": 291,
@@ -530,8 +555,9 @@
     "mrp": 60,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Open_and_close_Jaggery.jpg",
-    "barcode": "8908025108010"
+    "image_url": "images/products/prod_291_100g_r_rajam_panagkarkandu.jpg",
+    "barcode": "8908025108010",
+    "image": "images/products/prod_291_100g_r_rajam_panagkarkandu.jpg"
   },
   {
     "id": 300,
@@ -540,9 +566,9 @@
     "mrp": 25,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/106/301/2141/front_en.5.400.jpg",
+    "image_url": "images/products/prod_300_20rs_r_brita_good_day_cashew.jpg",
     "barcode": "8901063093409",
-    "image": "https://images.openfoodfacts.org/images/products/890/106/301/2141/front_en.5.400.jpg"
+    "image": "images/products/prod_300_20rs_r_brita_good_day_cashew.jpg"
   },
   {
     "id": 301,
@@ -551,9 +577,9 @@
     "mrp": 27,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/106/301/2141/front_en.5.400.jpg",
+    "image_url": "images/products/prod_301_75g_good_day_choco_chip.jpg",
     "barcode": "8901063004061",
-    "image": "https://images.openfoodfacts.org/images/products/890/106/301/2141/front_en.5.400.jpg"
+    "image": "images/products/prod_301_75g_good_day_choco_chip.jpg"
   },
   {
     "id": 308,
@@ -562,9 +588,9 @@
     "mrp": 9,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/106/301/3018/front_en.4.400.jpg",
+    "image_url": "images/products/prod_308_10rs_britanina_milk_bikis.jpg",
     "barcode": "8901063012813",
-    "image": "https://images.openfoodfacts.org/images/products/890/106/301/3018/front_en.4.400.jpg"
+    "image": "images/products/prod_308_10rs_britanina_milk_bikis.jpg"
   },
   {
     "id": 317,
@@ -573,9 +599,9 @@
     "mrp": 25,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/106/301/1014/front_en.3.400.jpg",
+    "image_url": "images/products/prod_317_r_britania_vita_marie.jpg",
     "barcode": "8901063014145",
-    "image": "https://images.openfoodfacts.org/images/products/890/106/301/1014/front_en.3.400.jpg"
+    "image": "images/products/prod_317_r_britania_vita_marie.jpg"
   },
   {
     "id": 323,
@@ -584,9 +610,9 @@
     "mrp": 40,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/103/053/5895/front_en.3.400.jpg",
+    "image_url": "images/products/prod_323_r_good_knight_maha_jambo_coil.jpg",
     "barcode": "8901157004243",
-    "image": "https://images.openfoodfacts.org/images/products/890/103/053/5895/front_en.3.400.jpg"
+    "image": "images/products/prod_323_r_good_knight_maha_jambo_coil.jpg"
   },
   {
     "id": 325,
@@ -595,9 +621,9 @@
     "mrp": 20,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/106/301/2561/front_en.4.400.jpg",
+    "image_url": "images/products/prod_325_120g_r_britannia_bourbon.jpg",
     "barcode": "8901063139336",
-    "image": "https://images.openfoodfacts.org/images/products/890/106/301/2561/front_en.4.400.jpg"
+    "image": "images/products/prod_325_120g_r_britannia_bourbon.jpg"
   },
   {
     "id": 327,
@@ -606,9 +632,9 @@
     "mrp": 10,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/106/301/2561/front_en.4.400.jpg",
+    "image_url": "images/products/prod_327_50g_r_brintannia_bourbon.jpg",
     "barcode": "8901063139329",
-    "image": "https://images.openfoodfacts.org/images/products/890/106/301/2561/front_en.4.400.jpg"
+    "image": "images/products/prod_327_50g_r_brintannia_bourbon.jpg"
   },
   {
     "id": 346,
@@ -617,9 +643,9 @@
     "mrp": 10,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/105/885/2264/front_en.4.400.jpg",
+    "image_url": "images/products/prod_346_10rs_r_kitkat.jpg",
     "barcode": "8901058024401",
-    "image": "https://images.openfoodfacts.org/images/products/890/105/885/2264/front_en.4.400.jpg"
+    "image": "images/products/prod_346_10rs_r_kitkat.jpg"
   },
   {
     "id": 347,
@@ -628,9 +654,9 @@
     "mrp": 200,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/172/501/1014/front_en.3.400.jpg",
+    "image_url": "images/products/prod_347_500g_r_avt_premium_tea.jpg",
     "barcode": "8902042111077",
-    "image": "https://images.openfoodfacts.org/images/products/890/172/501/1014/front_en.3.400.jpg"
+    "image": "images/products/prod_347_500g_r_avt_premium_tea.jpg"
   },
   {
     "id": 351,
@@ -639,9 +665,9 @@
     "mrp": 45,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/172/501/1014/front_en.3.400.jpg",
+    "image_url": "images/products/prod_351_100g_r_avt_premium_tea.jpg",
     "barcode": "8902042111053",
-    "image": "https://images.openfoodfacts.org/images/products/890/172/501/1014/front_en.3.400.jpg"
+    "image": "images/products/prod_351_100g_r_avt_premium_tea.jpg"
   },
   {
     "id": 354,
@@ -650,9 +676,9 @@
     "mrp": 10,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/172/501/1014/front_en.3.400.jpg",
+    "image_url": "images/products/prod_354_10rs_r_avt_premium_tea.jpg",
     "barcode": "8902042111183",
-    "image": "https://images.openfoodfacts.org/images/products/890/172/501/1014/front_en.3.400.jpg"
+    "image": "images/products/prod_354_10rs_r_avt_premium_tea.jpg"
   },
   {
     "id": 356,
@@ -661,9 +687,9 @@
     "mrp": 10,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/172/501/1014/front_en.3.400.jpg",
+    "image_url": "images/products/prod_356_10rs_r_avt_gold_cup.jpg",
     "barcode": "8902042163687",
-    "image": "https://images.openfoodfacts.org/images/products/890/172/501/1014/front_en.3.400.jpg"
+    "image": "images/products/prod_356_10rs_r_avt_gold_cup.jpg"
   },
   {
     "id": 359,
@@ -672,8 +698,9 @@
     "mrp": 10,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/103/053/5895/front_en.3.400.jpg",
-    "barcode": "8901058025095"
+    "image_url": "images/products/prod_359_10rs_r_sunrise.jpg",
+    "barcode": "8901058025095",
+    "image": "images/products/prod_359_10rs_r_sunrise.jpg"
   },
   {
     "id": 361,
@@ -682,8 +709,9 @@
     "mrp": 24,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/103/053/5895/front_en.3.400.jpg",
-    "barcode": "89081198"
+    "image_url": "images/products/prod_361_2rs_r_sunrise_2_12.jpg",
+    "barcode": "89081198",
+    "image": "images/products/prod_361_2rs_r_sunrise_2_12.jpg"
   },
   {
     "id": 368,
@@ -692,8 +720,9 @@
     "mrp": 500,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/DD/WD/DB/GLADMIN-60238/arokya-milk-250x250.jpg",
-    "barcode": "8904057390331"
+    "image_url": "images/products/prod_368_500ml_hat_ghee_jar.jpg",
+    "barcode": "8904057390331",
+    "image": "images/products/prod_368_500ml_hat_ghee_jar.jpg"
   },
   {
     "id": 370,
@@ -702,8 +731,9 @@
     "mrp": 10,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/404/390/1015/front_en.34.400.jpg",
-    "barcode": "8901512540102"
+    "image_url": "images/products/prod_370_10rs_r_act_ii_clas_salt.jpg",
+    "barcode": "8901512540102",
+    "image": "images/products/prod_370_10rs_r_act_ii_clas_salt.jpg"
   },
   {
     "id": 404,
@@ -712,9 +742,9 @@
     "mrp": 18,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/103/053/5895/front_en.3.400.jpg",
+    "image_url": "images/products/prod_404_r_new_hit_chalk_cockroach.jpg",
     "barcode": "8901157028003",
-    "image": "https://images.openfoodfacts.org/images/products/890/103/053/5895/front_en.3.400.jpg"
+    "image": "images/products/prod_404_r_new_hit_chalk_cockroach.jpg"
   },
   {
     "id": 408,
@@ -723,8 +753,9 @@
     "mrp": 30,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/725/0870/front_en.3.400.jpg",
-    "barcode": "8901157027020"
+    "image_url": "images/products/prod_408_r_hit_rats_cake.jpg",
+    "barcode": "8901157027020",
+    "image": "images/products/prod_408_r_hit_rats_cake.jpg"
   },
   {
     "id": 413,
@@ -733,8 +764,9 @@
     "mrp": 40,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/000/008/900/2940/front_en.7.400.jpg",
-    "barcode": "8906009512112"
+    "image_url": "images/products/prod_413_100ml_r_vvd_coconut_oil.jpg",
+    "barcode": "8906009512112",
+    "image": "images/products/prod_413_100ml_r_vvd_coconut_oil.jpg"
   },
   {
     "id": 421,
@@ -743,8 +775,9 @@
     "mrp": 120,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/629/512/005/2334/front_en.3.400.jpg",
-    "barcode": "8901157025033"
+    "image_url": "images/products/prod_421_200ml_r_hit_black.jpg",
+    "barcode": "8901157025033",
+    "image": "images/products/prod_421_200ml_r_hit_black.jpg"
   },
   {
     "id": 423,
@@ -753,8 +786,9 @@
     "mrp": 105,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/629/512/005/2334/front_en.3.400.jpg",
-    "barcode": "8901157025071"
+    "image_url": "images/products/prod_423_200ml_r_hit_fresh_fragrance.jpg",
+    "barcode": "8901157025071",
+    "image": "images/products/prod_423_200ml_r_hit_fresh_fragrance.jpg"
   },
   {
     "id": 441,
@@ -763,8 +797,9 @@
     "mrp": 45,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/629/512/005/2334/front_en.3.400.jpg",
-    "barcode": "8901157004342"
+    "image_url": "images/products/prod_441_r_gk_advanced_low_smoke_coil.jpg",
+    "barcode": "8901157004342",
+    "image": "images/products/prod_441_r_gk_advanced_low_smoke_coil.jpg"
   },
   {
     "id": 462,
@@ -773,8 +808,9 @@
     "mrp": 115,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2021/9/ZY/PP/LH/135258128/moong-dal-500x500.jpg",
-    "barcode": "6"
+    "image_url": "images/products/prod_462_1kg_pasi_paruppu_r.jpg",
+    "barcode": "6",
+    "image": "images/products/prod_462_1kg_pasi_paruppu_r.jpg"
   },
   {
     "id": 463,
@@ -783,8 +819,9 @@
     "mrp": 80,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2021/9/ZY/PP/LH/135258128/moong-dal-500x500.jpg",
-    "barcode": "1204"
+    "image_url": "images/products/prod_463_500g_r_pasi_paruppu.jpg",
+    "barcode": "1204",
+    "image": "images/products/prod_463_500g_r_pasi_paruppu.jpg"
   },
   {
     "id": 471,
@@ -1000,9 +1037,9 @@
     "mrp": 152,
     "stock": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openbeautyfacts.org/images/products/890/102/300/0034/front_en.8.400.jpg",
+    "image_url": "images/products/prod_586_r_3_100g_r_cinthol_confidence.jpg",
     "barcode": "8901023010453",
-    "image": "https://images.openbeautyfacts.org/images/products/890/102/300/0034/front_en.8.400.jpg"
+    "image": "images/products/prod_586_r_3_100g_r_cinthol_confidence.jpg"
   },
   {
     "id": 591,

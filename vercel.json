@@ -27,7 +27,7 @@
   ],
   "functions": {
     "api/**/*.js": {
-      "includeFiles": "public/**"
+      "includeFiles": "{public/**,*.json,analyticsService.js,generativeAiAdvisor.js,aiProductImageEngine.js,festivalMasterData.js}"
     }
   },
   "headers": [

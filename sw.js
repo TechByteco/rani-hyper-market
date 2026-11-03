@@ -1,5 +1,5 @@
 // Rani Hyper Market - Service Worker (PWA & Offline Resilience)
-const CACHE_NAME = 'rani-market-v1.3';
+const CACHE_NAME = 'rani-market-v1.4';
 const STATIC_ASSETS = [
   '/',
   '/store',
@@ -49,7 +49,7 @@ self.addEventListener('fetch', (event) => {
 
   // Skip non-GET or cross-origin analytics/mutation APIs
   if (req.method !== 'GET') return;
-  if (url.pathname.startsWith('/api/pos/sell') || url.pathname.startsWith('/api/pos/order')) return;
+  if (url.pathname.startsWith('/api/')) return;
 
   // Cache-first for images and fonts
   if (

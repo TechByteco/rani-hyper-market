@@ -158,8 +158,8 @@ async function callGeminiApi(question, fy, context, config, history = []) {
     return null;
   }
 
-  const primaryModel = config.model || 'gemini-3.1-flash-lite';
-  const fallbackModels = [primaryModel, 'gemini-3.1-flash-lite', 'gemini-3.6-flash'].filter((v, i, a) => a.indexOf(v) === i);
+  const primaryModel = config.model || 'gemini-1.5-flash';
+  const fallbackModels = [primaryModel, 'gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-1.5-pro'].filter((v, i, a) => a.indexOf(v) === i);
 
   const systemPrompt = `You are the executive Chief AI Business Intelligence & Operations Advisor for "SNS Market (Rani Hyper Market)", the leading supermarket/hypermarket in Bodinayakanur, Theni District, Tamil Nadu, India.
 The store owner is Rani. You have direct, live integration with the store's POS checkout database covering 5 financial years (2022–2027) with 137,205 real transactions and ₹2.55 Crore in historical turnover.
@@ -824,6 +824,7 @@ async function generateAnswer(question, fy = '2026-2027', history = []) {
   const localRes = generateLocalSynthesis(question, fy, context);
   return {
     ...localRes,
+    engine: 'SNS Autonomous Retail Engine (Local)',
     source: 'SNS AI Generative Engine (Local)'
   };
 }

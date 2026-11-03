@@ -266,7 +266,7 @@ if (reqPath === '/api/pos/status') {
         // ----------------------------------------------------
     // Dedicated Product Image Updating API (Vercel Serverless)
     // ----------------------------------------------------
-    if (reqPath === '/api/products/update-image' && req.method === 'POST') {
+    if ((reqPath === '/api/products/update-image' || reqPath === '/api/products/update-category') && req.method === 'POST') {
       const body = await getBody();
       const { authUser, authPass, productId, barcode, imageUrl, imageBase64, category } = body;
 

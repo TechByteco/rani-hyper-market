@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SNS AI Marketing Partner — Pitch Deck & Executive Presentation</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #070B19;
+      --bg-card: #0F172A;
+      --bg-card-border: #1E293B;
+      --emerald: #10B981;
+      --emerald-glow: rgba(16, 185, 129, 0.25);
+      --indigo: #6366F1;
+      --gold: #F59E0B;
+      --purple: #A855F7;
+      --rose: #F43F5E;
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* Top Presentation Bar */
+    header.deck-bar {
+      height: 56px;
+      background: rgba(11, 19, 43, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--bg-card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--emerald), var(--indigo));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 15px;
+    }
+
+    .brand-text h1 {
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-text span {
+      font-size: 10px;
+      color: var(--emerald);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .deck-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .action-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .action-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--emerald);
+    }
+
+    .action-btn.primary {
+      background: linear-gradient(135deg, var(--emerald), #059669);
+      color: #000;
+      border: none;
+    }
+
+    .action-btn.primary:hover {
+      filter: brightness(1.1);
+    }
+
+    /* Main Slide Stage */
+    main.stage {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .slide-viewport {
+      width: 100%;
+      max-width: 1300px;
+      aspect-ratio: 16 / 9;
+      background: #0B132B;
+      border: 1px solid var(--bg-card-border);
+      border-radius: 20px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 40px 48px;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      justify-content: space-between;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Slide Header */
+    .slide-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid var(--emerald);
+      color: var(--emerald);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      width: fit-content;
+      margin-bottom: 8px;
+    }
+
+    .slide-title {
+      font-size: clamp(22px, 2.6vw, 32px);
+      font-weight: 900;
+      letter-spacing: -0.8px;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .slide-sub {
+      font-size: clamp(12px, 1.2vw, 15px);
+      color: var(--text-muted);
+      margin-top: 4px;
+      margin-bottom: 24px;
+    }
+
+    /* Grid Layouts inside slides */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      flex: 1;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      flex: 1;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      flex: 1;
+    }
+
+    /* Stylized Cards inside slide */
+    .deck-card {
+      background: #1C2541;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      position: relative;
+    }
+
+    .deck-card.highlight {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: #152238;
+    }
+
+    .card-badge {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      color: var(--emerald);
+    }
+
+    .card-badge.gold { color: var(--gold); }
+    .card-badge.indigo { color: var(--indigo); }
+    .card-badge.rose { color: var(--rose); }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .card-body {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .card-body ul {
+      list-style: none;
+    }
+
+    .card-body ul li {
+      margin-bottom: 6px;
+      position: relative;
+      padding-left: 14px;
+    }
+
+    .card-body ul li::before {
+      content: '•';
+      color: var(--emerald);
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+
+    /* Stat Box */
+    .stat-box {
+      background: #1C2541;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .stat-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(24px, 2.5vw, 36px);
+      font-weight: 900;
+      color: var(--emerald);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-number.gold { color: var(--gold); }
+    .stat-number.indigo { color: var(--indigo); }
+    .stat-number.purple { color: var(--purple); }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #fff;
+    }
+
+    .stat-desc {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Slide Image Preview Container */
+    .slide-media {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      height: 100%;
+      position: relative;
+    }
+
+    .slide-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Bottom Controller Bar */
+    footer.deck-controls {
+      height: 60px;
+      background: rgba(11, 19, 43, 0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--bg-card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      z-index: 100;
+    }
+
+    .progress-track {
+      flex: 1;
+      max-width: 380px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin: 0 20px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--emerald), var(--indigo));
+      width: 7.14%;
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-arrow-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-arrow-btn:hover {
+      background: var(--emerald);
+      color: #000;
+    }
+
+    .slide-counter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .slide-counter strong {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Bar -->
+  <header class="deck-bar">
+    <div class="brand-area">
+      <div class="brand-icon">
+        <i class="fa-solid fa-brain"></i>
+      </div>
+      <div class="brand-text">
+        <h1>SNS AI Marketing Partner</h1>
+        <span>Autonomous Agentic Retail Pitch Deck</span>
+      </div>
+    </div>
+
+    <div class="deck-actions">
+      <a href="/SNS_Market_AI_Marketing_Partner_Presentation.pptx" download class="action-btn primary">
+        <i class="fa-solid fa-download"></i>
+        <span>Download PPTX (PowerPoint)</span>
+      </a>
+      <a href="/marketing" target="_blank" class="action-btn">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        <span>Open Live Studio</span>
+      </a>
+      <button onclick="toggleFullScreen()" class="action-btn">
+        <i class="fa-solid fa-expand"></i>
+        <span>Fullscreen (F)</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Slide Stage -->
+  <main class="stage">
+    <div class="slide-viewport">
+
+      <!-- SLIDE 1: COVER -->
+      <div class="slide active" id="slide-1">
+        <div>
+          <div class="slide-tag">● Flagship Retail AI Innovation · Bodinayakanur, Tamil Nadu</div>
+          <h1 class="slide-title" style="font-size: 42px; margin-top: 14px;">SNS AI Marketing Partner</h1>
+          <h2 style="font-size: 22px; color: var(--gold); font-weight: 800; margin-top: 6px;">Autonomous Agentic Retail Operating System</h2>
+          <p class="slide-sub" style="font-size: 15px; max-width: 800px; margin-top: 10px;">
+            Transforming 17,500+ bills, 7,179 catalog SKUs, and 5 financial years into automated multi-channel campaigns, personalized customer retention, and protected profit margins.
+          </p>
+        </div>
+
+        <div class="grid-4" style="margin-top: 20px;">
+          <div class="stat-box">
+            <div class="stat-number">Rani Market</div>
+            <div class="stat-label">Enterprise Deployment</div>
+            <div class="stat-desc">Bodinayakanur, Theni Dist.</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number indigo">4 Agents</div>
+            <div class="stat-label">Autonomous Swarm</div>
+            <div class="stat-desc">Gemini + Local Synthesis</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number gold">₹2.55 Cr</div>
+            <div class="stat-label">5-Year Historical Ledger</div>
+            <div class="stat-desc">137,205 Audited Bills</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number purple">Vercel + Edge</div>
+            <div class="stat-label">Production Online</div>
+            <div class="stat-desc">Offline SQLite Bridge</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2: THE PROBLEM -->
+      <div class="slide" id="slide-2">
+        <div>
+          <div class="slide-tag">● Chapter 01 · Origin & Problem Space</div>
+          <h2 class="slide-title">The Retail Dilemma: Why Independent Supermarkets Struggle</h2>
+          <p class="slide-sub">How traditional supermarkets lose margin, footfall, and inventory velocity.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="deck-card">
+            <div class="card-badge rose">Threat 01 · Dark Stores & Quick Commerce</div>
+            <div class="card-title">Blinkit & Zepto Encroachment</div>
+            <div class="card-body">
+              <ul>
+                <li>App-based delivery giants aggressively target Tier-2 & Tier-3 towns like Bodinayakanur and Theni.</li>
+                <li>Local retailers have fresher stock and lower purchase costs, but lack algorithmic digital customer outreach.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge gold">Threat 02 · Siloed Offline Data</div>
+            <div class="card-title">Data Trapped in Cash Registers</div>
+            <div class="card-body">
+              <ul>
+                <li>17,500+ past bills sat dead inside offline desktop POS machines.</li>
+                <li>Zero intelligence extraction on shopper restock habits, basket affinity, or lapsed customers.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge purple">Threat 03 · Frozen Working Capital</div>
+            <div class="card-title">Dead Stock & Stagnancy</div>
+            <div class="card-body">
+              <ul>
+                <li>₹4,18,000+ in working capital was frozen in slow-moving non-staple goods.</li>
+                <li>Store managers had no automated warning before items approached product expiration.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge">Threat 04 · Margin Destruction</div>
+            <div class="card-title">Arbitrary Intuition Discounting</div>
+            <div class="card-body">
+              <ul>
+                <li>Discounts were decided by gut feel rather than mathematical unit profit.</li>
+                <li>Blanket 20% discounts pushed gross margins into negative territory (< 0%).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3: STRATEGIC VISION -->
+      <div class="slide" id="slide-3">
+        <div>
+          <div class="slide-tag">● Chapter 02 · Strategic North Star</div>
+          <h2 class="slide-title">The Core Thesis: Transform Data Trapped In Cash Registers Into Cash Flow</h2>
+          <p class="slide-sub">Bridging offline hypermarket inventory with modern autonomous AI agent orchestration.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="deck-card highlight">
+            <div class="card-badge">Vision Manifesto</div>
+            <div class="card-title">Autonomous Retail Operating System</div>
+            <div class="card-body">
+              <ul>
+                <li><strong>Physical-to-Digital Bridge:</strong> Every offline checkout swipe automatically informs the AI marketing engine in real-time.</li>
+                <li><strong>Formula-First Margin Protection:</strong> Promos are rejected unless gross margin is mathematically calculated and verified (&ge; 5%).</li>
+                <li><strong>Hyper-Local Cultural Resonance:</strong> Authentic Tamil vernacular tailored to local family food habits and Bodinayakanur customs.</li>
+                <li><strong>Omni-Channel Synchronization:</strong> Instant push to WhatsApp, Meta ads, Google Merchant Center, and PWA.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="slide-media">
+            <img src="/images/products/prod_9_8g_r_iodex.jpg" onerror="this.src='/favicon.ico'" style="display:none;">
+            <div class="deck-card" style="height: 100%; justify-content: center; background: #0B172E;">
+              <div class="card-badge indigo">Production Platform</div>
+              <div class="card-title">Rani Hyper Market Digital Ecosystem</div>
+              <p class="card-body" style="font-size: 14px; margin-top: 8px;">
+                A complete omnichannel retail system with 7,179 catalog products, desktop POS synchronization, hardware barcode scanning, and multi-channel campaign dispatch.
+              </p>
+              <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <span style="background: rgba(16,185,129,0.2); color: var(--emerald); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold;">Live on Vercel</span>
+                <span style="background: rgba(99,102,241,0.2); color: var(--indigo); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold;">Google Merchant Feed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4: ARCHITECTURE -->
+      <div class="slide" id="slide-4">
+        <div>
+          <div class="slide-tag">● Chapter 03 · Enterprise Architecture</div>
+          <h2 class="slide-title">The Unified Quad-Pillar Platform Architecture</h2>
+          <p class="slide-sub">A resilient, full-stack edge-to-cloud ecosystem engineered for 99.9% retail uptime.</p>
+        </div>
+
+        <div class="grid-4">
+          <div class="deck-card">
+            <div class="card-badge">Pillar 01 · Edge Consumer</div>
+            <div class="card-title">Storefront PWA</div>
+            <div class="card-body">
+              <ul>
+                <li>Progressive Web App.</li>
+                <li>Offline IndexedDB cache (<25ms).</li>
+                <li>Hardware camera scanner.</li>
+                <li>Direct WhatsApp order routing.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge indigo">Pillar 02 · Store Ops</div>
+            <div class="card-title">Desktop POS Station</div>
+            <div class="card-body">
+              <ul>
+                <li>High-speed cashier grid.</li>
+                <li>Thermal ESC/POS printing.</li>
+                <li>Daily sales & tax ledgers.</li>
+                <li>Zero-latency SQLite database.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge purple">Pillar 03 · Cloud Sync</div>
+            <div class="card-title">Cloud Pipeline</div>
+            <div class="card-body">
+              <ul>
+                <li>Google Merchant XML feed.</li>
+                <li>6.28 MB catalog index.</li>
+                <li>Multi-year ledger sync.</li>
+                <li>Vercel serverless engine.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge gold">Pillar 04 · Agentic AI</div>
+            <div class="card-title">SNS Marketing AI</div>
+            <div class="card-body">
+              <ul>
+                <li>Multi-Agent Swarm.</li>
+                <li>Formula margin guard.</li>
+                <li>RFM customer clustering.</li>
+                <li>Lunisolar festival predictor.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 5: AGENT SWARM -->
+      <div class="slide" id="slide-5">
+        <div>
+          <div class="slide-tag">● Chapter 04 · Autonomous Agents</div>
+          <h2 class="slide-title">The 4-Agent Swarm: SNS Marketing Autonomous Specialists</h2>
+          <p class="slide-sub">Specialized agentic workers collaborating in real-time to drive retail footfall and sales.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="deck-card">
+            <div class="card-badge">Agent 01 · Intelligence Miner</div>
+            <div class="card-title">Basket & SKU Miner</div>
+            <div class="card-body">
+              <ul>
+                <li>Continuous ingestion of 17,547 checkout vouchers.</li>
+                <li>Computes inventory turnover velocity and basket affinities (Rice + Dal + Ghee bundles).</li>
+                <li>Identifies slow-moving dead stock before shelf expiry.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge indigo">Agent 02 · Creative Synthesis</div>
+            <div class="card-title">Generative Copywriter</div>
+            <div class="card-body">
+              <ul>
+                <li>Powered by Gemini API & Autonomous Local Retail Engine.</li>
+                <li>Synthesizes culturally resonant Tamil traditional and Modern express promotional copy.</li>
+                <li>Generates tailored WhatsApp, Instagram Reel hooks, and DLT SMS.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge purple">Agent 03 · Distribution</div>
+            <div class="card-title">Omni-Channel Dispatcher</div>
+            <div class="card-body">
+              <ul>
+                <li>Pre-populates 1-click WhatsApp cart links with store numbers.</li>
+                <li>Geo-fences Meta ads strictly to Bodinayakanur PIN 625513.</li>
+                <li>Dispatches real-time Google Shopping product feed updates.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge gold">Agent 04 · Seasonal Predictive</div>
+            <div class="card-title">Lunisolar Festival Forecaster</div>
+            <div class="card-body">
+              <ul>
+                <li>Analyzes 5-year lunisolar retail surge curves.</li>
+                <li>Forecasts 3.2x Thai Pongal and 2.35x Deepavali surges.</li>
+                <li>Autonomously drafts vendor Purchase Orders (PO) 2 weeks ahead.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 6: MATHEMATICAL FORMULAS -->
+      <div class="slide" id="slide-6">
+        <div>
+          <div class="slide-tag">● Chapter 05 · Mathematical Rigor</div>
+          <h2 class="slide-title">Live Financial Formulas: Margin Protection & Conversion Models</h2>
+          <p class="slide-sub">Replacing arbitrary intuition with verifiable mathematical retail equations.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="deck-card highlight">
+            <div class="card-badge gold">Core Formulas</div>
+            <div class="card-title">The Retail Mathematics Engine</div>
+            <div class="card-body" style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px;">
+              <p>Deal Price = MRP × (1 - Discount% / 100)</p>
+              <p style="margin-top: 6px;">Unit Profit = Deal Price - Wholesale Cost</p>
+              <p style="margin-top: 6px;">Gross Margin% = (Unit Profit / Deal Price) × 100</p>
+              <p style="color: var(--emerald); margin-top: 8px;">🛡️ Margin Check: Enforces Gross Margin &ge; 5.0%</p>
+              <p style="margin-top: 8px;">Conversion% = min(22.0%, 4.5% + (Discount% × 0.35%))</p>
+              <p style="margin-top: 6px;">Projected Orders = Audience Reach × (Conversion% / 100)</p>
+              <p style="margin-top: 6px;">Projected GMV = Projected Orders × Deal Price</p>
+              <p style="margin-top: 6px;">ROI Multiplier = Projected GMV / Dispatch Cost</p>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge">Live Simulation Case</div>
+            <div class="card-title">Ponni Boiled Rice (25kg Sack)</div>
+            <div class="card-body">
+              <ul>
+                <li><strong>Standard MRP:</strong> ₹1,450 | <strong>Wholesale Cost:</strong> ₹1,215</li>
+                <li><strong>Promo Discount:</strong> 15% OFF &rarr; <strong>Deal Price:</strong> ₹1,233</li>
+                <li><strong>Customer Savings:</strong> ₹217 per sack</li>
+                <li><strong>Unit Gross Profit:</strong> ₹18/bag (Margin Protected)</li>
+                <li><strong>Audience:</strong> 2,680 Weekly Grocery Households</li>
+                <li><strong>Predicted Conversion:</strong> 9.8% &rarr; <strong>263 Bags Sold</strong></li>
+                <li><strong>Projected Revenue:</strong> ₹3,24,279 GMV</li>
+                <li><strong>Marketing Dispatch Cost:</strong> ₹1,072 (WhatsApp Cloud API)</li>
+                <li><strong>Verified Marketing ROI:</strong> 302.5x Return!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 7: RFM SEGMENTATION -->
+      <div class="slide" id="slide-7">
+        <div>
+          <div class="slide-tag">● Chapter 06 · Customer Intelligence</div>
+          <h2 class="slide-title">Audited RFM Segmentation: 4 High-Yield Customer Cohorts</h2>
+          <p class="slide-sub">Grouping 17,548 historical customer profiles into targeted behavioral cohorts.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="deck-card">
+            <div class="card-badge">VIP Champions · 1,420 Families</div>
+            <div class="card-title">Highest Lifetime Value</div>
+            <div class="card-body">
+              <ul>
+                <li><strong>AOV:</strong> ₹1,240 / Order · <strong>GMV:</strong> ₹21.1 Lakhs/yr (42% of profits).</li>
+                <li>Never blasted with generic spam deals.</li>
+                <li>Permanent Free 30-min Express Delivery + Early access to pure country ghee & Diwali sweets.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge indigo">Loyal Regulars · 2,680 Families</div>
+            <div class="card-title">Volume Backbone</div>
+            <div class="card-body">
+              <ul>
+                <li><strong>AOV:</strong> ₹890 / Order · <strong>GMV:</strong> ₹28.6 Lakhs/yr.</li>
+                <li>Bi-weekly staple grocery replenishers.</li>
+                <li>Sunday morning personalized restock reminder with 1-tap WhatsApp reorder.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge rose">Dormant At-Risk · 1,730 Families</div>
+            <div class="card-title">Churn Mitigation</div>
+            <div class="card-body">
+              <ul>
+                <li><strong>AOV:</strong> ₹680 / Order · <strong>GMV:</strong> ₹14.1 Lakhs/yr.</li>
+                <li>Lapsed shoppers inactive for 45+ days.</li>
+                <li>Automated Day-46 win-back loop: ₹50 instant voucher + zero delivery fee.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge gold">Festival Surfers · 2,050 Families</div>
+            <div class="card-title">Seasonal Surge</div>
+            <div class="card-body">
+              <ul>
+                <li><strong>AOV:</strong> ₹1,650 / Order · <strong>GMV:</strong> ₹40.5 Lakhs/yr.</li>
+                <li>High-ticket festive and wedding shoppers.</li>
+                <li>Pre-booking bulk ghee, cooking oil tins, and sweet master combos before Deepavali & Pongal.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 8: CULTURAL RESONANCE -->
+      <div class="slide" id="slide-8">
+        <div>
+          <div class="slide-tag">● Chapter 07 · Cultural AI Resonance</div>
+          <h2 class="slide-title">Why Generic English Fails & Tamil Vernacular Converts</h2>
+          <p class="slide-sub">Respecting local food traditions, culinary terminology, and festive customs in Theni district.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="deck-card">
+            <div class="card-badge rose">Conventional Big-Box English Promo (Fails)</div>
+            <div class="card-title">Detached Corporate Blasts</div>
+            <div class="card-body">
+              <p style="font-style: italic; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+                "Super Discount! Get 15% off on cooking oil and rice bag. Limited period offer. Visit store today."
+              </p>
+              <ul style="margin-top: 10px;">
+                <li>❌ Emotionally detached & cold.</li>
+                <li>❌ Ignores specific rice variety preferences (Ponni Boiled vs Raw vs Idli rice).</li>
+                <li>❌ Low response rate (< 2.8% engagement).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card highlight">
+            <div class="card-badge">SNS AI Authentic Tamil Copy (4.2x Conversion)</div>
+            <div class="card-title">Culturally Resonant Vernacular</div>
+            <div class="card-body">
+              <p style="font-style: italic; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; color: #6EE7B7;">
+                "👑 போடிநாயக்கனூர் வாராந்திர மளிகை ஆஃபர்! முதல் தரம் தஞ்சாவூர் பொன்னி புழுங்கல் அரிசி (25kg) மற்றும் இதய நல்லெண்ணெய் 15% சிறப்பு தள்ளுபடியில். 30 நிமிடங்களில் உங்கள் வீட்டிற்கே டெலிவரி!"
+              </p>
+              <ul style="margin-top: 10px;">
+                <li>✅ Instantly establishes emotional trust with local families.</li>
+                <li>✅ Highlights 30-min doorstep drop across Bodinayakanur.</li>
+                <li>✅ Yields 4.2x higher WhatsApp open & click-through rates!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 9: OMNI-CHANNEL MATRIX -->
+      <div class="slide" id="slide-9">
+        <div>
+          <div class="slide-tag">● Chapter 08 · Omni-Channel Distribution</div>
+          <h2 class="slide-title">The Connected Omni-Channel Distribution Matrix</h2>
+          <p class="slide-sub">Publishing synchronized campaigns across search, social, chat, and store hardware.</p>
+        </div>
+
+        <div class="grid-4">
+          <div class="deck-card">
+            <div class="card-badge">Channel 01</div>
+            <div class="card-title">WhatsApp Cloud</div>
+            <div class="card-body">
+              <ul>
+                <li>Direct chat routing.</li>
+                <li>Pre-filled carts.</li>
+                <li>Instant confirmations.</li>
+                <li>Post-purchase e-Bills.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge indigo">Channel 02</div>
+            <div class="card-title">Meta Hyper-Local</div>
+            <div class="card-body">
+              <ul>
+                <li>Instagram & FB reels.</li>
+                <li>Geo-fenced to PIN 625513.</li>
+                <li>Zero wasted ad spend.</li>
+                <li>Footfall driving walk-ins.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge purple">Channel 03</div>
+            <div class="card-title">Google Merchant</div>
+            <div class="card-body">
+              <ul>
+                <li>Real-time 6.28 MB feed.</li>
+                <li>7,179 SKUs indexed.</li>
+                <li>Live price & GST info.</li>
+                <li>Direct Google Shopping hits.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge gold">Channel 04</div>
+            <div class="card-title">PWA & Barcode</div>
+            <div class="card-body">
+              <ul>
+                <li>Progressive Web App.</li>
+                <li>Hardware barcode scanner.</li>
+                <li>Sub-25ms offline cache.</li>
+                <li>Instant checkout speed.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 10: FESTIVAL SURGE FORECASTER -->
+      <div class="slide" id="slide-10">
+        <div>
+          <div class="slide-tag">● Chapter 09 · Seasonal Intelligence</div>
+          <h2 class="slide-title">Lunisolar Festival Surge Forecaster & Procurement Engine</h2>
+          <p class="slide-sub">Eliminating stockouts and festival buying chaos through predictive vendor purchase orders.</p>
+        </div>
+
+        <div class="grid-3">
+          <div class="deck-card">
+            <div class="card-badge">3.20x Harvest Peak</div>
+            <div class="card-title">Thai Pongal Harvest Week</div>
+            <div class="card-body">
+              <ul>
+                <li><strong>Historical Turnover:</strong> ₹1,88,000</li>
+                <li><strong>Reorder Window:</strong> Jan 05 (10 days ahead)</li>
+                <li><strong>Key SKUs:</strong> Raw Rice (+25 bags), Jaggery (+180 kg), Cashews & Raisins (+40 kg).</li>
+                <li>Vendor PO drafted before mandi rate spikes.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge gold">2.35x Surge</div>
+            <div class="card-title">Deepavali Sweet Rush</div>
+            <div class="card-body">
+              <ul>
+                <li><strong>Historical Turnover:</strong> ₹1,42,000</li>
+                <li><strong>Reorder Window:</strong> Oct 12 (14 days ahead)</li>
+                <li><strong>Key SKUs:</strong> Pure Ghee (+120 tins), Maida & Rava (+350 kg), Sunflower Oil (+480 pouches).</li>
+                <li>Bulk pre-booking locks in 4.5% higher distributor margin.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge indigo">2.10x Business Surge</div>
+            <div class="card-title">Ayudha Pooja Commercial</div>
+            <div class="card-body">
+              <ul>
+                <li><strong>Commercial Blitz:</strong> ₹1,23,375</li>
+                <li><strong>Focus:</strong> Vehicle & shop worship across Bodi businesses.</li>
+                <li><strong>Key SKUs:</strong> Pori & Kadalai (+220 bags), Camphor & Agarbatti (+150 packs), Sweets (+95 tins).</li>
+                <li>B2B enterprise bundles capture local business spending.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 11: REPORTS STATION -->
+      <div class="slide" id="slide-11">
+        <div>
+          <div class="slide-tag">● Chapter 10 · Reporting & Ledger Verification</div>
+          <h2 class="slide-title">Real-Time Reports Station & Financial Reconciliation</h2>
+          <p class="slide-sub">Instant business reports, tax ledgers, and fast-moving staple insights with live search.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="deck-card">
+            <div class="card-badge">Daily Cash Register</div>
+            <div class="card-title">Daily Sales & Profit Ledger</div>
+            <div class="card-body">
+              <ul>
+                <li>Dynamic date range filtering (Today, Yesterday, Last 7d, Month).</li>
+                <li>Reconciles actual turnover, purchase COGS, gross profit, and margin %.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge indigo">Tax Compliance</div>
+            <div class="card-title">GSTR-1 Tax Liability Ledger</div>
+            <div class="card-body">
+              <ul>
+                <li>0% Exempt: Fresh produce & raw grains (41.8% share).</li>
+                <li>5% Slab: Branded staples, atta, sugar, tea (35.4% share).</li>
+                <li>12% Slab: Ghee, butter, biscuits (14.8% share).</li>
+                <li>18% Slab: Detergents & personal care (8.0% share).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge gold">Cash Flow Audit</div>
+            <div class="card-title">Payment Mode Reconciliation</div>
+            <div class="card-body">
+              <ul>
+                <li><strong>Cash Register:</strong> 74.5% (Physical cash counter).</li>
+                <li><strong>UPI (GPay / PhonePe / QR):</strong> 21.5% (Direct bank settlement).</li>
+                <li><strong>Card Swipes:</strong> 4.0% (POS terminal reconciliation).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge rose">Capital Optimization</div>
+            <div class="card-title">Dead Stock Capital Recovery</div>
+            <div class="card-body">
+              <ul>
+                <li>Scans 7,179 catalog items for stagnancy (&ge; 15 units, &ge; 60 days).</li>
+                <li>Calculates locked capital and triggers automated BOGO clearance bundles.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 12: VISUAL SHOWCASE -->
+      <div class="slide" id="slide-12">
+        <div>
+          <div class="slide-tag">● Chapter 11 · Visual Showcase</div>
+          <h2 class="slide-title">The Live Production Surfaces in Action</h2>
+          <p class="slide-sub">High-performance client interfaces serving shoppers, cashiers, and store executives.</p>
+        </div>
+
+        <div class="grid-3">
+          <div class="deck-card highlight">
+            <div class="card-badge">Consumer PWA</div>
+            <div class="card-title">Online Grocery Store</div>
+            <div class="card-body">
+              <ul>
+                <li>7,179 verified products.</li>
+                <li>Real-time cart calculation.</li>
+                <li>30-minute doorstep delivery.</li>
+                <li>URL: /store</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card highlight">
+            <div class="card-badge indigo">Operations Bridge</div>
+            <div class="card-title">Admin POS Station</div>
+            <div class="card-body">
+              <ul>
+                <li>Hardware barcode scanner (<25ms).</li>
+                <li>Thermal invoice printer bridge.</li>
+                <li>Instant tax & sales reports.</li>
+                <li>URL: /admin</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card highlight">
+            <div class="card-badge gold">Autonomous AI</div>
+            <div class="card-title">SNS AI Marketing Hub</div>
+            <div class="card-body">
+              <ul>
+                <li>Live margin formula guard.</li>
+                <li>Multi-channel copy generator.</li>
+                <li>Lunisolar festival PO generator.</li>
+                <li>URL: /marketing</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 13: TELEMETRY & IMPACT -->
+      <div class="slide" id="slide-13">
+        <div>
+          <div class="slide-tag">● Chapter 12 · Verifiable Outcomes</div>
+          <h2 class="slide-title">Audited Business Impact & Retail Telemetry</h2>
+          <p class="slide-sub">Proven metrics generated from 5 financial years of live production deployment.</p>
+        </div>
+
+        <div class="grid-3" style="grid-template-rows: 1fr 1fr;">
+          <div class="stat-box">
+            <div class="stat-number">₹30,31,972</div>
+            <div class="stat-label">Recorded Annual Sales</div>
+            <div class="stat-desc">Audited across 17,547 checkout vouchers</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number indigo">₹172.79</div>
+            <div class="stat-label">Average Basket Spend</div>
+            <div class="stat-desc">Lifted from ₹148 baseline via automated bundles</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number gold">₹4,18,000+</div>
+            <div class="stat-label">Dead Stock Recovered</div>
+            <div class="stat-desc">Reallocated back into 14-day fast staples</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number purple">42 Hours</div>
+            <div class="stat-label">Monthly Labor Saved</div>
+            <div class="stat-desc">Zero manual Excel reconciliations or drafting</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">7,179</div>
+            <div class="stat-label">Catalog SKUs Managed</div>
+            <div class="stat-desc">100% synchronized with Google Shopping</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number gold">302.5x</div>
+            <div class="stat-label">Campaign ROI Multiplier</div>
+            <div class="stat-desc">Verified return on WhatsApp cloud dispatch</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 14: ROADMAP -->
+      <div class="slide" id="slide-14">
+        <div>
+          <div class="slide-tag">● Chapter 13 · Horizon & Future Roadmap</div>
+          <h2 class="slide-title">Scaling SNS AI Marketing: From 1 Store to 500+ Supermarkets</h2>
+          <p class="slide-sub">The expansion roadmap empowering independent regional grocers across South India.</p>
+        </div>
+
+        <div class="grid-3">
+          <div class="deck-card">
+            <div class="card-badge">Phase 01 · Production Ready</div>
+            <div class="card-title">Flagship Hardening</div>
+            <div class="card-body">
+              <ul>
+                <li>Rani Hyper Market fully automated.</li>
+                <li>7,179 SKUs live on Google Merchant.</li>
+                <li>Live formula-backed marketing studio deployed on Vercel.</li>
+                <li><strong>Status: COMPLETED</strong></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge indigo">Phase 02 · Regional Scaling</div>
+            <div class="card-title">Multi-Store Regional Mesh</div>
+            <div class="card-body">
+              <ul>
+                <li>Target: 15 supermarket locations across Theni, Madurai & Dindigul districts.</li>
+                <li>Centralized procurement consortium negotiating direct mandi rates for rice sacks & oils.</li>
+                <li><strong>Target: Q1–Q2 2027</strong></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="card-badge gold">Phase 03 · Pan-India SaaS</div>
+            <div class="card-title">SNS Retail OS as a SaaS</div>
+            <div class="card-body">
+              <ul>
+                <li>Packaged software-as-a-service for 500+ independent supermarkets.</li>
+                <li>Plug-and-play desktop POS agent with autonomous WhatsApp marketing.</li>
+                <li><strong>Target: Q3–Q4 2027</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="deck-card" style="margin-top: 16px; background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.3);">
+          <div class="card-body" style="font-size: 13px; color: #fff;">
+            <strong>Live Production URL:</strong> <a href="https://rani-hyper-market.vercel.app" target="_blank" style="color: var(--emerald); font-weight: bold; text-decoration: underline;">https://rani-hyper-market.vercel.app</a> • 
+            <strong>Operations Hotline:</strong> +91 77088 34547 • 
+            <strong>Location:</strong> Bodinayakanur, Theni District, Tamil Nadu, India
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Bottom Navigation Controller -->
+  <footer class="deck-controls">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <button class="nav-arrow-btn" onclick="prevSlide()" title="Previous Slide (Left Arrow)">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <button class="nav-arrow-btn" onclick="nextSlide()" title="Next Slide (Right Arrow / Spacebar)">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="deck-progress"></div>
+    </div>
+
+    <div class="slide-counter">
+      Slide <strong id="current-slide-num">01</strong> / 14
+    </div>
+  </footer>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 14;
+
+    function showSlide(n) {
+      if (n > totalSlides) n = 1;
+      if (n < 1) n = totalSlides;
+      currentSlide = n;
+
+      document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+      const activeEl = document.getElementById('slide-' + currentSlide);
+      if (activeEl) activeEl.classList.add('active');
+
+      document.getElementById('current-slide-num').textContent = currentSlide < 10 ? '0' + currentSlide : currentSlide;
+      document.getElementById('deck-progress').style.width = ((currentSlide / totalSlides) * 100) + '%';
+    }
+
+    function nextSlide() {
+      showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      showSlide(currentSlide - 1);
+    }
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullScreen();
+      } else if (e.key === 'Home') {
+        showSlide(1);
+      } else if (e.key === 'End') {
+        showSlide(totalSlides);
+      }
+    });
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+  </script>
+</body>
+</html>

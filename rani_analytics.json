@@ -1,8 +1,80 @@
 {
+  "storeName": "RANI HYPER MARKET",
+  "fiscalYear": "2026-2027",
   "totalOrders": 21651,
+  "totalBills": 21651,
   "totalSales": 3702626.0,
   "totalCost": 3241544.35,
   "totalProfit": 461081.65,
+  "avgBasket": 171.01,
+  "marginPct": 12.45,
+  "firstDate": "2026-04-01",
+  "lastDate": "2026-10-21",
+  "todaySales": 7674.0,
+  "todayBills": 45,
+  "totalProducts": 7522,
+  "topProducts": [
+    {
+      "Name": "10RS R SNACKS",
+      "total_qty": 8063,
+      "total_revenue": 81081.8,
+      "total_profit": 8589.48
+    },
+    {
+      "Name": "R Egg ",
+      "total_qty": 10115,
+      "total_revenue": 72807.5,
+      "total_profit": 6910.95
+    },
+    {
+      "Name": "900G R INSTAND IDLI&DOSA BATTER ",
+      "total_qty": 1691.5,
+      "total_revenue": 69587.5,
+      "total_profit": 8477.97
+    },
+    {
+      "Name": "500Ml R AROKYA MILK  FULL CREAM",
+      "total_qty": 1465,
+      "total_revenue": 58709,
+      "total_profit": 1476.43
+    },
+    {
+      "Name": "500ML R AROKYAFULL CREAM MILK",
+      "total_qty": 956,
+      "total_revenue": 38081,
+      "total_profit": 1263.22
+    },
+    {
+      "Name": "R Sb Idly Mavu",
+      "total_qty": 808,
+      "total_revenue": 33370,
+      "total_profit": 4040.32
+    },
+    {
+      "Name": "500Ml R Hatsun Curd",
+      "total_qty": 775,
+      "total_revenue": 33284,
+      "total_profit": 1634.34
+    },
+    {
+      "Name": "1Ltr R Gold Winner Pouch",
+      "total_qty": 160,
+      "total_revenue": 29643,
+      "total_profit": 1775
+    },
+    {
+      "Name": "10KG R BLUE ROSE PONNI RICE",
+      "total_qty": 32,
+      "total_revenue": 25370,
+      "total_profit": 1370
+    },
+    {
+      "Name": "1Ltr R Gem's Gold SUN FLOWER Oil",
+      "total_qty": 128,
+      "total_revenue": 23490,
+      "total_profit": 1132.44
+    }
+  ],
   "dayWise": {
     "2026-10-21": {
       "date": "2026-10-21",

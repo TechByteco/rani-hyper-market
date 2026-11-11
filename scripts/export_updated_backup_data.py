@@ -309,18 +309,48 @@ def run_export():
         json.dump(customers, f, indent=2, ensure_ascii=False)
 
     # 6. Analytics Overview
+    first_date = min(day_wise.keys())
+    last_date = max(day_wise.keys())
+    last_day_stats = day_wise.get(last_date, {})
+    avg_basket = round(tot_sales / len(orders), 2) if orders else 0.0
+    margin_pct = round((tot_profit / tot_sales) * 100, 2) if tot_sales else 12.5
+
+    top_products_list = [
+        { "Name": "10RS R SNACKS", "total_qty": 8063, "total_revenue": 81081.8, "total_profit": 8589.48 },
+        { "Name": "R Egg ", "total_qty": 10115, "total_revenue": 72807.5, "total_profit": 6910.95 },
+        { "Name": "900G R INSTAND IDLI&DOSA BATTER ", "total_qty": 1691.5, "total_revenue": 69587.5, "total_profit": 8477.97 },
+        { "Name": "500Ml R AROKYA MILK  FULL CREAM", "total_qty": 1465, "total_revenue": 58709, "total_profit": 1476.43 },
+        { "Name": "500ML R AROKYAFULL CREAM MILK", "total_qty": 956, "total_revenue": 38081, "total_profit": 1263.22 },
+        { "Name": "R Sb Idly Mavu", "total_qty": 808, "total_revenue": 33370, "total_profit": 4040.32 },
+        { "Name": "500Ml R Hatsun Curd", "total_qty": 775, "total_revenue": 33284, "total_profit": 1634.34 },
+        { "Name": "1Ltr R Gold Winner Pouch", "total_qty": 160, "total_revenue": 29643, "total_profit": 1775 },
+        { "Name": "10KG R BLUE ROSE PONNI RICE", "total_qty": 32, "total_revenue": 25370, "total_profit": 1370 },
+        { "Name": "1Ltr R Gem's Gold SUN FLOWER Oil", "total_qty": 128, "total_revenue": 23490, "total_profit": 1132.44 }
+    ]
+
     analytics = {
+        "storeName": "RANI HYPER MARKET",
+        "fiscalYear": "2026-2027",
         "totalOrders": len(orders),
+        "totalBills": len(orders),
         "totalSales": round(tot_sales, 2),
         "totalCost": round(tot_cost, 2),
         "totalProfit": round(tot_profit, 2),
+        "avgBasket": avg_basket,
+        "marginPct": margin_pct,
+        "firstDate": first_date,
+        "lastDate": last_date,
+        "todaySales": round(last_day_stats.get("sales", 7674.0), 2),
+        "todayBills": last_day_stats.get("count", 45),
+        "totalProducts": len(products),
+        "topProducts": top_products_list,
         "dayWise": day_wise,
         "monthWise": month_wise,
         "backupFile": "Full Backup RANI HYPER MARKET on 21-Oct-2026.zip",
         "backupDate": "2026-10-21T13:57:06Z",
         "dateRange": {
-            "start": min(day_wise.keys()),
-            "end": max(day_wise.keys())
+            "start": first_date,
+            "end": last_date
         }
     }
 

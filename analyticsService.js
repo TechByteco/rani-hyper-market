@@ -176,7 +176,7 @@ function getLivePosOrders(limit = 100) {
       coalesce(ti.Profit, round(t.Amount * 0.12, 2)) as profit,
       (SELECT group_concat(p.Name, ', ') 
        FROM TransProducts tp 
-       JOIN ProductVarients pv ON tp.VarientId = pv.Id 
+       JOIN ProductVariants pv ON tp.VariantId = pv.Id 
        JOIN Products p ON pv.ProductId = p.Id 
        WHERE tp.TransId = t.Id) as items_summary
     FROM Transactions t
@@ -243,7 +243,7 @@ function getLivePosProducts(search = '', limit = 100) {
       pv.Units as unit,
       pv.Id as variant_id
     FROM Products p
-    JOIN ProductVarients pv ON p.Id = pv.ProductId
+    JOIN ProductVariants pv ON p.Id = pv.ProductId
     WHERE ${where}
     ORDER BY p.Id ASC
     LIMIT ${lim};
@@ -445,7 +445,7 @@ function getTopProductsForFy(fy = '2026-2027', limit = 10) {
       round(sum(case when tp.Profit is not null and tp.Profit > 0 then tp.Profit else tp.NetValue * 0.12 end), 2) as total_profit
     FROM TransProducts tp 
     JOIN Transactions t ON tp.TransId = t.Id 
-    JOIN ProductVarients pv ON tp.VarientId = pv.Id 
+    JOIN ProductVariants pv ON tp.VariantId = pv.Id 
     JOIN Products p ON pv.ProductId = p.Id 
     WHERE t.VouType = 27 AND tp.Quantity < 10000 
     GROUP BY p.Name 
@@ -736,12 +736,12 @@ function getDeadStock(limit = 15) {
       pv.SalesRate, 
       pv.Mrp
     FROM Products p
-    JOIN ProductVarients pv ON pv.ProductId = p.Id
+    JOIN ProductVariants pv ON pv.ProductId = p.Id
     WHERE p.IsActive = 1 
       AND pv.Id NOT IN (
-        SELECT DISTINCT VarientId FROM TransProducts tp
+        SELECT DISTINCT VariantId FROM TransProducts tp
         JOIN Transactions t ON tp.TransId = t.Id
-        WHERE t.VouType = 27 AND t.VoucherDate >= date('2026-09-12', '-60 days')
+        WHERE t.VouType = 27 AND t.VoucherDate >= date('2026-10-21', '-60 days')
       )
     ORDER BY pv.SalesRate DESC
     LIMIT ${parseInt(limit, 10)};
@@ -778,8 +778,8 @@ function getProductReport(keyword) {
       pv.Mrp,
       pv.PurchaseRate
     FROM Products p
-    JOIN ProductVarients pv ON p.Id = pv.ProductId
-    LEFT JOIN TransProducts tp ON tp.VarientId = pv.Id AND tp.Quantity < 10000
+    JOIN ProductVariants pv ON p.Id = pv.ProductId
+    LEFT JOIN TransProducts tp ON tp.VariantId = pv.Id AND tp.Quantity < 10000
     LEFT JOIN Transactions t ON tp.TransId = t.Id AND t.VouType = 27
     WHERE p.Name LIKE '%${cleanKw}%' AND p.IsActive = 1
     GROUP BY p.Id
@@ -845,7 +845,7 @@ function getDateReport(targetDate, label) {
       round(sum(tp.NetValue), 2) as revenue
     FROM TransProducts tp 
     JOIN Transactions t ON tp.TransId = t.Id 
-    JOIN ProductVarients pv ON tp.VarientId = pv.Id 
+    JOIN ProductVariants pv ON tp.VariantId = pv.Id 
     JOIN Products p ON pv.ProductId = p.Id 
     WHERE t.VouType = 27 AND t.VoucherDate = '${dateStr}' AND tp.Quantity < 10000
     GROUP BY p.Name 
@@ -1001,7 +1001,7 @@ function getHighMarginReport(limit = 8) {
       round(sum(tp.Quantity), 1) as total_qty
     FROM TransProducts tp 
     JOIN Transactions t ON tp.TransId = t.Id 
-    JOIN ProductVarients pv ON tp.VarientId = pv.Id 
+    JOIN ProductVariants pv ON tp.VariantId = pv.Id 
     JOIN Products p ON pv.ProductId = p.Id 
     WHERE t.VouType = 27 AND tp.Quantity < 10000 AND tp.NetValue > 500 AND tp.Profit > 0 
     GROUP BY p.Id 
@@ -1524,7 +1524,7 @@ function getHistoricalFestivalAnalysis(targetId) {
     }
   }
 
-  const currentStockSql = "SELECT p.Name as name, pv.Stock as stock, pv.SalesRate as sales_rate, pv.PurchaseRate as purchase_rate, pv.Units as unit FROM ProductVarients pv JOIN Products p ON pv.ProductId = p.Id WHERE p.IsActive = 1;";
+  const currentStockSql = "SELECT p.Name as name, pv.Stock as stock, pv.SalesRate as sales_rate, pv.PurchaseRate as purchase_rate, pv.Units as unit FROM ProductVariants pv JOIN Products p ON pv.ProductId = p.Id WHERE p.IsActive = 1;";
   const currentStockRows = queryHistoricalDb(HISTORICAL_DB_PATHS['2026'], currentStockSql);
   const currentStockMap = new Map();
   currentStockRows.forEach(r => {
@@ -1551,7 +1551,7 @@ function getHistoricalFestivalAnalysis(targetId) {
 
     function buildFetchSql(w) {
       if (!w) return null;
-      return "SELECT p.Name as name, pv.SalesRate as price, pv.PurchaseRate as cost, pv.Units as unit, round(sum(tp.Quantity), 1) as qty, round(sum(tp.NetValue), 2) as rev, count(distinct t.Id) as bills FROM TransProducts tp JOIN Transactions t ON tp.TransId = t.Id JOIN ProductVarients pv ON tp.VarientId = pv.Id JOIN Products p ON pv.ProductId = p.Id WHERE t.VouType = 27 AND t.VoucherDate >= '" + w.start + "' AND t.VoucherDate <= '" + w.end + "' AND tp.Quantity < 5000 GROUP BY p.Name ORDER BY qty DESC LIMIT 35;";
+      return "SELECT p.Name as name, pv.SalesRate as price, pv.PurchaseRate as cost, pv.Units as unit, round(sum(tp.Quantity), 1) as qty, round(sum(tp.NetValue), 2) as rev, count(distinct t.Id) as bills FROM TransProducts tp JOIN Transactions t ON tp.TransId = t.Id JOIN ProductVariants pv ON tp.VariantId = pv.Id JOIN Products p ON pv.ProductId = p.Id WHERE t.VouType = 27 AND t.VoucherDate >= '" + w.start + "' AND t.VoucherDate <= '" + w.end + "' AND tp.Quantity < 5000 GROUP BY p.Name ORDER BY qty DESC LIMIT 35;";
     }
 
     const rows23 = w23 ? queryHistoricalDb(HISTORICAL_DB_PATHS['2023'], buildFetchSql(w23)) : [];

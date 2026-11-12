@@ -564,12 +564,39 @@ if (reqPath === '/api/pos/status') {
       try {
         const parsed = JSON.parse(body || '{}');
         const questionText = parsed.question || parsed.prompt || parsed.query || '';
-        const answer = await analytics.answerAiAdvisor(questionText, parsed.fy || '2026-2027', parsed.history || []);
+        const clientApiKey = parsed.apiKey || parsed.geminiApiKey || null;
+        const clientModel = parsed.model || null;
+        const answer = await analytics.answerAiAdvisor(
+          questionText,
+          parsed.fy || '2026-2027',
+          parsed.history || [],
+          clientApiKey,
+          clientModel
+        );
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(answer));
       } catch (err) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: err.message }));
+      }
+    });
+    return;
+  }
+
+  // Test Gemini Key Endpoint
+  if (reqPath === '/api/ai/test-key' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const generativeAi = require('./generativeAiAdvisor');
+        const testRes = await generativeAi.testGeminiApiKey(parsed.apiKey || parsed.geminiApiKey || '', parsed.model || 'gemini-2.5-flash');
+        res.writeHead(testRes.success ? 200 : 400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(testRes));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
       }
     });
     return;

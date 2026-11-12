@@ -6842,8 +6842,7 @@ ${itemsText}
         .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
         .replace(/₹/g, 'Rupees ')
         .replace(/Rs\./gi, 'Rupees ')
-        .replace(/
-+/g, '. ')
+        .replace(/\n+/g, '. ')
         .trim();
 
       if (clean.length > 400) {

@@ -783,7 +783,9 @@
 
     function checkProtectionGate() {
       const isAuth = sessionStorage.getItem('nsn_image_studio_auth') === 'true' ||
-                     localStorage.getItem('nsn_image_studio_auth') === 'true';
+                     localStorage.getItem('nsn_image_studio_auth') === 'true' ||
+                     sessionStorage.getItem('nsn_admin_auth') === 'true' ||
+                     localStorage.getItem('nsn_admin_auth') === 'true';
 
       const gateScreen = document.getElementById('protection-gate-screen');
       if (gateScreen) {

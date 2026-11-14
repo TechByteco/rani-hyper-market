@@ -119,6 +119,13 @@
 </head>
 <body class="min-h-screen flex flex-col antialiased">
 
+  <script>
+    // Enforce Admin POS authentication for Online Orders Dashboard
+    if (sessionStorage.getItem('nsn_admin_auth') !== 'true' && localStorage.getItem('nsn_admin_auth') !== 'true') {
+      window.location.replace('login.html?redirect=orders.html');
+    }
+  </script>
+
   <!-- TOP HEADER & BRAND BAR -->
   <header class="glass-nav sticky top-0 z-40 px-4 lg:px-8 py-3.5 shadow-xs">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
@@ -170,6 +177,10 @@
           <span class="hidden sm:inline">Print Sheet</span>
         </button>
 
+        <a href="admin.html" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs flex items-center gap-1.5 shadow-sm transition active:scale-95 no-underline" title="Return to Admin POS Counter">
+          <i class="fa-solid fa-cash-register"></i>
+          <span>Admin POS Desk</span>
+        </a>
         <a href="/store" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs flex items-center gap-1.5 shadow-sm transition active:scale-95 no-underline">
           <i class="fa-solid fa-store"></i>
           <span>Open Store</span>

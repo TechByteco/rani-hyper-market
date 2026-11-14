@@ -428,9 +428,9 @@
           <button type="button" onclick="openCounterPosModal()" class="px-4 py-2 bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white rounded-xl text-xs font-black transition flex items-center gap-1.5 shadow-md hover:shadow-lg transform active:scale-95 cursor-pointer">
             <i class="fa-solid fa-bolt text-yellow-200 animate-pulse"></i> ⚡ Quick POS (F2)
           </button>
-          <a href="orders.html" target="_blank" class="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs" title="Daywise Online Orders Dashboard & Dispatches">
+          <button type="button" onclick="switchAdminModule('orders')" class="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs cursor-pointer" title="View Online Orders & Dispatches inside Admin Portal">
             <i class="fa-solid fa-truck-fast text-[11px] text-blue-600"></i> <span class="hidden sm:inline">Online Orders</span>
-          </a>
+          </button>
           <a href="product-images.html" class="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs" title="Product Photo Studio (Camera, Gallery, Link)">
             <i class="fa-solid fa-camera-retro text-[11px] text-emerald-600"></i> <span class="hidden sm:inline">Photo Studio</span>
           </a>
@@ -480,9 +480,9 @@
 
         <!-- Supermarket Tools Quick Launchers -->
         <div class="flex items-center gap-1.5 shrink-0">
-          <a href="orders.html" target="_blank" class="px-2.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 text-xs font-bold transition flex items-center gap-1 shadow-2xs" title="Online Orders & Live Counter Dispatches">
+          <button type="button" onclick="switchAdminModule('orders')" class="px-2.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer" title="View Online Orders & Live Counter Dispatches inside Admin Portal">
             <i class="fa-solid fa-truck-fast text-blue-600"></i> 🛒 Online Orders
-          </a>
+          </button>
           <a href="product-images.html" class="px-2.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 text-xs font-bold transition flex items-center gap-1 shadow-2xs" title="Product Photo Studio & Packshots">
             <i class="fa-solid fa-camera text-emerald-600"></i> 📸 Photo Studio
           </a>
@@ -1074,9 +1074,9 @@
               <button onclick="filterOrdersByStatus('delivered', this)" class="tab-pill text-emerald-700">🟢 Delivered (<span id="cnt-delivered">0</span>)</button>
               <button onclick="filterOrdersByStatus('cancelled', this)" class="tab-pill text-red-700">🔴 Cancelled (<span id="cnt-cancelled">0</span>)</button>
             </div>
-            <a href="orders.html" target="_blank" class="px-4 py-1.5 text-xs font-bold flex items-center gap-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-sm whitespace-nowrap">
-              <i class="fa-solid fa-truck-fast"></i> Open Online Orders Hub &rarr;
-            </a>
+            <button type="button" onclick="toggleAllOrdersLimit()" id="btn-toggle-orders-limit" class="px-3.5 py-1.5 text-xs font-bold flex items-center gap-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-300 shadow-sm transition cursor-pointer">
+              <i class="fa-solid fa-list-ul text-blue-600"></i> <span id="orders-limit-label">Show 50 Orders</span>
+            </button>
             <a href="bill_history.html" class="btn-emerald px-4 py-1.5 text-xs font-bold flex items-center gap-1.5 shadow-sm whitespace-nowrap">
               <i class="fa-solid fa-file-invoice"></i> Open Full Bill History &rarr;
             </a>
@@ -4901,6 +4901,25 @@ let allProducts = [];
       renderOrdersListTable();
     }
 
+    
+    let ordersDisplayLimit = 25;
+    function toggleAllOrdersLimit() {
+      if (ordersDisplayLimit === 25) {
+        ordersDisplayLimit = 50;
+        if (document.getElementById('orders-limit-label')) document.getElementById('orders-limit-label').innerText = 'Show 100 Orders';
+      } else if (ordersDisplayLimit === 50) {
+        ordersDisplayLimit = 100;
+        if (document.getElementById('orders-limit-label')) document.getElementById('orders-limit-label').innerText = 'Show All Orders';
+      } else if (ordersDisplayLimit === 100) {
+        ordersDisplayLimit = 99999;
+        if (document.getElementById('orders-limit-label')) document.getElementById('orders-limit-label').innerText = 'Show Recent 25';
+      } else {
+        ordersDisplayLimit = 25;
+        if (document.getElementById('orders-limit-label')) document.getElementById('orders-limit-label').innerText = 'Show 50 Orders';
+      }
+      renderOrdersListTable();
+    }
+
     function renderOrdersListTable() {
       const tbody = document.getElementById('orders-list-tbody');
       let filtered = allOrders;
@@ -4924,8 +4943,8 @@ let allProducts = [];
         cancelled: 'bg-red-100 text-red-800 border-red-300'
       };
 
-      // Show recent 8 orders in dashboard to prevent long scrolling
-      const displaySlice = filtered.slice(0, 8);
+      // Dynamic display slice for comprehensive in-page order management
+      const displaySlice = filtered.slice(0, ordersDisplayLimit);
 
       let rowsHtml = displaySlice.map(o => {
         const invNo = o.voucher_no ? `#RANI-${o.voucher_no}` : (`#NSN-${o.id.substring(0,6).toUpperCase()}`);
@@ -4965,14 +4984,14 @@ let allProducts = [];
         `;
       }).join('');
 
-      if (filtered.length > 8) {
+      if (filtered.length > displaySlice.length) {
         rowsHtml += `
           <tr class="bg-blue-50/50">
             <td colspan="6" class="py-3 px-4 text-center">
-              <a href="bill_history.html" class="inline-flex items-center gap-2 font-black text-xs text-blue-700 hover:text-blue-900 bg-white px-4 py-1.5 rounded-full border border-blue-200 shadow-sm transition">
-                <i class="fa-solid fa-file-invoice text-emerald-600"></i>
-                Showing 8 recent orders. Click here to search &amp; check all ${filtered.length.toLocaleString('en-IN')} bills in Bill History Ledger &rarr;
-              </a>
+              <button type="button" onclick="ordersDisplayLimit += 25; renderOrdersListTable();" class="inline-flex items-center gap-2 font-black text-xs text-blue-700 hover:text-blue-900 bg-white px-5 py-2 rounded-xl border border-blue-300 shadow-sm transition cursor-pointer">
+                <i class="fa-solid fa-angles-down text-blue-600"></i>
+                Showing ${displaySlice.length} of ${filtered.length.toLocaleString('en-IN')} orders. Click to show 25 more &darr;
+              </button>
             </td>
           </tr>
         `;

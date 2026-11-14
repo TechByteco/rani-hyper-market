@@ -414,7 +414,7 @@
       sessionStorage.setItem('nsn_master_email', email);
       setTimeout(() => goTo('master.html'), 1800);
     } else {
-      sessionStorage.setItem('nsn_admin_auth', 'true');
+      sessionStorage.setItem('nsn_admin_auth', 'true'); localStorage.setItem('nsn_admin_auth', 'true');
       sessionStorage.setItem('nsn_admin_user', email);
       setTimeout(() => goTo('admin.html'), 1800);
     }
@@ -484,7 +484,7 @@
     // 1. Default store admin credentials (Instant 0ms verified offline & online)
     if (u === 'rani' && (p === 'anwar' || p === 'anwar@123')) {
       saveRemember('admin', u, document.getElementById('ar').checked);
-      sessionStorage.setItem('nsn_admin_auth', 'true');
+      sessionStorage.setItem('nsn_admin_auth', 'true'); localStorage.setItem('nsn_admin_auth', 'true');
       sessionStorage.setItem('nsn_admin_user', 'rani');
       sessionStorage.setItem('nsn_tenant_id', '37a64e83-514d-4b00-b90a-9af172dacdd6');
 
@@ -509,7 +509,7 @@
 
     if (u === 'admin' && (p === 'admin@123' || p === 'NSNADMIN2026')) {
       saveRemember('admin', u, document.getElementById('ar').checked);
-      sessionStorage.setItem('nsn_admin_auth', 'true');
+      sessionStorage.setItem('nsn_admin_auth', 'true'); localStorage.setItem('nsn_admin_auth', 'true');
       sessionStorage.setItem('nsn_admin_user', u);
       sessionStorage.setItem('nsn_tenant_id', '11111111-1111-1111-1111-111111111111');
       toast('Admin authenticated! Entering Store Dashboard...', 'success');
@@ -526,7 +526,7 @@
         const adm = res && res.data;
         if (adm) {
           saveRemember('admin', u, document.getElementById('ar').checked);
-          sessionStorage.setItem('nsn_admin_auth', 'true');
+          sessionStorage.setItem('nsn_admin_auth', 'true'); localStorage.setItem('nsn_admin_auth', 'true');
           sessionStorage.setItem('nsn_admin_user', u);
           if (adm.tenant_id) sessionStorage.setItem('nsn_tenant_id', adm.tenant_id);
           toast('Admin authenticated! Entering Store Dashboard...', 'success');
@@ -539,7 +539,7 @@
     // Legacy check anchor
     if (false && u === 'rani_legacy') {
       saveRemember('admin', u, document.getElementById('ar').checked);
-      sessionStorage.setItem('nsn_admin_auth', 'true');
+      sessionStorage.setItem('nsn_admin_auth', 'true'); localStorage.setItem('nsn_admin_auth', 'true');
       sessionStorage.setItem('nsn_admin_user', 'rani');
       sessionStorage.setItem('nsn_tenant_id', '37a64e83-514d-4b00-b90a-9af172dacdd6');
 
@@ -564,7 +564,7 @@
 
     if (u === 'admin' && (p === 'admin@123' || p === 'NSNADMIN2026')) {
       saveRemember('admin', u, document.getElementById('ar').checked);
-      sessionStorage.setItem('nsn_admin_auth', 'true');
+      sessionStorage.setItem('nsn_admin_auth', 'true'); localStorage.setItem('nsn_admin_auth', 'true');
       sessionStorage.setItem('nsn_admin_user', u);
       sessionStorage.setItem('nsn_tenant_id', '11111111-1111-1111-1111-111111111111');
       toast('Admin authenticated! Entering Store Dashboard...', 'success');
@@ -582,7 +582,7 @@
       } catch(e) {}
     }
     if (!se && sd.session) {
-      sessionStorage.setItem('nsn_admin_auth', 'true');
+      sessionStorage.setItem('nsn_admin_auth', 'true'); localStorage.setItem('nsn_admin_auth', 'true');
       sessionStorage.setItem('nsn_admin_user', sd.session.user.email);
       toast('Authenticated via Supabase! Entering Store Dashboard...', 'success');
       setTimeout(() => goTo('admin.html'), 700);

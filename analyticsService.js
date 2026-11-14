@@ -1,3 +1,18 @@
+function findLocalDataFile(filename) {
+  const possible = [
+    path.join(__dirname, filename),
+    path.join(__dirname, 'public', filename),
+    path.join(process.cwd(), filename),
+    path.join(process.cwd(), 'public', filename),
+    path.join(__dirname, '..', filename),
+    path.join(__dirname, '..', 'public', filename)
+  ];
+  for (const p of possible) {
+    if (fs.existsSync(p)) return p;
+  }
+  return null;
+}
+
 const { execFileSync, execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
@@ -1009,7 +1024,7 @@ function getMonthlyTrendReport() {
 function getTopCustomersReport(limit = 10) {
   let lifetimeCustomers = [];
   try {
-    const custFile = path.join(__dirname, 'rani_customers.json');
+    const custFile = findLocalDataFile('rani_customers.json');
     if (fs.existsSync(custFile)) {
       const rawCust = JSON.parse(fs.readFileSync(custFile, 'utf8'));
       lifetimeCustomers = rawCust
@@ -1066,7 +1081,7 @@ function getTopCustomersReport(limit = 10) {
 function getRecentDispatchesReport(limit = 10) {
   let orders = [];
   try {
-    const ordersFile = path.join(__dirname, 'rani_orders.json');
+    const ordersFile = findLocalDataFile('rani_orders.json');
     if (fs.existsSync(ordersFile)) {
       orders = JSON.parse(fs.readFileSync(ordersFile, 'utf8'));
     }

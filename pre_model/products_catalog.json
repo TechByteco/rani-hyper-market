@@ -62766,26 +62766,6 @@
     "barcode": "02246"
   },
   {
-    "id": 25121,
-    "title": "26KG R BHARAT PONNI PACHARISI",
-    "price": 1500,
-    "mrp": 1800,
-    "stock": 50,
-    "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg",
-    "barcode": "26KG R BHARAT"
-  },
-  {
-    "id": 25122,
-    "title": "1KG R BHARAT PONNI PACHARISI",
-    "price": 65,
-    "mrp": 70,
-    "stock": 50,
-    "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg",
-    "barcode": "1KG R BHARAT"
-  },
-  {
     "id": 25123,
     "title": "5KG R ORANGE RICE",
     "price": 380,
@@ -62884,16 +62864,6 @@
     "unit": "1 unit",
     "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg",
     "barcode": "8901248104685"
-  },
-  {
-    "id": 25133,
-    "title": "200G R BHARATHI BRAND RUBBER",
-    "price": 80,
-    "mrp": 150,
-    "stock": 50,
-    "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg",
-    "barcode": "RUBBER"
   },
   {
     "id": 25134,

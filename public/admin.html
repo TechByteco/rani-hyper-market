@@ -2839,6 +2839,21 @@ let allProducts = [];
       checkLicense();
     }
 
+    
+    // Global Blacklist Filter to permanently exclude removed products (e.g. R Bharath / 65kg variants)
+    function isBlacklistedProduct(p) {
+      if (!p) return true;
+      const t = String(p.title || p.Name || p.name || '').toLowerCase().trim();
+      const u = String(p.unit || p.Unit || '').toLowerCase().trim();
+      const pid = String(p.id || p.Id || '');
+      if (pid === '25121' || pid === '25122' || pid === '25133') return true;
+      if ((t.includes('bharath') || t.includes('bharat')) && (u.includes('65') || t.includes('65'))) return true;
+      if (t === 'r bharath' || t.startsWith('r bharath ') || t === 'r bharat' || t.startsWith('r bharat ')) return true;
+      if (t.includes('r bharat ponni') || t.includes('r bharathi brand rubber')) return true;
+      if (u.includes('65kg') && (t.includes('bharat') || t.includes('bharath'))) return true;
+      return false;
+    }
+
     /* LOAD RANI HYPER MARKET POS DATABASE & BACKUP DATA */
     async function loadRaniPosData(isAutoRefresh = false) {
       try {
@@ -2929,7 +2944,18 @@ let allProducts = [];
         }
 
         if (productsRes && productsRes.length > 0) {
-          let mergedList = [...productsRes];
+          // Cleanse custom products in localStorage
+          try {
+            let customProds = JSON.parse(localStorage.getItem('nsn_custom_added_products') || '[]');
+            if (Array.isArray(customProds) && customProds.length > 0) {
+              const cleaned = customProds.filter(p => !isBlacklistedProduct(p));
+              if (cleaned.length !== customProds.length) {
+                localStorage.setItem('nsn_custom_added_products', JSON.stringify(cleaned));
+              }
+            }
+          } catch(e) {}
+
+          let mergedList = [...productsRes].filter(p => !isBlacklistedProduct(p));
 
           // Filter out any deleted products
           try {
@@ -2949,7 +2975,7 @@ let allProducts = [];
             });
           } catch(e) {}
 
-          allProducts = mergedList;
+          allProducts = mergedList.filter(p => !isBlacklistedProduct(p));
           document.getElementById('stat-products').innerText = allProducts.length.toLocaleString('en-IN');
           document.getElementById('inventory-count').innerText = allProducts.length.toLocaleString('en-IN') + ' items';
           renderInventoryList(allProducts);
@@ -4308,7 +4334,8 @@ let allProducts = [];
 
     /* INVENTORY MANAGEMENT */
     async function loadInventory() {
-      const { data: products } = await sb.from('products').select('*').order('created_at', { ascending: false });
+      const { data: rawProducts } = await sb.from('products').select('*').order('created_at', { ascending: false });
+      const products = (rawProducts || []).filter(p => !isBlacklistedProduct(p));
       const container = document.getElementById('product-list');
       if (!products || products.length === 0) {
         container.innerHTML = '<div class="p-6 text-center text-gray-400 text-sm">No products in inventory. Add your first item above!</div>';
@@ -4542,6 +4569,7 @@ let allProducts = [];
     }
 
     function renderInventoryList(items) {
+      items = (items || []).filter(p => !isBlacklistedProduct(p));
       filteredInventoryItems = items;
       const container = document.getElementById('product-list');
       if (items.length === 0) {

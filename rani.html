@@ -1872,6 +1872,20 @@ function playScanBeep() {
 // ============================================================
 // REAL DATA INITIALIZER (7,179 Products & 323 Customers)
 // ============================================================
+
+function isBlacklistedProduct(p) {
+  if (!p) return true;
+  const t = String(p.title || p.Name || p.name || '').toLowerCase().trim();
+  const u = String(p.unit || p.Unit || '').toLowerCase().trim();
+  const pid = String(p.id || p.Id || '');
+  if (pid === '25121' || pid === '25122' || pid === '25133') return true;
+  if ((t.includes('bharath') || t.includes('bharat')) && (u.includes('65') || t.includes('65'))) return true;
+  if (t === 'r bharath' || t.startsWith('r bharath ') || t === 'r bharat' || t.startsWith('r bharat ')) return true;
+  if (t.includes('r bharat ponni') || t.includes('r bharathi brand rubber')) return true;
+  if (u.includes('65kg') && (t.includes('bharat') || t.includes('bharath'))) return true;
+  return false;
+}
+
 async function initRealData() {
   try {
     // 1. Fetch real products from products_catalog.json or rani_products.json
@@ -1879,7 +1893,8 @@ async function initRealData() {
     if (!prodRes || !prodRes.ok) prodRes = await fetch('/rani_products.json').catch(() => null);
     if (!prodRes || !prodRes.ok) prodRes = await fetch('rani_products.json').catch(() => null);
     if (prodRes && prodRes.ok) {
-      const prods = await prodRes.json();
+      const rawProds = await prodRes.json();
+      const prods = Array.isArray(rawProds) ? rawProds.filter(p => !isBlacklistedProduct(p)) : [];
       if (Array.isArray(prods) && prods.length > 0) {
         DB.products = prods.map(p => ({
           id: p.id,

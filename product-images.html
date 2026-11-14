@@ -932,6 +932,20 @@
   
 
     // 1. Initial Load with Permanent State Holding
+    
+function isBlacklistedProduct(p) {
+  if (!p) return true;
+  const t = String(p.title || p.Name || p.name || '').toLowerCase().trim();
+  const u = String(p.unit || p.Unit || '').toLowerCase().trim();
+  const pid = String(p.id || p.Id || '');
+  if (pid === '25121' || pid === '25122' || pid === '25133') return true;
+  if ((t.includes('bharath') || t.includes('bharat')) && (u.includes('65') || t.includes('65'))) return true;
+  if (t === 'r bharath' || t.startsWith('r bharath ') || t === 'r bharat' || t.startsWith('r bharat ')) return true;
+  if (t.includes('r bharat ponni') || t.includes('r bharathi brand rubber')) return true;
+  if (u.includes('65kg') && (t.includes('bharat') || t.includes('bharath'))) return true;
+  return false;
+}
+
     async function loadCatalog() {
       try {
         let res = await fetch('/products_catalog.json?v=' + Date.now()).catch(() => null);
@@ -939,7 +953,8 @@
         if (!res || !res.ok) res = await fetch('products_catalog.json?v=' + Date.now()).catch(() => null);
 
         if (res && res.ok) {
-          allProducts = await res.json();
+          const rawCatalog = await res.json();
+          allProducts = Array.isArray(rawCatalog) ? rawCatalog.filter(p => !isBlacklistedProduct(p)) : [];
           
           // Apply local custom overrides with full multi-key lookup & IndexedDB persistent state
           let overrides = JSON.parse(localStorage.getItem('nsn_custom_images') || '{}');

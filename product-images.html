@@ -45,6 +45,11 @@
   </style>
 </head>
 <body class="p-3 md:p-6 lg:p-8">
+  <script>
+    if (sessionStorage.getItem('nsn_admin_auth') !== 'true' && localStorage.getItem('nsn_admin_auth') !== 'true') {
+      window.location.replace('login.html?redirect=product-images.html');
+    }
+  </script>
 
   <!-- ============================================================ -->
   <!-- FRONT PROTECTION GATE: AUTHENTICATION BARRIER                -->

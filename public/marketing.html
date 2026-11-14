@@ -177,6 +177,11 @@
   </style>
 </head>
 <body class="selection:bg-gold-500 selection:text-white">
+  <script>
+    if (sessionStorage.getItem('nsn_admin_auth') !== 'true' && localStorage.getItem('nsn_admin_auth') !== 'true') {
+      window.location.replace('login.html?redirect=marketing.html');
+    }
+  </script>
 
   <!-- ══════════════════════════════════════════════════════════
        1. TOP LUXURY TICKER & ANNOUNCEMENT BAR

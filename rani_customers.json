@@ -1,606 +1,2964 @@
 [
   {
-    "id": 4,
-    "name": "Selvam",
-    "phone": "7200762890",
+    "id": 310,
+    "name": "Walk-in Customer",
+    "phone": "",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 136563,
+    "totalSpent": 93388911599547,
+    "lastOrder": "2026-10-21"
+  },
+  {
+    "id": 227,
+    "name": "THE HEAD MASTER PLPS POOPPARA",
+    "phone": "9976637319",
+    "address": "Bodinayakanur",
+    "frequency": 114,
+    "totalSpent": 477540,
+    "lastOrder": "2026-08-02"
+  },
+  {
+    "id": 274,
+    "name": "APSARA FURNITURE",
+    "phone": "8825869311",
+    "address": "Bodinayakanur",
+    "frequency": 72,
+    "totalSpent": 122691,
+    "lastOrder": "2025-09-23"
   },
   {
     "id": 5,
     "name": "Sarariyaz",
     "phone": "9345639008",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 54,
+    "totalSpent": 121375,
+    "lastOrder": "2026-03-20"
   },
   {
-    "id": 6,
-    "name": "Ravi",
-    "phone": "9944497910",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 7,
-    "name": "Bala",
-    "phone": "9677788963",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 8,
-    "name": "Kanagaraj",
-    "phone": "8778737716",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 9,
-    "name": "Badhar Nisha",
-    "phone": "6383165926",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 10,
-    "name": "Chellamma",
-    "phone": "9443021841",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 11,
-    "name": "Uma Rani",
-    "phone": "6384535248",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 12,
-    "name": "Baskaran",
-    "phone": "9677363922",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 13,
-    "name": "Kani",
-    "phone": "9080967929",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 14,
-    "name": "Rajesh",
-    "phone": "9487431268",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 15,
-    "name": "Suresh",
-    "phone": "9790008617",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 16,
-    "name": "Thoufiq",
-    "phone": "8807987832",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 17,
-    "name": "Vijaya",
-    "phone": "9943039246",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 18,
-    "name": "Yasar Arafath",
-    "phone": "6381401050",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 19,
-    "name": "Vetriselvi",
-    "phone": "7305158479",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 20,
-    "name": "Kalai Arasi",
-    "phone": "9488228889",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 21,
-    "name": "Ashok Kumar",
-    "phone": "6382207684",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 22,
-    "name": "Abdul Gani",
-    "phone": "9965757573",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 23,
-    "name": "N.Chellapandi",
-    "phone": "9876181931",
-    "address": "Bodinayakanur",
-    "frequency": 5,
-    "totalSpent": 3775.0,
-    "lastOrder": "2026-08-22T13:13:43.136383Z"
-  },
-  {
-    "id": 24,
-    "name": "Nasreen",
-    "phone": "9791836850",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 25,
-    "name": "Kumudha",
-    "phone": "9787292854",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 26,
-    "name": "Pandi Amma",
-    "phone": "9626212282",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 27,
-    "name": "Rajan",
-    "phone": "9362603197",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 28,
-    "name": "Maarimuthu",
-    "phone": "9865061365",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 29,
-    "name": "Boss",
-    "phone": "9443698724",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 30,
-    "name": "JP Kovil (Jeya Prakash)",
-    "phone": "9952486797",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 31,
-    "name": "Pandiya Raj",
-    "phone": "9944231065",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 32,
-    "name": "Ponnu Lakshmi",
-    "phone": "8754262613",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 33,
-    "name": "Kavitha",
-    "phone": "9443301264",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 34,
-    "name": "Subramani",
-    "phone": "7502024859",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 35,
-    "name": "Azar",
-    "phone": "9894158878",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 36,
-    "name": "Lalitha",
-    "phone": "9952529017",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 37,
-    "name": "Ram Kumar",
-    "phone": "9751902390",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 38,
-    "name": "Meena",
-    "phone": "9944428428",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "id": 363,
+    "name": "PRS VENTURES",
+    "phone": "8072429799",
+    "address": "BODINAYAKANUT",
+    "frequency": 4,
+    "totalSpent": 119690,
+    "lastOrder": "2026-01-08"
   },
   {
     "id": 40,
     "name": "Rabik",
     "phone": "9976575436",
     "address": "Bodinayakanur",
-    "frequency": 10,
-    "totalSpent": 3217.0,
-    "lastOrder": "2026-10-14T14:38:22.816976Z"
+    "frequency": 119,
+    "totalSpent": 109212,
+    "lastOrder": "2026-10-14"
   },
   {
-    "id": 41,
-    "name": "Surya",
-    "phone": "7303575701",
+    "id": 23,
+    "name": "N.Chellapandi",
+    "phone": "9876181931",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 42,
-    "name": "Sheik Farith",
-    "phone": "9865576901",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 116,
+    "totalSpent": 104992,
+    "lastOrder": "2026-08-22"
   },
   {
     "id": 43,
     "name": "T.S.Hari Raman",
     "phone": "9840306918",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 67,
+    "totalSpent": 95041,
+    "lastOrder": "2025-08-24"
   },
   {
-    "id": 44,
-    "name": "Rithi Kesavan",
-    "phone": "9994490586",
+    "id": 151,
+    "name": "KARTHIK SANKAR",
+    "phone": "9941141161",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 45,
-    "name": "Vikram",
-    "phone": "7708677059",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 46,
-    "name": "Mohammed Fathima",
-    "phone": "9865368074",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 47,
-    "name": "Peer Oli",
-    "phone": "7010988436",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 48,
-    "name": "Ravi",
-    "phone": "9944497910",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 49,
-    "name": "Praveen Gandhi",
-    "phone": "9176062620",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 50,
-    "name": "Jeya",
-    "phone": "9790506473",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 51,
-    "name": "Star Broilers",
-    "phone": "9994955650",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 52,
-    "name": "Mohammed Safiyullah",
-    "phone": "9066360024",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 53,
-    "name": "Selva Mani",
-    "phone": "9344920559",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 54,
-    "name": "Kasa Maideen",
-    "phone": "9159491150",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 55,
-    "name": "Gomathi Sivakumar",
-    "phone": "6381846595",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 56,
-    "name": "Muthu Bala",
-    "phone": "9585796068",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 57,
-    "name": "Selvi",
-    "phone": "9585319230",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 58,
-    "name": "V.Ganesan",
-    "phone": "8124876757",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 535,
+    "totalSpent": 78122,
+    "lastOrder": "2026-09-21"
   },
   {
     "id": 59,
     "name": "Thanuja",
     "phone": "9345270901",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 46,
+    "totalSpent": 73611,
+    "lastOrder": "2024-11-03"
   },
   {
-    "id": 61,
-    "name": "Bakiyalakshmi",
-    "phone": "9789080632",
+    "id": 141,
+    "name": "AS DHAKSHANA",
+    "phone": "8925204400",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 99,
+    "totalSpent": 65163,
+    "lastOrder": "2026-05-01"
   },
   {
-    "id": 62,
-    "name": "Selvi",
-    "phone": "9976068309",
+    "id": 139,
+    "name": "B RENUGA DEVI",
+    "phone": "9585872303",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 94,
+    "totalSpent": 57034,
+    "lastOrder": "2026-04-28"
+  },
+  {
+    "id": 123,
+    "name": "SAMAD AATHIQ (AUTO)",
+    "phone": "9500295945",
+    "address": "Bodinayakanur",
+    "frequency": 39,
+    "totalSpent": 54362,
+    "lastOrder": "2026-07-03"
+  },
+  {
+    "id": 211,
+    "name": "Dhanush",
+    "phone": "7708531628",
+    "address": "Bodinayakanur",
+    "frequency": 127,
+    "totalSpent": 50942,
+    "lastOrder": "2026-08-30"
+  },
+  {
+    "id": 244,
+    "name": "Bairusha Ppm",
+    "phone": "8754993157",
+    "address": "Bodinayakanur",
+    "frequency": 11,
+    "totalSpent": 49304,
+    "lastOrder": "2025-10-02"
+  },
+  {
+    "id": 293,
+    "name": "NANDHA KUMAR",
+    "phone": "9042523140",
+    "address": "Bodinayakanur",
+    "frequency": 27,
+    "totalSpent": 48613,
+    "lastOrder": "2026-05-21"
+  },
+  {
+    "id": 82,
+    "name": "GEETHA",
+    "phone": "8344724426",
+    "address": "Bodinayakanur",
+    "frequency": 148,
+    "totalSpent": 46235,
+    "lastOrder": "2026-10-01"
+  },
+  {
+    "id": 133,
+    "name": "KUWAIT MATHARSHA",
+    "phone": "9994913508",
+    "address": "Bodinayakanur",
+    "frequency": 36,
+    "totalSpent": 45403,
+    "lastOrder": "2024-12-03"
   },
   {
     "id": 63,
     "name": "Aadil",
     "phone": "8012934284",
     "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 1123.0,
-    "lastOrder": "2026-09-02T15:29:41.872735Z"
+    "frequency": 36,
+    "totalSpent": 41798,
+    "lastOrder": "2026-09-02"
   },
   {
-    "id": 64,
+    "id": 324,
+    "name": "ABDUL RAJACK SYED ABU",
+    "phone": "8072730443",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 40084,
+    "lastOrder": "2025-04-18"
+  },
+  {
+    "id": 360,
+    "name": "CHITHRA",
+    "phone": "8608650938",
+    "address": "Bodinayakanur",
+    "frequency": 170,
+    "totalSpent": 38815,
+    "lastOrder": "2026-06-28"
+  },
+  {
+    "id": 33,
+    "name": "Kavitha",
+    "phone": "9443301264",
+    "address": "Bodinayakanur",
+    "frequency": 23,
+    "totalSpent": 36484,
+    "lastOrder": "2024-03-02"
+  },
+  {
+    "id": 235,
+    "name": "ABU WALKER FOOT",
+    "phone": "9865813029",
+    "address": "Bodinayakanur",
+    "frequency": 12,
+    "totalSpent": 34463,
+    "lastOrder": "2025-04-01"
+  },
+  {
+    "id": 326,
+    "name": "SURESH",
+    "phone": "7904859468",
+    "address": "Bodinayakanur",
+    "frequency": 85,
+    "totalSpent": 34015,
+    "lastOrder": "2026-05-02"
+  },
+  {
+    "id": 120,
+    "name": "Saratha",
+    "phone": "8608449610",
+    "address": "Bodinayakanur",
+    "frequency": 82,
+    "totalSpent": 32341,
+    "lastOrder": "2026-09-27"
+  },
+  {
+    "id": 17,
+    "name": "Vijaya",
+    "phone": "9943039246",
+    "address": "Bodinayakanur",
+    "frequency": 56,
+    "totalSpent": 25890,
+    "lastOrder": "2025-02-01"
+  },
+  {
+    "id": 130,
+    "name": "MOHAN",
+    "phone": "9600350572",
+    "address": "Bodinayakanur",
+    "frequency": 13,
+    "totalSpent": 25428,
+    "lastOrder": "2024-02-09"
+  },
+  {
+    "id": 316,
+    "name": "ENG SARBUDEEN",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 18,
+    "totalSpent": 24624,
+    "lastOrder": "2025-04-25"
+  },
+  {
+    "id": 294,
+    "name": "AYYAPPAN RAJ",
+    "phone": "7904468821",
+    "address": "Bodinayakanur",
+    "frequency": 57,
+    "totalSpent": 24484,
+    "lastOrder": "2026-04-02"
+  },
+  {
+    "id": 91,
+    "name": "S.SUDHAKAR",
+    "phone": "9908507623",
+    "address": "Bodinayakanur",
+    "frequency": 18,
+    "totalSpent": 22004,
+    "lastOrder": "2025-07-28"
+  },
+  {
+    "id": 154,
+    "name": "GEETHA KUMARE",
+    "phone": "9965007900",
+    "address": "Bodinayakanur",
+    "frequency": 75,
+    "totalSpent": 21517,
+    "lastOrder": "2026-10-17"
+  },
+  {
+    "id": 106,
+    "name": "M.Sudhakar",
+    "phone": "7639039666",
+    "address": "Bodinayakanur",
+    "frequency": 8,
+    "totalSpent": 21492,
+    "lastOrder": "2025-04-05"
+  },
+  {
+    "id": 146,
+    "name": "SUMATHI THIRPPATHI",
+    "phone": "9047373421",
+    "address": "Bodinayakanur",
+    "frequency": 8,
+    "totalSpent": 21110,
+    "lastOrder": "2024-04-07"
+  },
+  {
+    "id": 288,
+    "name": "S Kala",
+    "phone": "9865778052",
+    "address": "Bodinayakanur",
+    "frequency": 69,
+    "totalSpent": 19385,
+    "lastOrder": "2024-11-17"
+  },
+  {
+    "id": 337,
+    "name": "MILAT SHO MARET SHAJAKHAN",
+    "phone": "7010764804",
+    "address": "Bodinayakanur",
+    "frequency": 14,
+    "totalSpent": 19278,
+    "lastOrder": "2025-08-01"
+  },
+  {
+    "id": 193,
+    "name": "VIJAYA LAKSHMI",
+    "phone": "9790482405",
+    "address": "Bodinayakanur",
+    "frequency": 13,
+    "totalSpent": 19229,
+    "lastOrder": "2025-06-22"
+  },
+  {
+    "id": 155,
+    "name": "JAIBU NISHA PPM",
+    "phone": "8438905997",
+    "address": "Bodinayakanur",
+    "frequency": 6,
+    "totalSpent": 18645,
+    "lastOrder": "2025-02-05"
+  },
+  {
+    "id": 190,
+    "name": "HAKIM",
+    "phone": "9715795067",
+    "address": "Bodinayakanur",
+    "frequency": 18,
+    "totalSpent": 18538,
+    "lastOrder": "2025-09-15"
+  },
+  {
+    "id": 318,
+    "name": "Sullthan Techar",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 18293,
+    "lastOrder": "2024-08-12"
+  },
+  {
+    "id": 55,
+    "name": "Gomathi Sivakumar",
+    "phone": "6381846595",
+    "address": "Bodinayakanur",
+    "frequency": 40,
+    "totalSpent": 17988,
+    "lastOrder": "2024-12-12"
+  },
+  {
+    "id": 334,
+    "name": "Muthu Selvam",
+    "phone": "9344066388",
+    "address": "Bodinayakanur",
+    "frequency": 105,
+    "totalSpent": 17591,
+    "lastOrder": "2026-10-11"
+  },
+  {
+    "id": 186,
+    "name": "RAIKHANA NEAR SHOP",
+    "phone": "9790399691",
+    "address": "Bodinayakanur",
+    "frequency": 73,
+    "totalSpent": 17590,
+    "lastOrder": "2023-12-16"
+  },
+  {
+    "id": 99,
+    "name": "SARASWATHI BAI",
+    "phone": "6381654441",
+    "address": "Bodinayakanur",
+    "frequency": 11,
+    "totalSpent": 17503,
+    "lastOrder": "2025-07-11"
+  },
+  {
+    "id": 215,
+    "name": "Harun",
+    "phone": "9597982010",
+    "address": "Bodinayakanur",
+    "frequency": 32,
+    "totalSpent": 17409,
+    "lastOrder": "2026-10-01"
+  },
+  {
+    "id": 38,
+    "name": "Meena",
+    "phone": "9944428428",
+    "address": "Bodinayakanur",
+    "frequency": 29,
+    "totalSpent": 17321,
+    "lastOrder": "2025-10-18"
+  },
+  {
+    "id": 336,
+    "name": "NAGARAJ",
+    "phone": "8870334411",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 17241,
+    "lastOrder": "2024-08-14"
+  },
+  {
+    "id": 346,
+    "name": "T Vijaya",
+    "phone": "9626274697",
+    "address": "Bodinayakanur",
+    "frequency": 18,
+    "totalSpent": 17157,
+    "lastOrder": "2026-09-11"
+  },
+  {
+    "id": 179,
+    "name": "K.NAGARAJAN",
+    "phone": "7604889733",
+    "address": "Bodinayakanur",
+    "frequency": 6,
+    "totalSpent": 17090,
+    "lastOrder": "2025-06-09"
+  },
+  {
+    "id": 30,
+    "name": "JP Kovil (Jeya Prakash)",
+    "phone": "9952486797",
+    "address": "Bodinayakanur",
+    "frequency": 35,
+    "totalSpent": 17024,
+    "lastOrder": "2024-01-25"
+  },
+  {
+    "id": 203,
+    "name": "RAMACHANDRAN",
+    "phone": "9842519705",
+    "address": "Bodinayakanur",
+    "frequency": 7,
+    "totalSpent": 16486,
+    "lastOrder": "2023-05-27"
+  },
+  {
+    "id": 329,
+    "name": "THONTHI ATHTHA AND FAMILY",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 15940,
+    "lastOrder": "2023-04-15"
+  },
+  {
+    "id": 12,
+    "name": "Baskaran",
+    "phone": "9677363922",
+    "address": "Bodinayakanur",
+    "frequency": 34,
+    "totalSpent": 15310,
+    "lastOrder": "2024-04-01"
+  },
+  {
+    "id": 213,
+    "name": "VIGNESH",
+    "phone": "9865732286",
+    "address": "Bodinayakanur",
+    "frequency": 17,
+    "totalSpent": 15249,
+    "lastOrder": "2025-02-03"
+  },
+  {
+    "id": 169,
+    "name": "M.RAM KUMAR",
+    "phone": "8778025087",
+    "address": "Bodinayakanur",
+    "frequency": 14,
+    "totalSpent": 15138,
+    "lastOrder": "2025-03-23"
+  },
+  {
+    "id": 286,
+    "name": "Maheswari",
+    "phone": "9788941066",
+    "address": "Bodinayakanur",
+    "frequency": 72,
+    "totalSpent": 14655,
+    "lastOrder": "2026-03-24"
+  },
+  {
+    "id": 292,
+    "name": "ANSAARI",
+    "phone": "9944477983",
+    "address": "Bodinayakanur",
+    "frequency": 61,
+    "totalSpent": 14155,
+    "lastOrder": "2025-09-05"
+  },
+  {
+    "id": 300,
+    "name": "SENTHIL",
+    "phone": "9790612686",
+    "address": "Bodinayakanur",
+    "frequency": 21,
+    "totalSpent": 13921,
+    "lastOrder": "2026-04-28"
+  },
+  {
+    "id": 323,
+    "name": "Smille Dentel Clinic",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 13717,
+    "lastOrder": "2023-04-09"
+  },
+  {
+    "id": 25,
+    "name": "Kumudha",
+    "phone": "9787292854",
+    "address": "Bodinayakanur",
+    "frequency": 56,
+    "totalSpent": 13697,
+    "lastOrder": "2026-02-08"
+  },
+  {
+    "id": 125,
+    "name": "Padmavathy",
+    "phone": "8217028102",
+    "address": "Bodinayakanur",
+    "frequency": 26,
+    "totalSpent": 13594,
+    "lastOrder": "2025-10-18"
+  },
+  {
+    "id": 277,
+    "name": "VASANTH",
+    "phone": "9788857420",
+    "address": "Bodinayakanur",
+    "frequency": 26,
+    "totalSpent": 13291,
+    "lastOrder": "2025-12-02"
+  },
+  {
+    "id": 20,
+    "name": "Kalai Arasi",
+    "phone": "9488228889",
+    "address": "Bodinayakanur",
+    "frequency": 34,
+    "totalSpent": 13228,
+    "lastOrder": "2026-02-23"
+  },
+  {
+    "id": 138,
+    "name": "MAHALAKMI",
+    "phone": "9123548095",
+    "address": "Bodinayakanur",
+    "frequency": 21,
+    "totalSpent": 13050,
+    "lastOrder": "2024-04-27"
+  },
+  {
+    "id": 79,
+    "name": "Anwar",
+    "phone": "7558101180",
+    "address": "Bodinayakanur",
+    "frequency": 26,
+    "totalSpent": 12766,
+    "lastOrder": "2026-03-15"
+  },
+  {
+    "id": 301,
+    "name": "ARULPAVAI",
+    "phone": "9566902146",
+    "address": "Bodinayakanur",
+    "frequency": 26,
+    "totalSpent": 12490,
+    "lastOrder": "2026-10-13"
+  },
+  {
+    "id": 11,
     "name": "Uma Rani",
     "phone": "6384535248",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 39,
+    "totalSpent": 12469,
+    "lastOrder": "2023-12-31"
   },
   {
-    "id": 65,
-    "name": "Pavithra Karthick",
-    "phone": "7418857253",
+    "id": 262,
+    "name": "SHEK",
+    "phone": "9791464641",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 65,
+    "totalSpent": 12459,
+    "lastOrder": "2026-08-24"
+  },
+  {
+    "id": 39,
+    "name": "Abitha Begam",
+    "phone": "6383150057",
+    "address": "Bodinayakanur",
+    "frequency": 70,
+    "totalSpent": 12329,
+    "lastOrder": "2025-09-19"
+  },
+  {
+    "id": 325,
+    "name": "Justice Nainaar And Family",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 11800,
+    "lastOrder": "2023-04-11"
+  },
+  {
+    "id": 110,
+    "name": "Sivasankari",
+    "phone": "9865321909",
+    "address": "Bodinayakanur",
+    "frequency": 67,
+    "totalSpent": 11631,
+    "lastOrder": "2026-02-21"
+  },
+  {
+    "id": 321,
+    "name": "PRATHIMA",
+    "phone": "7708000347",
+    "address": "Bodinayakanur",
+    "frequency": 15,
+    "totalSpent": 11366,
+    "lastOrder": "2024-07-13"
+  },
+  {
+    "id": 347,
+    "name": "RASENA PPM",
+    "phone": "8148399508",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 11266,
+    "lastOrder": "2025-02-03"
+  },
+  {
+    "id": 142,
+    "name": "AABITHA",
+    "phone": "9344121031",
+    "address": "Bodinayakanur",
+    "frequency": 28,
+    "totalSpent": 11094,
+    "lastOrder": "2025-08-16"
+  },
+  {
+    "id": 198,
+    "name": "Murugarvari",
+    "phone": "6379020859",
+    "address": "Bodinayakanur",
+    "frequency": 40,
+    "totalSpent": 10970,
+    "lastOrder": "2024-06-19"
+  },
+  {
+    "id": 283,
+    "name": "MANSOOR",
+    "phone": "9944959670",
+    "address": "Bodinayakanur",
+    "frequency": 17,
+    "totalSpent": 10812,
+    "lastOrder": "2025-11-05"
+  },
+  {
+    "id": 134,
+    "name": "NAZURUDEEN",
+    "phone": "8939320171",
+    "address": "Bodinayakanur",
+    "frequency": 22,
+    "totalSpent": 10777,
+    "lastOrder": "2023-07-22"
+  },
+  {
+    "id": 330,
+    "name": "ENG.SAYED USHIF BODI",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 10631,
+    "lastOrder": "2023-04-17"
+  },
+  {
+    "id": 92,
+    "name": "Kabilan",
+    "phone": "9994222289",
+    "address": "Bodinayakanur",
+    "frequency": 11,
+    "totalSpent": 10489,
+    "lastOrder": "2023-04-23"
+  },
+  {
+    "id": 173,
+    "name": "SANTHI",
+    "phone": "9715228901",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 10443,
+    "lastOrder": "2025-04-09"
+  },
+  {
+    "id": 281,
+    "name": "P.SURESH",
+    "phone": "8608865332",
+    "address": "Bodinayakanur",
+    "frequency": 64,
+    "totalSpent": 10393,
+    "lastOrder": "2025-03-12"
+  },
+  {
+    "id": 220,
+    "name": "Urmila",
+    "phone": "9245863634",
+    "address": "Bodinayakanur",
+    "frequency": 8,
+    "totalSpent": 9885,
+    "lastOrder": "2025-05-21"
+  },
+  {
+    "id": 13,
+    "name": "Kani",
+    "phone": "9080967929",
+    "address": "Bodinayakanur",
+    "frequency": 33,
+    "totalSpent": 9805,
+    "lastOrder": "2024-06-14"
+  },
+  {
+    "id": 320,
+    "name": "ENGINEER JAYLANI AND FAMILY",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 9626,
+    "lastOrder": "2023-04-03"
+  },
+  {
+    "id": 322,
+    "name": "SAHUL TNPSC BODI",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 9398,
+    "lastOrder": "2023-04-06"
+  },
+  {
+    "id": 343,
+    "name": "MOHAMED SEAK IBURAKIM",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 9206,
+    "lastOrder": "2023-03-30"
+  },
+  {
+    "id": 22,
+    "name": "Abdul Gani",
+    "phone": "9965757573",
+    "address": "Bodinayakanur",
+    "frequency": 11,
+    "totalSpent": 9187,
+    "lastOrder": "2023-08-27"
+  },
+  {
+    "id": 145,
+    "name": "KAALAI",
+    "phone": "9245158864",
+    "address": "Bodinayakanur",
+    "frequency": 23,
+    "totalSpent": 8821,
+    "lastOrder": "2023-12-22"
+  },
+  {
+    "id": 316,
+    "name": "KANAPIRAN",
+    "phone": "9443855995",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 8608,
+    "lastOrder": "2024-07-16"
+  },
+  {
+    "id": 319,
+    "name": "MENAKA",
+    "phone": "9345643301",
+    "address": "Bodinayakanur",
+    "frequency": 23,
+    "totalSpent": 8553,
+    "lastOrder": "2026-01-19"
+  },
+  {
+    "id": 214,
+    "name": "SIYANA",
+    "phone": "7092062231",
+    "address": "Bodinayakanur",
+    "frequency": 19,
+    "totalSpent": 8512,
+    "lastOrder": "2025-04-08"
+  },
+  {
+    "id": 332,
+    "name": "INAYITH HOSIGN BODI",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 8498,
+    "lastOrder": "2023-04-20"
+  },
+  {
+    "id": 370,
+    "name": "KAVIN SAALI FRIEND",
+    "phone": "9361351996",
+    "address": "Bodinayakanur",
+    "frequency": 6,
+    "totalSpent": 8475,
+    "lastOrder": "2026-09-06"
+  },
+  {
+    "id": 313,
+    "name": "Karthika",
+    "phone": "9043607100",
+    "address": "Bodinayakanur",
+    "frequency": 9,
+    "totalSpent": 8239,
+    "lastOrder": "2024-09-29"
+  },
+  {
+    "id": 201,
+    "name": "Yogesh",
+    "phone": "9566646018",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 7926,
+    "lastOrder": "2023-05-02"
+  },
+  {
+    "id": 144,
+    "name": "WEST MADARSA",
+    "phone": "9080656935",
+    "address": "Bodinayakanur",
+    "frequency": 8,
+    "totalSpent": 7897,
+    "lastOrder": "2024-03-12"
+  },
+  {
+    "id": 126,
+    "name": "A KUMARASAN",
+    "phone": "6382975556",
+    "address": "Bodinayakanur",
+    "frequency": 23,
+    "totalSpent": 7848,
+    "lastOrder": "2024-12-26"
+  },
+  {
+    "id": 199,
+    "name": "BIROJA",
+    "phone": "8344865768",
+    "address": "Bodinayakanur",
+    "frequency": 39,
+    "totalSpent": 7781,
+    "lastOrder": "2024-01-02"
+  },
+  {
+    "id": 324,
+    "name": "DR MEERA KANI BODI",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 7764,
+    "lastOrder": "2023-04-10"
+  },
+  {
+    "id": 326,
+    "name": "NPKS NAINAR FAMILY",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 7530,
+    "lastOrder": "2023-04-12"
+  },
+  {
+    "id": 328,
+    "name": "BILAL BEST SHOE MART BODI",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 7508,
+    "lastOrder": "2023-04-14"
+  },
+  {
+    "id": 240,
+    "name": "BEULAH DAYCARE",
+    "phone": "8883910334",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 7477,
+    "lastOrder": "2025-02-04"
+  },
+  {
+    "id": 116,
+    "name": "Bharakath Ali",
+    "phone": "9578927614",
+    "address": "Bodinayakanur",
+    "frequency": 8,
+    "totalSpent": 7438,
+    "lastOrder": "2024-02-05"
+  },
+  {
+    "id": 246,
+    "name": "SRIRAM",
+    "phone": "6382023150",
+    "address": "Bodinayakanur",
+    "frequency": 27,
+    "totalSpent": 7328,
+    "lastOrder": "2025-11-02"
+  },
+  {
+    "id": 331,
+    "name": "BASIR & SONS FAMILY BODI",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 7325,
+    "lastOrder": "2023-04-19"
+  },
+  {
+    "id": 266,
+    "name": "S AMBIKA",
+    "phone": "7094566443",
+    "address": "Bodinayakanur",
+    "frequency": 26,
+    "totalSpent": 7169,
+    "lastOrder": "2026-03-12"
+  },
+  {
+    "id": 335,
+    "name": "MUTHU SARANYA",
+    "phone": "9842968716",
+    "address": "Bodinayakanur",
+    "frequency": 20,
+    "totalSpent": 7108,
+    "lastOrder": "2025-12-16"
+  },
+  {
+    "id": 108,
+    "name": "Siva Prakash",
+    "phone": "6381017552",
+    "address": "Bodinayakanur",
+    "frequency": 7,
+    "totalSpent": 7035,
+    "lastOrder": "2023-05-06"
+  },
+  {
+    "id": 298,
+    "name": "Siva Karubanan",
+    "phone": "9884435055",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 6813,
+    "lastOrder": "2025-08-05"
+  },
+  {
+    "id": 172,
+    "name": "ABDULAH",
+    "phone": "8012345720",
+    "address": "Bodinayakanur",
+    "frequency": 11,
+    "totalSpent": 6755,
+    "lastOrder": "2023-08-05"
+  },
+  {
+    "id": 342,
+    "name": "Ajmeer Kaaja And Family",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 6692,
+    "lastOrder": "2023-03-29"
+  },
+  {
+    "id": 31,
+    "name": "Pandiya Raj",
+    "phone": "9944231065",
+    "address": "Bodinayakanur",
+    "frequency": 11,
+    "totalSpent": 6651,
+    "lastOrder": "2025-04-13"
+  },
+  {
+    "id": 54,
+    "name": "Kasa Maideen",
+    "phone": "9159491150",
+    "address": "Bodinayakanur",
+    "frequency": 23,
+    "totalSpent": 6387,
+    "lastOrder": "2025-05-28"
+  },
+  {
+    "id": 327,
+    "name": "HAJI RIZWAN BURHAR BANGLUR",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 6289,
+    "lastOrder": "2023-04-13"
+  },
+  {
+    "id": 181,
+    "name": "VEL MURUGAN",
+    "phone": "6374908388",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 6051,
+    "lastOrder": "2023-03-05"
+  },
+  {
+    "id": 329,
+    "name": "Manoj Kumar",
+    "phone": "7904622332",
+    "address": "Bodinayakanur",
+    "frequency": 6,
+    "totalSpent": 5641,
+    "lastOrder": "2025-09-18"
+  },
+  {
+    "id": 88,
+    "name": "Aasif",
+    "phone": "9600679282",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 5579,
+    "lastOrder": "2024-06-29"
+  },
+  {
+    "id": 60,
+    "name": "Apsara",
+    "phone": "9865760872",
+    "address": "Bodinayakanur",
+    "frequency": 11,
+    "totalSpent": 5553,
+    "lastOrder": "2025-12-03"
+  },
+  {
+    "id": 317,
+    "name": "1",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 23,
+    "totalSpent": 5504,
+    "lastOrder": "2025-12-01"
+  },
+  {
+    "id": 46,
+    "name": "Mohammed Fathima",
+    "phone": "9865368074",
+    "address": "Bodinayakanur",
+    "frequency": 33,
+    "totalSpent": 5226,
+    "lastOrder": "2025-11-19"
+  },
+  {
+    "id": 103,
+    "name": "S.Ganga Devi",
+    "phone": "9003413931",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 5021,
+    "lastOrder": "2024-01-31"
+  },
+  {
+    "id": 128,
+    "name": "RAJA LEMAIN",
+    "phone": "9940750477",
+    "address": "Bodinayakanur",
+    "frequency": 7,
+    "totalSpent": 4947,
+    "lastOrder": "2024-04-26"
+  },
+  {
+    "id": 167,
+    "name": "RAJADURAI",
+    "phone": "9092604821",
+    "address": "Bodinayakanur",
+    "frequency": 6,
+    "totalSpent": 4842,
+    "lastOrder": "2026-01-28"
+  },
+  {
+    "id": 341,
+    "name": "Sivasangari",
+    "phone": "8508810499",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 4651,
+    "lastOrder": "2026-07-18"
+  },
+  {
+    "id": 112,
+    "name": "FATHIMA ABBAS",
+    "phone": "9360331721",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 4595,
+    "lastOrder": "2023-03-22"
+  },
+  {
+    "id": 187,
+    "name": "VASTHI",
+    "phone": "9159147724",
+    "address": "Bodinayakanur",
+    "frequency": 12,
+    "totalSpent": 4534,
+    "lastOrder": "2023-08-25"
+  },
+  {
+    "id": 352,
+    "name": "RAMES SISTER SI",
+    "phone": "9245197109",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 4491,
+    "lastOrder": "2025-04-02"
+  },
+  {
+    "id": 189,
+    "name": "M D SAHAD ANSARI",
+    "phone": "7639975018",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 4469,
+    "lastOrder": "2023-08-15"
+  },
+  {
+    "id": 205,
+    "name": "A.MUNISH WARAN",
+    "phone": "9965857703",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 4269,
+    "lastOrder": "2024-01-04"
+  },
+  {
+    "id": 269,
+    "name": "NANTHINI",
+    "phone": "9944204417",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 4151,
+    "lastOrder": "2023-08-29"
+  },
+  {
+    "id": 149,
+    "name": "HAKKIM",
+    "phone": "9487143254",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 4132,
+    "lastOrder": "2025-05-21"
+  },
+  {
+    "id": 98,
+    "name": "ANALAKSHMI",
+    "phone": "9994856216",
+    "address": "Bodinayakanur",
+    "frequency": 28,
+    "totalSpent": 3993,
+    "lastOrder": "2024-01-25"
+  },
+  {
+    "id": 311,
+    "name": "SRI DEVI",
+    "phone": "9345984547",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 3864,
+    "lastOrder": "2023-12-14"
+  },
+  {
+    "id": 9,
+    "name": "Badhar Nisha",
+    "phone": "6383165926",
+    "address": "Bodinayakanur",
+    "frequency": 13,
+    "totalSpent": 3845,
+    "lastOrder": "2023-06-23"
+  },
+  {
+    "id": 202,
+    "name": "JAYARANI SURYA NAGER",
+    "phone": "9442021771",
+    "address": "Bodinayakanur",
+    "frequency": 6,
+    "totalSpent": 3833,
+    "lastOrder": "2023-05-24"
+  },
+  {
+    "id": 237,
+    "name": "Yasmine",
+    "phone": "8098352879",
+    "address": "Bodinayakanur",
+    "frequency": 6,
+    "totalSpent": 3775,
+    "lastOrder": "2023-07-15"
+  },
+  {
+    "id": 94,
+    "name": "RISVANA",
+    "phone": "7200744603",
+    "address": "Bodinayakanur",
+    "frequency": 11,
+    "totalSpent": 3768,
+    "lastOrder": "2023-05-12"
+  },
+  {
+    "id": 366,
+    "name": "SINGH WATER",
+    "phone": "7598776764",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 3723,
+    "lastOrder": "2026-09-20"
+  },
+  {
+    "id": 279,
+    "name": "Janath",
+    "phone": "9790689288",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 3566,
+    "lastOrder": "2025-03-02"
+  },
+  {
+    "id": 124,
+    "name": "MOHAMAD IBRAHIM",
+    "phone": "9677783202",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 3502,
+    "lastOrder": "2025-03-14"
+  },
+  {
+    "id": 74,
+    "name": "Faruq",
+    "phone": "9566933348",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 3389,
+    "lastOrder": "2023-08-29"
+  },
+  {
+    "id": 226,
+    "name": "ANNALAKSHMI",
+    "phone": "9947024516",
+    "address": "Bodinayakanur",
+    "frequency": 13,
+    "totalSpent": 3370,
+    "lastOrder": "2024-01-02"
+  },
+  {
+    "id": 42,
+    "name": "Sheik Farith",
+    "phone": "9865576901",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 3291,
+    "lastOrder": "2023-12-26"
+  },
+  {
+    "id": 325,
+    "name": "Sobana Rani",
+    "phone": "74020653",
+    "address": "Bodinayakanur",
+    "frequency": 13,
+    "totalSpent": 3227,
+    "lastOrder": "2026-02-01"
+  },
+  {
+    "id": 100,
+    "name": "RABIYA",
+    "phone": "7339002756",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 3195,
+    "lastOrder": "2023-01-01"
+  },
+  {
+    "id": 343,
+    "name": "Pandi Selvi",
+    "phone": "9344567134",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 3175,
+    "lastOrder": "2025-01-29"
+  },
+  {
+    "id": 305,
+    "name": "RAJA KUWAITH",
+    "phone": "9944544694",
+    "address": "Bodinayakanur",
+    "frequency": 6,
+    "totalSpent": 3167,
+    "lastOrder": "2023-12-06"
+  },
+  {
+    "id": 24,
+    "name": "Nasreen",
+    "phone": "9791836850",
+    "address": "Bodinayakanur",
+    "frequency": 9,
+    "totalSpent": 3145,
+    "lastOrder": "2025-04-07"
+  },
+  {
+    "id": 280,
+    "name": "MUTHUKUMAIR",
+    "phone": "8838423153",
+    "address": "Bodinayakanur",
+    "frequency": 7,
+    "totalSpent": 3127,
+    "lastOrder": "2024-12-25"
+  },
+  {
+    "id": 80,
+    "name": "Sundar Singh",
+    "phone": "8526675598",
+    "address": "Bodinayakanur",
+    "frequency": 8,
+    "totalSpent": 3024,
+    "lastOrder": "2024-12-19"
+  },
+  {
+    "id": 165,
+    "name": "MAGETHI",
+    "phone": "9894215315",
+    "address": "Bodinayakanur",
+    "frequency": 8,
+    "totalSpent": 2990,
+    "lastOrder": "2023-09-20"
+  },
+  {
+    "id": 349,
+    "name": "RAJA",
+    "phone": "8248927793",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 2953,
+    "lastOrder": "2025-02-10"
+  },
+  {
+    "id": 18,
+    "name": "Yasar Arafath",
+    "phone": "6381401050",
+    "address": "Bodinayakanur",
+    "frequency": 7,
+    "totalSpent": 2921,
+    "lastOrder": "2023-05-19"
+  },
+  {
+    "id": 276,
+    "name": "DIHVYA",
+    "phone": "6383458853",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 2886,
+    "lastOrder": "2023-12-03"
+  },
+  {
+    "id": 131,
+    "name": "A.SAMSUDEEN",
+    "phone": "9952870858",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 2852,
+    "lastOrder": "2023-11-21"
+  },
+  {
+    "id": 264,
+    "name": "THEIVAM",
+    "phone": "9786621441",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 2829,
+    "lastOrder": "2025-03-12"
+  },
+  {
+    "id": 16,
+    "name": "Thoufiq",
+    "phone": "8807987832",
+    "address": "Bodinayakanur",
+    "frequency": 6,
+    "totalSpent": 2804,
+    "lastOrder": "2023-02-19"
+  },
+  {
+    "id": 323,
+    "name": "BANUMATHI",
+    "phone": "9659398685",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 2751,
+    "lastOrder": "2024-03-22"
+  },
+  {
+    "id": 185,
+    "name": "RAIHANA FATHINA",
+    "phone": "9442882526",
+    "address": "Bodinayakanur",
+    "frequency": 11,
+    "totalSpent": 2729,
+    "lastOrder": "2023-12-13"
+  },
+  {
+    "id": 333,
+    "name": "MUNIYAMMAL",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 2598,
+    "lastOrder": "2023-07-23"
+  },
+  {
+    "id": 243,
+    "name": "Rajie",
+    "phone": "8807582510",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 2558,
+    "lastOrder": "2023-06-04"
+  },
+  {
+    "id": 257,
+    "name": "MAJITH",
+    "phone": "7598139502",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 2547,
+    "lastOrder": "2023-05-02"
+  },
+  {
+    "id": 113,
+    "name": "PARIMALA",
+    "phone": "6379479027",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 2516,
+    "lastOrder": "2023-01-03"
+  },
+  {
+    "id": 132,
+    "name": "VANMATHI MAHAL",
+    "phone": "6383487532",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 2504,
+    "lastOrder": "2023-12-10"
+  },
+  {
+    "id": 340,
+    "name": "M.Siva Sweet Shop",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 2500,
+    "lastOrder": "2023-01-14"
+  },
+  {
+    "id": 14,
+    "name": "Rajesh",
+    "phone": "9487431268",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 2421,
+    "lastOrder": "2023-10-28"
+  },
+  {
+    "id": 177,
+    "name": "MOHAMED RABEEK",
+    "phone": "9994204023",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 2414,
+    "lastOrder": "2023-04-21"
+  },
+  {
+    "id": 96,
+    "name": "VIJI",
+    "phone": "9788355112",
+    "address": "Bodinayakanur",
+    "frequency": 10,
+    "totalSpent": 2403,
+    "lastOrder": "2023-04-18"
+  },
+  {
+    "id": 175,
+    "name": "MUJI",
+    "phone": "9994572738",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 2387,
+    "lastOrder": "2023-02-07"
+  },
+  {
+    "id": 365,
+    "name": "Hari Mother",
+    "phone": "6379281825",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 2385,
+    "lastOrder": "2026-01-13"
+  },
+  {
+    "id": 170,
+    "name": "P MANIKANDAN",
+    "phone": "9942225872",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 2344,
+    "lastOrder": "2023-01-23"
+  },
+  {
+    "id": 87,
+    "name": "GIRI",
+    "phone": "9894749345",
+    "address": "Bodinayakanur",
+    "frequency": 11,
+    "totalSpent": 2332,
+    "lastOrder": "2025-11-24"
+  },
+  {
+    "id": 330,
+    "name": "Jeeva",
+    "phone": "9655185150",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 2221,
+    "lastOrder": "2024-07-31"
+  },
+  {
+    "id": 101,
+    "name": "P.ALAGU RAMAN",
+    "phone": "8300796533",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 2205,
+    "lastOrder": "2023-02-21"
+  },
+  {
+    "id": 76,
+    "name": "Maariammal",
+    "phone": "9942690695",
+    "address": "Bodinayakanur",
+    "frequency": 6,
+    "totalSpent": 2178,
+    "lastOrder": "2023-05-05"
+  },
+  {
+    "id": 219,
+    "name": "Mohammed Ismayil Master",
+    "phone": "8056964046",
+    "address": "Bodinayakanur",
+    "frequency": 14,
+    "totalSpent": 2152,
+    "lastOrder": "2023-12-12"
+  },
+  {
+    "id": 197,
+    "name": "BARVIN FATHIMA",
+    "phone": "6374990671",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 2150,
+    "lastOrder": "2023-04-21"
+  },
+  {
+    "id": 115,
+    "name": "E.M.S.ANBUNITHI",
+    "phone": "8220883012",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 2119,
+    "lastOrder": "2023-04-11"
+  },
+  {
+    "id": 77,
+    "name": "Krishna Kumar",
+    "phone": "7010281485",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 2118,
+    "lastOrder": "2023-01-01"
+  },
+  {
+    "id": 315,
+    "name": "IDBL BANK",
+    "phone": "8248501731",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 2046,
+    "lastOrder": "2024-08-15"
+  },
+  {
+    "id": 314,
+    "name": "MALAR KODI",
+    "phone": "9791431122",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 2010,
+    "lastOrder": "2024-01-02"
+  },
+  {
+    "id": 297,
+    "name": "Radha Krishnana",
+    "phone": "8807174999",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1992,
+    "lastOrder": "2023-11-10"
+  },
+  {
+    "id": 208,
+    "name": "Farhan",
+    "phone": "9894948024",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 1979,
+    "lastOrder": "2023-06-28"
+  },
+  {
+    "id": 176,
+    "name": "ARJUN",
+    "phone": "9944666900",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1968,
+    "lastOrder": "2023-02-05"
+  },
+  {
+    "id": 321,
+    "name": "Ajarath",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1921,
+    "lastOrder": "2023-04-04"
+  },
+  {
+    "id": 364,
+    "name": "Ajithkumar",
+    "phone": "6382778782",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1905,
+    "lastOrder": "2025-12-26"
+  },
+  {
+    "id": 210,
+    "name": "Karthika M",
+    "phone": "6381540870",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 1832,
+    "lastOrder": "2026-01-20"
+  },
+  {
+    "id": 195,
+    "name": "BABU",
+    "phone": "8667499928",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 1822,
+    "lastOrder": "2023-03-15"
+  },
+  {
+    "id": 327,
+    "name": "Karthik",
+    "phone": "9363247696",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 1794,
+    "lastOrder": "2024-05-18"
+  },
+  {
+    "id": 129,
+    "name": "S THANGAVEL",
+    "phone": "9444367191",
+    "address": "Bodinayakanur",
+    "frequency": 9,
+    "totalSpent": 1769,
+    "lastOrder": "2024-05-19"
+  },
+  {
+    "id": 28,
+    "name": "Maarimuthu",
+    "phone": "9865061365",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1727,
+    "lastOrder": "2022-12-24"
+  },
+  {
+    "id": 52,
+    "name": "Mohammed Safiyullah",
+    "phone": "9066360024",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 1657,
+    "lastOrder": "2024-01-20"
+  },
+  {
+    "id": 209,
+    "name": "Anbu",
+    "phone": "8825759366",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1643,
+    "lastOrder": "2023-03-02"
+  },
+  {
+    "id": 171,
+    "name": "S.MD RAHUMADULA",
+    "phone": "7305804741",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 1641,
+    "lastOrder": "2023-02-21"
+  },
+  {
+    "id": 331,
+    "name": "Boomika",
+    "phone": "9342729383",
+    "address": "Bodinayakanur",
+    "frequency": 6,
+    "totalSpent": 1635,
+    "lastOrder": "2024-09-24"
+  },
+  {
+    "id": 35,
+    "name": "Azar",
+    "phone": "9894158878",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 1632,
+    "lastOrder": "2023-07-17"
+  },
+  {
+    "id": 225,
+    "name": "NAGARAJ",
+    "phone": "9080002188",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1620,
+    "lastOrder": "2023-03-25"
+  },
+  {
+    "id": 224,
+    "name": "AHAMAD KABIR",
+    "phone": "9600596884",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1590,
+    "lastOrder": "2023-03-25"
+  },
+  {
+    "id": 234,
+    "name": "Janagi",
+    "phone": "9495517019",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 1566,
+    "lastOrder": "2023-11-29"
+  },
+  {
+    "id": 137,
+    "name": "BARANI",
+    "phone": "9342575343",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 1559,
+    "lastOrder": "2023-04-14"
+  },
+  {
+    "id": 7,
+    "name": "Bala",
+    "phone": "9677788963",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 1541,
+    "lastOrder": "2023-02-23"
+  },
+  {
+    "id": 361,
+    "name": "JEGATHEESWARI",
+    "phone": "9344104574",
+    "address": "Bodinayakanur",
+    "frequency": 8,
+    "totalSpent": 1464,
+    "lastOrder": "2026-09-14"
+  },
+  {
+    "id": 84,
+    "name": "Vignesh",
+    "phone": "9095028170",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 1414,
+    "lastOrder": "2023-01-14"
+  },
+  {
+    "id": 194,
+    "name": "SULTHAN",
+    "phone": "9487930615",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1408,
+    "lastOrder": "2023-02-16"
+  },
+  {
+    "id": 57,
+    "name": "Selvi",
+    "phone": "9585319230",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 1403,
+    "lastOrder": "2024-07-14"
+  },
+  {
+    "id": 271,
+    "name": "SENTHIL 6TH STREET NEW COLONY",
+    "phone": "9626454863",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1400,
+    "lastOrder": "2023-07-08"
+  },
+  {
+    "id": 304,
+    "name": "A Sirajdeen",
+    "phone": "9952765781",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 1400,
+    "lastOrder": "2024-05-10"
+  },
+  {
+    "id": 107,
+    "name": "SANTHA SANMUHAM",
+    "phone": "9842737548",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1340,
+    "lastOrder": "2023-01-03"
+  },
+  {
+    "id": 50,
+    "name": "Jeya",
+    "phone": "9790506473",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 1304,
+    "lastOrder": "2023-11-13"
   },
   {
     "id": 66,
     "name": "Puthur Customer",
     "phone": "6379434964",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 1,
+    "totalSpent": 1300,
+    "lastOrder": "2022-12-26"
   },
   {
-    "id": 67,
-    "name": "Zafar Nisha",
-    "phone": "9655154865",
+    "id": 122,
+    "name": "KAYAL VILI",
+    "phone": "9360919835",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 1,
+    "totalSpent": 1271,
+    "lastOrder": "2023-01-04"
   },
   {
-    "id": 68,
-    "name": "Irfana",
-    "phone": "6381234750",
+    "id": 332,
+    "name": "ATHITHAN",
+    "phone": "8870200803",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 4,
+    "totalSpent": 1260,
+    "lastOrder": "2025-03-06"
   },
   {
-    "id": 69,
-    "name": "Surya",
-    "phone": "9003427137",
+    "id": 32,
+    "name": "Ponnu Lakshmi",
+    "phone": "8754262613",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 7,
+    "totalSpent": 1238,
+    "lastOrder": "2024-08-12"
   },
   {
-    "id": 70,
-    "name": "Thanga Pandi",
-    "phone": "9342567956",
+    "id": 81,
+    "name": "RAMYA",
+    "phone": "9087928535",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 3,
+    "totalSpent": 1214,
+    "lastOrder": "2023-05-09"
   },
   {
-    "id": 71,
-    "name": "Aruna Giri",
-    "phone": "7418508990",
+    "id": 192,
+    "name": "MUTHU .K",
+    "phone": "8940312042",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 1,
+    "totalSpent": 1181,
+    "lastOrder": "2023-02-16"
+  },
+  {
+    "id": 295,
+    "name": "RAJESH",
+    "phone": "8124530886",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 1168,
+    "lastOrder": "2025-10-15"
+  },
+  {
+    "id": 306,
+    "name": "Abuthaker",
+    "phone": "9994411343",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1158,
+    "lastOrder": "2023-11-26"
+  },
+  {
+    "id": 334,
+    "name": "PANDIYAN",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1154,
+    "lastOrder": "2023-09-14"
+  },
+  {
+    "id": 308,
+    "name": "MOHAN",
+    "phone": "9865612825",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 1129,
+    "lastOrder": "2026-09-12"
+  },
+  {
+    "id": 267,
+    "name": "Kajalakshmi",
+    "phone": "9361288463",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 1106,
+    "lastOrder": "2024-06-22"
+  },
+  {
+    "id": 287,
+    "name": "Pandiarajan",
+    "phone": "8778580277",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 1098,
+    "lastOrder": "2024-02-05"
+  },
+  {
+    "id": 319,
+    "name": "Er Najumudeen",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1092,
+    "lastOrder": "2023-04-02"
+  },
+  {
+    "id": 65,
+    "name": "Pavithra Karthick",
+    "phone": "7418857253",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1084,
+    "lastOrder": "2022-12-26"
+  },
+  {
+    "id": 168,
+    "name": "ANANDH",
+    "phone": "8248323942",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1082,
+    "lastOrder": "2023-01-21"
+  },
+  {
+    "id": 161,
+    "name": "Jegadeswari",
+    "phone": "9042314718",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 1051,
+    "lastOrder": "2023-01-14"
+  },
+  {
+    "id": 121,
+    "name": "ANAND",
+    "phone": "9940183898",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1044,
+    "lastOrder": "2023-01-04"
+  },
+  {
+    "id": 148,
+    "name": "UTHAYA KUMAR",
+    "phone": "8883866412",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 1037,
+    "lastOrder": "2023-03-12"
+  },
+  {
+    "id": 174,
+    "name": "Gowri",
+    "phone": "6382580015",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 1022,
+    "lastOrder": "2023-02-04"
+  },
+  {
+    "id": 153,
+    "name": "Ahamad Ibrahim",
+    "phone": "8220191991",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1017,
+    "lastOrder": "2023-01-09"
+  },
+  {
+    "id": 36,
+    "name": "Lalitha",
+    "phone": "9952529017",
+    "address": "Bodinayakanur",
+    "frequency": 11,
+    "totalSpent": 1013,
+    "lastOrder": "2024-07-03"
+  },
+  {
+    "id": 86,
+    "name": "Kannamma Syed",
+    "phone": "9994905832",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 1012,
+    "lastOrder": "2023-01-19"
+  },
+  {
+    "id": 299,
+    "name": "Anbuchelian",
+    "phone": "9994459155",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 986,
+    "lastOrder": "2023-11-20"
+  },
+  {
+    "id": 102,
+    "name": "MUTHU MURUGASWARIE",
+    "phone": "9715239406",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 982,
+    "lastOrder": "2024-07-26"
+  },
+  {
+    "id": 164,
+    "name": "Mohamed Saref",
+    "phone": "9943691284",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 978,
+    "lastOrder": "2023-01-20"
+  },
+  {
+    "id": 318,
+    "name": "AFAFRA",
+    "phone": "7810006902",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 977,
+    "lastOrder": "2024-04-07"
+  },
+  {
+    "id": 272,
+    "name": "CHANDRA SEHAR",
+    "phone": "9047908342",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 958,
+    "lastOrder": "2023-08-14"
   },
   {
     "id": 72,
     "name": "Zahangir",
     "phone": "9095040334",
     "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
+    "frequency": 1,
+    "totalSpent": 943,
+    "lastOrder": "2022-12-26"
+  },
+  {
+    "id": 157,
+    "name": "Saukath Ali",
+    "phone": "9443804208",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 943,
+    "lastOrder": "2023-01-14"
+  },
+  {
+    "id": 333,
+    "name": "KAJA",
+    "phone": "8807274150",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 935,
+    "lastOrder": "2024-06-21"
+  },
+  {
+    "id": 204,
+    "name": "SATHIYA",
+    "phone": "6385213445",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 896,
+    "lastOrder": "2023-04-03"
+  },
+  {
+    "id": 303,
+    "name": "Yoha",
+    "phone": "6383857510",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 836,
+    "lastOrder": "2023-11-19"
+  },
+  {
+    "id": 45,
+    "name": "Vikram",
+    "phone": "7708677059",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 818,
+    "lastOrder": "2022-12-29"
+  },
+  {
+    "id": 27,
+    "name": "Rajan",
+    "phone": "9362603197",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 811,
+    "lastOrder": "2023-01-02"
+  },
+  {
+    "id": 184,
+    "name": "MUNIAMMAL.C",
+    "phone": "8754256165",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 797,
+    "lastOrder": "2023-11-28"
+  },
+  {
+    "id": 312,
+    "name": "SYED ALAFATHIMA",
+    "phone": "9486124302",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 791,
+    "lastOrder": "2023-12-26"
+  },
+  {
+    "id": 200,
+    "name": "ROJA",
+    "phone": "7708131142",
+    "address": "Bodinayakanur",
+    "frequency": 6,
+    "totalSpent": 790,
+    "lastOrder": "2024-06-15"
+  },
+  {
+    "id": 58,
+    "name": "V.Ganesan",
+    "phone": "8124876757",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 780,
+    "lastOrder": "2022-12-31"
+  },
+  {
+    "id": 341,
+    "name": "JOTHI MANI",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 719,
+    "lastOrder": "2023-02-27"
+  },
+  {
+    "id": 270,
+    "name": "M.Mugaeswari",
+    "phone": "9524675035",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 717,
+    "lastOrder": "2023-07-06"
+  },
+  {
+    "id": 221,
+    "name": "THANALAXMI",
+    "phone": "7092177049",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 693,
+    "lastOrder": "2023-03-23"
+  },
+  {
+    "id": 135,
+    "name": "PIER MOHAMMED",
+    "phone": "8870186476",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 685,
+    "lastOrder": "2024-03-05"
+  },
+  {
+    "id": 342,
+    "name": "GIRI SELVI",
+    "phone": "7092279554",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 669,
+    "lastOrder": "2024-11-23"
+  },
+  {
+    "id": 336,
+    "name": "AMARAVADHI",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 663,
+    "lastOrder": "2023-01-03"
+  },
+  {
+    "id": 335,
+    "name": "NIVETHA",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 657,
+    "lastOrder": "2023-09-21"
+  },
+  {
+    "id": 338,
+    "name": "Veerammal",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 651,
+    "lastOrder": "2023-01-14"
+  },
+  {
+    "id": 119,
+    "name": "Raja Mani",
+    "phone": "9486149099",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 649,
+    "lastOrder": "2023-01-04"
+  },
+  {
+    "id": 136,
+    "name": "SAMSUDEEN",
+    "phone": "9043985899",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 641,
+    "lastOrder": "2025-04-04"
+  },
+  {
+    "id": 302,
+    "name": "SAARA BEGAM",
+    "phone": "9600653461",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 633,
+    "lastOrder": "2023-11-18"
+  },
+  {
+    "id": 350,
+    "name": "LILA",
+    "phone": "9486615694",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 620,
+    "lastOrder": "2025-02-10"
+  },
+  {
+    "id": 212,
+    "name": "Harikaran P",
+    "phone": "8825455758",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 616,
+    "lastOrder": "2023-03-19"
+  },
+  {
+    "id": 70,
+    "name": "Thanga Pandi",
+    "phone": "9342567956",
+    "address": "Bodinayakanur",
+    "frequency": 5,
+    "totalSpent": 604,
+    "lastOrder": "2024-08-17"
+  },
+  {
+    "id": 104,
+    "name": "Gyana Prakash",
+    "phone": "9865445484",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 589,
+    "lastOrder": "2023-01-02"
+  },
+  {
+    "id": 344,
+    "name": "Rajasabi",
+    "phone": "6382518622",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 586,
+    "lastOrder": "2025-01-15"
+  },
+  {
+    "id": 105,
+    "name": "Sajahan",
+    "phone": "9043828534",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 568,
+    "lastOrder": "2023-01-11"
+  },
+  {
+    "id": 160,
+    "name": "Raja",
+    "phone": "8610132209",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 567,
+    "lastOrder": "2023-07-05"
+  },
+  {
+    "id": 362,
+    "name": "Kottai",
+    "phone": "9025467040",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 552,
+    "lastOrder": "2025-12-26"
+  },
+  {
+    "id": 359,
+    "name": "RAJESH KANNA",
+    "phone": "9597551551",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 551,
+    "lastOrder": "2025-09-24"
+  },
+  {
+    "id": 118,
+    "name": "Dilhar",
+    "phone": "7418470008",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 529,
+    "lastOrder": "2023-01-04"
+  },
+  {
+    "id": 147,
+    "name": "RAJESH",
+    "phone": "9950604160",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 523,
+    "lastOrder": "2023-01-08"
+  },
+  {
+    "id": 117,
+    "name": "Bashith",
+    "phone": "8825439943",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 515,
+    "lastOrder": "2023-01-03"
+  },
+  {
+    "id": 127,
+    "name": "JAYALAKSMI",
+    "phone": "9894232328",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 514,
+    "lastOrder": "2023-02-04"
+  },
+  {
+    "id": 263,
+    "name": "SAANTHI",
+    "phone": "9994711518",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 507,
+    "lastOrder": "2023-05-31"
+  },
+  {
+    "id": 162,
+    "name": "BARAMASEWAM",
+    "phone": "9047341723",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 499,
+    "lastOrder": "2023-01-18"
+  },
+  {
+    "id": 339,
+    "name": "Yogesh",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 468,
+    "lastOrder": "2023-01-14"
+  },
+  {
+    "id": 93,
+    "name": "Ajitha",
+    "phone": "9715802934",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 444,
+    "lastOrder": "2022-12-31"
+  },
+  {
+    "id": 8,
+    "name": "Kanagaraj",
+    "phone": "8778737716",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 435,
+    "lastOrder": "2023-01-19"
+  },
+  {
+    "id": 34,
+    "name": "Subramani",
+    "phone": "7502024859",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 423,
+    "lastOrder": "2023-01-14"
+  },
+  {
+    "id": 47,
+    "name": "Peer Oli",
+    "phone": "7010988436",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 423,
+    "lastOrder": "2022-12-25"
+  },
+  {
+    "id": 109,
+    "name": "Jamrath",
+    "phone": "7826094844",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 423,
+    "lastOrder": "2023-01-03"
+  },
+  {
+    "id": 114,
+    "name": "RAMAR",
+    "phone": "9787556070",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 405,
+    "lastOrder": "2023-01-03"
+  },
+  {
+    "id": 97,
+    "name": "Atheef",
+    "phone": "9994734291",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 404,
+    "lastOrder": "2023-01-12"
+  },
+  {
+    "id": 56,
+    "name": "Muthu Bala",
+    "phone": "9585796068",
+    "address": "Bodinayakanur",
+    "frequency": 11,
+    "totalSpent": 399,
+    "lastOrder": "2023-01-07"
+  },
+  {
+    "id": 259,
+    "name": "RASUUL",
+    "phone": "9791458728",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 396,
+    "lastOrder": "2024-05-05"
+  },
+  {
+    "id": 85,
+    "name": "Logesh",
+    "phone": "9944256662",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 393,
+    "lastOrder": "2022-12-27"
+  },
+  {
+    "id": 71,
+    "name": "Aruna Giri",
+    "phone": "7418508990",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 390,
+    "lastOrder": "2022-12-26"
+  },
+  {
+    "id": 90,
+    "name": "KARTHIK SELVAM",
+    "phone": "9087495144",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 379,
+    "lastOrder": "2022-12-29"
+  },
+  {
+    "id": 268,
+    "name": "Sakthi",
+    "phone": "8940925535",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 369,
+    "lastOrder": "2023-06-15"
+  },
+  {
+    "id": 89,
+    "name": "SELVI",
+    "phone": "9751779004",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 352,
+    "lastOrder": "2022-12-29"
+  },
+  {
+    "id": 351,
+    "name": "GANEAS BABU",
+    "phone": "9344995018",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 350,
+    "lastOrder": "2025-02-17"
+  },
+  {
+    "id": 51,
+    "name": "Star Broilers",
+    "phone": "9994955650",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 342,
+    "lastOrder": "2022-12-28"
+  },
+  {
+    "id": 69,
+    "name": "Surya",
+    "phone": "9003427137",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 341,
+    "lastOrder": "2022-12-26"
+  },
+  {
+    "id": 183,
+    "name": "MEHARBANU",
+    "phone": "9843505727",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 328,
+    "lastOrder": "2023-02-09"
+  },
+  {
+    "id": 44,
+    "name": "Rithi Kesavan",
+    "phone": "9994490586",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 325,
+    "lastOrder": "2022-12-25"
+  },
+  {
+    "id": 296,
+    "name": "Ajarutheen",
+    "phone": "9566613386",
+    "address": "Bodinayakanur",
+    "frequency": 3,
+    "totalSpent": 324,
+    "lastOrder": "2023-11-13"
+  },
+  {
+    "id": 258,
+    "name": "Hakkem Palli Vasal Steet",
+    "phone": "9442751390",
+    "address": "Tvkk nagar",
+    "frequency": 1,
+    "totalSpent": 318,
+    "lastOrder": "2023-05-03"
+  },
+  {
+    "id": 340,
+    "name": "S.Ganasekaran",
+    "phone": "7904031299",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 317,
+    "lastOrder": "2024-10-16"
+  },
+  {
+    "id": 191,
+    "name": "Malair",
+    "phone": "9976624875",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 305,
+    "lastOrder": "2023-02-15"
+  },
+  {
+    "id": 291,
+    "name": "RAAM KUMAR",
+    "phone": "7538858939",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 300,
+    "lastOrder": "2023-10-30"
+  },
+  {
+    "id": 140,
+    "name": "ADMLS LARI",
+    "phone": "9994352051",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 298,
+    "lastOrder": "2023-01-07"
+  },
+  {
+    "id": 61,
+    "name": "Bakiyalakshmi",
+    "phone": "9789080632",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 293,
+    "lastOrder": "2023-02-12"
+  },
+  {
+    "id": 285,
+    "name": "REJANAMBAAL",
+    "phone": "9655627678",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 269,
+    "lastOrder": "2023-10-05"
+  },
+  {
+    "id": 314,
+    "name": "Rahumat",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 263,
+    "lastOrder": "2025-04-02"
+  },
+  {
+    "id": 223,
+    "name": "Selvanayaham",
+    "phone": "9087710624",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 259,
+    "lastOrder": "2023-03-24"
+  },
+  {
+    "id": 317,
+    "name": "Muthu",
+    "phone": "8072785215",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 257,
+    "lastOrder": "2024-01-16"
+  },
+  {
+    "id": 348,
+    "name": "A.JAILANI",
+    "phone": "8148147001",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 253,
+    "lastOrder": "2025-02-09"
+  },
+  {
+    "id": 49,
+    "name": "Praveen Gandhi",
+    "phone": "9176062620",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 245,
+    "lastOrder": "2022-12-25"
+  },
+  {
+    "id": 29,
+    "name": "Boss",
+    "phone": "9443698724",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 239,
+    "lastOrder": "2022-12-24"
+  },
+  {
+    "id": 309,
+    "name": "NANDHINI",
+    "phone": "8637658704",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 237,
+    "lastOrder": "2023-12-06"
+  },
+  {
+    "id": 217,
+    "name": "MANI VASAGAN",
+    "phone": "7598671826",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 227,
+    "lastOrder": "2023-03-16"
+  },
+  {
+    "id": 315,
+    "name": "NANTHA KUMAIR",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 212,
+    "lastOrder": "2025-04-18"
+  },
+  {
+    "id": 4,
+    "name": "Selvam",
+    "phone": "7200762890",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 200,
+    "lastOrder": "2022-12-24"
+  },
+  {
+    "id": 21,
+    "name": "Ashok Kumar",
+    "phone": "6382207684",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 200,
+    "lastOrder": "2022-12-24"
+  },
+  {
+    "id": 95,
+    "name": "MURUGAN",
+    "phone": "8248205494",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 192,
+    "lastOrder": "2024-12-24"
+  },
+  {
+    "id": 62,
+    "name": "Selvi",
+    "phone": "9976068309",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 185,
+    "lastOrder": "2022-12-26"
+  },
+  {
+    "id": 307,
+    "name": "Akamathiya",
+    "phone": "9626640316",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 183,
+    "lastOrder": "2023-11-27"
+  },
+  {
+    "id": 15,
+    "name": "Suresh",
+    "phone": "9790008617",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 162,
+    "lastOrder": "2022-12-24"
+  },
+  {
+    "id": 37,
+    "name": "Ram Kumar",
+    "phone": "9751902390",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 152,
+    "lastOrder": "2022-12-25"
+  },
+  {
+    "id": 150,
+    "name": "SHIVA",
+    "phone": "6384534806",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 150,
+    "lastOrder": "2023-01-08"
+  },
+  {
+    "id": 310,
+    "name": "SUMIT SHAH",
+    "phone": "8097390000",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 144,
+    "lastOrder": "2023-12-13"
+  },
+  {
+    "id": 83,
+    "name": "GOPALA KRISHNAN",
+    "phone": "7401179707",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 133,
+    "lastOrder": "2023-04-03"
+  },
+  {
+    "id": 53,
+    "name": "Selva Mani",
+    "phone": "9344920559",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 129,
+    "lastOrder": "2022-12-25"
+  },
+  {
+    "id": 68,
+    "name": "Irfana",
+    "phone": "6381234750",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 121,
+    "lastOrder": "2022-12-26"
+  },
+  {
+    "id": 26,
+    "name": "Pandi Amma",
+    "phone": "9626212282",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 111,
+    "lastOrder": "2022-12-25"
+  },
+  {
+    "id": 6,
+    "name": "Ravi",
+    "phone": "9944497910",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 98,
+    "lastOrder": "2022-12-24"
+  },
+  {
+    "id": 178,
+    "name": "LUJAIN",
+    "phone": "9043220430",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 97,
+    "lastOrder": "2025-01-14"
+  },
+  {
+    "id": 337,
+    "name": "THASLIMA",
+    "phone": "",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 86,
+    "lastOrder": "2023-01-08"
+  },
+  {
+    "id": 10,
+    "name": "Chellamma",
+    "phone": "9443021841",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 61,
+    "lastOrder": "2022-12-27"
+  },
+  {
+    "id": 19,
+    "name": "Vetriselvi",
+    "phone": "7305158479",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 58,
+    "lastOrder": "2022-12-24"
+  },
+  {
+    "id": 41,
+    "name": "Surya",
+    "phone": "7303575701",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 45,
+    "lastOrder": "2022-12-25"
+  },
+  {
+    "id": 67,
+    "name": "Zafar Nisha",
+    "phone": "9655154865",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 39,
+    "lastOrder": "2022-12-26"
   },
   {
     "id": 73,
@@ -608,16 +2966,7 @@
     "phone": "7395995545",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 74,
-    "name": "Faruq",
-    "phone": "9566933348",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -626,601 +2975,7 @@
     "phone": "9942690699",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 76,
-    "name": "Maariammal",
-    "phone": "9942690695",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 77,
-    "name": "Krishna Kumar",
-    "phone": "7010281485",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 78,
-    "name": "Muthu Mani",
-    "phone": "9942690695",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 79,
-    "name": "Anwar",
-    "phone": "7558101180",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 80,
-    "name": "Sundar Singh",
-    "phone": "8526675598",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 81,
-    "name": "RAMYA",
-    "phone": "9087928535",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 82,
-    "name": "GEETHA",
-    "phone": "8344724426",
-    "address": "Bodinayakanur",
-    "frequency": 8,
-    "totalSpent": 3208.0,
-    "lastOrder": "2026-10-01T12:20:47.610731Z"
-  },
-  {
-    "id": 83,
-    "name": "GOPALA KRISHNAN",
-    "phone": "7401179707",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 84,
-    "name": "Vignesh",
-    "phone": "9095028170",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 85,
-    "name": "Logesh",
-    "phone": "9944256662",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 86,
-    "name": "Kannamma Syed",
-    "phone": "9994905832",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 87,
-    "name": "GIRI",
-    "phone": "9894749345",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 88,
-    "name": "Aasif",
-    "phone": "9600679282",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 89,
-    "name": "SELVI",
-    "phone": "9751779004",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 90,
-    "name": "KARTHIK SELVAM",
-    "phone": "9087495144",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 91,
-    "name": "S.SUDHAKAR",
-    "phone": "9908507623",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 92,
-    "name": "Kabilan",
-    "phone": "9994222289",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 93,
-    "name": "Ajitha",
-    "phone": "9715802934",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 94,
-    "name": "RISVANA",
-    "phone": "7200744603",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 95,
-    "name": "MURUGAN",
-    "phone": "8248205494",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 96,
-    "name": "VIJI",
-    "phone": "9788355112",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 97,
-    "name": "Atheef",
-    "phone": "9994734291",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 98,
-    "name": "ANALAKSHMI",
-    "phone": "9994856216",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 99,
-    "name": "SARASWATHI BAI",
-    "phone": "6381654441",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 100,
-    "name": "RABIYA",
-    "phone": "7339002756",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 101,
-    "name": "P.ALAGU RAMAN",
-    "phone": "8300796533",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 102,
-    "name": "MUTHU MURUGASWARIE",
-    "phone": "9715239406",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 103,
-    "name": "S.Ganga Devi",
-    "phone": "9003413931",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 104,
-    "name": "Gyana Prakash",
-    "phone": "9865445484",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 105,
-    "name": "Sajahan",
-    "phone": "9043828534",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 106,
-    "name": "M.Sudhakar",
-    "phone": "7639039666",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 107,
-    "name": "SANTHA SANMUHAM",
-    "phone": "9842737548",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 108,
-    "name": "Siva Prakash",
-    "phone": "6381017552",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 109,
-    "name": "Jamrath",
-    "phone": "7826094844",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 110,
-    "name": "Sivasankari",
-    "phone": "9865321909",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 112,
-    "name": "FATHIMA ABBAS",
-    "phone": "9360331721",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 113,
-    "name": "PARIMALA",
-    "phone": "6379479027",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 114,
-    "name": "RAMAR",
-    "phone": "9787556070",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 115,
-    "name": "E.M.S.ANBUNITHI",
-    "phone": "8220883012",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 116,
-    "name": "Bharakath Ali",
-    "phone": "9578927614",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 117,
-    "name": "Bashith",
-    "phone": "8825439943",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 118,
-    "name": "Dilhar",
-    "phone": "7418470008",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 119,
-    "name": "Raja Mani",
-    "phone": "9486149099",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 120,
-    "name": "Saratha",
-    "phone": "8608449610",
-    "address": "Bodinayakanur",
-    "frequency": 11,
-    "totalSpent": 5960.0,
-    "lastOrder": "2026-09-27T04:41:53.865294Z"
-  },
-  {
-    "id": 121,
-    "name": "ANAND",
-    "phone": "9940183898",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 122,
-    "name": "KAYAL VILI",
-    "phone": "9360919835",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 123,
-    "name": "SAMAD AATHIQ (AUTO)",
-    "phone": "9500295945",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 1621.0,
-    "lastOrder": "2026-07-03T07:39:53.429059Z"
-  },
-  {
-    "id": 124,
-    "name": "MOHAMAD IBRAHIM",
-    "phone": "9677783202",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 125,
-    "name": "Padmavathy",
-    "phone": "8217028102",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 126,
-    "name": "A KUMARASAN",
-    "phone": "6382975556",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 127,
-    "name": "JAYALAKSMI",
-    "phone": "9894232328",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 128,
-    "name": "RAJA LEMAIN",
-    "phone": "9940750477",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 129,
-    "name": "S THANGAVEL",
-    "phone": "9444367191",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 130,
-    "name": "MOHAN",
-    "phone": "9600350572",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 131,
-    "name": "A.SAMSUDEEN",
-    "phone": "9952870858",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 132,
-    "name": "VANMATHI MAHAL",
-    "phone": "6383487532",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 133,
-    "name": "KUWAIT MATHARSHA",
-    "phone": "9994913508",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 134,
-    "name": "NAZURUDEEN",
-    "phone": "8939320171",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 135,
-    "name": "PIER MOHAMMED",
-    "phone": "8870186476",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 136,
-    "name": "SAMSUDEEN",
-    "phone": "9043985899",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 137,
-    "name": "BARANI",
-    "phone": "9342575343",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 138,
-    "name": "MAHALAKMI",
-    "phone": "9123548095",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 139,
-    "name": "B RENUGA DEVI",
-    "phone": "9585872303",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 217.0,
-    "lastOrder": "2026-04-28T12:56:21.706070Z"
-  },
-  {
-    "id": 140,
-    "name": "ADMLS LARI",
-    "phone": "9994352051",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 141,
-    "name": "AS DHAKSHANA",
-    "phone": "8925204400",
-    "address": "Bodinayakanur",
-    "frequency": 2,
-    "totalSpent": 1590.0,
-    "lastOrder": "2026-05-01T13:24:14.271487Z"
-  },
-  {
-    "id": 142,
-    "name": "AABITHA",
-    "phone": "9344121031",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1229,340 +2984,7 @@
     "phone": "7010134425",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 144,
-    "name": "WEST MADARSA",
-    "phone": "9080656935",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 145,
-    "name": "KAALAI",
-    "phone": "9245158864",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 146,
-    "name": "SUMATHI THIRPPATHI",
-    "phone": "9047373421",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 147,
-    "name": "RAJESH",
-    "phone": "9950604160",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 148,
-    "name": "UTHAYA KUMAR",
-    "phone": "8883866412",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 149,
-    "name": "HAKKIM",
-    "phone": "9487143254",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 150,
-    "name": "SHIVA",
-    "phone": "6384534806",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 151,
-    "name": "KARTHIK SANKAR",
-    "phone": "9941141161",
-    "address": "Bodinayakanur",
-    "frequency": 2,
-    "totalSpent": 235.0,
-    "lastOrder": "2026-09-21T04:52:56.263666Z"
-  },
-  {
-    "id": 153,
-    "name": "Ahamad Ibrahim",
-    "phone": "8220191991",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 154,
-    "name": "GEETHA KUMARE",
-    "phone": "9965007900",
-    "address": "Bodinayakanur",
-    "frequency": 12,
-    "totalSpent": 4019.0,
-    "lastOrder": "2026-10-17T14:11:19.765684Z"
-  },
-  {
-    "id": 155,
-    "name": "JAIBU NISHA PPM",
-    "phone": "8438905997",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 157,
-    "name": "Saukath Ali",
-    "phone": "9443804208",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 160,
-    "name": "Raja",
-    "phone": "8610132209",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 161,
-    "name": "Jegadeswari",
-    "phone": "9042314718",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 162,
-    "name": "BARAMASEWAM",
-    "phone": "9047341723",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 164,
-    "name": "Mohamed Saref",
-    "phone": "9943691284",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 165,
-    "name": "MAGETHI",
-    "phone": "9894215315",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 167,
-    "name": "RAJADURAI",
-    "phone": "9092604821",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 168,
-    "name": "ANANDH",
-    "phone": "8248323942",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 169,
-    "name": "M.RAM KUMAR",
-    "phone": "8778025087",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 170,
-    "name": "P MANIKANDAN",
-    "phone": "9942225872",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 171,
-    "name": "S.MD RAHUMADULA",
-    "phone": "7305804741",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 172,
-    "name": "ABDULAH",
-    "phone": "8012345720",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 173,
-    "name": "SANTHI",
-    "phone": "9715228901",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 174,
-    "name": "Gowri",
-    "phone": "6382580015",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 175,
-    "name": "MUJI",
-    "phone": "9994572738",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 176,
-    "name": "ARJUN",
-    "phone": "9944666900",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 177,
-    "name": "MOHAMED RABEEK",
-    "phone": "9994204023",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 178,
-    "name": "LUJAIN",
-    "phone": "9043220430",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 179,
-    "name": "K.NAGARAJAN",
-    "phone": "7604889733",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 181,
-    "name": "VEL MURUGAN",
-    "phone": "6374908388",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 182,
-    "name": "VIJAYA",
-    "phone": "9943039246",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 183,
-    "name": "MEHARBANU",
-    "phone": "9843505727",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 184,
-    "name": "MUNIAMMAL.C",
-    "phone": "8754256165",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 185,
-    "name": "RAIHANA FATHINA",
-    "phone": "9442882526",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 186,
-    "name": "RAIKHANA NEAR SHOP",
-    "phone": "9790399691",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 187,
-    "name": "VASTHI",
-    "phone": "9159147724",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1571,295 +2993,7 @@
     "phone": "8608154828",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 189,
-    "name": "M D SAHAD ANSARI",
-    "phone": "7639975018",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 190,
-    "name": "HAKIM",
-    "phone": "9715795067",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 191,
-    "name": "Malair",
-    "phone": "9976624875",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 192,
-    "name": "MUTHU .K",
-    "phone": "8940312042",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 193,
-    "name": "VIJAYA LAKSHMI",
-    "phone": "9790482405",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 194,
-    "name": "SULTHAN",
-    "phone": "9487930615",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 195,
-    "name": "BABU",
-    "phone": "8667499928",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 196,
-    "name": "Kaalai",
-    "phone": "9245158864",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 197,
-    "name": "BARVIN FATHIMA",
-    "phone": "6374990671",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 198,
-    "name": "Murugarvari",
-    "phone": "6379020859",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 199,
-    "name": "BIROJA",
-    "phone": "8344865768",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 200,
-    "name": "ROJA",
-    "phone": "7708131142",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 201,
-    "name": "Yogesh",
-    "phone": "9566646018",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 202,
-    "name": "JAYARANI SURYA NAGER",
-    "phone": "9442021771",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 203,
-    "name": "RAMACHANDRAN",
-    "phone": "9842519705",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 204,
-    "name": "SATHIYA",
-    "phone": "6385213445",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 205,
-    "name": "A.MUNISH WARAN",
-    "phone": "9965857703",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 206,
-    "name": "SHEIK FARITH",
-    "phone": "9865576901",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 208,
-    "name": "Farhan",
-    "phone": "9894948024",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 209,
-    "name": "Anbu",
-    "phone": "8825759366",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 210,
-    "name": "Karthika M",
-    "phone": "6381540870",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 211,
-    "name": "Dhanush",
-    "phone": "7708531628",
-    "address": "Bodinayakanur",
-    "frequency": 13,
-    "totalSpent": 5679.0,
-    "lastOrder": "2026-08-30T15:27:26.110822Z"
-  },
-  {
-    "id": 212,
-    "name": "Harikaran P",
-    "phone": "8825455758",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 213,
-    "name": "VIGNESH",
-    "phone": "9865732286",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 214,
-    "name": "SIYANA",
-    "phone": "7092062231",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 215,
-    "name": "Harun",
-    "phone": "9597982010",
-    "address": "Bodinayakanur",
-    "frequency": 3,
-    "totalSpent": 2510.0,
-    "lastOrder": "2026-10-01T14:49:32.991585Z"
-  },
-  {
-    "id": 216,
-    "name": "Jaibu Ppm",
-    "phone": "8438905997",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 217,
-    "name": "MANI VASAGAN",
-    "phone": "7598671826",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 218,
-    "name": "THANUSHREE",
-    "phone": "9087928535",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 219,
-    "name": "Mohammed Ismayil Master",
-    "phone": "8056964046",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 220,
-    "name": "Urmila",
-    "phone": "9245863634",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 221,
-    "name": "THANALAXMI",
-    "phone": "7092177049",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1868,259 +3002,7 @@
     "phone": "7502024727",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 223,
-    "name": "Selvanayaham",
-    "phone": "9087710624",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 224,
-    "name": "AHAMAD KABIR",
-    "phone": "9600596884",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 225,
-    "name": "NAGARAJ",
-    "phone": "9080002188",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 226,
-    "name": "ANNALAKSHMI",
-    "phone": "9947024516",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 227,
-    "name": "THE HEAD MASTER PLPS POOPPARA",
-    "phone": "9976637319",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 5041.0,
-    "lastOrder": "2026-08-02T15:54:47.257287Z"
-  },
-  {
-    "id": 231,
-    "name": "GOPALAKRISHNAN",
-    "phone": "7401179707",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 234,
-    "name": "Janagi",
-    "phone": "9495517019",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 235,
-    "name": "ABU WALKER FOOT",
-    "phone": "9865813029",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 237,
-    "name": "Yasmine",
-    "phone": "8098352879",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 240,
-    "name": "BEULAH DAYCARE",
-    "phone": "8883910334",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 241,
-    "name": "LITTLE ANGEL TUTOIN",
-    "phone": "8883910334",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 243,
-    "name": "Rajie",
-    "phone": "8807582510",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 244,
-    "name": "Bairusha Ppm",
-    "phone": "8754993157",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 246,
-    "name": "SRIRAM",
-    "phone": "6382023150",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 257,
-    "name": "MAJITH",
-    "phone": "7598139502",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 258,
-    "name": "Hakkem Palli Vasal Steet",
-    "phone": "9442751390",
-    "address": "Tvkk nagar",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 259,
-    "name": "RASUUL",
-    "phone": "9791458728",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 262,
-    "name": "SHEK",
-    "phone": "9791464641",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 173.0,
-    "lastOrder": "2026-08-24T14:43:50.354589Z"
-  },
-  {
-    "id": 263,
-    "name": "SAANTHI",
-    "phone": "9994711518",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 264,
-    "name": "THEIVAM",
-    "phone": "9786621441",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 265,
-    "name": "Bilaal",
-    "phone": "7639975018",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 266,
-    "name": "S AMBIKA",
-    "phone": "7094566443",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 267,
-    "name": "Kajalakshmi",
-    "phone": "9361288463",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 268,
-    "name": "Sakthi",
-    "phone": "8940925535",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 269,
-    "name": "NANTHINI",
-    "phone": "9944204417",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 270,
-    "name": "M.Mugaeswari",
-    "phone": "9524675035",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 271,
-    "name": "SENTHIL 6TH STREET NEW COLONY",
-    "phone": "9626454863",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 272,
-    "name": "CHANDRA SEHAR",
-    "phone": "9047908342",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2129,106 +3011,7 @@
     "phone": "9092576823",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 276,
-    "name": "DIHVYA",
-    "phone": "6383458853",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 277,
-    "name": "VASANTH",
-    "phone": "9788857420",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 279,
-    "name": "Janath",
-    "phone": "9790689288",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 280,
-    "name": "MUTHUKUMAIR",
-    "phone": "8838423153",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 281,
-    "name": "P.SURESH",
-    "phone": "8608865332",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 283,
-    "name": "MANSOOR",
-    "phone": "9944959670",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 285,
-    "name": "REJANAMBAAL",
-    "phone": "9655627678",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 286,
-    "name": "Maheswari",
-    "phone": "9788941066",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 287,
-    "name": "Pandiarajan",
-    "phone": "8778580277",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 288,
-    "name": "S Kala",
-    "phone": "9865778052",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 289,
-    "name": "RAJES",
-    "phone": "9487431268",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2237,268 +3020,7 @@
     "phone": "8122779424",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 291,
-    "name": "RAAM KUMAR",
-    "phone": "7538858939",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 292,
-    "name": "ANSAARI",
-    "phone": "9944477983",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 293,
-    "name": "NANDHA KUMAR",
-    "phone": "9042523140",
-    "address": "Bodinayakanur",
-    "frequency": 2,
-    "totalSpent": 6154.0,
-    "lastOrder": "2026-05-21T13:33:25.493458Z"
-  },
-  {
-    "id": 294,
-    "name": "AYYAPPAN RAJ",
-    "phone": "7904468821",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 180.0,
-    "lastOrder": "2026-04-02T14:20:38.401859Z"
-  },
-  {
-    "id": 295,
-    "name": "RAJESH",
-    "phone": "8124530886",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 296,
-    "name": "Ajarutheen",
-    "phone": "9566613386",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 297,
-    "name": "Radha Krishnana",
-    "phone": "8807174999",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 298,
-    "name": "Siva Karubanan",
-    "phone": "9884435055",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 299,
-    "name": "Anbuchelian",
-    "phone": "9994459155",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 300,
-    "name": "SENTHIL",
-    "phone": "9790612686",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 93.0,
-    "lastOrder": "2026-04-28T15:46:40.073975Z"
-  },
-  {
-    "id": 301,
-    "name": "ARULPAVAI",
-    "phone": "9566902146",
-    "address": "Bodinayakanur",
-    "frequency": 2,
-    "totalSpent": 1441.0,
-    "lastOrder": "2026-10-13T12:01:23.420224Z"
-  },
-  {
-    "id": 302,
-    "name": "SAARA BEGAM",
-    "phone": "9600653461",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 303,
-    "name": "Yoha",
-    "phone": "6383857510",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 304,
-    "name": "A Sirajdeen",
-    "phone": "9952765781",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 305,
-    "name": "RAJA KUWAITH",
-    "phone": "9944544694",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 306,
-    "name": "Abuthaker",
-    "phone": "9994411343",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 307,
-    "name": "Akamathiya",
-    "phone": "9626640316",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 308,
-    "name": "MOHAN",
-    "phone": "9865612825",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 275.0,
-    "lastOrder": "2026-09-12T12:07:30.063758Z"
-  },
-  {
-    "id": 309,
-    "name": "NANDHINI",
-    "phone": "8637658704",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 310,
-    "name": "SUMIT SHAH",
-    "phone": "8097390000",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 311,
-    "name": "SRI DEVI",
-    "phone": "9345984547",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 312,
-    "name": "SYED ALAFATHIMA",
-    "phone": "9486124302",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 313,
-    "name": "Karthika",
-    "phone": "9043607100",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 314,
-    "name": "MALAR KODI",
-    "phone": "9791431122",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 315,
-    "name": "IDBL BANK",
-    "phone": "8248501731",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 316,
-    "name": "KANAPIRAN",
-    "phone": "9443855995",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 317,
-    "name": "Muthu",
-    "phone": "8072785215",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 318,
-    "name": "AFAFRA",
-    "phone": "7810006902",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 319,
-    "name": "MENAKA",
-    "phone": "9345643301",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2507,151 +3029,7 @@
     "phone": "7538882984",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 321,
-    "name": "PRATHIMA",
-    "phone": "7708000347",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 323,
-    "name": "BANUMATHI",
-    "phone": "9659398685",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 324,
-    "name": "ABDUL RAJACK SYED ABU",
-    "phone": "8072730443",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 325,
-    "name": "Sobana Rani",
-    "phone": "74020653",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 326,
-    "name": "SURESH",
-    "phone": "7904859468",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 820.0,
-    "lastOrder": "2026-05-02T16:44:57.092281Z"
-  },
-  {
-    "id": 327,
-    "name": "Karthik",
-    "phone": "9363247696",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 329,
-    "name": "Manoj Kumar",
-    "phone": "7904622332",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 330,
-    "name": "Jeeva",
-    "phone": "9655185150",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 331,
-    "name": "Boomika",
-    "phone": "9342729383",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 332,
-    "name": "ATHITHAN",
-    "phone": "8870200803",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 333,
-    "name": "KAJA",
-    "phone": "8807274150",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 334,
-    "name": "Muthu Selvam",
-    "phone": "9344066388",
-    "address": "Bodinayakanur",
-    "frequency": 25,
-    "totalSpent": 4586.0,
-    "lastOrder": "2026-10-11T15:04:05.046407Z"
-  },
-  {
-    "id": 335,
-    "name": "MUTHU SARANYA",
-    "phone": "9842968716",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 336,
-    "name": "NAGARAJ",
-    "phone": "8870334411",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 337,
-    "name": "MILAT SHO MARET SHAJAKHAN",
-    "phone": "7010764804",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 338,
-    "name": "R SHANTHI",
-    "phone": "9715228901",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2660,124 +3038,7 @@
     "phone": "9626979219",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 340,
-    "name": "S.Ganasekaran",
-    "phone": "7904031299",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 341,
-    "name": "Sivasangari",
-    "phone": "8508810499",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 275.0,
-    "lastOrder": "2026-07-18T16:06:31.503207Z"
-  },
-  {
-    "id": 342,
-    "name": "GIRI SELVI",
-    "phone": "7092279554",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 343,
-    "name": "Pandi Selvi",
-    "phone": "9344567134",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 344,
-    "name": "Rajasabi",
-    "phone": "6382518622",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 345,
-    "name": "Nimilaas",
-    "phone": "9043220430",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 346,
-    "name": "T Vijaya",
-    "phone": "9626274697",
-    "address": "Bodinayakanur",
-    "frequency": 8,
-    "totalSpent": 9346.0,
-    "lastOrder": "2026-09-11T13:21:18.055341Z"
-  },
-  {
-    "id": 347,
-    "name": "RASENA PPM",
-    "phone": "8148399508",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 348,
-    "name": "A.JAILANI",
-    "phone": "8148147001",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 349,
-    "name": "RAJA",
-    "phone": "8248927793",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 350,
-    "name": "LILA",
-    "phone": "9486615694",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 351,
-    "name": "GANEAS BABU",
-    "phone": "9344995018",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 352,
-    "name": "RAMES SISTER SI",
-    "phone": "9245197109",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2786,89 +3047,8 @@
     "phone": "8072430949",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 357,
-    "name": "Puthuraja",
-    "phone": "9842968716",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 359,
-    "name": "RAJESH KANNA",
-    "phone": "9597551551",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 360,
-    "name": "CHITHRA",
-    "phone": "8608650938",
-    "address": "Bodinayakanur",
-    "frequency": 6,
-    "totalSpent": 1667.0,
-    "lastOrder": "2026-06-28T15:58:08.446353Z"
-  },
-  {
-    "id": 361,
-    "name": "JEGATHEESWARI",
-    "phone": "9344104574",
-    "address": "Bodinayakanur",
-    "frequency": 7,
-    "totalSpent": 1146.0,
-    "lastOrder": "2026-09-14T08:36:09.839703Z"
-  },
-  {
-    "id": 362,
-    "name": "Kottai",
-    "phone": "9025467040",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 363,
-    "name": "PRS VENTURES",
-    "phone": "8072429799",
-    "address": "BODINAYAKANUT, 625513",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 364,
-    "name": "Ajithkumar",
-    "phone": "6382778782",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 365,
-    "name": "Hari Mother",
-    "phone": "6379281825",
-    "address": "Bodinayakanur",
-    "frequency": 0,
-    "totalSpent": 0.0,
-    "lastOrder": null
-  },
-  {
-    "id": 366,
-    "name": "SINGH WATER",
-    "phone": "7598776764",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 3723.0,
-    "lastOrder": "2026-09-20T07:38:47.803443Z"
   },
   {
     "id": 367,
@@ -2876,7 +3056,7 @@
     "phone": "8610628631",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2885,7 +3065,7 @@
     "phone": "7092273447",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2894,17 +3074,8 @@
     "phone": "9790091226",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 370,
-    "name": "KAVIN SAALI FRIEND",
-    "phone": "9361351996",
-    "address": "Bodinayakanur",
-    "frequency": 6,
-    "totalSpent": 8475.0,
-    "lastOrder": "2026-09-06T12:29:28.890546Z"
   },
   {
     "id": 371,
@@ -2912,7 +3083,7 @@
     "phone": "9865562100",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   }
 ]

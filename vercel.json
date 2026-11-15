@@ -4,6 +4,14 @@
   "rewrites": [
     {
       "source": "/",
+      "destination": "/store.html"
+    },
+    {
+      "source": "/landing",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/about",
       "destination": "/index.html"
     },
     {

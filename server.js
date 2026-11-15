@@ -838,9 +838,11 @@ if (reqPath === '/api/pos/status') {
   }
 
   const ROUTE_ALIASES = {
-    '/': '/index.html',
-    '/index': '/index.html',
+    '/': '/store.html',
     '/store': '/store.html',
+    '/landing': '/index.html',
+    '/about': '/index.html',
+    '/index': '/index.html',
     '/admin': '/admin.html',
     '/pos': '/admin.html',
     '/photo': '/product-images.html',
@@ -866,7 +868,7 @@ if (reqPath === '/api/pos/status') {
   if (ROUTE_ALIASES[reqPath]) {
     reqPath = ROUTE_ALIASES[reqPath];
   } else if (reqPath === '/' || reqPath === '') {
-    reqPath = '/index.html';
+    reqPath = '/store.html';
   }
   const cleanPath = decodeURIComponent(reqPath);
   let filePath = path.join(__dirname, cleanPath);

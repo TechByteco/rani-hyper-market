@@ -71,10 +71,15 @@ module.exports = async (req, res) => {
   const queryParams = parsedUrl.searchParams;
 
   const sendJson = (statusCode, data) => {
-    if (res.status && res.json) {
+    if (typeof res.status === 'function' && typeof res.json === 'function') {
       res.status(statusCode).json(data);
     } else {
-      res.writeHead(statusCode, { 'Content-Type': 'application/json' });
+      if (typeof res.writeHead === 'function') {
+        res.writeHead(statusCode, { 'Content-Type': 'application/json' });
+      } else {
+        res.statusCode = statusCode;
+        if (typeof res.setHeader === 'function') res.setHeader('Content-Type', 'application/json');
+      }
       res.end(JSON.stringify(data));
     }
   };
@@ -252,7 +257,7 @@ if (reqPath === '/api/pos/status') {
         },
         cloudSync: {
           supabaseConfigured: true,
-          projectId: 'xjyuxlslaqpqlzxvxaqn',
+          projectId: 'lofykatlypiywrziwtdp',
           bucket: 'sks-backups'
         }
       });
@@ -1045,8 +1050,8 @@ if (reqPath === '/api/pos/status') {
     // 13. Supabase Keepalive & Healthcheck Heartbeat (Prevents 7-day Inactivity Pause)
     if (reqPath === '/api/supabase/keepalive' || reqPath === '/api/supabase/status' || reqPath === '/api/keepalive') {
       const https = require('https');
-      const sbKey = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqeXV4bHNsYXFwcWx6eHZ4YXFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMTE0NDcsImV4cCI6MjEwNDc4NzQ0N30.SrrZ4aVJasotXUvJWHoFitodvfNHpt-xlNx9pijpf9s';
-      const sbUrl = 'https://xjyuxlslaqpqlzxvxaqn.supabase.co/rest/v1/';
+      const sbKey = process.env.SUPABASE_ANON_KEY || 'sb_publishable_8-vFFctJnZYUTZFCmV2rqg_LgHuYjrn';
+      const sbUrl = 'https://lofykatlypiywrziwtdp.supabase.co/rest/v1/store_admins?select=username&limit=1';
 
       const pingResult = await new Promise((resolve) => {
         const pingReq = https.get(sbUrl, {
@@ -1065,7 +1070,7 @@ if (reqPath === '/api/pos/status') {
         status: pingResult.active ? 'OPERATIONAL' : (pingResult.paused ? 'PAUSED' : 'DEGRADED'),
         ...pingResult,
         timestamp: new Date().toISOString(),
-        guidance: pingResult.paused ? 'Supabase project xjyuxlslaqpqlzxvxaqn is paused. Login to https://supabase.com/dashboard and click Restore. Once restored, this cron will keep it active.' : 'Keepalive active.'
+        guidance: pingResult.paused ? 'Supabase project lofykatlypiywrziwtdp is paused. Login to https://supabase.com/dashboard and click Restore. Once restored, this cron will keep it active.' : 'Keepalive active.'
       });
     }
 

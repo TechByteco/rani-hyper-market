@@ -30,7 +30,7 @@ try {
 const DB_PATH = 'C:/SKS Market/Data/database/37a64e83-514d-4b00-b90a-9af172dacdd6/9bcfb0b0-2cd2-11f1-9b4b-6fef85f604f9_2026-2027.db';
 const SQLITE_EXE = 'C:/SKS Market/sqlite3.exe';
 
-const SUPABASE_URL = 'https://xjyuxlslaqpqlzxvxaqn.supabase.co';
+const SUPABASE_URL = 'https://lofykatlypiywrziwtdp.supabase.co';
 const SUPABASE_SECRET = process.env.SUPABASE_SECRET || '';
 
 function loadJsonFallback(filename, defaultValue = null) {
@@ -140,7 +140,7 @@ function getPosStatus() {
       },
       cloudSync: {
         supabaseConfigured: true,
-        projectId: 'xjyuxlslaqpqlzxvxaqn',
+        projectId: 'lofykatlypiywrziwtdp',
         bucket: 'sks-backups'
       }
     };
@@ -172,7 +172,7 @@ function getPosStatus() {
     },
     cloudSync: {
       supabaseConfigured: true,
-      projectId: 'xjyuxlslaqpqlzxvxaqn',
+      projectId: 'lofykatlypiywrziwtdp',
       bucket: 'sks-backups'
     }
   };

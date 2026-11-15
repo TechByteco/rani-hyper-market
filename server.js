@@ -857,8 +857,8 @@ if (reqPath === '/api/pos/status') {
   // Supabase Keepalive & Heartbeat Ping Route
   if (reqPath === '/api/supabase/keepalive' || reqPath === '/api/supabase/status' || reqPath === '/api/keepalive') {
     const https = require('https');
-    const sbKey = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqeXV4bHNsYXFwcWx6eHZ4YXFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMTE0NDcsImV4cCI6MjEwNDc4NzQ0N30.SrrZ4aVJasotXUvJWHoFitodvfNHpt-xlNx9pijpf9s';
-    const sbUrl = 'https://xjyuxlslaqpqlzxvxaqn.supabase.co/rest/v1/';
+    const sbKey = process.env.SUPABASE_ANON_KEY || 'sb_publishable_8-vFFctJnZYUTZFCmV2rqg_LgHuYjrn';
+    const sbUrl = 'https://lofykatlypiywrziwtdp.supabase.co/rest/v1/store_admins?select=username&limit=1';
 
     const pingReq = https.get(sbUrl, {
       headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` },
@@ -869,10 +869,10 @@ if (reqPath === '/api/pos/status') {
       pingRes.on('end', () => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
-          status: 'OPERATIONAL',
+          status: pingRes.statusCode === 200 ? 'OPERATIONAL' : 'ONLINE',
           active: true,
           httpStatus: pingRes.statusCode,
-          message: 'Supabase ping delivered',
+          message: 'Supabase ping delivered to PostgreSQL database',
           timestamp: new Date().toISOString()
         }));
       });
@@ -893,7 +893,7 @@ if (reqPath === '/api/pos/status') {
         error: err.message,
         paused: err.code === 'ENOTFOUND',
         timestamp: new Date().toISOString(),
-        guidance: 'Supabase project xjyuxlslaqpqlzxvxaqn is paused. Login to https://supabase.com/dashboard and click Restore. Once restored, this cron will keep it active.'
+        guidance: 'Supabase project lofykatlypiywrziwtdp is paused. Login to https://supabase.com/dashboard and click Restore. Once restored, this cron will keep it active.'
       }));
     });
     return;
@@ -976,15 +976,15 @@ process.on('unhandledRejection', (reason, promise) => {
 // Automated Supabase Database Keep-Alive Heartbeat (Every 6 hours)
 function startSupabaseHeartbeat() {
   const https = require('https');
-  const sbKey = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqeXV4bHNsYXFwcWx6eHZ4YXFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMTE0NDcsImV4cCI6MjEwNDc4NzQ0N30.SrrZ4aVJasotXUvJWHoFitodvfNHpt-xlNx9pijpf9s';
-  const sbUrl = 'https://xjyuxlslaqpqlzxvxaqn.supabase.co/rest/v1/';
+  const sbKey = process.env.SUPABASE_ANON_KEY || 'sb_publishable_8-vFFctJnZYUTZFCmV2rqg_LgHuYjrn';
+  const sbUrl = 'https://lofykatlypiywrziwtdp.supabase.co/rest/v1/store_admins?select=username&limit=1';
 
   function ping() {
     const req = https.get(sbUrl, {
       headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` },
       timeout: 5000
     }, (res) => {
-      console.log(`[Supabase Keep-Alive Heartbeat] Ping status: ${res.statusCode} (Database awake)`);
+      console.log(`[Supabase Keep-Alive Heartbeat] Ping status: ${res.statusCode} (Database awake & active)`);
     });
     req.on('error', (e) => {
       if (e.code === 'ENOTFOUND') {

@@ -1,0 +1,2 @@
+-- Seed data for Rani Hyper Market / SKS Market
+-- Project: lofykatlypiywrziwtdp

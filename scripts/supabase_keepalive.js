@@ -1,11 +1,12 @@
 const https = require('https');
 
-const SUPABASE_URL = 'https://xjyuxlslaqpqlzxvxaqn.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqeXV4bHNsYXFwcWx6eHZ4YXFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMTE0NDcsImV4cCI6MjEwNDc4NzQ0N30.SrrZ4aVJasotXUvJWHoFitodvfNHpt-xlNx9pijpf9s';
+const SUPABASE_URL = 'https://lofykatlypiywrziwtdp.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_8-vFFctJnZYUTZFCmV2rqg_LgHuYjrn';
 
 function pingSupabase() {
   return new Promise((resolve) => {
-    const url = `${SUPABASE_URL}/rest/v1/`;
+    // Ping genuine database table (store_admins) to actively exercise PostgreSQL engine and prevent sleep
+    const url = `${SUPABASE_URL}/rest/v1/store_admins?select=username&limit=1`;
     console.log(`[Supabase Keepalive] Pinging ${url}...`);
 
     const req = https.get(url, {
@@ -21,9 +22,9 @@ function pingSupabase() {
       res.on('end', () => {
         console.log(`[Supabase Keepalive] HTTP Status: ${res.statusCode}`);
         resolve({
-          status: 'online',
+          status: res.statusCode === 200 ? 'online' : (res.statusCode < 500 ? 'online' : 'degraded'),
           httpCode: res.statusCode,
-          active: true,
+          active: res.statusCode < 500,
           timestamp: new Date().toISOString()
         });
       });
@@ -57,7 +58,7 @@ if (require.main === module) {
     console.log('[Supabase Keepalive] Result:', JSON.stringify(res, null, 2));
     if (res.paused) {
       console.log('\n======================================================');
-      console.log('NOTICE: Supabase project xjyuxlslaqpqlzxvxaqn is currently PAUSED on free-tier.');
+      console.log('NOTICE: Supabase project lofykatlypiywrziwtdp is currently PAUSED on free-tier.');
       console.log('To unpause: Login to https://supabase.com/dashboard and click "Restore project".');
       console.log('Once restored, our GitHub Action and Vercel keep-alive cron will keep it active permanently!');
       console.log('======================================================\n');

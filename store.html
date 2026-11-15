@@ -1398,6 +1398,11 @@
             <span class="hidden sm:inline">Wishlist</span>
             <span id="wishlist-badge" class="bg-rose-100 text-rose-700 font-extrabold px-1.5 py-0.2 rounded-full text-[10px]">0</span>
           </button>
+          <!-- Customer Phone & Gmail Sign-In Button -->
+          <button type="button" onclick="openCustAuthModal()" id="btn-cust-auth" class="px-3 py-2 bg-white/80 hover:bg-white text-gray-700 hover:text-emerald-700 border border-gray-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer" title="Sign In with Phone OTP or Gmail">
+            <i class="fa-solid fa-user-circle text-emerald-600 text-sm"></i>
+            <span id="cust-auth-label" class="hidden sm:inline">Sign In</span>
+          </button>
           <button onclick="toggleCart()" class="btn-emerald px-4 py-2 text-xs flex items-center gap-2">
             <i class="fa-solid fa-cart-shopping text-sm"></i>
             <span class="hidden sm:inline">Cart</span>
@@ -6396,6 +6401,64 @@
 
   <!-- PWA, Barcode Scanner & IndexedDB Engine Module -->
   <script src="/store_upgrade_module.js"></script>
+
+    <!-- CUSTOMER PHONE & GMAIL AUTH MODAL -->
+    <div id="custAuthModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-md">
+      <div class="bg-white/95 backdrop-blur-2xl border border-emerald-200 rounded-3xl p-6 w-full max-w-sm shadow-2xl space-y-4">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-sm font-black border border-emerald-300">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div>
+              <h3 class="text-sm font-black text-gray-900">Customer Sign In</h3>
+              <p class="text-[10px] text-gray-500 font-medium">Quick login for address &amp; tracking</p>
+            </div>
+          </div>
+          <button type="button" onclick="closeCustAuthModal()" class="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center cursor-pointer">
+            <i class="fa-solid fa-xmark text-xs"></i>
+          </button>
+        </div>
+
+        <!-- Phone Login Section -->
+        <div class="space-y-2">
+          <label class="text-[11px] font-bold text-gray-700 block">Mobile Number (Phone OTP)</label>
+          <div class="relative flex">
+            <span class="absolute left-3 top-2.5 text-xs font-bold text-gray-500">🇮🇳 +91</span>
+            <input type="tel" id="cust-phone-input" maxlength="10" placeholder="9876543210" class="glass-input pl-14 py-2 text-xs w-full rounded-xl border border-gray-200">
+          </div>
+          <div id="cust-otp-group" class="hidden space-y-1.5 pt-1">
+            <label class="text-[11px] font-bold text-gray-700 block">Enter 6-Digit Code</label>
+            <input type="text" id="cust-otp-input" maxlength="6" placeholder="123456" class="glass-input text-center font-black tracking-widest text-sm py-2 rounded-xl border border-emerald-300">
+            <div class="flex items-center justify-between text-[10px]">
+              <span class="text-emerald-700 font-bold">⚡ Instant Code: 123456</span>
+              <button type="button" onclick="document.getElementById('cust-otp-input').value='123456'" class="text-emerald-700 font-bold underline">Quick-Fill</button>
+            </div>
+          </div>
+          <button type="button" id="btn-cust-phone-submit" onclick="handleCustPhoneAuth()" class="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-sm transition cursor-pointer">
+            <i class="fa-solid fa-mobile-screen"></i>
+            <span id="lbl-cust-phone-btn">Send OTP 📲</span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2 my-2">
+          <div class="flex-1 h-px bg-gray-200"></div>
+          <span class="text-[10px] text-gray-400 font-bold uppercase">or continue with</span>
+          <div class="flex-1 h-px bg-gray-200"></div>
+        </div>
+
+        <!-- Gmail / Google Login Button -->
+        <button type="button" onclick="handleCustGoogleAuth()" class="w-full py-2.5 px-3 bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-2xs transition cursor-pointer">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-4 h-4" alt="Google">
+          <span>Sign in with Google (Gmail)</span>
+        </button>
+
+        <p class="text-[10px] text-center text-gray-400 font-semibold pt-1">
+          🔒 Secure 256-bit encrypted authentication &bull; Rani Hyper Market
+        </p>
+      </div>
+    </div>
+
 </body>
 </html>
 

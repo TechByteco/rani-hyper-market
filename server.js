@@ -854,6 +854,51 @@ if (reqPath === '/api/pos/status') {
     return;
   }
 
+  // Supabase Keepalive & Heartbeat Ping Route
+  if (reqPath === '/api/supabase/keepalive' || reqPath === '/api/supabase/status' || reqPath === '/api/keepalive') {
+    const https = require('https');
+    const sbKey = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqeXV4bHNsYXFwcWx6eHZ4YXFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMTE0NDcsImV4cCI6MjEwNDc4NzQ0N30.SrrZ4aVJasotXUvJWHoFitodvfNHpt-xlNx9pijpf9s';
+    const sbUrl = 'https://xjyuxlslaqpqlzxvxaqn.supabase.co/rest/v1/';
+
+    const pingReq = https.get(sbUrl, {
+      headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` },
+      timeout: 4000
+    }, (pingRes) => {
+      let data = '';
+      pingRes.on('data', c => data += c);
+      pingRes.on('end', () => {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          status: 'OPERATIONAL',
+          active: true,
+          httpStatus: pingRes.statusCode,
+          message: 'Supabase ping delivered',
+          timestamp: new Date().toISOString()
+        }));
+      });
+    });
+
+    pingReq.on('timeout', () => {
+      pingReq.destroy();
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ status: 'TIMEOUT', active: false, httpStatus: 408, error: 'Ping timed out', timestamp: new Date().toISOString() }));
+    });
+
+    pingReq.on('error', (err) => {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        status: err.code === 'ENOTFOUND' ? 'PAUSED' : 'ERROR',
+        active: false,
+        httpStatus: 503,
+        error: err.message,
+        paused: err.code === 'ENOTFOUND',
+        timestamp: new Date().toISOString(),
+        guidance: 'Supabase project xjyuxlslaqpqlzxvxaqn is paused. Login to https://supabase.com/dashboard and click Restore. Once restored, this cron will keep it active.'
+      }));
+    });
+    return;
+  }
+
   const ROUTE_ALIASES = {
     '/': '/store.html',
     '/store': '/store.html',
@@ -927,6 +972,34 @@ process.on('uncaughtException', (err) => {
 process.on('unhandledRejection', (reason, promise) => {
   console.error('[SERVER ERROR] Unhandled Rejection:', reason);
 });
+
+// Automated Supabase Database Keep-Alive Heartbeat (Every 6 hours)
+function startSupabaseHeartbeat() {
+  const https = require('https');
+  const sbKey = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqeXV4bHNsYXFwcWx6eHZ4YXFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMTE0NDcsImV4cCI6MjEwNDc4NzQ0N30.SrrZ4aVJasotXUvJWHoFitodvfNHpt-xlNx9pijpf9s';
+  const sbUrl = 'https://xjyuxlslaqpqlzxvxaqn.supabase.co/rest/v1/';
+
+  function ping() {
+    const req = https.get(sbUrl, {
+      headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` },
+      timeout: 5000
+    }, (res) => {
+      console.log(`[Supabase Keep-Alive Heartbeat] Ping status: ${res.statusCode} (Database awake)`);
+    });
+    req.on('error', (e) => {
+      if (e.code === 'ENOTFOUND') {
+        console.warn('[Supabase Keep-Alive] Project is currently paused on Supabase free tier. Restore via https://supabase.com/dashboard');
+      } else {
+        console.warn('[Supabase Keep-Alive] Ping notice:', e.message);
+      }
+    });
+  }
+
+  ping();
+  setInterval(ping, 6 * 60 * 60 * 1000); // 6 hours
+}
+
+startSupabaseHeartbeat();
 
 server.listen(PORT, '0.0.0.0', () => {
   const os = require('os');

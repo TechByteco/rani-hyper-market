@@ -116,6 +116,12 @@
       "includeFiles": "{public/**,*.json,analyticsService.js,generativeAiAdvisor.js,aiProductImageEngine.js,festivalMasterData.js}"
     }
   },
+  "crons": [
+    {
+      "path": "/api/supabase/keepalive",
+      "schedule": "0 */6 * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",

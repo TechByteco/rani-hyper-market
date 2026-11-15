@@ -7282,9 +7282,9 @@ ${itemsText}
           history: (aiChatHistory || []).slice(-6)
         };
 
-        // 1. Try serverless AI analytics endpoint with strict 4.5s timeout
+        // 1. Try serverless AI analytics endpoint with strict 2.0s timeout
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 4500);
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
         let data = null;
 
         try {
@@ -7508,6 +7508,10 @@ ${itemsText}
 
     /* INTELLIGENT ANALYTICS COPILOT ENGINE */
     const AdminDataCopilot = {
+      escape: function(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      },
       formatInr: function(num) {
         const n = parseFloat(num || 0);
         return '₹' + n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -8551,9 +8555,9 @@ ${itemsText}
           history: (aiChatHistory || []).slice(-6)
         };
 
-        // 1. Try serverless endpoint with 4.5s timeout
+        // 1. Try serverless endpoint with 2.0s timeout
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 4500);
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
 
         let data = null;
         try {

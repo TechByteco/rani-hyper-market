@@ -1042,6 +1042,33 @@ if (reqPath === '/api/pos/status') {
       return sendJson(200, report);
     }
 
+    // 13. Supabase Keepalive & Healthcheck Heartbeat (Prevents 7-day Inactivity Pause)
+    if (reqPath === '/api/supabase/keepalive' || reqPath === '/api/supabase/status' || reqPath === '/api/keepalive') {
+      const https = require('https');
+      const sbKey = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqeXV4bHNsYXFwcWx6eHZ4YXFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMTE0NDcsImV4cCI6MjEwNDc4NzQ0N30.SrrZ4aVJasotXUvJWHoFitodvfNHpt-xlNx9pijpf9s';
+      const sbUrl = 'https://xjyuxlslaqpqlzxvxaqn.supabase.co/rest/v1/';
+
+      const pingResult = await new Promise((resolve) => {
+        const pingReq = https.get(sbUrl, {
+          headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` },
+          timeout: 4000
+        }, (res) => {
+          let data = '';
+          res.on('data', c => data += c);
+          res.on('end', () => resolve({ active: true, httpStatus: res.statusCode, message: 'Supabase ping delivered' }));
+        });
+        pingReq.on('timeout', () => { pingReq.destroy(); resolve({ active: false, httpStatus: 408, error: 'Ping timed out' }); });
+        pingReq.on('error', (err) => resolve({ active: false, httpStatus: 503, error: err.message, paused: err.code === 'ENOTFOUND' }));
+      });
+
+      return sendJson(200, {
+        status: pingResult.active ? 'OPERATIONAL' : (pingResult.paused ? 'PAUSED' : 'DEGRADED'),
+        ...pingResult,
+        timestamp: new Date().toISOString(),
+        guidance: pingResult.paused ? 'Supabase project xjyuxlslaqpqlzxvxaqn is paused. Login to https://supabase.com/dashboard and click Restore. Once restored, this cron will keep it active.' : 'Keepalive active.'
+      });
+    }
+
     // Default: 404 for unknown API routes
     return sendJson(404, { error: 'API route not found', path: reqPath });
   } catch (error) {

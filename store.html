@@ -336,6 +336,28 @@
       from { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
       to { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
     }
+    .voice-bars {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      height: 14px;
+    }
+    .voice-bar {
+      width: 2.5px;
+      height: 100%;
+      background: currentColor;
+      border-radius: 2px;
+      animation: voiceBarWave 0.8s ease-in-out infinite alternate;
+    }
+    .voice-bar:nth-child(1) { animation-delay: 0.1s; height: 35%; }
+    .voice-bar:nth-child(2) { animation-delay: 0.3s; height: 90%; }
+    .voice-bar:nth-child(3) { animation-delay: 0.15s; height: 60%; }
+    .voice-bar:nth-child(4) { animation-delay: 0.4s; height: 100%; }
+    .voice-bar:nth-child(5) { animation-delay: 0.25s; height: 50%; }
+    @keyframes voiceBarWave {
+      0% { transform: scaleY(0.3); }
+      100% { transform: scaleY(1); }
+    }
 
     /* MODERN GROCERY STORE STYLES (BLINKIT / ZEPTO INSPIRED) */
     @media (max-width: 767px) {
@@ -2777,27 +2799,35 @@
   <!-- EXPANDABLE CUSTOMER AI SHOPPING CHAT WIDGET -->
   <div id="customer-ai-chat-widget" class="hidden fixed bottom-24 right-4 sm:right-6 z-50 w-[94vw] sm:w-[440px] h-[580px] max-h-[84vh] glass rounded-3xl border border-emerald-300/80 shadow-2xl flex flex-col overflow-hidden animate-cust-ai">
     <!-- CHAT HEADER -->
-    <div class="px-5 py-3.5 bg-gradient-to-r from-emerald-700 via-teal-700 to-indigo-800 text-white flex items-center justify-between shadow-md">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-inner">
-          <i class="fa-solid fa-robot text-emerald-300 text-lg"></i>
+    <div class="px-4 py-3 bg-gradient-to-r from-emerald-700 via-teal-700 to-indigo-800 text-white flex items-center justify-between shadow-md">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-inner shrink-0">
+          <i class="fa-solid fa-robot text-emerald-300 text-base"></i>
         </div>
         <div>
           <div class="flex items-center gap-1.5">
-            <h3 class="text-sm font-black tracking-wide">AI Shopping Assistant</h3>
+            <h3 class="text-xs sm:text-sm font-black tracking-wide">AI Shopping Assistant</h3>
             <span class="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-amber-400/30 text-amber-200 border border-amber-400/40">Smart Cart</span>
           </div>
-          <p class="text-[11px] text-emerald-200/90 flex items-center gap-1">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>Voice &amp; Text &bull; Auto-adds items with quantity</span>
+          <p class="text-[10px] text-emerald-200/90 flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="cust-ai-status-sub">Voice &amp; Text &bull; Auto-adds items with quantity</span>
           </p>
         </div>
       </div>
       <div class="flex items-center gap-1">
-        <button type="button" onclick="clearCustomerAiChat()" title="Reset Chat" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white/80 hover:text-white flex items-center justify-center text-xs transition">
+        <!-- Voice Language Selector Toggle (EN / Tamil) -->
+        <button type="button" id="btn-cust-ai-lang" onclick="toggleCustAiLanguage()" title="Switch Voice Language (English / தமிழ்)" class="px-2 py-1 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-[10px] flex items-center gap-1 border border-white/20 transition cursor-pointer active:scale-95">
+          <span id="cust-ai-lang-label">🇮🇳 EN</span>
+        </button>
+        <!-- Speech Audio Readout Mute/Unmute -->
+        <button type="button" id="btn-cust-ai-sound" onclick="toggleCustAiSpeechSound()" title="Toggle Voice Response Readout" class="w-7 h-7 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer active:scale-95">
+          <i id="cust-ai-sound-icon" class="fa-solid fa-volume-high"></i>
+        </button>
+        <button type="button" onclick="clearCustomerAiChat()" title="Reset Chat" class="w-7 h-7 rounded-xl bg-white/10 hover:bg-white/20 text-white/80 hover:text-white flex items-center justify-center text-xs transition cursor-pointer">
           <i class="fa-solid fa-rotate-left"></i>
         </button>
-        <button type="button" onclick="toggleCustomerAiChat()" title="Close Assistant" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-red-500/80 text-white flex items-center justify-center text-xs transition">
+        <button type="button" onclick="toggleCustomerAiChat()" title="Close Assistant" class="w-7 h-7 rounded-xl bg-white/10 hover:bg-red-500/80 text-white flex items-center justify-center text-xs transition cursor-pointer">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
@@ -2813,6 +2843,12 @@
       <span class="text-[10px] font-bold text-gray-400 shrink-0"><i class="fa-solid fa-bolt text-amber-500"></i> Try:</span>
       <button type="button" onclick="sendCustQuickPrompt('2 kg Ponni Boiled Rice and 1 litre Idhayam Oil')" class="px-2.5 py-1 rounded-full bg-white hover:bg-emerald-600 hover:text-white text-gray-700 font-bold border border-gray-200 shadow-2xs whitespace-nowrap transition cursor-pointer">
         🍚 2 Rice + 1 Oil
+      </button>
+      <button type="button" onclick="sendCustQuickPrompt('2 பாக்கெட் பொன்னி அரிசி மற்றும் 1 லிட்டர் நல்லெண்ணெய்')" class="px-2.5 py-1 rounded-full bg-white hover:bg-emerald-600 hover:text-white text-gray-700 font-bold border border-gray-200 shadow-2xs whitespace-nowrap transition cursor-pointer">
+        🌾 2 அரிசி + 1 எண்ணெய்
+      </button>
+      <button type="button" onclick="sendCustQuickPrompt('10 farm eggs')" class="px-2.5 py-1 rounded-full bg-white hover:bg-emerald-600 hover:text-white text-gray-700 font-bold border border-gray-200 shadow-2xs whitespace-nowrap transition cursor-pointer">
+        🥚 10 Eggs (முட்டை)
       </button>
       <button type="button" onclick="sendCustQuickPrompt('5 kg Aashirvaad Atta and 2 Tata Salt')" class="px-2.5 py-1 rounded-full bg-white hover:bg-emerald-600 hover:text-white text-gray-700 font-bold border border-gray-200 shadow-2xs whitespace-nowrap transition cursor-pointer">
         🌾 1 Atta + 2 Salt
@@ -2841,12 +2877,28 @@
       </button>
     </div>
 
+    <!-- ACTIVE LISTENING ACOUSTIC WAVE BAR -->
+    <div id="cust-ai-listening-bar" class="hidden px-3.5 py-1.5 bg-red-50 border-t border-red-200 text-red-600 flex items-center justify-between text-[11px] font-bold">
+      <span class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-red-600 animate-ping"></span>
+        <span class="voice-bars text-red-600">
+          <span class="voice-bar"></span>
+          <span class="voice-bar"></span>
+          <span class="voice-bar"></span>
+          <span class="voice-bar"></span>
+          <span class="voice-bar"></span>
+        </span>
+        <span id="cust-ai-wave-text">Listening... Speak items naturally!</span>
+      </span>
+      <button type="button" onclick="toggleCustAiVoiceInput()" class="text-red-700 font-black hover:underline cursor-pointer">Done</button>
+    </div>
+
     <!-- CHAT INPUT COMPOSER -->
     <div class="p-3 bg-white/95 border-t border-gray-200 flex items-center gap-2">
-      <button type="button" id="btn-cust-ai-voice" onclick="toggleCustAiVoiceInput()" title="Speak your grocery list (Microphone)" class="w-10 h-10 rounded-2xl bg-gray-100 hover:bg-emerald-100 text-gray-600 hover:text-emerald-700 flex items-center justify-center transition border border-gray-200 shrink-0 cursor-pointer">
-        <i class="fa-solid fa-microphone" id="cust-ai-voice-icon"></i>
+      <button type="button" id="btn-cust-ai-voice" onclick="toggleCustAiVoiceInput()" title="Speak your grocery list (Microphone)" class="w-10 h-10 rounded-2xl bg-gray-100 hover:bg-emerald-100 text-gray-700 hover:text-emerald-700 flex items-center justify-center transition border border-gray-200 shrink-0 cursor-pointer shadow-xs active:scale-95">
+        <i class="fa-solid fa-microphone text-sm" id="cust-ai-voice-icon"></i>
       </button>
-      <input type="text" id="cust-ai-input" onkeydown="handleCustAiInputKeydown(event)" placeholder="e.g. 2 Ponni rice, 1 Idhayam oil, 3 salt..." class="flex-1 px-3.5 py-2.5 text-xs bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-emerald-500 focus:bg-white transition text-gray-900 placeholder-gray-400">
+      <input type="text" id="cust-ai-input" onkeydown="handleCustAiInputKeydown(event)" placeholder="Say or type: 2 Ponni rice, 1 Idhayam oil..." class="flex-1 px-3.5 py-2.5 text-xs bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-emerald-500 focus:bg-white transition text-gray-900 placeholder-gray-400">
       <button type="button" id="btn-cust-ai-send" onclick="submitCustomerAiMessage()" class="w-10 h-10 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white flex items-center justify-center transition shadow-md shadow-emerald-600/30 shrink-0 cursor-pointer">
         <i class="fa-solid fa-paper-plane text-xs"></i>
       </button>
@@ -5249,13 +5301,15 @@
       document.getElementById('receipt-modal').classList.add('hidden');
     }
 
-    /* ══════════════════════════════════════════════════════════════════
+        /* ══════════════════════════════════════════════════════════════════
        CUSTOMER AI SHOPPING ASSISTANT & VOICE CART COPILOT
        ══════════════════════════════════════════════════════════════════ */
     let isCustAiChatOpen = false;
     let custAiHistory = [];
     let custAiSpeechRecognition = null;
     let isCustAiListening = false;
+    let custAiLang = 'en-IN';
+    let custAiSoundEnabled = false;
 
     function toggleCustomerAiChat() {
       const widget = document.getElementById('customer-ai-chat-widget');
@@ -5299,20 +5353,20 @@
         <div class="space-y-2.5">
           <p class="font-bold text-gray-900 text-xs">👋 <b>Hello &amp; Vanakkam!</b> I am your <b>Smart AI Shopping Assistant</b>.</p>
           <p class="text-gray-600 leading-relaxed text-[11px]">
-            Tell or voice-dictate what you need along with the quantity, and I will automatically find the items and add them straight to your cart!
+            Tell or voice-dictate what you need along with the quantity in English or தமிழ், and I will automatically find the items, suggest alternative pack sizes, and add them straight to your live cart!
           </p>
-          <div class="p-2.5 rounded-2xl bg-emerald-50/90 border border-emerald-200 text-emerald-950 space-y-1 text-[11px]">
+          <div class="p-2.5 rounded-2xl bg-emerald-50/90 border border-emerald-200 text-emerald-950 space-y-1.5 text-[11px]">
             <div class="font-black text-[11px] flex items-center gap-1.5 text-emerald-800">
               <i class="fa-solid fa-microphone-lines text-emerald-600"></i> Examples you can say or type:
             </div>
-            <ul class="list-disc pl-4 space-y-0.5 text-gray-700">
+            <ul class="list-disc pl-4 space-y-1 text-gray-700">
               <li><i>"2 kg Ponni Boiled Rice and 1 litre Idhayam Oil"</i></li>
+              <li><i>"2 பாக்கெட் பொன்னி அரிசி மற்றும் 1 லிட்டர் நல்லெண்ணெய்"</i></li>
               <li><i>"3 Aashirvaad Atta, 2 Tata Salt, and 5 Hamam soaps"</i></li>
-              <li><i>"Add 4 Dairy Milk and 2 Maggi noodles"</i></li>
-              <li><i>"1 kg Toor Dhal and 2 kg Sugar"</i></li>
+              <li><i>"10 Eggs (முட்டை), 2 kg Sugar, and 4 Maggi noodles"</i></li>
             </ul>
           </div>
-          <p class="text-[10px] text-gray-400 font-semibold">Tap the mic button 🎙️ to speak or click any item pill below!</p>
+          <p class="text-[10px] text-gray-400 font-semibold">Tap the mic button 🎙️ to speak or click any quick prompt below!</p>
         </div>
       `;
       appendCustAiBotMessage(welcomeHtml, true);
@@ -5374,7 +5428,7 @@
       el.className = 'flex items-center gap-2 text-xs text-emerald-700 font-bold bg-white/90 p-2.5 rounded-2xl w-fit border border-emerald-200 shadow-2xs';
       el.innerHTML = `
         <i class="fa-solid fa-basket-shopping fa-spin text-emerald-600"></i>
-        <span>Adding items to your cart...</span>
+        <span>Analyzing items and matching catalog...</span>
       `;
       msgBox.appendChild(el);
       msgBox.scrollTop = msgBox.scrollHeight;
@@ -5413,6 +5467,10 @@
         removeCustAiTypingIndicator();
         const replyHtml = CustomerAiShopper.process(q);
         appendCustAiBotMessage(replyHtml);
+        if (custAiSoundEnabled) {
+          const cartTotal = cart.reduce((s, x) => s + (parseFloat(x.price) * x.quantity), 0);
+          speakCustText('Updated cart. Current total is ' + cartTotal.toFixed(0) + ' rupees');
+        }
       }, 350);
     }
 
@@ -5438,14 +5496,59 @@
       } catch(e) {}
     }
 
-    /* VOICE RECOGNITION (WEB SPEECH API) */
+    /* BILINGUAL LANGUAGE & SPEECH SYNTHESIS CONTROLS */
+    function toggleCustAiLanguage() {
+      custAiLang = custAiLang === 'en-IN' ? 'ta-IN' : 'en-IN';
+      updateCustAiLangUI();
+      if (isCustAiListening && custAiSpeechRecognition) {
+        try { custAiSpeechRecognition.stop(); } catch(e) {}
+      }
+    }
+
+    function updateCustAiLangUI() {
+      const label = document.getElementById('cust-ai-lang-label');
+      const sub = document.getElementById('cust-ai-status-sub');
+      const input = document.getElementById('cust-ai-input');
+      if (label) {
+        label.innerText = custAiLang === 'ta-IN' ? 'தமிழ்' : 'EN';
+      }
+      if (sub) {
+        sub.innerText = custAiLang === 'ta-IN' ? 'தமிழ் குரல் தேர்வு தயார் 🇮🇳' : 'Bilingual EN/தமிழ் Voice Ready 🎙️';
+      }
+      if (input) {
+        input.placeholder = custAiLang === 'ta-IN' ? 'உங்களுக்கு தேவையான பொருட்களை சொல்லுங்கள்...' : 'Type or voice: 2 Ponni rice, 1 Idhayam oil...';
+      }
+    }
+
+    function toggleCustAiSpeechSound() {
+      custAiSoundEnabled = !custAiSoundEnabled;
+      const icon = document.getElementById('cust-ai-sound-icon');
+      if (icon) {
+        icon.className = custAiSoundEnabled ? 'fa-solid fa-volume-high text-emerald-300' : 'fa-solid fa-volume-xmark text-emerald-200/60';
+      }
+    }
+
+    function speakCustText(text) {
+      if (!custAiSoundEnabled || !window.speechSynthesis) return;
+      try {
+        window.speechSynthesis.cancel();
+        const clean = text.replace(/<[^>]*>?/gm, '').replace(/[\u{1F600}-\u{1F64F}]/gu, '');
+        const utterance = new SpeechSynthesisUtterance(clean);
+        utterance.lang = custAiLang;
+        utterance.rate = 1.0;
+        window.speechSynthesis.speak(utterance);
+      } catch(e) {}
+    }
+
+    /* VOICE RECOGNITION (WEB SPEECH API) WITH WAVEFORM FEEDBACK */
     function toggleCustAiVoiceInput() {
       const btn = document.getElementById('btn-cust-ai-voice');
       const icon = document.getElementById('cust-ai-voice-icon');
+      const listeningBar = document.getElementById('cust-ai-listening-bar');
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
       if (!SpeechRecognition) {
-        alert('Voice recognition is not supported in this browser. Please use Google Chrome or Microsoft Edge.');
+        alert('Voice recognition is not supported in this browser. Please use Google Chrome, Microsoft Edge, or Safari.');
         return;
       }
 
@@ -5456,12 +5559,13 @@
         isCustAiListening = false;
         if (btn) btn.classList.remove('voice-recording-active');
         if (icon) icon.className = 'fa-solid fa-microphone';
+        if (listeningBar) listeningBar.classList.add('hidden');
         return;
       }
 
       try {
         custAiSpeechRecognition = new SpeechRecognition();
-        custAiSpeechRecognition.lang = 'en-IN';
+        custAiSpeechRecognition.lang = custAiLang;
         custAiSpeechRecognition.interimResults = false;
         custAiSpeechRecognition.maxAlternatives = 1;
 
@@ -5469,8 +5573,9 @@
           isCustAiListening = true;
           if (btn) btn.classList.add('voice-recording-active');
           if (icon) icon.className = 'fa-solid fa-microphone-lines animate-pulse';
+          if (listeningBar) listeningBar.classList.remove('hidden');
           const input = document.getElementById('cust-ai-input');
-          if (input) input.placeholder = 'Listening... Say your items and quantity!';
+          if (input) input.placeholder = custAiLang === 'ta-IN' ? 'கேட்கிறது... சொல்லுங்கள்!' : 'Listening... Speak items & quantities!';
         };
 
         custAiSpeechRecognition.onresult = (event) => {
@@ -5485,16 +5590,16 @@
           isCustAiListening = false;
           if (btn) btn.classList.remove('voice-recording-active');
           if (icon) icon.className = 'fa-solid fa-microphone';
-          const input = document.getElementById('cust-ai-input');
-          if (input) input.placeholder = 'e.g. 2 Ponni rice, 1 Idhayam oil, 3 salt...';
+          if (listeningBar) listeningBar.classList.add('hidden');
+          updateCustAiLangUI();
         };
 
         custAiSpeechRecognition.onend = () => {
           isCustAiListening = false;
           if (btn) btn.classList.remove('voice-recording-active');
           if (icon) icon.className = 'fa-solid fa-microphone';
-          const input = document.getElementById('cust-ai-input');
-          if (input) input.placeholder = 'e.g. 2 Ponni rice, 1 Idhayam oil, 3 salt...';
+          if (listeningBar) listeningBar.classList.add('hidden');
+          updateCustAiLangUI();
         };
 
         custAiSpeechRecognition.start();
@@ -5503,82 +5608,201 @@
       }
     }
 
-    /* CUSTOMER AI SHOPPER NATURAL LANGUAGE & QUANTITY PARSER */
+    /* CUSTOMER AI SHOPPER NATURAL LANGUAGE, BILINGUAL & QUANTITY ENGINE */
     const CustomerAiShopper = {
+      tamilGroceryMap: {
+        'அரிசி': 'rice', 'பொன்னி': 'ponni', 'சாதம்': 'rice', 'பச்சரிசி': 'raw rice',
+        'புழுங்கல்': 'boiled rice', 'எண்ணெய்': 'oil', 'நல்லெண்ணெய்': 'sesame gingelly oil',
+        'கடலை எண்ணெய்': 'groundnut oil', 'தேங்காய் எண்ணெய்': 'coconut oil', 'சூரியகாந்தி': 'sunflower oil',
+        'ஆட்டா': 'atta', 'கோதுமை': 'wheat atta', 'மாவு': 'atta flour', 'மைதா': 'maida',
+        'உப்பு': 'salt', 'முட்டை': 'egg', 'பருப்பு': 'dhal dal', 'துவரம்': 'toor dhal',
+        'பாசி': 'moong dal', 'உளுந்து': 'urad dal', 'கடலை': 'chana dal', 'சோப்பு': 'soap',
+        'சர்க்கரை': 'sugar', 'சீனி': 'sugar', 'வெல்லம்': 'jaggery', 'பால்': 'milk',
+        'நெய்': 'ghee', 'டீ': 'tea', 'தேயிலை': 'tea', 'காபி': 'coffee', 'பிஸ்கட்': 'biscuit',
+        'மேகி': 'maggi', 'நூடுல்ஸ்': 'noodles', 'மஞ்சள்': 'turmeric', 'சீரகம்': 'cumin',
+        'கடுகு': 'mustard', 'மிளகாய்': 'chilli', 'மிளகு': 'pepper', 'வெங்காயம்': 'onion',
+        'பூண்டு': 'garlic', 'ரவா': 'rava sooji', 'சேமியா': 'semiya vermicelli', 'அப்பளம்': 'appalam papad',
+        'ஷாம்பூ': 'shampoo', 'பேஸ்ட்': 'paste colgate', 'ப்ரு': 'bru coffee', 'ஹார்லிக்ஸ்': 'horlicks',
+        'பாக்கெட்': 'packet', 'கிலோ': 'kg', 'லிட்டர்': 'litre', 'பாட்டில்': 'bottle',
+        // Tanglish
+        'arisi': 'rice', 'ponni': 'ponni', 'saatham': 'rice', 'ennai': 'oil', 'nallennai': 'sesame gingelly oil',
+        'kadala': 'chana', 'paruppu': 'dhal dal', 'parupu': 'dhal dal', 'muttai': 'egg', 'mutta': 'egg',
+        'uppu': 'salt', 'sakkarai': 'sugar', 'seeni': 'sugar', 'vellam': 'jaggery', 'paal': 'milk',
+        'nei': 'ghee', 'soppu': 'soap', 'manjal': 'turmeric', 'seeragam': 'cumin', 'kadugu': 'mustard',
+        'milagai': 'chilli', 'vengayam': 'onion', 'poondu': 'garlic', 'appalam': 'appalam papad'
+      },
+
       wordNumbers: {
         'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
         'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10,
-        'rendu': 2, 'onnu': 1, 'moonu': 3, 'naalu': 4, 'anju': 5,
-        'a': 1, 'an': 1, 'half': 1, 'quarter': 1, 'pair': 2
+        'dozen': 12, 'half': 1, 'quarter': 1, 'pair': 2, 'couple': 2,
+        'ஒன்று': 1, 'ஒரு': 1, 'onnu': 1, 'oru': 1,
+        'இரண்டு': 2, 'ரெண்டு': 2, 'rendu': 2, 'irandu': 2,
+        'மூன்று': 3, 'மூணு': 3, 'moonu': 3,
+        'நான்கு': 4, 'நாலு': 4, 'naalu': 4,
+        'ஐந்து': 5, 'அஞ்சு': 5, 'anju': 5,
+        'ஆறு': 6, 'aaru': 6,
+        'ஏழு': 7, 'ezhu': 7,
+        'எட்டு': 8, 'ettu': 8,
+        'ஒன்பது': 9, 'ombodhu': 9,
+        'பத்து': 10, 'pathu': 10,
+        'அரை': 1, 'arai': 1, 'கால்': 1, 'kaal': 1
+      },
+
+      levenshtein: function(a, b) {
+        const an = a ? a.length : 0;
+        const bn = b ? b.length : 0;
+        if (an === 0) return bn;
+        if (bn === 0) return an;
+        const matrix = [];
+        for (let i = 0; i <= bn; i++) matrix[i] = [i];
+        for (let j = 0; j <= an; j++) matrix[0][j] = j;
+        for (let i = 1; i <= bn; i++) {
+          for (let j = 1; j <= an; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+              matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+              matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j] + 1);
+            }
+          }
+        }
+        return matrix[bn][an];
       },
 
       process: function(rawQuery) {
         const q = rawQuery.toLowerCase().trim();
 
-        // 1. Check for conversational greetings
-        if (q === 'hi' || q === 'hello' || q === 'vanakkam' || q.startsWith('help')) {
+        // 1. Clear Cart Intent
+        if (q === 'clear cart' || q === 'empty cart' || q === 'remove all' || q === 'delete all' || q.includes('காலி செய்')) {
+          cart = [];
+          try { localStorage.setItem('nsn_cart', JSON.stringify(cart)); } catch(e) {}
+          updateCartUI();
+          syncCustomerAiCartStrip();
+          return `
+            <div class="space-y-2 text-xs">
+              <p class="font-bold text-gray-800 flex items-center gap-1.5"><i class="fa-solid fa-trash-can text-red-500"></i> Your shopping cart has been emptied.</p>
+              <p class="text-gray-500 text-[11px]">Tell or speak what groceries you would like to add afresh!</p>
+            </div>
+          `;
+        }
+
+        // 2. Remove / Delete Single Item Intent
+        if (q.startsWith('remove ') || q.startsWith('delete ') || q.startsWith('cancel ') || q.startsWith('drop ') || q.startsWith('நீக்கு ') || q.startsWith('எடு ')) {
+          const targetQuery = q.replace(/^(?:remove|delete|cancel|drop|நீக்கு|எடு)\s+/i, '').trim();
+          const removedIndex = cart.findIndex(i => (i.title || '').toLowerCase().includes(targetQuery));
+          if (removedIndex !== -1) {
+            const removedItem = cart[removedIndex];
+            cart.splice(removedIndex, 1);
+            try { localStorage.setItem('nsn_cart', JSON.stringify(cart)); } catch(e) {}
+            updateCartUI();
+            syncCustomerAiCartStrip();
+            return `
+              <div class="space-y-1.5 text-xs">
+                <p class="font-bold text-emerald-900 flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-emerald-600"></i> Removed <b>${escapeCustHtml(removedItem.title)}</b> from your cart.</p>
+                <p class="text-[11px] text-gray-500">Updated cart: ${cart.length} item(s) &bull; ₹${cart.reduce((s, x) => s + (parseFloat(x.price) * x.quantity), 0).toFixed(2)}</p>
+              </div>
+            `;
+          } else {
+            return `
+              <div class="space-y-1 text-xs">
+                <p class="font-bold text-amber-800">⚠️ Could not find "<i>${escapeCustHtml(targetQuery)}</i>" in your current cart.</p>
+                <p class="text-[11px] text-gray-500">Your cart currently has ${cart.length} item(s).</p>
+              </div>
+            `;
+          }
+        }
+
+        // 3. Price Check Intent
+        if (q.startsWith('price of ') || q.startsWith('how much is ') || q.startsWith('rate of ') || q.startsWith('cost of ') || q.includes('விலை என்ன')) {
+          const cleanTarget = q.replace(/^(?:what is the|what's the|price of|how much is|rate of|cost of)\s+/i, '').replace(/விலை என்ன/g, '').trim();
+          const matchRes = this.matchProductInCatalog(cleanTarget);
+          if (matchRes) {
+            const p = matchRes.bestProduct;
+            const price = parseFloat(p.price);
+            const mrp = parseFloat(p.mrp || (price * 1.2));
+            return `
+              <div class="space-y-2 text-xs">
+                <div class="p-2.5 rounded-2xl bg-white border border-emerald-200 shadow-2xs flex items-center gap-3">
+                  <img src="${getRelevantProductImage(p.title, p.image_url, p.id)}" class="w-12 h-12 rounded-xl object-cover border border-emerald-100">
+                  <div class="flex-1 min-w-0">
+                    <div class="font-black text-gray-900 text-xs truncate">${escapeCustHtml(p.title)}</div>
+                    <div class="text-[10px] text-emerald-700 font-bold mt-0.5">Price: ₹${price.toFixed(2)} <span class="text-gray-400 line-through">₹${mrp.toFixed(2)}</span></div>
+                    <div class="text-[9px] text-gray-500">${p.unit || '1 unit'} &bull; In Stock</div>
+                  </div>
+                  <button type="button" onclick="CustomerAiShopper.quickAddAlternate(${p.id}, 1)" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-[10px] shadow-xs cursor-pointer">
+                    + Add
+                  </button>
+                </div>
+              </div>
+            `;
+          }
+        }
+
+        // 4. Greetings / Help
+        if (q === 'hi' || q === 'hello' || q === 'vanakkam' || q === 'வணக்கம்' || q.startsWith('help')) {
           return `
             <div class="space-y-2">
-              <p class="font-bold text-gray-900 text-xs">👋 Hello! How can I help you today?</p>
-              <p class="text-gray-600 text-[11px]">Just type or voice-dictate whatever groceries you need along with the quantity. For instance, try:</p>
-              <div class="p-2 rounded-xl bg-emerald-50 text-emerald-900 font-bold text-[11px] cursor-pointer" onclick="sendCustQuickPrompt('2 kg Ponni Boiled Rice and 1 litre Idhayam Oil')">
-                👉 <i>"2 kg Ponni Boiled Rice and 1 litre Idhayam Oil"</i>
+              <p class="font-bold text-gray-900 text-xs">👋 Hello &amp; Vanakkam! How can I help you today?</p>
+              <p class="text-gray-600 text-[11px]">Just type or speak whatever groceries you need along with the quantity. For instance, try:</p>
+              <div class="space-y-1">
+                <div class="p-2 rounded-xl bg-emerald-50 text-emerald-900 font-bold text-[11px] cursor-pointer" onclick="sendCustQuickPrompt('2 kg Ponni Boiled Rice and 1 litre Idhayam Oil')">
+                  👉 <i>"2 kg Ponni Boiled Rice and 1 litre Idhayam Oil"</i>
+                </div>
+                <div class="p-2 rounded-xl bg-emerald-50 text-emerald-900 font-bold text-[11px] cursor-pointer" onclick="sendCustQuickPrompt('2 பாக்கெட் பொன்னி அரிசி மற்றும் 1 லிட்டர் நல்லெண்ணெய்')">
+                  👉 <i>"2 பாக்கெட் பொன்னி அரிசி மற்றும் 1 லிட்டர் நல்லெண்ணெய்"</i>
+                </div>
               </div>
             </div>
           `;
         }
 
-        // 2. Split query into multiple items (handled by commas, 'and', '&', '+', 'also', 'with', 'matrum')
-        const clauses = q.split(/,\s*|\band\b|\b&\b|\b\+\b|\balso\b|\bwith\b|\n+|;|\bmatrum\b|\bpinbu\b/g)
+        // 5. Normal Product Procurement (Add to Cart)
+        const clauses = q.split(/,\s*|\band\b|\b&\b|\b\+\b|\balso\b|\bwith\b|\n+|;|\bmatrum\b|\bpinbu\b|மற்றும்/g)
                          .map(s => s.trim())
                          .filter(s => s.length > 1);
 
-        if (clauses.length === 0) {
-          clauses.push(q);
-        }
+        if (clauses.length === 0) clauses.push(q);
 
         const addedResults = [];
         const notFoundQueries = [];
 
         for (const clause of clauses) {
-          // Parse quantity and product keyword
           const { qty, cleanQuery } = this.parseClause(clause);
           if (!cleanQuery) continue;
 
-          const matchedProduct = this.matchProductInCatalog(cleanQuery);
-          if (matchedProduct) {
-            this.addItemToCart(matchedProduct, qty);
+          const matchRes = this.matchProductInCatalog(cleanQuery);
+          if (matchRes) {
+            this.addItemToCart(matchRes.bestProduct, qty);
             addedResults.push({
-              product: matchedProduct,
+              product: matchRes.bestProduct,
+              alternatives: matchRes.alternatives || [],
               quantity: qty,
-              totalPrice: parseFloat(matchedProduct.price) * qty
+              totalPrice: parseFloat(matchRes.bestProduct.price) * qty
             });
           } else {
             notFoundQueries.push(cleanQuery);
           }
         }
 
-        // Sync with store UI
         updateCartUI();
         syncCustomerAiCartStrip();
 
-        // If no products matched at all
         if (addedResults.length === 0) {
           return `
             <div class="space-y-2 text-xs">
               <p class="font-bold text-amber-800">⚠️ I couldn't find exact matches for your request.</p>
-              <p class="text-gray-600 text-[11px]">Please try checking the product name or browsing popular categories:</p>
+              <p class="text-gray-600 text-[11px]">Please check the product spelling or tap one of our grocery staples:</p>
               <div class="grid grid-cols-2 gap-1.5 text-[10px]">
-                <button type="button" onclick="sendCustQuickPrompt('Ponni Boiled Rice')" class="p-2 text-left rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 font-bold text-emerald-900 transition">
+                <button type="button" onclick="sendCustQuickPrompt('Ponni Boiled Rice')" class="p-2 text-left rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 font-bold text-emerald-900 transition cursor-pointer">
                   🍚 Ponni Boiled Rice
                 </button>
-                <button type="button" onclick="sendCustQuickPrompt('Idhayam Gingelly Oil')" class="p-2 text-left rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 font-bold text-emerald-900 transition">
+                <button type="button" onclick="sendCustQuickPrompt('Idhayam Gingelly Oil')" class="p-2 text-left rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 font-bold text-emerald-900 transition cursor-pointer">
                   🌻 Idhayam Gingelly Oil
                 </button>
-                <button type="button" onclick="sendCustQuickPrompt('Aashirvaad Atta')" class="p-2 text-left rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 font-bold text-emerald-900 transition">
+                <button type="button" onclick="sendCustQuickPrompt('Aashirvaad Atta')" class="p-2 text-left rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 font-bold text-emerald-900 transition cursor-pointer">
                   🌾 Aashirvaad Atta
                 </button>
-                <button type="button" onclick="sendCustQuickPrompt('Hamam Soap')" class="p-2 text-left rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 font-bold text-emerald-900 transition">
+                <button type="button" onclick="sendCustQuickPrompt('Hamam Soap')" class="p-2 text-left rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 font-bold text-emerald-900 transition cursor-pointer">
                   🧼 Hamam Soap
                 </button>
               </div>
@@ -5586,7 +5810,6 @@
           `;
         }
 
-        // Render success confirmation card
         const cartTotalItems = cart.reduce((s, i) => s + i.quantity, 0);
         const cartTotalAmount = cart.reduce((s, i) => s + (parseFloat(i.price) * i.quantity), 0);
 
@@ -5596,31 +5819,59 @@
               <span class="font-black text-emerald-900 text-xs flex items-center gap-1.5">
                 <i class="fa-solid fa-circle-check text-emerald-600"></i> Added ${addedResults.length} item(s) to Cart!
               </span>
-              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Cart Updated ✅</span>
+              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Cart Live ✅</span>
             </div>
 
-            <!-- ITEMIZED ADDED CARDS -->
-            <div class="space-y-2">
+            <!-- ITEMIZED ADDED CARDS WITH LIVE STEPPERS -->
+            <div class="space-y-2.5">
               ${addedResults.map(res => {
                 const p = res.product;
                 const finalImg = getRelevantProductImage(p.title, p.image_url, p.id);
                 const price = parseFloat(p.price);
                 const mrp = parseFloat(p.mrp || (price * 1.25));
                 const savings = mrp > price ? (mrp - price) * res.quantity : 0;
+                const alts = res.alternatives || [];
 
                 return `
-                  <div class="p-2.5 rounded-2xl bg-white border border-emerald-200 shadow-2xs flex items-center gap-2.5">
-                    <img src="${finalImg}" alt="${escapeCustHtml(p.title)}" class="w-12 h-12 rounded-xl object-cover border border-emerald-100 shrink-0">
-                    <div class="flex-1 min-w-0">
-                      <div class="font-black text-gray-900 text-xs truncate">${escapeCustHtml(p.title)}</div>
-                      <div class="text-[10px] text-gray-400 mt-0.5">${p.unit ? 'Pack: ' + p.unit : 'Standard Pack'}</div>
-                      <div class="flex items-center justify-between mt-1">
-                        <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800">
-                          Qty: ${res.quantity} &times; ₹${price.toFixed(2)}
-                        </span>
-                        <span class="font-black text-emerald-700 text-xs">₹${res.totalPrice.toFixed(2)}</span>
+                  <div class="product-ai-card p-2.5 rounded-2xl bg-white border border-emerald-200 shadow-2xs space-y-2" data-pid="${p.id}">
+                    <div class="flex items-start gap-2.5">
+                      <img src="${finalImg}" alt="${escapeCustHtml(p.title)}" class="w-12 h-12 rounded-xl object-cover border border-emerald-100 shrink-0">
+                      <div class="flex-1 min-w-0">
+                        <div class="font-black text-gray-900 text-xs truncate">${escapeCustHtml(p.title)}</div>
+                        <div class="text-[10px] text-gray-500 font-medium mt-0.5">${p.unit ? 'Pack: ' + p.unit : 'Standard Pack'} &bull; <span class="text-emerald-700 font-bold">In Stock</span></div>
+                        <div class="flex items-center gap-1.5 mt-0.5">
+                          <span class="font-black text-emerald-800 text-xs">₹${price.toFixed(2)}</span>
+                          ${savings > 0 ? `<span class="text-[9px] text-gray-400 line-through">₹${mrp.toFixed(2)}</span> <span class="text-[8px] font-bold text-emerald-700 bg-emerald-50 px-1 py-0.2 rounded border border-emerald-200">Save ₹${savings.toFixed(0)}</span>` : ''}
+                        </div>
                       </div>
                     </div>
+
+                    <!-- Quantity Steppers & Price Subtotal -->
+                    <div class="flex items-center justify-between pt-1 border-t border-gray-100 text-xs">
+                      <div class="flex items-center gap-1 bg-gray-50 p-0.5 rounded-xl border border-gray-200">
+                        <button type="button" onclick="CustomerAiShopper.changeQty(${p.id}, -1)" class="w-6 h-6 rounded-lg bg-white hover:bg-emerald-100 text-emerald-800 font-black flex items-center justify-center border border-gray-200 cursor-pointer shadow-2xs active:scale-95">&minus;</button>
+                        <span id="ai-item-qty-${p.id}" class="w-6 text-center font-black text-xs text-gray-900">${res.quantity}</span>
+                        <button type="button" onclick="CustomerAiShopper.changeQty(${p.id}, 1)" class="w-6 h-6 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-black flex items-center justify-center cursor-pointer shadow-2xs active:scale-95">&plus;</button>
+                      </div>
+                      <span id="ai-item-total-${p.id}" class="font-black text-emerald-900 text-xs">₹${res.totalPrice.toFixed(2)}</span>
+                      <button type="button" onclick="CustomerAiShopper.removeItem(${p.id})" title="Remove item" class="text-gray-400 hover:text-red-500 p-1 text-xs cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+
+                    ${alts.length > 0 ? `
+                      <!-- OTHER SIZES / BRANDS CAROUSEL -->
+                      <div class="pt-1 border-t border-dashed border-gray-100">
+                        <div class="text-[9px] font-bold text-gray-400 mb-1 flex items-center gap-1">
+                          <i class="fa-solid fa-arrows-split-up-and-left text-emerald-600"></i> Other Sizes &amp; Brands:
+                        </div>
+                        <div class="flex items-center gap-1 overflow-x-auto pb-0.5" style="scrollbar-width: none;">
+                          ${alts.map(alt => `
+                            <button type="button" onclick="CustomerAiShopper.quickAddAlternate(${alt.id}, 1)" class="px-2 py-0.5 rounded-lg bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-900 border border-emerald-200 font-bold text-[9px] whitespace-nowrap transition cursor-pointer shrink-0 shadow-2xs">
+                              + ${escapeCustHtml(alt.title.slice(0, 18))} (₹${parseFloat(alt.price).toFixed(0)})
+                            </button>
+                          `).join('')}
+                        </div>
+                      </div>
+                    ` : ''}
                   </div>
                 `;
               }).join('')}
@@ -5647,16 +5898,15 @@
         let text = rawClause.toLowerCase().trim();
         let qty = 1;
 
-        // 1. Look for leading or trailing numbers (e.g. "2 kg ponni rice" or "ponni rice 2")
-        const numRegex = /(?:^|\s)(\d+)\s*(?:kg|kilos|kilo|litre|litres|ltr|l|packet|packets|pkt|pkts|bag|bags|box|boxes|piece|pieces|nos|items|cans|bottles)?(?:\s|$)/i;
-        const numMatch = text.match(numRegex);
-
-        if (numMatch) {
-          qty = parseInt(numMatch[1], 10) || 1;
-          text = text.replace(numMatch[0], ' ');
-        } else {
-          // Check for word numbers
-          for (const [w, val] of Object.entries(this.wordNumbers)) {
+        // Check for Tamil / English quantity words
+        for (const [w, val] of Object.entries(this.wordNumbers)) {
+          if (/[^\x00-\x7F]/.test(w)) {
+            if (text.includes(w)) {
+              qty = val;
+              text = text.split(w).join(' ');
+              break;
+            }
+          } else {
             const wordRegex = new RegExp('\\b' + w + '\\b', 'i');
             if (wordRegex.test(text)) {
               qty = val;
@@ -5666,20 +5916,34 @@
           }
         }
 
-        // Safety on quantity bounds
+        // Number digits check
+        const numMatch = text.match(/(?:^|\s)(\d+)\s*(?:kg|kilos|kilo|litre|litres|ltr|l|packet|packets|pkt|pkts|bag|bags|box|boxes|piece|pieces|nos|items|cans|bottles|பாக்கெட்|கிலோ|லிட்டர்)?(?:\s|$)/i);
+        if (numMatch) {
+          qty = parseInt(numMatch[1], 10) || 1;
+          text = text.replace(numMatch[0], ' ');
+        }
+
         if (qty < 1) qty = 1;
         if (qty > 50) qty = 50;
 
-        // 2. Strip unit words
-        const unitWords = ['kg', 'kilos', 'kilo', 'grams', 'gram', 'g', 'litre', 'litres', 'ltr', 'l', 'packet', 'packets', 'pkt', 'pkts', 'pouch', 'pouches', 'bag', 'bags', 'box', 'boxes', 'piece', 'pieces', 'nos', 'items', 'bottle', 'bottles', 'can', 'cans', 'pack', 'packs'];
+        // Strip unit words
+        const unitWords = ['kg', 'kilos', 'kilo', 'grams', 'gram', 'g', 'litre', 'litres', 'ltr', 'l', 'packet', 'packets', 'pkt', 'pkts', 'pouch', 'pouches', 'bag', 'bags', 'box', 'boxes', 'piece', 'pieces', 'nos', 'items', 'bottle', 'bottles', 'can', 'cans', 'pack', 'packs', 'பாக்கெட்', 'கிலோ', 'லிட்டர்'];
         for (const u of unitWords) {
-          text = text.replace(new RegExp('\\b' + u + '\\b', 'gi'), ' ');
+          if (/[^\x00-\x7F]/.test(u)) {
+            text = text.split(u).join(' ');
+          } else {
+            text = text.replace(new RegExp('\\b' + u + '\\b', 'gi'), ' ');
+          }
         }
 
-        // 3. Strip stop words & filler intent words
-        const stopWords = ['i', 'need', 'please', 'add', 'give', 'me', 'can', 'get', 'to', 'cart', 'of', 'for', 'want', 'require', 'put', 'and', 'also', 'the', 'a', 'an', 'some', 'enaku', 'venum', 'kodu', 'kudunga'];
+        // Strip stop words
+        const stopWords = ['i', 'need', 'please', 'add', 'give', 'me', 'can', 'get', 'to', 'cart', 'of', 'for', 'want', 'require', 'put', 'and', 'also', 'the', 'a', 'an', 'some', 'enaku', 'venum', 'kodu', 'kudunga', 'வேண்டும்', 'சேர்', 'போடு'];
         for (const sw of stopWords) {
-          text = text.replace(new RegExp('\\b' + sw + '\\b', 'gi'), ' ');
+          if (/[^\x00-\x7F]/.test(sw)) {
+            text = text.split(sw).join(' ');
+          } else {
+            text = text.replace(new RegExp('\\b' + sw + '\\b', 'gi'), ' ');
+          }
         }
 
         const cleanQuery = text.replace(/\s+/g, ' ').trim();
@@ -5689,49 +5953,90 @@
       matchProductInCatalog: function(cleanQuery) {
         if (!allProducts || allProducts.length === 0 || !cleanQuery) return null;
 
-        const tokens = cleanQuery.split(/\s+/).filter(t => t.length > 1);
+        let norm = cleanQuery.toLowerCase();
+        for (const [t, eng] of Object.entries(this.tamilGroceryMap)) {
+          if (/[^\x00-\x7F]/.test(t)) {
+            norm = norm.split(t).join(' ' + eng + ' ');
+          } else {
+            norm = norm.replace(new RegExp('\\b' + t + '\\b', 'gi'), ' ' + eng + ' ');
+          }
+        }
+        norm = norm.replace(/\s+/g, ' ').trim();
+
+        const tokens = norm.split(/\s+/).filter(t => t.length > 1 && !['and', 'the', 'for', 'with', 'in', 'of'].includes(t));
         if (tokens.length === 0) return null;
 
-        let bestProduct = null;
-        let bestScore = 0;
+        const sizeMatch = norm.match(/\b(\d+(?:kg|g|ltr|l|ml))\b/i);
+        const requestedSize = sizeMatch ? sizeMatch[1].toUpperCase() : null;
+
+        const candidates = [];
 
         for (const p of allProducts) {
-          const title = (p.title || p.name || '').toLowerCase();
-          const desc = (p.description || '').toLowerCase();
-          const dept = (p.department || '').toLowerCase();
+          const rawTitle = (p.title || p.name || '');
+          const title = rawTitle.toLowerCase();
+          const titleWords = title.split(/[\s,./\-_()]+/).filter(w => w.length > 1);
           let score = 0;
 
-          // Full phrase match
-          if (title.includes(cleanQuery)) {
-            score += 100;
-          }
+          if (title.includes(norm)) score += 150;
 
-          // Token matches
+          let tokenMatches = 0;
           for (const token of tokens) {
-            if (title.includes(token)) {
-              score += 25;
-              // Exact word match
-              const reg = new RegExp('\\b' + token + '\\b', 'i');
-              if (reg.test(title)) score += 20;
-            } else if (dept.includes(token)) {
-              score += 15;
-            } else if (desc.includes(token)) {
-              score += 10;
+            if (titleWords.includes(token)) {
+              score += 40;
+              tokenMatches++;
+              if (['egg', 'rice', 'oil', 'atta', 'salt', 'sugar', 'soap', 'milk', 'ghee', 'maggi'].includes(token)) {
+                if (token === 'egg' && (title.includes('masala') || title.includes('shampoo')) && !norm.includes('masala') && !norm.includes('shampoo')) {
+                  score -= 40;
+                } else {
+                  score += 25;
+                }
+              }
+            } else if (title.includes(token)) {
+              score += 20;
+              tokenMatches++;
+            } else if (token.length >= 4) {
+              for (const tw of titleWords) {
+                if (Math.abs(tw.length - token.length) <= 2) {
+                  const dist = this.levenshtein(token, tw);
+                  if (dist === 1) { score += 28; tokenMatches++; break; }
+                  if (dist === 2 && token.length >= 6) { score += 18; tokenMatches++; break; }
+                }
+              }
             }
           }
 
-          if (score > bestScore) {
-            bestScore = score;
-            bestProduct = p;
+          if (tokenMatches === 0) continue;
+
+          if (requestedSize && rawTitle.toUpperCase().includes(requestedSize)) {
+            score += 50;
+          }
+
+          if (tokens.includes('egg') && titleWords.length <= 3 && titleWords.includes('egg')) {
+            score += 60;
+          }
+
+          if (score >= 25) {
+            candidates.push({ product: p, score });
           }
         }
 
-        // Threshold for acceptable match
-        if (bestScore >= 20) {
-          return bestProduct;
+        candidates.sort((a, b) => b.score - a.score);
+        if (candidates.length === 0) return null;
+
+        const bestProduct = candidates[0].product;
+        const seenTitles = new Set([bestProduct.title.toLowerCase()]);
+        const alternatives = [];
+        for (let i = 1; i < candidates.length; i++) {
+          const altP = candidates[i].product;
+          const tLower = altP.title.toLowerCase();
+          if (!seenTitles.has(tLower)) {
+            seenTitles.add(tLower);
+            alternatives.push(altP);
+            if (alternatives.length >= 3) break;
+          }
         }
 
-        return null;
+        return { bestProduct, alternatives, bestScore: candidates[0].score };
       },
 
       addItemToCart: function(p, qtyToAdd) {
@@ -5753,10 +6058,70 @@
         try {
           localStorage.setItem('nsn_cart', JSON.stringify(cart));
         } catch(e) {}
+      },
+
+      changeQty: function(productId, delta) {
+        const idStr = String(productId);
+        const item = cart.find(x => String(x.id) === idStr);
+        if (!item) return;
+        item.quantity += delta;
+        if (item.quantity <= 0) {
+          this.removeItem(productId);
+          return;
+        }
+        try {
+          localStorage.setItem('nsn_cart', JSON.stringify(cart));
+        } catch(e) {}
+        updateCartUI();
+        syncCustomerAiCartStrip();
+        const qtySpan = document.getElementById('ai-item-qty-' + productId);
+        const totalSpan = document.getElementById('ai-item-total-' + productId);
+        if (qtySpan) qtySpan.innerText = item.quantity;
+        if (totalSpan) totalSpan.innerText = '₹' + (parseFloat(item.price) * item.quantity).toFixed(2);
+        playCartChime();
+      },
+
+      removeItem: function(productId) {
+        const idStr = String(productId);
+        const idx = cart.findIndex(x => String(x.id) === idStr);
+        if (idx !== -1) {
+          cart.splice(idx, 1);
+          try {
+            localStorage.setItem('nsn_cart', JSON.stringify(cart));
+          } catch(e) {}
+          updateCartUI();
+          syncCustomerAiCartStrip();
+          const card = document.querySelector(`.product-ai-card[data-pid="${productId}"]`);
+          if (card) {
+            card.style.opacity = '0.5';
+            card.innerHTML = `<div class="p-2 text-center text-xs text-gray-500 font-bold bg-gray-50 rounded-xl"><i class="fa-solid fa-trash-can text-red-500"></i> Item removed from cart</div>`;
+            setTimeout(() => { if (card) card.remove(); }, 1200);
+          }
+        }
+      },
+
+      quickAddAlternate: function(productId, qty) {
+        const p = (allProducts || []).find(x => String(x.id) === String(productId));
+        if (p) {
+          this.addItemToCart(p, qty || 1);
+          updateCartUI();
+          syncCustomerAiCartStrip();
+          playCartChime();
+          appendCustAiBotMessage(`
+            <div class="space-y-1.5 text-xs">
+              <p class="font-bold text-emerald-900 flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-emerald-600"></i> Added <b>${escapeCustHtml(p.title)}</b> to cart!</p>
+              <p class="text-[10px] text-gray-500">Cart Total: ₹${cart.reduce((s, x) => s + (parseFloat(x.price) * x.quantity), 0).toFixed(2)}</p>
+            </div>
+          `);
+          if (custAiSoundEnabled) {
+            speakCustText('Added ' + p.title + ' to cart');
+          }
+        }
       }
     };
   
     /* ════════════════════════════════════════════════════════════════
+       📱 MOBILE FUNCTIONS/* ════════════════════════════════════════════════════════════════
        📱 MOBILE FUNCTIONS — toggleMobileSearch, syncMobileSearch
        ════════════════════════════════════════════════════════════════ */
     function toggleMobileSearch() {

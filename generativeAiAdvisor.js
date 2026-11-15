@@ -168,9 +168,9 @@ function requestGemini(model, apiKey, contents) {
       });
     });
 
-    req.setTimeout(25000, () => {
+    req.setTimeout(3500, () => {
       req.destroy();
-      reject(new Error('Gemini API timeout after 25s'));
+      reject(new Error('Gemini API timeout after 3.5s'));
     });
 
     req.on('error', (err) => {
@@ -192,8 +192,11 @@ async function callGeminiApi(question, fy, context, config, history = []) {
     return null;
   }
 
-  const primaryModel = config.model || 'gemini-2.5-flash';
-  const fallbackModels = [primaryModel, 'gemini-2.5-flash', 'gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-1.5-flash', 'gemini-2.0-flash'].filter((v, i, a) => a.indexOf(v) === i);
+  const primaryModel = (config.model && (config.model.startsWith('gemini-1.') || config.model.startsWith('gemini-2.'))) ? config.model : 'gemini-1.5-flash';
+  const fallbackModels = [primaryModel, 'gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-1.5-pro']
+    .filter(m => m && !m.includes('2.5') && !m.includes('3.8') && !m.includes('3.5'))
+    .filter((v, i, a) => a.indexOf(v) === i);
+  if (fallbackModels.length === 0) fallbackModels.push('gemini-1.5-flash');
 
   const systemPrompt = `You are the executive Chief AI Business Intelligence & Operations Advisor for "Rani Hyper Market" (SNS Market), the leading supermarket and hypermarket in Bodinayakanur, Theni District, Tamil Nadu, India.
 The store owner and managing director is Rani (Rani Amma). You have direct, live integration with Rani Hyper Market's POS checkout database covering 5 financial years (2022–2027) with 141,311 real customer transactions and ₹2.61 Crore in empirical turnover.
@@ -243,11 +246,12 @@ YOUR INSTRUCTIONS:
 
   if (Array.isArray(history) && history.length > 0) {
     history.slice(-8).forEach((turn, idx) => {
+      const turnText = turn.text || turn.content || '';
       if (turn.role === 'user') {
-        const text = idx === 0 ? (systemPrompt + '\n\nUSER QUESTION: ' + turn.text) : turn.text;
+        const text = idx === 0 ? (systemPrompt + '\n\nUSER QUESTION: ' + turnText) : turnText;
         contents.push({ role: 'user', parts: [{ text }] });
-      } else if (turn.role === 'model' || turn.role === 'assistant') {
-        contents.push({ role: 'model', parts: [{ text: turn.text || turn.content || '' }] });
+      } else if (turn.role === 'model' || turn.role === 'assistant' || turn.role === 'bot') {
+        contents.push({ role: 'model', parts: [{ text: turnText }] });
       }
     });
     contents.push({ role: 'user', parts: [{ text: question }] });
@@ -273,7 +277,10 @@ YOUR INSTRUCTIONS:
         };
       }
     } catch (err) {
-      console.warn(`Gemini API call with model ${model} failed: ${err.message}. Trying fallback...`);
+      console.warn(`Gemini API call with model ${model} failed: ${err.message}.`);
+      if (err.message && (err.message.includes('400') || err.message.includes('API key not valid') || err.message.includes('API_KEY_INVALID') || err.message.includes('403'))) {
+        break; // Key invalid or forbidden, don't waste time retrying other models
+      }
     }
   }
 
@@ -934,12 +941,14 @@ async function generateAnswer(question, fy = '2026-2027', history = [], override
 /**
  * Tests a Gemini API Key with a lightweight ping
  */
-async function testGeminiApiKey(apiKey, model = 'gemini-2.5-flash') {
+async function testGeminiApiKey(apiKey, model = 'gemini-1.5-flash') {
   if (!apiKey || !apiKey.trim()) {
     return { success: false, error: 'Gemini API key is required' };
   }
   const cleanKey = apiKey.trim();
-  const testModels = [model, 'gemini-2.5-flash', 'gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-1.5-flash'];
+  const testModels = [model, 'gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-1.5-pro']
+    .filter(m => m && !m.includes('2.5') && !m.includes('3.8') && !m.includes('3.5'))
+    .filter((v, i, a) => a.indexOf(v) === i);
   for (const m of testModels) {
     try {
       const res = await requestGemini(m, cleanKey, [
@@ -950,6 +959,9 @@ async function testGeminiApiKey(apiKey, model = 'gemini-2.5-flash') {
       }
     } catch (err) {
       console.warn(`Test key failed with model ${m}:`, err.message);
+      if (err.message && (err.message.includes('400') || err.message.includes('API key not valid') || err.message.includes('API_KEY_INVALID') || err.message.includes('403'))) {
+        break;
+      }
     }
   }
   return {

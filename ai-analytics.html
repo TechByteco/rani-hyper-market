@@ -1611,6 +1611,9 @@ Loading live briefing...
       container.scrollTop = container.scrollHeight;
       lucide.createIcons();
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4500);
+
       try {
         const res = await fetch('/api/ai-analytics/chat', {
           method: 'POST',
@@ -1619,10 +1622,15 @@ Loading live briefing...
             question: text,
             fy: currentFinancialYear,
             history: (typeof conversationHistory !== 'undefined' ? conversationHistory.slice(-8) : [])
-          })
+          }),
+          signal: controller.signal
         });
+        clearTimeout(timeoutId);
         const data = await res.json();
-        container.removeChild(loadingBubble);
+
+        if (loadingBubble && loadingBubble.parentNode) {
+          loadingBubble.parentNode.removeChild(loadingBubble);
+        }
 
         if (data.answer && typeof conversationHistory !== 'undefined') {
           conversationHistory.push({ role: 'user', text: text });
@@ -1650,7 +1658,11 @@ Loading live briefing...
         container.scrollTop = container.scrollHeight;
         lucide.createIcons();
       } catch (err) {
-        container.removeChild(loadingBubble);
+        clearTimeout(timeoutId);
+      } finally {
+        if (loadingBubble && loadingBubble.parentNode) {
+          loadingBubble.parentNode.removeChild(loadingBubble);
+        }
       }
     }
 

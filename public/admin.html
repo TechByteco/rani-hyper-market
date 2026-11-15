@@ -546,11 +546,11 @@
             </div>
             <div class="glass px-3.5 py-2 rounded-2xl border border-emerald-200 text-center">
               <span class="text-[10px] uppercase font-bold text-gray-400 block">Total Sales</span>
-              <b id="sync-stat-sales" class="text-emerald-700 text-sm font-black"><span class="rupee font-bold">₹</span>30,31,972.00</b>
+              <b id="sync-stat-sales" class="text-emerald-700 text-sm font-black"><span class="rupee font-bold">₹</span>37,02,626.00</b>
             </div>
             <div class="glass px-3.5 py-2 rounded-2xl border border-emerald-200 text-center">
               <span class="text-[10px] uppercase font-bold text-gray-400 block">Real Profit</span>
-              <b id="sync-stat-profit" class="text-purple-700 text-sm font-black"><span class="rupee font-bold">₹</span>3,63,836.64</b>
+              <b id="sync-stat-profit" class="text-purple-700 text-sm font-black"><span class="rupee font-bold">₹</span>4,44,315.12</b>
             </div>
             <button onclick="refreshDataFromLocalDb()" id="btn-sync-refresh" class="btn-emerald px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm">
               <i class="fa-solid fa-arrows-rotate"></i> Sync from Desktop POS
@@ -2953,6 +2953,14 @@ let allProducts = [];
           } catch(e) {}
         }
 
+        const datePickerEl = document.getElementById('admin-date-picker');
+        if (datePickerEl) {
+          const dayKeys = raniAnalytics && raniAnalytics.dayWise ? Object.keys(raniAnalytics.dayWise).sort() : [];
+          const latestDate = dayKeys.length > 0 ? dayKeys[dayKeys.length - 1] : '2026-10-21';
+          datePickerEl.max = latestDate;
+          datePickerEl.value = latestDate;
+        }
+
         if (profileRes) {
           document.getElementById('admin-store-heading').innerText = profileRes.store_name + ' Admin';
           document.getElementById('sync-store-title').innerText = profileRes.store_name;
@@ -3357,10 +3365,10 @@ let allProducts = [];
           statAvgBasket.innerText = `Avg Basket: ₹${avgBasket}`;
         }
       } else { // Years
-        const currSales = raniAnalytics ? raniAnalytics.totalSales : 3031972;
-        const currCost = raniAnalytics ? raniAnalytics.totalCost : 2644550;
-        const currProfit = raniAnalytics ? raniAnalytics.totalProfit : 387422;
-        const currBills = raniAnalytics ? raniAnalytics.totalOrders : 17547;
+        const currSales = raniAnalytics ? raniAnalytics.totalSales : 3702626;
+        const currCost = raniAnalytics ? raniAnalytics.totalCost : 3258311;
+        const currProfit = raniAnalytics ? raniAnalytics.totalProfit : 444315;
+        const currBills = raniAnalytics ? raniAnalytics.totalOrders : 21651;
         const margin = currSales > 0 ? ((currProfit / currSales) * 100).toFixed(1) : '12.8';
         const avgBasket = currBills > 0 ? Math.round(currSales / currBills) : 173;
 
@@ -3387,6 +3395,12 @@ let allProducts = [];
     function openReportsFinderModal(defaultType = 'daily') {
       const modal = document.getElementById('reports-finder-modal');
       if (modal) modal.classList.remove('hidden');
+      const startInp = document.getElementById('rf-date-start');
+      const endInp = document.getElementById('rf-date-end');
+      const dayKeys = raniAnalytics && raniAnalytics.dayWise ? Object.keys(raniAnalytics.dayWise).sort() : [];
+      const latestDate = dayKeys.length > 0 ? dayKeys[dayKeys.length - 1] : '2026-10-21';
+      if (startInp) startInp.max = latestDate;
+      if (endInp) endInp.max = latestDate;
       selectReportType(defaultType);
     }
 
@@ -3423,23 +3437,25 @@ let allProducts = [];
     function setReportDatePreset(preset) {
       const startInp = document.getElementById('rf-date-start');
       const endInp = document.getElementById('rf-date-end');
-      const today = new Date().toISOString().slice(0, 10);
+      
+      const dayKeys = raniAnalytics && raniAnalytics.dayWise ? Object.keys(raniAnalytics.dayWise).sort() : [];
+      const latestDate = dayKeys.length > 0 ? dayKeys[dayKeys.length - 1] : '2026-10-21';
+      const prevDate = dayKeys.length > 1 ? dayKeys[dayKeys.length - 2] : '2026-10-20';
+      const last7Date = dayKeys.length >= 7 ? dayKeys[dayKeys.length - 7] : (dayKeys[0] || '2026-10-14');
+      const monthStart = latestDate.slice(0, 7) + '-01';
 
       if (preset === 'today') {
-        if (startInp) startInp.value = today;
-        if (endInp) endInp.value = today;
+        if (startInp) startInp.value = latestDate;
+        if (endInp) endInp.value = latestDate;
       } else if (preset === 'yesterday') {
-        const y = new Date(); y.setDate(y.getDate() - 1);
-        const yStr = y.toISOString().slice(0, 10);
-        if (startInp) startInp.value = yStr;
-        if (endInp) endInp.value = yStr;
+        if (startInp) startInp.value = prevDate;
+        if (endInp) endInp.value = prevDate;
       } else if (preset === 'last7') {
-        const d = new Date(); d.setDate(d.getDate() - 7);
-        if (startInp) startInp.value = d.toISOString().slice(0, 10);
-        if (endInp) endInp.value = today;
+        if (startInp) startInp.value = last7Date;
+        if (endInp) endInp.value = latestDate;
       } else if (preset === 'thismonth') {
-        if (startInp) startInp.value = today.slice(0, 7) + '-01';
-        if (endInp) endInp.value = today;
+        if (startInp) startInp.value = monthStart;
+        if (endInp) endInp.value = latestDate;
       } else if (preset === 'all') {
         if (startInp) startInp.value = '';
         if (endInp) endInp.value = '';
@@ -3585,7 +3601,7 @@ let allProducts = [];
           { period: '2023-2024', label: 'FY 2023–2024', bills: 31250, sales: 5410900, cost: 4734538, profit: 676362, avgBasket: 173.15, marginPct: 12.5 },
           { period: '2024-2025', label: 'FY 2024–2025', bills: 33900, sales: 6024100, cost: 5240967, profit: 783133, avgBasket: 177.70, marginPct: 13.0 },
           { period: '2025-2026', label: 'FY 2025–2026', bills: 26104, sales: 6189520, cost: 5384883, profit: 804637, avgBasket: 237.11, marginPct: 13.0 },
-          { period: '2026-2027', label: 'FY 2026–2027 (Current)', bills: 17547, sales: (raniAnalytics ? raniAnalytics.totalSales : 3031972), cost: (raniAnalytics ? raniAnalytics.totalCost : 2644550), profit: (raniAnalytics ? raniAnalytics.totalProfit : 387422), avgBasket: 172.79, marginPct: 12.8 }
+          { period: '2026-2027', label: 'FY 2026–2027 (Current)', bills: 21651, sales: (raniAnalytics ? raniAnalytics.totalSales : 3702626), cost: (raniAnalytics ? raniAnalytics.totalCost : 3258311), profit: (raniAnalytics ? raniAnalytics.totalProfit : 444315), avgBasket: 171.01, marginPct: 12.0 }
         ];
 
         let totOrders = 0, totSales = 0, totCost = 0, totProfit = 0;
@@ -3697,8 +3713,8 @@ let allProducts = [];
         reportData.title = 'Payment Mode Reconciliation Report (FY 2026-27)';
         reportData.headers = ['Payment Mode', 'Transaction Bills', 'Share %', 'Total Amount Collected (₹)', 'Average Bill Value (₹)'];
 
-        const totBills = (typeof raniAnalytics !== 'undefined' && raniAnalytics && raniAnalytics.totalOrders) ? raniAnalytics.totalOrders : (typeof globalOverview !== 'undefined' && globalOverview ? globalOverview.totalBills : 17547);
-        const totSales = (typeof raniAnalytics !== 'undefined' && raniAnalytics && raniAnalytics.totalSales) ? raniAnalytics.totalSales : (typeof globalOverview !== 'undefined' && globalOverview ? globalOverview.totalSales : 3031972);
+        const totBills = (typeof raniAnalytics !== 'undefined' && raniAnalytics && raniAnalytics.totalOrders) ? raniAnalytics.totalOrders : (typeof globalOverview !== 'undefined' && globalOverview ? globalOverview.totalBills : 21651);
+        const totSales = (typeof raniAnalytics !== 'undefined' && raniAnalytics && raniAnalytics.totalSales) ? raniAnalytics.totalSales : (typeof globalOverview !== 'undefined' && globalOverview ? globalOverview.totalSales : 3702626);
 
         let cashBills = Math.round(totBills * 0.745);
         let upiBills = Math.round(totBills * 0.215);
@@ -3731,7 +3747,7 @@ let allProducts = [];
         reportData.title = 'GSTR-1 Outward Supplies & Tax Liability Report';
         reportData.headers = ['Tax Slab', 'Taxable Turnover (₹)', 'CGST (₹)', 'SGST (₹)', 'Total GST (₹)', 'Gross Sales (₹)'];
 
-        const totSales = (typeof raniAnalytics !== 'undefined' && raniAnalytics && raniAnalytics.totalSales) ? raniAnalytics.totalSales : (typeof globalOverview !== 'undefined' && globalOverview ? globalOverview.totalSales : 3031972);
+        const totSales = (typeof raniAnalytics !== 'undefined' && raniAnalytics && raniAnalytics.totalSales) ? raniAnalytics.totalSales : (typeof globalOverview !== 'undefined' && globalOverview ? globalOverview.totalSales : 3702626);
         
         const slabs = [
           { slab: '0% Exempt (Fresh Produce, Grains, Raw Rice, Milk)', taxable: Math.round(totSales * 0.418), rate: 0 },
@@ -4145,7 +4161,7 @@ let allProducts = [];
             { label: 'FY 2023–2024', sales: 5410900, cost: 4734538, profit: 676362, bills: 31250 },
             { label: 'FY 2024–2025', sales: 6024100, cost: 5240967, profit: 783133, bills: 33900 },
             { label: 'FY 2025–2026', sales: 6189520, cost: 5384883, profit: 804637, bills: 26104 },
-            { label: 'FY 2026–2027 (Current)', sales: (raniAnalytics ? raniAnalytics.totalSales : 3031972), cost: (raniAnalytics ? raniAnalytics.totalCost : 2644550), profit: (raniAnalytics ? raniAnalytics.totalProfit : 387422), bills: (raniAnalytics ? raniAnalytics.totalOrders : 17547) }
+            { label: 'FY 2026–2027 (Current)', sales: (raniAnalytics ? raniAnalytics.totalSales : 3702626), cost: (raniAnalytics ? raniAnalytics.totalCost : 3258311), profit: (raniAnalytics ? raniAnalytics.totalProfit : 444315), bills: (raniAnalytics ? raniAnalytics.totalOrders : 21651) }
           ];
           labels = multiYearList.map(y => y.label);
           salesData = multiYearList.map(y => y.sales);
@@ -7288,12 +7304,15 @@ ${itemsText}
         }
 
         if (data && data.answer) {
-          rawTextAnswer = data.answer;
-          const isGem = data.engine === 'gemini' || (data.source && data.source.includes('Gemini'));
-          const engineTag = isGem
-            ? `<div class="flex items-center justify-between text-[10px] font-black text-purple-700 bg-purple-50 px-2 py-0.5 rounded-lg mb-1 border border-purple-200"><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Google Gemini AI (${data.model || '1.5 Flash'})</span><button type="button" onclick="speakAiText(this.closest('.space-y-2').innerText)" title="Listen" class="text-purple-600 hover:text-purple-900 cursor-pointer flex items-center gap-1 font-bold"><i class="fa-solid fa-volume-high"></i> Listen</button></div>`
-            : `<div class="flex items-center justify-between text-[10px] font-black text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-lg mb-1 border border-emerald-200"><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Live POS Database &amp; Analytics Records</span><button type="button" onclick="speakAiText(this.closest('.space-y-2').innerText)" title="Listen" class="text-emerald-700 hover:text-emerald-950 cursor-pointer flex items-center gap-1 font-bold"><i class="fa-solid fa-volume-high"></i> Listen</button></div>`;
-          replyHtml = engineTag + formatAdminAiMarkdown(data.answer);
+          const isGenericPlaceholder = data.answer.includes('Connect your Gemini API Key in AI Studio to activate') || data.answer.startsWith('Hello! Rani Hyper Market AI Assistant is online. You asked:');
+          if (!isGenericPlaceholder) {
+            rawTextAnswer = data.answer;
+            const isGem = data.engine === 'gemini' || (data.source && data.source.includes('Gemini'));
+            const engineTag = isGem
+              ? `<div class="flex items-center justify-between text-[10px] font-black text-purple-700 bg-purple-50 px-2 py-0.5 rounded-lg mb-1 border border-purple-200"><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Google Gemini AI (${data.model || '1.5 Flash'})</span><button type="button" onclick="speakAiText(this.closest('.space-y-2').innerText)" title="Listen" class="text-purple-600 hover:text-purple-900 cursor-pointer flex items-center gap-1 font-bold"><i class="fa-solid fa-volume-high"></i> Listen</button></div>`
+              : `<div class="flex items-center justify-between text-[10px] font-black text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-lg mb-1 border border-emerald-200"><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Live POS Database &amp; Analytics Records</span><button type="button" onclick="speakAiText(this.closest('.space-y-2').innerText)" title="Listen" class="text-emerald-700 hover:text-emerald-950 cursor-pointer flex items-center gap-1 font-bold"><i class="fa-solid fa-volume-high"></i> Listen</button></div>`;
+            replyHtml = engineTag + formatAdminAiMarkdown(data.answer);
+          }
         }
 
         // 2. Direct client-side Gemini fallback if user provided API key in browser
@@ -8554,12 +8573,15 @@ ${itemsText}
         }
 
         if (data && data.answer) {
-          rawBotAnswer = data.answer;
-          const isGem = data.engine === 'gemini' || (data.source && data.source.includes('Gemini'));
-          const engineTag = isGem
-            ? `<div class="flex items-center justify-between text-[10px] font-black text-purple-700 bg-purple-50 px-2.5 py-1 rounded-xl mb-1.5 border border-purple-200"><span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Google Gemini AI (${data.model || '1.5 Flash'})</span><button type="button" onclick="speakAiText(this.closest('.space-y-2').innerText)" title="Listen" class="text-purple-600 hover:text-purple-900 cursor-pointer flex items-center gap-1 font-bold text-[10px]"><i class="fa-solid fa-volume-high"></i> Listen</button></div>`
-            : `<div class="flex items-center justify-between text-[10px] font-black text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-xl mb-1.5 border border-emerald-200"><span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Live POS Database &amp; Analytics Records</span><button type="button" onclick="speakAiText(this.closest('.space-y-2').innerText)" title="Listen" class="text-emerald-700 hover:text-emerald-950 cursor-pointer flex items-center gap-1 font-bold text-[10px]"><i class="fa-solid fa-volume-high"></i> Listen</button></div>`;
-          replyHtml = engineTag + formatAdminAiMarkdown(data.answer);
+          const isGenericPlaceholder = data.answer.includes('Connect your Gemini API Key in AI Studio to activate') || data.answer.startsWith('Hello! Rani Hyper Market AI Assistant is online. You asked:');
+          if (!isGenericPlaceholder) {
+            rawBotAnswer = data.answer;
+            const isGem = data.engine === 'gemini' || (data.source && data.source.includes('Gemini'));
+            const engineTag = isGem
+              ? `<div class="flex items-center justify-between text-[10px] font-black text-purple-700 bg-purple-50 px-2.5 py-1 rounded-xl mb-1.5 border border-purple-200"><span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Google Gemini AI (${data.model || '1.5 Flash'})</span><button type="button" onclick="speakAiText(this.closest('.space-y-2').innerText)" title="Listen" class="text-purple-600 hover:text-purple-900 cursor-pointer flex items-center gap-1 font-bold text-[10px]"><i class="fa-solid fa-volume-high"></i> Listen</button></div>`
+              : `<div class="flex items-center justify-between text-[10px] font-black text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-xl mb-1.5 border border-emerald-200"><span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Live POS Database &amp; Analytics Records</span><button type="button" onclick="speakAiText(this.closest('.space-y-2').innerText)" title="Listen" class="text-emerald-700 hover:text-emerald-950 cursor-pointer flex items-center gap-1 font-bold text-[10px]"><i class="fa-solid fa-volume-high"></i> Listen</button></div>`;
+            replyHtml = engineTag + formatAdminAiMarkdown(data.answer);
+          }
         }
 
         // 2. Direct Gemini fallback

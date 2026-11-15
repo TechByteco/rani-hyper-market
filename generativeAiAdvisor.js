@@ -297,6 +297,18 @@ function generateLocalSynthesis(question, fy = '2026-2027', context) {
   const q = rawQ.toLowerCase();
   const as = getAnalytics();
 
+  // Greetings / Identity / Tamil Salutations
+  if (q === 'hi' || q === 'hello' || q === 'hey' || q.includes('who are you') || q.includes('வணக்கம்') || q.includes('vanakkam')) {
+    const isTa = /[\u0B80-\u0BFF]/.test(rawQ) || q.includes('vanakkam');
+    const greetingText = isTa
+      ? `👋 **வணக்கம் ராணி அம்மா! நான் உங்கள் SNS Hyper Market AI வணிக ஆலோசகர்.**\n\n- **கணினியில் சரிபார்க்கப்பட்ட மொத்த விற்பனை:** ₹37,02,626 (21,651 பில்கள்)\n- **பட்டியலிடப்பட்ட மொத்த பொருட்கள்:** 7,522 பொருட்கள்\n- **கடைசியாக பதிவான நாள்:** 2026-10-21 (₹7,674 விற்பனை, 45 பில்கள்)\n- **முக்கிய வாடிக்கையாளர்:** THE HEAD MASTER PLPS POOPPARA (₹4,77,540)\n\nஇன்றைய விற்பனை, அதிக லாபம் தரும் பொருட்கள், விஐபி வாடிக்கையாளர்கள் அல்லது பண்டிகை கொள்முதல் பற்றி என்னிடம் கேளுங்கள்!`
+      : `👋 **Vanakkam Rani Amma! I am your SNS Hyper Market AI Business Intelligence Advisor.**\n\n- **Verified Retail Turnover:** ₹37,02,626 across 21,651 genuine customer invoices\n- **Active Inventory Catalog:** 7,522 products mapped to shelf barcodes\n- **Latest Active Business Date:** 2026-10-21 (₹7,674 sales, 45 customer bills)\n- **Top VIP Patron:** THE HEAD MASTER PLPS POOPPARA (₹4,77,540 across 114 visits)\n\nAsk me about today's sales, profit margins, top purchasing customers, counter dispatches, or upcoming festival stock needs!`;
+    return {
+      answer: greetingText,
+      category: 'greeting'
+    };
+  }
+
   // --- 1. DIRECT FACTUAL DATABASE REPORTS ---
 
   // Specific Date Query
@@ -305,13 +317,13 @@ function generateLocalSynthesis(question, fy = '2026-2027', context) {
     return as.getDateReport(dateMatch[1]);
   }
   const latestDate = context?.dateRange?.end || '2026-10-21';
-  if (q.includes('yesterday')) {
+  if (q.includes('yesterday') || q.includes('நேற்று')) {
     const prevDateObj = new Date(latestDate);
     prevDateObj.setDate(prevDateObj.getDate() - 1);
     const prevDate = prevDateObj.toISOString().slice(0, 10);
     return as.getDateReport(prevDate, 'Yesterday / Prior Active Day');
   }
-  if (q.includes('today') || q.includes('today sales') || q.includes('todays sale') || q.includes('latest sales') || q.includes('recent sales')) {
+  if (q.includes('today') || q.includes('today sales') || q.includes('todays sale') || q.includes('latest sales') || q.includes('recent sales') || q.includes('இன்றைய') || q.includes('இன்று') || q.includes('விற்பனை')) {
     return as.getDateReport(latestDate, 'Latest Recorded Day (Today)');
   }
 
@@ -354,12 +366,12 @@ function generateLocalSynthesis(question, fy = '2026-2027', context) {
   }
 
   // Top Customers / VIPs
-  if (q.includes('top customer') || q.includes('vip customer') || q.includes('who bought most') || q.includes('highest spending customer') || q.includes('top customers') || q.includes('top 10 customer') || q.includes('highest purchasing') || q.includes('top purchasers') || q.includes('top purchasing') || q.includes('best customer') || q.includes('vip patron') || q.includes('who is our highest') || q.includes('highest purchaser')) {
+  if (q.includes('top customer') || q.includes('vip customer') || q.includes('who bought most') || q.includes('highest spending customer') || q.includes('top customers') || q.includes('top 10 customer') || q.includes('highest purchasing') || q.includes('top purchasers') || q.includes('top purchasing') || q.includes('best customer') || q.includes('vip patron') || q.includes('who is our highest') || q.includes('highest purchaser') || q.includes('வாடிக்கையாளர்') || q.includes('வாடிக்கையாளர்கள்')) {
     return as.getTopCustomersReport(10);
   }
 
   // High Margin Items
-  if ((q.includes('high margin') || q.includes('highest margin') || q.includes('most profitable product')) && !q.includes('how to')) {
+  if ((q.includes('high margin') || q.includes('highest margin') || q.includes('most profitable product') || q.includes('லாபம்')) && !q.includes('how to')) {
     return as.getHighMarginReport(10);
   }
 
@@ -378,8 +390,8 @@ function generateLocalSynthesis(question, fy = '2026-2027', context) {
     };
   }
 
-  // Dead stock listing
-  if (q === 'which items are dead stock?' || q === 'show dead stock' || q === 'dead stock list') {
+  // Dead stock listing (broad fuzzy matching)
+  if (q.includes('dead stock') || q.includes('slow moving') || q.includes('zero sales') || q.includes('unsold') || q.includes('slow-moving')) {
     const dead = as.getDeadStock(6);
     const deadList = dead.map((p, i) => `${i + 1}. **${p.Name.trim()}** (Sales Rate: ₹${p.SalesRate}, MRP: ₹${p.Mrp})`).join('\n');
     return {
@@ -388,8 +400,8 @@ function generateLocalSynthesis(question, fy = '2026-2027', context) {
     };
   }
 
-  // Peak rush hour listing
-  if (q === 'what is our peak rush hour?' || q === 'busiest hours' || q === 'rush hours') {
+  // Peak rush hour listing (broad fuzzy matching)
+  if (q.includes('rush hour') || q.includes('peak hour') || q.includes('busiest hour') || q.includes('rush hours') || q.includes('peak rush')) {
     const hourly = as.getHourlyTrends();
     const peak = [...hourly].sort((a, b) => b.sales - a.sales)[0];
     return {

@@ -3457,6 +3457,17 @@
     }
 
     function renderStepperHtml(productId, qty) {
+      const prod = allProducts.find(x => String(x.id) === String(productId));
+      const isOutOfStock = prod && prod.stock !== undefined && parseInt(prod.stock, 10) <= 0;
+
+      if (isOutOfStock) {
+        return `
+          <button type="button" disabled class="w-full py-1.5 px-2 rounded-lg bg-gray-100 text-gray-400 border border-gray-200 font-extrabold text-[10px] flex items-center justify-center gap-1 cursor-not-allowed" title="Sold out in local store">
+            <span>OUT OF STOCK</span>
+          </button>
+        `;
+      }
+
       if (qty > 0) {
         return `
           <div class="w-full flex items-center justify-between bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white rounded-lg p-0.5 shadow-xs">
@@ -5616,7 +5627,16 @@
     /* CUSTOMER AI SHOPPER NATURAL LANGUAGE, BILINGUAL & QUANTITY ENGINE */
     const CustomerAiShopper = {
       tamilGroceryMap: {
-        'அரிசி': 'rice', 'பொன்னி': 'ponni', 'சாதம்': 'rice', 'பச்சரிசி': 'raw rice',
+        'அரிசி': 'rice', 'பொன்னி': 'ponni', 'சாம்பார்': 'sambar powder', 'சாம்பார் தூள்': 'sambar powder',
+        'ரசம்': 'rasam powder', 'கரம் மசாலா': 'garam masala', 'சிக்கன் மசாலா': 'chicken masala',
+        'ஆச்சி': 'aachi', 'சக்தி': 'sakthi', 'எவரெஸ்ட்': 'everest', 'பாசுமதி': 'basmati rice',
+        'சீரக சம்பா': 'seeraga samba rice', 'முந்திரி': 'cashew kaju', 'திராட்சை': 'raisins kismis',
+        'பாதாம்': 'badam almond', 'ஏலக்காய்': 'cardamom elaichi', 'கிராம்பு': 'clove lavangam',
+        'பட்டை': 'cinnamon', 'வெண்ணெய்': 'butter', 'தயிர்': 'curd yogurt', 'பன்னீர்': 'paneer',
+        'பூஸ்ட்': 'boost', 'காம்ப்ளான்': 'complan', 'சர்ப்': 'surf excel', 'சர்ப் எக்செல்': 'surf excel',
+        'ரின்': 'rin', 'விம்': 'vim bar', 'ஹமாம்': 'hamam soap', 'மெடிமிக்ஸ்': 'medimix soap',
+        'டவ்': 'dove soap', 'லைஃப்பாய்': 'lifebuoy soap', 'கோல்கேட்': 'colgate paste',
+        'அரை கிலோ': '0.5 kg', 'கால் கிலோ': '0.25 kg', 'முக்கால் கிலோ': '0.75 kg', 'சாதம்': 'rice', 'பச்சரிசி': 'raw rice',
         'புழுங்கல்': 'boiled rice', 'எண்ணெய்': 'oil', 'நல்லெண்ணெய்': 'sesame gingelly oil',
         'கடலை எண்ணெய்': 'groundnut oil', 'தேங்காய் எண்ணெய்': 'coconut oil', 'சூரியகாந்தி': 'sunflower oil',
         'ஆட்டா': 'atta', 'கோதுமை': 'wheat atta', 'மாவு': 'atta flour', 'மைதா': 'maida',
@@ -5791,6 +5811,13 @@
 
         updateCartUI();
         syncCustomerAiCartStrip();
+
+        if (typeof speakCustText === 'function' && custAiSoundEnabled && addedResults.length > 0) {
+          const speechSummary = custAiLang === 'ta-IN' ?
+            `${addedResults.length} பொருட்கள் கூடையில் சேர்க்கப்பட்டன.` :
+            `Added ${addedResults.length} items to your cart.`;
+          speakCustText(speechSummary);
+        }
 
         if (addedResults.length === 0) {
           return `
@@ -6079,6 +6106,13 @@
         } catch(e) {}
         updateCartUI();
         syncCustomerAiCartStrip();
+
+        if (typeof speakCustText === 'function' && custAiSoundEnabled && addedResults.length > 0) {
+          const speechSummary = custAiLang === 'ta-IN' ?
+            `${addedResults.length} பொருட்கள் கூடையில் சேர்க்கப்பட்டன.` :
+            `Added ${addedResults.length} items to your cart.`;
+          speakCustText(speechSummary);
+        }
         const qtySpan = document.getElementById('ai-item-qty-' + productId);
         const totalSpan = document.getElementById('ai-item-total-' + productId);
         if (qtySpan) qtySpan.innerText = item.quantity;

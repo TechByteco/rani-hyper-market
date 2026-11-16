@@ -854,6 +854,98 @@ if (reqPath === '/api/pos/status') {
     return;
   }
 
+  // ══════════════════════════════════════════════════════════════════
+  // RETAIL POS ENHANCEMENTS API SUITE
+  // ══════════════════════════════════════════════════════════════════
+  const posEnhancement = require('./posEnhancementService');
+
+  // 1. Delta Sync Push (Counter Bills -> Supabase Cloud)
+  if (reqPath === '/api/sync/push' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', async () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const bills = Array.isArray(parsed) ? parsed : (parsed.bills || [parsed]);
+        const result = await posEnhancement.syncPushSales(bills, parsed.tenantId);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  // 2. Delta Sync Pull (Online Orders from Supabase -> Counter POS)
+  if (reqPath === '/api/sync/pull') {
+    const tenantId = queryParams.get('tenantId') || '37a64e83-514d-4b00-b90a-9af172dacdd6';
+    const limit = parseInt(queryParams.get('limit') || '30', 10);
+    posEnhancement.syncPullOnlineOrders(tenantId, limit)
+      .then(result => {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      })
+      .catch(err => {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      });
+    return;
+  }
+
+  // 3. Automated WhatsApp Business E-Bill Formatter & Dispatcher
+  if (reqPath === '/api/whatsapp/send-ebill' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const { order, phone, storeName } = JSON.parse(body || '{}');
+        if (!order) throw new Error('Order data is required');
+        const text = posEnhancement.formatWhatsAppEbillMessage(order, { storeName });
+        const cleanPhone = (phone || order.customer_phone || '').replace(/[^0-9]/g, '');
+        const fullPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+        const waUrl = fullPhone ? `https://api.whatsapp.com/send?phone=${fullPhone}&text=${encodeURIComponent(text)}` : `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, text, waUrl, phone: fullPhone }));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  // 4. Automated Predictive Vendor Purchase Order (PO) Generator
+  if (reqPath === '/api/po/generate') {
+    try {
+      const liveProducts = analytics.getLivePosProducts('', 500);
+      const mult = parseFloat(queryParams.get('multiplier') || '2.4');
+      const pos = posEnhancement.generatePredictiveVendorPOs(liveProducts, [], mult);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, purchase_orders: pos, count: pos.length, timestamp: new Date().toISOString() }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: err.message }));
+    }
+    return;
+  }
+
+  // 5. Predictive Customer Reorder Scanner
+  if (reqPath === '/api/reorders/predict') {
+    try {
+      const sales = analytics.getSalesAnalytics();
+      const recentOrders = (sales && sales.recentTransactions) ? sales.recentTransactions : [];
+      const predictions = posEnhancement.predictCustomerReorders(recentOrders, 25);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, reorder_candidates: predictions, count: predictions.length }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: err.message }));
+    }
+    return;
+  }
+
   // Supabase Keepalive & Heartbeat Ping Route
   if (reqPath === '/api/supabase/keepalive' || reqPath === '/api/supabase/status' || reqPath === '/api/keepalive') {
     const https = require('https');

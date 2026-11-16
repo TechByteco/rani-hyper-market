@@ -412,11 +412,15 @@
           </div>
         </div>
 
-        <!-- Center POS Live Connection Badge -->
+        <!-- Center POS Live Connection Badge & Cloud Sync -->
         <div class="hidden md:flex items-center gap-2">
           <span id="pos-connection-badge" class="px-3 py-1.5 bg-emerald-50 text-emerald-900 border border-emerald-300 rounded-xl text-xs font-black flex items-center gap-2 shadow-2xs" title="Live Desktop Connection to SNS Market.exe">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span>Desktop POS: Connected</span>
+          </span>
+          <span id="cloud-sync-badge" onclick="triggerManualSync()" class="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 rounded-xl text-xs font-black flex items-center gap-1.5 shadow-2xs cursor-pointer transition" title="Bi-Directional Local <-> Cloud Sync (Click to Sync)">
+            <span id="cloud-sync-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span id="cloud-sync-text">Cloud: Synced</span>
           </span>
           <span id="license-pill" class="px-2.5 py-1 bg-emerald-100/80 text-emerald-800 border border-emerald-300 rounded-lg text-[11px] font-bold flex items-center gap-1.5">
             <i class="fa-solid fa-certificate text-emerald-600"></i> Enterprise License
@@ -427,6 +431,12 @@
         <div class="flex items-center gap-2 flex-wrap">
           <button type="button" onclick="openCounterPosModal()" class="px-4 py-2 bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white rounded-xl text-xs font-black transition flex items-center gap-1.5 shadow-md hover:shadow-lg transform active:scale-95 cursor-pointer">
             <i class="fa-solid fa-bolt text-yellow-200 animate-pulse"></i> ⚡ Quick POS (F2)
+          </button>
+          <button type="button" onclick="openVendorPoModal()" class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs cursor-pointer" title="Automated Vendor Purchase Order (PO) Generator">
+            <i class="fa-solid fa-boxes-packing text-[11px] text-indigo-600"></i> <span class="hidden sm:inline">Vendor POs</span>
+          </button>
+          <button type="button" onclick="openCustomerReordersModal()" class="px-3 py-2 bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs cursor-pointer" title="Predictive Customer Reorders CRM">
+            <i class="fa-solid fa-arrows-rotate text-[11px] text-teal-600"></i> <span class="hidden sm:inline">Reorders CRM</span>
           </button>
           <button type="button" onclick="switchAdminModule('orders')" class="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs cursor-pointer" title="View Online Orders & Dispatches inside Admin Portal">
             <i class="fa-solid fa-truck-fast text-[11px] text-blue-600"></i> <span class="hidden sm:inline">Online Orders</span>
@@ -2086,6 +2096,26 @@
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
         <!-- LEFT: PRODUCT CATALOGUE LOOKUP & QUICK ADD (7 cols) -->
         <div class="lg:col-span-7 space-y-3">
+          <!-- WEIGHING SCALE & BARCODE ASSIST BAR -->
+          <div class="flex items-center justify-between gap-2 p-2 bg-blue-50/80 border border-blue-200 rounded-2xl text-xs">
+            <div class="flex items-center gap-2">
+              <button type="button" id="btn-scale-toggle" onclick="toggleWeighingScaleConnection()" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[11px] font-black flex items-center gap-1.5 shadow-xs transition cursor-pointer">
+                <i class="fa-solid fa-scale-balanced text-amber-300"></i>
+                <span id="scale-status-text">Connect Scale</span>
+              </button>
+              <div class="flex items-center gap-1.5 font-mono text-xs">
+                <span class="text-gray-500 font-bold">Live Weight:</span>
+                <span id="scale-live-weight-display" class="bg-white px-2 py-0.5 rounded-lg border border-blue-300 font-black text-blue-900 text-xs shadow-inner hidden">0.000 kg</span>
+              </div>
+              <button type="button" onclick="tareWeighingScale()" class="px-2 py-0.5 bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 rounded-lg text-[10px] font-bold shadow-2xs cursor-pointer">
+                Tare / Zero
+              </button>
+            </div>
+            <div class="text-[10px] text-blue-800 font-medium hidden sm:flex items-center gap-1">
+              <i class="fa-solid fa-barcode text-blue-600"></i> EAN-13 Scale Barcode: <span class="font-mono font-bold">20xxxxxWWWWWC</span> Auto-Detect
+            </div>
+          </div>
+
           <!-- POS SEARCH INPUT -->
           <div class="relative">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-xs"></i>
@@ -2334,14 +2364,17 @@
         </div>
       </div>
 
-      <div class="mt-4 flex gap-2 no-print">
-        <button onclick="window.print()" class="btn-emerald flex-1 py-2 text-xs font-bold flex items-center justify-center gap-1.5">
-          <i class="fa-solid fa-print"></i> Print Thermal Slip
+      <div class="mt-4 flex gap-2 no-print flex-wrap">
+        <button type="button" onclick="printDirectThermalEscPos(currentReceiptOrder)" class="btn-emerald flex-1 py-2 text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm cursor-pointer" title="Direct Silent Print to 58mm/80mm Thermal Printer via WebSerial / WebUSB (Zero print dialogs & Cash Drawer Kick)">
+          <i class="fa-solid fa-bolt text-yellow-300"></i> ⚡ Direct ESC/POS
+        </button>
+        <button onclick="window.print()" class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
+          <i class="fa-solid fa-print"></i> Dialog Print
         </button>
         <button type="button" onclick="sendWhatsAppReceipt()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition shadow-sm cursor-pointer" title="Send digital e-Bill receipt to Customer WhatsApp">
           <i class="fa-brands fa-whatsapp text-sm text-white"></i> WhatsApp e-Bill
         </button>
-        <button onclick="closeThermalReceiptModal()" class="px-4 py-2 glass hover:bg-white text-gray-700 text-xs font-bold rounded-xl">
+        <button onclick="closeThermalReceiptModal()" class="px-3 py-2 glass hover:bg-white text-gray-700 text-xs font-bold rounded-xl cursor-pointer">
           Close
         </button>
       </div>
@@ -2423,6 +2456,81 @@
             Close
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTOMATED PREDICTIVE VENDOR PURCHASE ORDER (PO) GENERATOR MODAL -->
+  <div id="vendor-po-modal" class="modal-overlay hidden">
+    <div class="modal-card max-w-5xl max-h-[92vh] flex flex-col p-6">
+      <div class="flex items-center justify-between border-b border-gray-200 pb-3 mb-4">
+        <div>
+          <h3 class="font-black text-gray-900 text-base flex items-center gap-2">
+            <i class="fa-solid fa-boxes-packing text-indigo-600"></i> Automated Predictive Vendor Purchase Order (PO) Engine
+          </h3>
+          <p class="text-xs text-gray-500 font-medium">Lunisolar Festival Demand Spike Analytics &bull; Distributor PO Batch Generator</p>
+        </div>
+        <button type="button" onclick="closeVendorPoModal()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
+      </div>
+
+      <!-- FILTER & SETTINGS ROW -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4 bg-indigo-50/70 p-3 rounded-2xl border border-indigo-200 text-xs">
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Festival Demand Multiplier</label>
+          <select id="po-festival-multiplier" onchange="loadVendorPos()" class="glass-input text-xs py-1.5 font-bold">
+            <option value="1.5">Standard Buffer (1.5x Lead Time Demand)</option>
+            <option value="2.4" selected>Major Festival Peak (2.4x Diwali/Pongal Demand)</option>
+            <option value="3.5">Mega Season Peak (3.5x Surge Order)</option>
+          </select>
+        </div>
+        <div class="flex items-center justify-center text-center">
+          <div class="space-y-0.5">
+            <span class="text-[10px] uppercase font-bold text-indigo-800">Distributors Monitored</span>
+            <div class="text-base font-black text-indigo-950">5 Regional Hubs (ITC, HUL, Aachi, Millers, Oils)</div>
+          </div>
+        </div>
+        <div class="flex items-center justify-end">
+          <button type="button" onclick="loadVendorPos()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black flex items-center gap-1.5 shadow-sm transition cursor-pointer">
+            <i class="fa-solid fa-rotate"></i> Recalculate POs
+          </button>
+        </div>
+      </div>
+
+      <!-- VENDOR PO CARDS CONTAINER -->
+      <div id="vendor-po-cards-container" class="flex-1 overflow-y-auto space-y-4 pr-1">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-gray-200 flex justify-end">
+        <button type="button" onclick="closeVendorPoModal()" class="px-5 py-2 glass hover:bg-gray-100 text-gray-700 text-xs font-bold rounded-xl cursor-pointer">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREDICTIVE CUSTOMER REORDERS CRM MODAL -->
+  <div id="customer-reorders-modal" class="modal-overlay hidden">
+    <div class="modal-card max-w-4xl max-h-[92vh] flex flex-col p-6">
+      <div class="flex items-center justify-between border-b border-gray-200 pb-3 mb-4">
+        <div>
+          <h3 class="font-black text-gray-900 text-base flex items-center gap-2">
+            <i class="fa-solid fa-arrows-rotate text-teal-600"></i> Predictive Customer Reorders CRM Engine
+          </h3>
+          <p class="text-xs text-gray-500 font-medium">Grocery Consumption Cycle Detection (Rice, Atta, Oil, Sugar 20-40 Days Replenishment)</p>
+        </div>
+        <button type="button" onclick="closeCustomerReordersModal()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
+      </div>
+
+      <!-- REORDER CANDIDATES CONTAINER -->
+      <div id="reorders-crm-cards-container" class="flex-1 overflow-y-auto space-y-3 pr-1">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-gray-200 flex justify-end">
+        <button type="button" onclick="closeCustomerReordersModal()" class="px-5 py-2 glass hover:bg-gray-100 text-gray-700 text-xs font-bold rounded-xl cursor-pointer">
+          Close
+        </button>
       </div>
     </div>
   </div>
@@ -5740,6 +5848,19 @@ let allProducts = [];
         }
       }
 
+      // Auto-detect EAN-13 Scale Weighted Barcode (20 IIIII WWWWW C)
+      if (q && q.length === 13 && (q.startsWith('20') || q.startsWith('02'))) {
+        const scaleData = parseScaleWeightedBarcode(q);
+        if (scaleData.isScaleBarcode) {
+          const matched = allProducts.find(p => String(p.id).includes(scaleData.itemCode) || (p.barcode && p.barcode.includes(scaleData.itemCode)));
+          if (matched) {
+            addToPosCart(matched.id, scaleData.weightKg);
+            if (document.getElementById('pos-search-input')) document.getElementById('pos-search-input').value = '';
+            return;
+          }
+        }
+      }
+
       if (q) {
         list = list.filter(p => 
           (p.title || '').toLowerCase().includes(q) || 
@@ -5790,13 +5911,24 @@ let allProducts = [];
       }).join('');
     }
 
-    function addToPosCart(id) {
+    function addToPosCart(id, customQty = null) {
       const p = allProducts.find(x => String(x.id) === String(id));
       if (!p) return;
 
+      let qtyToAdd = 1;
+      if (customQty !== null && customQty > 0) {
+        qtyToAdd = customQty;
+      } else if (typeof currentScaleWeightKg !== 'undefined' && currentScaleWeightKg > 0) {
+        const titleLower = (p.title || '').toLowerCase();
+        const isLoose = titleLower.includes('loose') || titleLower.includes('kg') || titleLower.includes('rice') || titleLower.includes('dhal') || titleLower.includes('onion') || titleLower.includes('sugar') || titleLower.includes('dal');
+        if (isLoose) {
+          qtyToAdd = parseFloat(currentScaleWeightKg.toFixed(3));
+        }
+      }
+
       const existing = posCart.find(x => String(x.id) === String(id));
       if (existing) {
-        existing.qty += 1;
+        existing.qty = parseFloat((existing.qty + qtyToAdd).toFixed(3));
       } else {
         const rate = parseFloat(p.price || 0);
         const mrp = parseFloat(p.mrp || (rate * 1.25));
@@ -5808,7 +5940,7 @@ let allProducts = [];
           price: rate,
           mrp: mrp,
           cost: cost,
-          qty: 1
+          qty: qtyToAdd
         });
       }
 
@@ -6326,11 +6458,17 @@ ${itemsText}
         // Add to allOrders at the very top
         allOrders.unshift(newOrder);
 
-        // Persist local counter POS orders
+        // Persist local counter POS orders & enqueue for cloud sync
         try {
           const storedPosOrders = JSON.parse(localStorage.getItem('nsn_pos_orders') || '[]');
           storedPosOrders.unshift(newOrder);
           localStorage.setItem('nsn_pos_orders', JSON.stringify(storedPosOrders));
+
+          // Enqueue for cloud sync & trigger background sync
+          const syncQueue = JSON.parse(localStorage.getItem('nsn_pending_sync_queue') || '[]');
+          syncQueue.unshift(newOrder);
+          localStorage.setItem('nsn_pending_sync_queue', JSON.stringify(syncQueue));
+          if (typeof triggerManualSync === 'function') triggerManualSync();
         } catch(e) {}
 
         // Persist to Supabase if accessible
@@ -9499,6 +9637,516 @@ ${itemsText}
       setTimeout(() => {
         resetAgencyScanner();
       }, 1200);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════
+       RETAIL ENHANCEMENTS SUITE
+       1. Bi-Directional Delta Sync (SQLite <-> Supabase)
+       2. Direct ESC/POS Thermal Printing & Weighing Scale Integration
+       3. Automated Predictive Vendor Purchase Orders (POs)
+       4. Customer Reorders CRM Engine
+       ══════════════════════════════════════════════════════════════════ */
+
+    // 1. BI-DIRECTIONAL CLOUD DELTA SYNC ENGINE
+    let isDeltaSyncing = false;
+
+    async function triggerManualSync() {
+      if (isDeltaSyncing) return;
+      isDeltaSyncing = true;
+      const dot = document.getElementById('cloud-sync-dot');
+      const text = document.getElementById('cloud-sync-text');
+      if (dot) dot.className = 'w-2 h-2 rounded-full bg-amber-500 animate-ping';
+      if (text) text.innerText = 'Syncing...';
+
+      try {
+        // A. Flush pending offline bills queue
+        const pendingQueue = JSON.parse(localStorage.getItem('nsn_pending_sync_queue') || '[]');
+        if (pendingQueue.length > 0) {
+          const pushRes = await fetch('/api/sync/push', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ bills: pendingQueue })
+          }).then(r => r.json()).catch(() => null);
+
+          if (pushRes && pushRes.success) {
+            localStorage.removeItem('nsn_pending_sync_queue');
+          }
+        }
+
+        // B. Pull remote online orders
+        const pullRes = await fetch('/api/sync/pull?limit=25').then(r => r.json()).catch(() => null);
+        if (pullRes && pullRes.success && Array.isArray(pullRes.orders)) {
+          let newRemoteCount = 0;
+          pullRes.orders.forEach(ro => {
+            const exists = allOrders.some(o => o.id === ro.id || (ro.shipping_address && o.shipping_address === ro.shipping_address && Math.abs(new Date(o.created_at) - new Date(ro.created_at)) < 5000));
+            if (!exists) {
+              allOrders.unshift({
+                id: ro.id,
+                voucher_no: 'ONL-' + (ro.id || '').substring(0, 6).toUpperCase(),
+                voucher_date: (ro.created_at || '').slice(0, 10),
+                customer_name: ro.shipping_address ? ro.shipping_address.split('|')[0].trim() : 'Online Customer',
+                customer_phone: (ro.shipping_address && ro.shipping_address.match(/\b\d{10}\b/)?.[0]) || '',
+                shipping_address: ro.shipping_address || 'Online Store Delivery',
+                total_amount: parseFloat(ro.total_amount || 0),
+                payment_method: ro.payment_method || 'ONLINE STORE',
+                status: ro.status || 'pending',
+                created_at: ro.created_at
+              });
+              newRemoteCount++;
+            }
+          });
+
+          if (newRemoteCount > 0) {
+            if (typeof renderOrdersListTable === 'function') renderOrdersListTable();
+            if (typeof renderLiveCounterDispatches === 'function') renderLiveCounterDispatches();
+          }
+        }
+
+        if (dot) dot.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
+        if (text) text.innerText = 'Cloud: Synced';
+      } catch (err) {
+        if (dot) dot.className = 'w-2 h-2 rounded-full bg-red-500';
+        if (text) text.innerText = 'Sync: Offline';
+      } finally {
+        isDeltaSyncing = false;
+      }
+    }
+
+    // Auto-sync worker every 30 seconds
+    setInterval(() => {
+      if (navigator.onLine && !isDeltaSyncing) {
+        triggerManualSync();
+      }
+    }, 30000);
+
+    // 2. DIRECT ESC/POS SILENT PRINTING VIA WEBSERIAL / WEBUSB
+    let activeThermalSerialPort = null;
+
+    async function printDirectThermalEscPos(order) {
+      const o = order || currentReceiptOrder;
+      if (!o) {
+        alert('No active bill receipt to print.');
+        return;
+      }
+
+      if ('serial' in navigator) {
+        try {
+          if (!activeThermalSerialPort) {
+            activeThermalSerialPort = await navigator.serial.requestPort();
+            await activeThermalSerialPort.open({ baudRate: 9600, dataBits: 8, stopBits: 1, parity: 'none' });
+          }
+
+          const bytes = [];
+          const push = (...arr) => arr.forEach(b => bytes.push(b));
+          const pushStr = (str) => {
+            for (let i = 0; i < str.length; i++) bytes.push(str.charCodeAt(i) & 0xFF);
+          };
+          const pushLine = (str = '') => pushStr(str + '\n');
+
+          push(0x1B, 0x40); // Init
+          push(0x1B, 0x70, 0x00, 0x19, 0xFA); // Kick drawer pulse
+
+          push(0x1B, 0x61, 0x01); // Center
+          push(0x1B, 0x45, 0x01); // Bold
+          push(0x1D, 0x21, 0x11); // Double size
+          pushLine('RANI HYPER MARKET');
+          push(0x1D, 0x21, 0x00); // Normal
+          push(0x1B, 0x45, 0x00); // Bold off
+          pushLine('93, Sundara Pandian St, Bodinayakanur');
+          pushLine('Ph: 77088 34547, 88073 34547');
+          pushLine('GSTIN: 33BAGPN1341C1ZC');
+          pushLine('--------------------------------');
+
+          push(0x1B, 0x61, 0x00); // Left
+          const invNo = o.voucher_no ? `#RANI-${o.voucher_no}` : `#${(o.id || 'POS').substring(0, 8)}`;
+          const dStr = new Date(o.created_at || Date.now()).toLocaleDateString('en-IN');
+          const tStr = new Date(o.created_at || Date.now()).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+          pushLine(`BILL: ${invNo.padEnd(16)}${dStr}`);
+          pushLine(`CUST: ${(o.customer_name || 'Walk-in').substring(0, 14).padEnd(16)}${tStr}`);
+          pushLine('--------------------------------');
+          push(0x1B, 0x45, 0x01);
+          pushLine('ITEM               QTY    AMOUNT');
+          push(0x1B, 0x45, 0x00);
+          pushLine('--------------------------------');
+
+          const items = (o.items && o.items.length > 0) ? o.items : [
+            { title: o.product_summary || 'Retail Provisions', qty: 1, price: parseFloat(o.total_amount || 0) }
+          ];
+
+          let totalQty = 0;
+          items.forEach(it => {
+            const q = it.qty || 1;
+            const p = parseFloat(it.price || 0);
+            totalQty += q;
+            const title = (it.title || 'Item').substring(0, 18).padEnd(18);
+            const qtyStr = String(q).padStart(3);
+            const amtStr = (q * p).toFixed(2).padStart(8);
+            pushLine(`${title} ${qtyStr} ${amtStr}`);
+          });
+
+          pushLine('--------------------------------');
+          const net = parseFloat(o.total_amount || 0).toFixed(2);
+          pushLine(`Total Items: ${totalQty}`);
+          push(0x1B, 0x45, 0x01);
+          push(0x1D, 0x21, 0x01);
+          pushLine(`NET TOTAL:      Rs.${net}`);
+          push(0x1D, 0x21, 0x00);
+          push(0x1B, 0x45, 0x00);
+          pushLine(`Payment: ${o.payment_method || 'CASH'}`);
+          pushLine('--------------------------------');
+          push(0x1B, 0x61, 0x01); // Center
+          pushLine('*** THANK YOU! VISIT AGAIN ***');
+          pushLine('Free Delivery: 77088 34547\n\n\n');
+          push(0x1D, 0x56, 0x42, 0x00); // Cut
+
+          const writer = activeThermalSerialPort.writable.getWriter();
+          await writer.write(new Uint8Array(bytes));
+          writer.releaseLock();
+
+          alert('⚡ Silent ESC/POS Print Dispatched & Cash Drawer Kicked!');
+          return;
+        } catch (err) {
+          console.warn('WebSerial print error, falling back to print dialog:', err);
+        }
+      }
+
+      window.print();
+    }
+
+    // 3. WEBSERIAL DIGITAL WEIGHING SCALE AUTO-READER
+    let activeScalePort = null;
+    let isScaleReading = false;
+    let currentScaleWeightKg = 0;
+
+    async function toggleWeighingScaleConnection() {
+      if (!('serial' in navigator)) {
+        alert('WebSerial API is not supported in this browser. Please use Google Chrome or Microsoft Edge to connect digital weighing scales.');
+        return;
+      }
+
+      const statusText = document.getElementById('scale-status-text');
+      const weightDisplay = document.getElementById('scale-live-weight-display');
+
+      if (isScaleReading) {
+        isScaleReading = false;
+        if (activeScalePort) {
+          try { await activeScalePort.close(); } catch(e) {}
+          activeScalePort = null;
+        }
+        if (statusText) statusText.innerText = 'Connect Scale';
+        if (weightDisplay) weightDisplay.classList.add('hidden');
+        return;
+      }
+
+      try {
+        activeScalePort = await navigator.serial.requestPort();
+        await activeScalePort.open({ baudRate: 9600 });
+        isScaleReading = true;
+
+        if (statusText) statusText.innerText = 'Scale: Active';
+        if (weightDisplay) weightDisplay.classList.remove('hidden');
+
+        readScaleStream(activeScalePort);
+      } catch (err) {
+        console.warn('Weighing scale connection canceled:', err);
+      }
+    }
+
+    async function readScaleStream(port) {
+      const textDecoder = new TextDecoderStream();
+      const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+      const reader = textDecoder.readable.getReader();
+
+      let buffer = '';
+      try {
+        while (isScaleReading) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buffer += value;
+          const lines = buffer.split('\n');
+          buffer = lines.pop();
+
+          for (const line of lines) {
+            const match = line.match(/(?:ST,GS|WN|WT|\+|\s)?([0-9]+\.[0-9]+)\s*(?:kg|g)?/i);
+            if (match && match[1]) {
+              const weight = parseFloat(match[1]);
+              if (!isNaN(weight)) {
+                currentScaleWeightKg = weight;
+                const disp = document.getElementById('scale-live-weight-display');
+                if (disp) disp.innerText = `${weight.toFixed(3)} kg`;
+              }
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Scale stream read error:', e);
+      } finally {
+        reader.releaseLock();
+      }
+    }
+
+    function tareWeighingScale() {
+      currentScaleWeightKg = 0;
+      const disp = document.getElementById('scale-live-weight-display');
+      if (disp) disp.innerText = '0.000 kg';
+    }
+
+    // EAN-13 Scale Barcode Parser (20 IIIII WWWWW C)
+    function parseScaleWeightedBarcode(barcode) {
+      const b = String(barcode || '').trim();
+      if ((b.startsWith('20') || b.startsWith('02')) && b.length === 13) {
+        const itemCode = b.substring(2, 7);
+        const weightGrams = parseInt(b.substring(7, 12), 10);
+        const weightKg = weightGrams / 1000;
+        return { isScaleBarcode: true, itemCode, weightKg };
+      }
+      return { isScaleBarcode: false };
+    }
+
+    // 4. AUTOMATED PREDICTIVE VENDOR PURCHASE ORDERS (PO) MODAL & ENGINE
+    let currentVendorPos = [];
+
+    async function openVendorPoModal() {
+      const modal = document.getElementById('vendor-po-modal');
+      if (modal) modal.classList.remove('hidden');
+      loadVendorPos();
+    }
+
+    function closeVendorPoModal() {
+      const modal = document.getElementById('vendor-po-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function loadVendorPos() {
+      const multInput = document.getElementById('po-festival-multiplier');
+      const mult = multInput ? multInput.value : '2.4';
+      const container = document.getElementById('vendor-po-cards-container');
+      if (container) container.innerHTML = `<div class="py-12 text-center text-gray-500 font-bold"><i class="fa-solid fa-spinner fa-spin text-xl text-indigo-600 mb-2"></i><br>Analyzing Lunisolar Festival Data &amp; Generating Vendor POs...</div>`;
+
+      try {
+        const res = await fetch(`/api/po/generate?multiplier=${mult}`).then(r => r.json());
+        if (res && res.success && Array.isArray(res.purchase_orders)) {
+          currentVendorPos = res.purchase_orders;
+          renderVendorPoCards(res.purchase_orders);
+        } else {
+          throw new Error(res.error || 'Failed to generate POs');
+        }
+      } catch (err) {
+        if (container) {
+          container.innerHTML = `<div class="p-6 bg-red-50 text-red-700 rounded-2xl border border-red-200 text-xs">Error generating POs: ${err.message}</div>`;
+        }
+      }
+    }
+
+    function renderVendorPoCards(pos) {
+      const container = document.getElementById('vendor-po-cards-container');
+      if (!container) return;
+
+      if (pos.length === 0) {
+        container.innerHTML = `<div class="py-12 text-center text-gray-500 font-bold"><i class="fa-solid fa-boxes-packing text-4xl text-gray-300 mb-3 block"></i>No urgent purchase orders needed! All vendor stock levels meet festival safety thresholds.</div>`;
+        return;
+      }
+
+      container.innerHTML = pos.map((po, idx) => `
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-xs hover:shadow-md transition p-4 space-y-3">
+          <div class="flex items-center justify-between border-b border-gray-100 pb-2">
+            <div>
+              <span class="text-[10px] font-black tracking-wider uppercase px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">${po.po_number}</span>
+              <h4 class="font-black text-gray-900 text-sm mt-1">${po.vendor.vendor_name}</h4>
+              <p class="text-[11px] text-gray-500">Contact: ${po.vendor.contact_person} • Ph: ${po.vendor.phone}</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-gray-500 font-medium">Estimated PO Cost</span>
+              <div class="text-base font-black text-emerald-800">₹${po.total_order_cost.toLocaleString('en-IN')}</div>
+              <span class="text-[10px] text-gray-400 font-bold">${po.total_units} units across ${po.items.length} item(s)</span>
+            </div>
+          </div>
+
+          <div class="max-h-[160px] overflow-y-auto">
+            <table class="w-full text-left text-[11px]">
+              <thead class="bg-gray-50 text-gray-700 font-bold sticky top-0">
+                <tr>
+                  <th class="py-1 px-2">Item Description</th>
+                  <th class="py-1 px-2 text-center">Cur Stock</th>
+                  <th class="py-1 px-2 text-center">Safety Thresh</th>
+                  <th class="py-1 px-2 text-center font-black text-indigo-900">PO Qty</th>
+                  <th class="py-1 px-2 text-right">Rate</th>
+                  <th class="py-1 px-2 text-right">Total</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                ${po.items.map(it => `
+                  <tr>
+                    <td class="py-1 px-2 font-medium text-gray-900">${it.title}</td>
+                    <td class="py-1 px-2 text-center text-red-600 font-bold">${it.current_stock}</td>
+                    <td class="py-1 px-2 text-center text-gray-500">${it.safety_stock_threshold}</td>
+                    <td class="py-1 px-2 text-center font-black text-indigo-700 bg-indigo-50/50 rounded">${it.reorder_qty}</td>
+                    <td class="py-1 px-2 text-right font-mono">₹${it.unit_cost.toFixed(2)}</td>
+                    <td class="py-1 px-2 text-right font-black font-mono">₹${it.total_cost.toFixed(2)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="flex items-center justify-end gap-2 pt-2 border-t border-gray-100">
+            <button onclick="printVendorPo(${idx})" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer">
+              <i class="fa-solid fa-print"></i> Print PO Slip
+            </button>
+            <button onclick="exportVendorPoCsv(${idx})" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer">
+              <i class="fa-solid fa-file-csv"></i> Download CSV
+            </button>
+            <button onclick="whatsappVendorPo(${idx})" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black flex items-center gap-1.5 transition shadow-xs cursor-pointer">
+              <i class="fa-brands fa-whatsapp"></i> WhatsApp Vendor
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function printVendorPo(idx) {
+      const po = currentVendorPos[idx];
+      if (!po) return;
+      window.print();
+    }
+
+    function exportVendorPoCsv(idx) {
+      const po = currentVendorPos[idx];
+      if (!po) return;
+
+      let csv = `PURCHASE ORDER - RANI HYPER MARKET\n`;
+      csv += `PO Number,${po.po_number},Date,${po.po_date}\n`;
+      csv += `Vendor,${po.vendor.vendor_name},Contact,${po.vendor.contact_person} (${po.vendor.phone})\n`;
+      csv += `Delivery Due Date,${po.delivery_due_date},Total Value (INR),${po.total_order_cost.toFixed(2)}\n\n`;
+      csv += `Item Description,Current Stock,Safety Threshold,Order Qty,Trade Cost (INR),Total Value (INR)\n`;
+
+      po.items.forEach(it => {
+        csv += `"${it.title.replace(/"/g, '""')}",${it.current_stock},${it.safety_stock_threshold},${it.reorder_qty},${it.unit_cost.toFixed(2)},${it.total_cost.toFixed(2)}\n`;
+      });
+      csv += `\n"TOTAL",,,,${po.total_units},,${po.total_order_cost.toFixed(2)}\n`;
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${po.po_number}_${po.vendor.vendor_id}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function whatsappVendorPo(idx) {
+      const po = currentVendorPos[idx];
+      if (!po) return;
+
+      const itemsText = po.items.map((it, i) => `${i + 1}. *${it.title}* - Qty: *${it.reorder_qty}* units (Rate: ₹${it.unit_cost.toFixed(2)})`).join('\n');
+      const cleanPhone = (po.vendor.phone || '').replace(/[^0-9]/g, '');
+      const fullPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+
+      const msg = 
+`📦 *PURCHASE ORDER: ${po.po_number}*
+🏢 *RANI HYPER MARKET*, Bodinayakanur
+📅 *Date:* ${po.po_date} | *Due:* ${po.delivery_due_date}
+👤 *To:* ${po.vendor.vendor_name} (Attn: ${po.vendor.contact_person})
+------------------------------------------
+Dear Sir, please supply the following festival stock items urgently:
+
+${itemsText}
+------------------------------------------
+📦 *Total Units:* ${po.total_units}
+💰 *Estimated Order Value:* *₹${po.total_order_cost.toLocaleString('en-IN')}*
+------------------------------------------
+Please confirm delivery schedule to 77088 34547. Thank you!`;
+
+      const waUrl = fullPhone ? `https://api.whatsapp.com/send?phone=${fullPhone}&text=${encodeURIComponent(msg)}` : `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+      window.open(waUrl, '_blank');
+    }
+
+    // 5. CUSTOMER REORDERS CRM ENGINE MODAL
+    let currentCustomerReorders = [];
+
+    async function openCustomerReordersModal() {
+      const modal = document.getElementById('customer-reorders-modal');
+      if (modal) modal.classList.remove('hidden');
+      loadCustomerReorders();
+    }
+
+    function closeCustomerReordersModal() {
+      const modal = document.getElementById('customer-reorders-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function loadCustomerReorders() {
+      const container = document.getElementById('reorders-crm-cards-container');
+      if (container) container.innerHTML = `<div class="py-12 text-center text-gray-500 font-bold"><i class="fa-solid fa-spinner fa-spin text-xl text-teal-600 mb-2"></i><br>Analyzing Customer Grocery Consumption Cycles...</div>`;
+
+      try {
+        const res = await fetch('/api/reorders/predict').then(r => r.json());
+        if (res && res.success && Array.isArray(res.reorder_candidates)) {
+          currentCustomerReorders = res.reorder_candidates;
+          renderCustomerReordersList(res.reorder_candidates);
+        } else {
+          throw new Error(res.error || 'Failed to scan reorders');
+        }
+      } catch (err) {
+        if (container) container.innerHTML = `<div class="p-6 bg-red-50 text-red-700 rounded-2xl border border-red-200 text-xs">Error: ${err.message}</div>`;
+      }
+    }
+
+    function renderCustomerReordersList(reorders) {
+      const container = document.getElementById('reorders-crm-cards-container');
+      if (!container) return;
+
+      if (reorders.length === 0) {
+        container.innerHTML = `<div class="py-12 text-center text-gray-500 font-bold"><i class="fa-solid fa-user-check text-4xl text-gray-300 mb-3 block"></i>No customer staple replenishment due today! All monthly grocery cycles are currently fresh.</div>`;
+        return;
+      }
+
+      container.innerHTML = reorders.map((c, idx) => `
+        <div class="bg-white rounded-2xl border border-gray-200 p-4 shadow-xs hover:shadow-md transition flex items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <h4 class="font-black text-gray-900 text-sm">${c.customer_name}</h4>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-100 text-teal-800">Bought ${c.last_order_days_ago} days ago</span>
+            </div>
+            <p class="text-xs text-gray-500">Ph: <span class="font-mono font-bold text-gray-800">${c.customer_phone}</span> • Last Bill: ${c.last_order_date}</p>
+            <div class="flex items-center gap-1.5 flex-wrap text-[11px] text-gray-700">
+              <span class="font-bold text-gray-500">Frequent Staples:</span>
+              ${c.staple_items.map(st => `<span class="bg-gray-100 px-2 py-0.5 rounded-lg border border-gray-200 font-medium">${st}</span>`).join('')}
+            </div>
+          </div>
+          <div>
+            <button onclick="sendCustomerReorderWhatsApp(${idx})" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black flex items-center gap-1.5 transition shadow-xs cursor-pointer">
+              <i class="fa-brands fa-whatsapp text-sm"></i> Remind on WhatsApp
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function sendCustomerReorderWhatsApp(idx) {
+      const c = currentCustomerReorders[idx];
+      if (!c) return;
+
+      const itemsList = c.staple_items.slice(0, 3).join(', ');
+      const cleanPhone = String(c.customer_phone).replace(/[^0-9]/g, '');
+      const fullPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+
+      const msg = 
+`வணக்கம் ${c.customer_name}! 🛒
+*ராணி ஹைப்பர் மார்க்கெட்* போடிநாயக்கனூர்.
+
+உங்களுடைய மாதாந்திர மளிகைப் பொருட்கள் (${itemsList}) வாங்கி சுமார் *${c.last_order_days_ago} நாட்கள்* ஆகிறது.
+
+மீண்டும் தேவைப்படுகிறதா? 
+இப்போதே வாட்ஸ்அப் மூலமாகவோ அல்லது எங்கள் ஆன்லைன் ஸ்டோர் மூலமாகவோ ஆர்டர் செய்யுங்கள்:
+🔗 https://rani-hyper-market.vercel.app/store.html
+
+🚚 *இலவச ஹோம் டெலிவரி உண்டு!*
+📞 தொடர்பு: 77088 34547`;
+
+      const waUrl = `https://api.whatsapp.com/send?phone=${fullPhone}&text=${encodeURIComponent(msg)}`;
+      window.open(waUrl, '_blank');
     }
 
     function handleLogout() {

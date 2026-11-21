@@ -635,7 +635,7 @@ if (reqPath === '/api/pos/status') {
       try {
         const parsed = JSON.parse(body || '{}');
         const generativeAi = require('./generativeAiAdvisor');
-        const testRes = await generativeAi.testGeminiApiKey(parsed.apiKey || parsed.geminiApiKey || '', parsed.model || 'gemini-1.5-flash');
+        const testRes = await generativeAi.testGeminiApiKey(parsed.apiKey || parsed.geminiApiKey || '', parsed.model || 'gemini-2.5-flash');
         res.writeHead(testRes.success ? 200 : 400, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(testRes));
       } catch (err) {

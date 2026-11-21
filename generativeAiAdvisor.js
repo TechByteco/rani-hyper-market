@@ -126,10 +126,15 @@ function buildStoreContext(fy = '2026-2027') {
  */
 function requestGemini(model, apiKey, contents) {
   return new Promise((resolve, reject) => {
+    const cleanKey = String(apiKey || '').trim();
+    if (!cleanKey) {
+      return reject(new Error('API key is missing or empty'));
+    }
+    const cleanModel = String(model || 'gemini-2.5-flash').trim().replace(/^models\//, '');
+
     const postData = JSON.stringify({
       contents: contents,
       generationConfig: {
-        temperature: 0.35,
         maxOutputTokens: 2500
       }
     });
@@ -137,11 +142,12 @@ function requestGemini(model, apiKey, contents) {
     const options = {
       hostname: 'generativelanguage.googleapis.com',
       port: 443,
-      path: '/v1beta/models/' + encodeURIComponent(model) + ':generateContent?key=' + encodeURIComponent(apiKey),
+      path: '/v1beta/models/' + encodeURIComponent(cleanModel) + ':generateContent?key=' + encodeURIComponent(cleanKey),
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(postData)
+        'Content-Length': Buffer.byteLength(postData),
+        'x-goog-api-key': cleanKey
       }
     };
 
@@ -153,24 +159,38 @@ function requestGemini(model, apiKey, contents) {
           try {
             const json = JSON.parse(data);
             const candidate = json.candidates?.[0];
-            const text = candidate?.content?.parts?.[0]?.text;
-            if (text && text.trim().length > 10) {
-              resolve(text.trim());
+            let text = '';
+            if (candidate?.content?.parts && Array.isArray(candidate.content.parts)) {
+              const textParts = candidate.content.parts.filter(p => !p.thought && typeof p.text === 'string');
+              if (textParts.length > 0) {
+                text = textParts.map(p => p.text).join('').trim();
+              } else {
+                text = candidate.content.parts.map(p => p.text || '').join('').trim();
+              }
+            }
+            if (text && text.length > 5) {
+              resolve(text);
             } else {
-              reject(new Error('Empty candidate text from Gemini'));
+              reject(new Error('Empty candidate text from Gemini (' + cleanModel + ')'));
             }
           } catch (e) {
             reject(new Error('JSON parse error: ' + e.message));
           }
         } else {
-          reject(new Error('HTTP ' + res.statusCode + ': ' + data.slice(0, 200)));
+          try {
+            const errJson = JSON.parse(data);
+            const msg = errJson.error?.message || ('HTTP ' + res.statusCode);
+            reject(new Error(msg));
+          } catch (_) {
+            reject(new Error('HTTP ' + res.statusCode + ': ' + data.slice(0, 200)));
+          }
         }
       });
     });
 
-    req.setTimeout(12000, () => {
+    req.setTimeout(18000, () => {
       req.destroy();
-      reject(new Error('Gemini API timeout after 12s'));
+      reject(new Error('Gemini API timeout after 18s (' + cleanModel + ')'));
     });
 
     req.on('error', (err) => {
@@ -184,20 +204,27 @@ function requestGemini(model, apiKey, contents) {
 
 /**
  * Executes Google Gemini Cloud AI with comprehensive live store context
- * Supports gemini-2.5-flash, gemini-3.8-flash, gemini-3.5-flash-lite with multi-turn history
+ * Supports gemini-2.5-flash, gemini-2.0-flash, gemini-2.0-flash-lite, gemini-1.5-flash with multi-turn history
  */
 async function callGeminiApi(question, fy, context, config, history = []) {
-  const apiKey = config.geminiApiKey || process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+  const rawKey = config.geminiApiKey || process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+  const apiKey = String(rawKey || '').trim();
   if (!apiKey || !config.useCloudIfAvailable) {
     return null;
   }
 
-  let primaryModel = (config.model || 'gemini-1.5-flash').trim();
-  if (primaryModel.includes('2.5') || primaryModel.includes('3.8') || primaryModel.includes('3.5')) {
-    primaryModel = 'gemini-1.5-flash';
-  }
-  const fallbackModels = [primaryModel, 'gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-1.5-pro', 'gemini-1.5-flash-8b']
-    .filter((v, i, a) => a.indexOf(v) === i);
+  const primaryModel = String(config.model || 'gemini-2.5-flash').trim().replace(/^models\//, '');
+  const candidateModels = [
+    primaryModel,
+    'gemini-2.5-flash',
+    'gemini-2.0-flash',
+    'gemini-2.0-flash-lite',
+    'gemini-1.5-flash',
+    'gemini-1.5-flash-8b',
+    'gemini-2.5-pro',
+    'gemini-1.5-pro'
+  ];
+  const fallbackModels = [...new Set(candidateModels.filter(Boolean))];
 
   const systemPrompt = `You are the executive Chief AI Business Intelligence & Operations Advisor for "Rani Hyper Market" (SNS Market), the leading supermarket and hypermarket in Bodinayakanur, Theni District, Tamil Nadu, India.
 The store owner and managing director is Rani (Rani Amma). You have direct, live integration with Rani Hyper Market's POS checkout database covering 5 financial years (2022–2027) with 141,311 real customer transactions and ₹2.61 Crore in empirical turnover.
@@ -278,9 +305,9 @@ YOUR INSTRUCTIONS:
         };
       }
     } catch (err) {
-      console.warn(`Gemini API call with model ${model} failed: ${err.message}.`);
-      if (err.message && (err.message.includes('400') || err.message.includes('API key not valid') || err.message.includes('API_KEY_INVALID') || err.message.includes('403'))) {
-        break; // Key invalid or forbidden, don't waste time retrying other models
+      console.warn(`Gemini API call with model ${model} failed: ${err.message}. Retrying fallback...`);
+      if (err.message && (err.message.includes('API_KEY_INVALID') || err.message.includes('API key not valid') || err.message.includes('403') || err.message.includes('CONSUMER_SUSPENDED'))) {
+        break; // Key itself is invalid or forbidden, don't waste time retrying other models
       }
     }
   }
@@ -1041,18 +1068,27 @@ async function generateAnswer(question, fy = '2026-2027', history = [], override
 
 /**
  * Tests a Gemini API Key with a lightweight ping
+ * Tests against latest Gemini Flash models with graceful waterfall fallback
  */
-async function testGeminiApiKey(apiKey, model = 'gemini-1.5-flash') {
+async function testGeminiApiKey(apiKey, model = 'gemini-2.5-flash') {
   if (!apiKey || !apiKey.trim()) {
     return { success: false, error: 'Gemini API key is required' };
   }
   const cleanKey = apiKey.trim();
-  let cleanModel = (model || 'gemini-1.5-flash').trim();
-  if (cleanModel.includes('2.5') || cleanModel.includes('3.8') || cleanModel.includes('3.5')) {
-    cleanModel = 'gemini-1.5-flash';
-  }
-  const testModels = [cleanModel, 'gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-1.5-pro']
-    .filter((v, i, a) => a.indexOf(v) === i);
+  const cleanModel = String(model || 'gemini-2.5-flash').trim().replace(/^models\//, '');
+  const candidateModels = [
+    cleanModel,
+    'gemini-2.5-flash',
+    'gemini-2.0-flash',
+    'gemini-2.0-flash-lite',
+    'gemini-1.5-flash',
+    'gemini-1.5-flash-8b',
+    'gemini-2.5-pro',
+    'gemini-1.5-pro'
+  ];
+  const testModels = [...new Set(candidateModels.filter(Boolean))];
+
+  let lastError = '';
   for (const m of testModels) {
     try {
       const res = await requestGemini(m, cleanKey, [
@@ -1062,15 +1098,16 @@ async function testGeminiApiKey(apiKey, model = 'gemini-1.5-flash') {
         return { success: true, message: res, model: m };
       }
     } catch (err) {
+      lastError = err.message;
       console.warn(`Test key failed with model ${m}:`, err.message);
-      if (err.message && (err.message.includes('400') || err.message.includes('API key not valid') || err.message.includes('API_KEY_INVALID') || err.message.includes('403'))) {
-        break;
+      if (err.message && (err.message.includes('API_KEY_INVALID') || err.message.includes('API key not valid') || err.message.includes('403') || err.message.includes('CONSUMER_SUSPENDED'))) {
+        break; // Key itself rejected by Google
       }
     }
   }
   return {
     success: false,
-    error: 'Gemini API call failed. Please check that your key is valid and has Gemini API enabled in Google AI Studio.'
+    error: lastError || 'Gemini API call failed. Please verify that your key is valid and has Gemini API enabled in Google AI Studio.'
   };
 }
 
@@ -1159,8 +1196,19 @@ Generate a JSON object (strictly valid JSON only, without markdown fences or bac
 }`;
 
       const contents = [{ role: 'user', parts: [{ text: geminiPrompt }] }];
-      const model = config.model || 'gemini-1.5-flash';
-      const rawText = await requestGemini(model, apiKey, contents);
+      const primaryModel = String(config.model || 'gemini-2.5-flash').trim().replace(/^models\//, '');
+      const marketingModels = [...new Set([primaryModel, 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'])];
+      let rawText = null;
+      let usedModel = primaryModel;
+      for (const m of marketingModels) {
+        try {
+          rawText = await requestGemini(m, apiKey, contents);
+          if (rawText) {
+            usedModel = m;
+            break;
+          }
+        } catch (_) {}
+      }
       if (rawText) {
         let cleanJson = rawText.trim();
         if (cleanJson.startsWith('```json')) cleanJson = cleanJson.replace(/^```json/, '').replace(/```$/, '').trim();
@@ -1168,7 +1216,7 @@ Generate a JSON object (strictly valid JSON only, without markdown fences or bac
         const parsed = JSON.parse(cleanJson);
         return {
           success: true,
-          engine: 'Google Gemini Cloud AI (' + model + ')',
+          engine: 'Google Gemini Cloud AI (' + usedModel + ')',
           formulas,
           copy: parsed
         };

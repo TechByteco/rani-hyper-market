@@ -1016,7 +1016,7 @@ if (reqPath === '/api/pos/status') {
     if (reqPath === '/api/ai/test-key' && req.method === 'POST') {
       const body = await getBody();
       const testKey = body.apiKey || body.geminiApiKey || '';
-      const testModel = body.model || 'gemini-1.5-flash';
+      const testModel = body.model || 'gemini-2.5-flash';
       if (generativeAi && typeof generativeAi.testGeminiApiKey === 'function') {
         const testRes = await generativeAi.testGeminiApiKey(testKey, testModel);
         return sendJson(testRes.success ? 200 : 400, testRes);

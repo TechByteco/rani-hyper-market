@@ -2068,32 +2068,70 @@ function getHistoricalFestivalAnalysis(targetId) {
     }
   });
 
-  // Fast path: Return empirical SQLite-mined dataset for lunisolar festivals across all 5 FYs
+  // Fast path: Return empirical SQLite-mined dataset for all 34 festivals across 5 FYs
   if (MINED_FESTIVAL_EMPIRICAL_DATA) {
     const festKeys = Object.keys(MINED_FESTIVAL_EMPIRICAL_DATA);
     let resolvedKey = null;
     if (targetId && targetId !== 'all') {
-      const tid = targetId.toLowerCase().trim();
+      const tid = targetId.toLowerCase().trim().replace(/[\s\-_]+/g, '_');
       if (MINED_FESTIVAL_EMPIRICAL_DATA[tid]) {
         resolvedKey = tid;
-      } else if (tid.includes('pongal')) {
-        resolvedKey = 'pongal_harvest';
-      } else if (tid.includes('ayudha') || tid.includes('pooja') || tid.includes('ayutha')) {
-        resolvedKey = 'ayudha_pooja';
-      } else if (tid.includes('vinayakar') || tid.includes('chaturthi') || tid.includes('ganesh')) {
-        resolvedKey = 'vinayakar_chaturthi';
-      } else if (tid.includes('karthigai') || tid.includes('deepam')) {
-        resolvedKey = 'karthigai_deepam';
-      } else if (tid.includes('krishna') || tid.includes('jayanthi') || tid.includes('gokulashtami')) {
-        resolvedKey = 'krishna_jayanthi';
-      } else if (tid.includes('tamil new year') || tid.includes('puthandu') || tid.includes('varusha')) {
-        resolvedKey = 'tamil_new_year';
-      } else if (tid.includes('aadi') || tid.includes('perukku')) {
-        resolvedKey = 'aadi_18_perukku';
-      } else if (tid.includes('diwali') || tid.includes('deepavali')) {
-        resolvedKey = 'deepavali';
       } else {
-        resolvedKey = festKeys.find(k => k.includes(tid) || tid.includes(k)) || 'deepavali';
+        const synonymMap = {
+          'pongal': 'pongal_harvest',
+          'mattu_pongal': 'mattu_kanum_pongal',
+          'kanum_pongal': 'mattu_kanum_pongal',
+          'bhogi': 'bhogi_festival',
+          'shivaratri': 'maha_shivaratri',
+          'shivarathri': 'maha_shivaratri',
+          'poosam': 'thai_poosam',
+          'thaipoosam': 'thai_poosam',
+          'chithirai': 'chithirai_thiruvizha',
+          'puthandu': 'tamil_new_year',
+          'tamil_new_year': 'tamil_new_year',
+          'easter': 'easter_good_friday',
+          'good_friday': 'easter_good_friday',
+          'mariamman': 'mariamman_koozh_thiruvizha',
+          'koozh': 'mariamman_koozh_thiruvizha',
+          'school': 'school_reopening_rush',
+          'bakrid': 'bakrid_eid',
+          'eid': 'bakrid_eid',
+          'aadi': 'aadi_18_perukku',
+          'aadi18': 'aadi_18_perukku',
+          'perukku': 'aadi_18_perukku',
+          'aadi_velli': 'aadi_velli_pooja',
+          'varalakshmi': 'varalakshmi_vratham',
+          'krishna': 'krishna_jayanthi',
+          'gokulashtami': 'krishna_jayanthi',
+          'vinayakar': 'vinayakar_chaturthi',
+          'ganesh': 'vinayakar_chaturthi',
+          'onam': 'onam_sadhya',
+          'navaratri': 'navaratri_sundal_days',
+          'golu': 'navaratri_sundal_days',
+          'sundal': 'navaratri_sundal_days',
+          'ayudha': 'ayudha_pooja',
+          'saraswathi': 'ayudha_pooja',
+          'ayutha': 'ayudha_pooja',
+          'deepavali': 'deepavali',
+          'diwali': 'deepavali',
+          'karthigai': 'karthigai_deepam',
+          'deepam': 'karthigai_deepam',
+          'margazhi': 'margazhi_temple_month',
+          'christmas': 'christmas_newyear',
+          'new_year': 'new_year_day',
+          'newyear': 'new_year_day',
+          'payday': 'payday_cycle',
+          'salary': 'payday_cycle'
+        };
+        for (const [syn, k] of Object.entries(synonymMap)) {
+          if (tid.includes(syn) || syn.includes(tid)) {
+            resolvedKey = k;
+            break;
+          }
+        }
+        if (!resolvedKey) {
+          resolvedKey = festKeys.find(k => k.includes(tid) || tid.includes(k)) || 'karthigai_deepam';
+        }
       }
     }
 
@@ -2102,6 +2140,8 @@ function getHistoricalFestivalAnalysis(targetId) {
       if (!d) return null;
       const meta = d.meta || {};
       const windows = meta.windows || {};
+      const masterFest = (ALL_YEAR_FESTIVALS || []).find(f => f.id === k) || {};
+      
       const stockList = (d.recommended_stock_needs || []).map(item => {
         const sh = item.sales_history || {};
         const lookup = currentStockMap.get((item.name || '').trim().toLowerCase()) || {};
@@ -2131,38 +2171,41 @@ function getHistoricalFestivalAnalysis(targetId) {
 
       const totalBudget = stockList.reduce((acc, c) => acc + (c.estPurchaseBudget || 0), 0);
       const totalRev = stockList.reduce((acc, c) => acc + (c.estGrossRevenue || 0), 0);
-      const w26 = windows['2026'] || [];
-      let date2026 = w26[1] || '2026-11-08';
-      let cutoff2026 = '2026-10-28';
-      if (k === 'karthigai_deepam') {
-        date2026 = '2026-11-24';
-        cutoff2026 = '2026-11-18';
-      } else {
+      
+      const mD26 = masterFest.datesByYear && masterFest.datesByYear['2026'];
+      const date2026 = masterFest.date2026 || (typeof mD26 === 'object' ? mD26.date : mD26) || (windows['2026'] ? windows['2026'][1] : '2026-11-24');
+      let cutoff2026 = masterFest.cutoff2026 || (typeof mD26 === 'object' ? mD26.cutoff : null);
+      if (!cutoff2026 && date2026 && date2026.startsWith('2026-')) {
         const dObj = new Date(date2026);
         dObj.setDate(dObj.getDate() - 7);
         cutoff2026 = dObj.toISOString().slice(0, 10);
       }
 
+      const dByYearOut = {};
+      ['2022', '2023', '2024', '2025', '2026', '2027', '2028'].forEach(yr => {
+        const mYr = masterFest.datesByYear && masterFest.datesByYear[yr];
+        if (mYr) {
+          dByYearOut[yr] = typeof mYr === 'object' ? mYr.date : mYr;
+        } else if (windows[yr]) {
+          dByYearOut[yr] = windows[yr][1] || windows[yr][0];
+        } else {
+          dByYearOut[yr] = '-';
+        }
+      });
+
       return {
         festivalId: k,
-        name: meta.name || k,
-        tamilName: meta.tamil || '',
-        fullName: meta.name || k,
-        tier: meta.tier || 'Peak',
-        calendarRule: meta.rule || '',
-        category: meta.category || '',
+        name: masterFest.name || meta.name || k,
+        tamilName: masterFest.tamilName || meta.tamil || '',
+        fullName: masterFest.fullName || meta.name || k,
+        tier: masterFest.tier || meta.tier || 'Peak',
+        calendarRule: masterFest.calendarRule || meta.rule || '',
+        category: masterFest.category || meta.category || '',
         date2026,
         cutoff2026,
-        datesByYear: {
-          '2022': windows['2022'] ? windows['2022'][1] : '-',
-          '2023': windows['2023'] ? windows['2023'][1] : '-',
-          '2024': windows['2024'] ? windows['2024'][1] : '-',
-          '2025': windows['2025'] ? windows['2025'][1] : '-',
-          '2026': windows['2026'] ? windows['2026'][1] : '-',
-          '2027': windows['2027'] ? windows['2027'][1] : '-'
-        },
-        surgeExpected: meta.tier && meta.tier.includes('+') ? '+' + meta.tier.split('+')[1].split(')')[0] : '+95%',
-        tag: meta.tier || 'Festival Surge',
+        datesByYear: dByYearOut,
+        surgeExpected: masterFest.surgePercent || (meta.tier && meta.tier.includes('+') ? '+' + meta.tier.split('+')[1].split(')')[0] : '+95%'),
+        tag: masterFest.tag || meta.tier || 'Festival Surge',
         yearlyMetrics: d.yearly_metrics || {},
         topProducts: d.all_time_top_products || [],
         totalProductsAnalyzed: stockList.length,
@@ -2177,10 +2220,16 @@ function getHistoricalFestivalAnalysis(targetId) {
       return formatFest(resolvedKey);
     }
     if (!targetId || targetId === 'all') {
-      return festKeys.map(k => formatFest(k));
+      const list = festKeys.map(k => formatFest(k)).filter(Boolean);
+      return list.sort((a, b) => {
+        const da = a.date2026 || '9999';
+        const db = b.date2026 || '9999';
+        return da.localeCompare(db);
+      });
     }
   }
 
+  // Fallback if MINED_FESTIVAL_EMPIRICAL_DATA is null
   const allAnalyses = [];
   const festivalsToProcess = (targetId && targetId !== 'all')
     ? FESTIVAL_CALENDAR_CONFIG.filter(f => f.id === targetId || f.name.toLowerCase().includes(targetId.toLowerCase()))
@@ -2188,119 +2237,19 @@ function getHistoricalFestivalAnalysis(targetId) {
 
   festivalsToProcess.forEach(fest => {
     const dByYear = fest.datesByYear || {};
-    const w23 = dByYear['2023']?.window;
-    const w24 = dByYear['2024']?.window;
-    const w25 = dByYear['2025']?.window;
-
-    function buildFetchSql(w) {
-      if (!w) return null;
-      return "SELECT p.Name as name, pv.SalesRate as price, pv.PurchaseRate as cost, pv.Units as unit, round(sum(tp.Quantity), 1) as qty, round(sum(tp.NetValue), 2) as rev, count(distinct t.Id) as bills FROM TransProducts tp JOIN Transactions t ON tp.TransId = t.Id JOIN ProductVariants pv ON tp.VariantId = pv.Id JOIN Products p ON pv.ProductId = p.Id WHERE t.VouType = 27 AND t.VoucherDate >= '" + w.start + "' AND t.VoucherDate <= '" + w.end + "' AND tp.Quantity < 5000 GROUP BY p.Name ORDER BY qty DESC LIMIT 35;";
-    }
-
-    const rows23 = w23 ? queryHistoricalDb(HISTORICAL_DB_PATHS['2023'], buildFetchSql(w23)) : [];
-    const rows24 = w24 ? queryHistoricalDb(HISTORICAL_DB_PATHS['2024'], buildFetchSql(w24)) : [];
-    const rows25 = w25 ? queryHistoricalDb(HISTORICAL_DB_PATHS['2025'], buildFetchSql(w25)) : [];
-
-    const productMap = new Map();
-
-    function ingestYearRows(rows, yrKey) {
-      rows.forEach(r => {
-        const key = r.name.trim();
-        const lookup = currentStockMap.get(key.toLowerCase()) || {};
-        if (!productMap.has(key)) {
-          productMap.set(key, {
-            name: key,
-            price: r.price || lookup.price || 0,
-            cost: r.cost || lookup.cost || Math.round((r.price || 100) * 0.75),
-            unit: r.unit || lookup.unit || 'Unit',
-            currentStock: lookup.stock || 0,
-            qty2023: 0, rev2023: 0,
-            qty2024: 0, rev2024: 0,
-            qty2025: 0, rev2025: 0
-          });
-        }
-        const obj = productMap.get(key);
-        obj['qty' + yrKey] = r.qty;
-        obj['rev' + yrKey] = r.rev;
-        if (r.price && !obj.price) obj.price = r.price;
-        if (r.cost && !obj.cost) obj.cost = r.cost;
-      });
-    }
-
-    ingestYearRows(rows23, '2023');
-    ingestYearRows(rows24, '2024');
-    ingestYearRows(rows25, '2025');
-
-    const stockNeedList = [];
-    productMap.forEach(item => {
-      const recorded = [item.qty2023, item.qty2024, item.qty2025].filter(q => q > 0);
-      const avgHistoricalQty = recorded.length > 0 
-        ? Math.round((recorded.reduce((a, b) => a + b, 0) / recorded.length) * 10) / 10 
-        : 1;
-
-      // Recommended procurement: +10% YoY demand expansion + 25% surge buffer
-      const recommendedOrderQty = Math.max(1, Math.ceil(avgHistoricalQty * 1.10 * 1.25));
-      const netToOrder = Math.max(0, recommendedOrderQty - (item.currentStock > 0 ? item.currentStock : 0));
-      const estPurchaseBudget = Math.round(recommendedOrderQty * item.cost);
-      const estGrossRevenue = Math.round(recommendedOrderQty * item.price);
-      const estProfit = Math.round(estGrossRevenue - estPurchaseBudget);
-
-      let priority = 'NORMAL';
-      if (avgHistoricalQty >= 35 || item.name.includes('Oil') || item.name.includes('Batter') || item.name.includes('Ghee') || item.name.includes('Egg') || item.name.includes('Vellam') || item.name.includes('Rava') || item.name.includes('Rice') || item.name.includes('Sugar')) {
-        priority = avgHistoricalQty >= 60 ? 'CRITICAL' : 'HIGH';
-      }
-
-      stockNeedList.push({
-        ...item,
-        avgHistoricalQty,
-        recommendedOrderQty,
-        netToOrder,
-        estPurchaseBudget,
-        estGrossRevenue,
-        estProfit,
-        priority
-      });
-    });
-
-    stockNeedList.sort((a, b) => (b.qty2023 + b.qty2024 + b.qty2025) - (a.qty2023 + a.qty2024 + a.qty2025));
-
-    let finalStockList = stockNeedList.slice(0, 20);
-    // If SQLite has no rows for this window, fall back directly to the curated stockNeedList
-    if (finalStockList.length === 0 && Array.isArray(fest.stockNeedList) && fest.stockNeedList.length > 0) {
-      finalStockList = fest.stockNeedList.map(item => {
-        const lookup = currentStockMap.get(item.name.toLowerCase()) || {};
-        const curStock = lookup.stock !== undefined ? lookup.stock : (item.currentStock || 0);
-        const price = lookup.price || item.price || 100;
-        const cost = lookup.cost || item.cost || Math.round(price * 0.75);
-        const recOrder = item.recommendedOrderQty || 50;
-        const netToOrder = Math.max(0, recOrder - curStock);
-        const estPurchaseBudget = item.estPurchaseBudget || Math.round(recOrder * cost);
-        const estGrossRevenue = Math.round(recOrder * price);
-        const estProfit = Math.round(estGrossRevenue - estPurchaseBudget);
-        return {
-          name: item.name,
-          unit: item.unit || lookup.unit || 'Unit',
-          price,
-          cost,
-          currentStock: curStock,
-          qty2023: item.qty2023 || Math.round(recOrder * 0.7),
-          qty2024: item.qty2024 || Math.round(recOrder * 0.85),
-          qty2025: item.qty2025 || Math.round(recOrder * 0.95),
-          avgHistoricalQty: Math.round(((item.qty2023 || 0) + (item.qty2024 || 0) + (item.qty2025 || 0)) / 3) || Math.round(recOrder * 0.8),
-          recommendedOrderQty: recOrder,
-          netToOrder,
-          estPurchaseBudget,
-          estGrossRevenue,
-          estProfit,
-          priority: item.priority || 'NORMAL'
-        };
-      });
-    }
-
+    const finalStockList = Array.isArray(fest.stockNeedList) ? fest.stockNeedList : [];
     const totalRecommendedBudget = finalStockList.reduce((acc, c) => acc + (c.estPurchaseBudget || 0), 0);
-    const totalProjectedRevenue = finalStockList.reduce((acc, c) => acc + (c.estGrossRevenue || 0), 0);
+    const totalProjectedRevenue = finalStockList.reduce((acc, c) => acc + (c.estGrossRevenue || (c.recommendedOrderQty * c.price) || 0), 0);
 
-    const activeYearConfig = fest.datesByYear?.['2026'] || fest.datesByYear?.['2027'] || {};
+    const mD26 = dByYear['2026'];
+    const date2026 = fest.date2026 || (typeof mD26 === 'object' ? mD26.date : mD26) || '2026-11-24';
+    const cutoff2026 = fest.cutoff2026 || (typeof mD26 === 'object' ? mD26.cutoff : null) || '2026-11-18';
+
+    const dByYearOut = {};
+    ['2022', '2023', '2024', '2025', '2026', '2027', '2028'].forEach(yr => {
+      const mYr = dByYear[yr];
+      dByYearOut[yr] = mYr ? (typeof mYr === 'object' ? mYr.date : mYr) : '-';
+    });
 
     const analysis = {
       festivalId: fest.id,
@@ -2311,17 +2260,11 @@ function getHistoricalFestivalAnalysis(targetId) {
       monthName: fest.monthName,
       quarter: fest.quarter,
       calendarRule: fest.calendarRule,
-      date2026: activeYearConfig.date || '2026-11-08',
-      cutoff2026: activeYearConfig.cutoff || fest.procurementCutoff || '2026-10-28',
-      datesByYear: {
-        '2023': fest.datesByYear?.['2023']?.date || '-',
-        '2024': fest.datesByYear?.['2024']?.date || '-',
-        '2025': fest.datesByYear?.['2025']?.date || '-',
-        '2026': fest.datesByYear?.['2026']?.date || '-',
-        '2027': fest.datesByYear?.['2027']?.date || '-'
-      },
-      surgeExpected: fest.surgePercent || fest.surgeExpected,
-      tag: fest.tag,
+      date2026,
+      cutoff2026,
+      datesByYear: dByYearOut,
+      surgeExpected: fest.surgePercent || '+95%',
+      tag: fest.tag || 'Festival Surge',
       totalProductsAnalyzed: finalStockList.length,
       totalRecommendedBudget,
       totalProjectedRevenue,
@@ -2355,13 +2298,16 @@ function getFestivalCalendarMatrix() {
     tier: f.tier || 'Standard',
     surgeExpected: f.surgePercent || f.surgeExpected,
     dates: {
-      '2023': f.datesByYear?.['2023']?.date || '-',
-      '2024': f.datesByYear?.['2024']?.date || '-',
-      '2025': f.datesByYear?.['2025']?.date || '-',
-      '2026': f.datesByYear?.['2026']?.date || '-',
-      '2027': f.datesByYear?.['2027']?.date || '-'
+      '2022': f.datesByYear?.['2022']?.date || (typeof f.datesByYear?.['2022'] === 'string' ? f.datesByYear['2022'] : '-'),
+      '2023': f.datesByYear?.['2023']?.date || (typeof f.datesByYear?.['2023'] === 'string' ? f.datesByYear['2023'] : '-'),
+      '2024': f.datesByYear?.['2024']?.date || (typeof f.datesByYear?.['2024'] === 'string' ? f.datesByYear['2024'] : '-'),
+      '2025': f.datesByYear?.['2025']?.date || (typeof f.datesByYear?.['2025'] === 'string' ? f.datesByYear['2025'] : '-'),
+      '2026': f.datesByYear?.['2026']?.date || f.date2026 || (typeof f.datesByYear?.['2026'] === 'string' ? f.datesByYear['2026'] : '-'),
+      '2027': f.datesByYear?.['2027']?.date || (typeof f.datesByYear?.['2027'] === 'string' ? f.datesByYear['2027'] : '-'),
+      '2028': f.datesByYear?.['2028']?.date || (typeof f.datesByYear?.['2028'] === 'string' ? f.datesByYear['2028'] : '-')
     },
-    cutoff2026: f.datesByYear?.['2026']?.cutoff || f.datesByYear?.['2027']?.cutoff || f.procurementCutoff || '-'
+    date2026: f.date2026 || f.datesByYear?.['2026']?.date || '-',
+    cutoff2026: f.cutoff2026 || f.datesByYear?.['2026']?.cutoff || '-'
   }));
 }
 

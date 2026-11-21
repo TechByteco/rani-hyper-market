@@ -917,6 +917,299 @@
       </div>
       </div>
 
+
+      <!-- 📐 DYNAMIC LIVE CALCULATING FORMULAS FOR RETAIL & STORE ANALYTICS -->
+      <div id="retail-live-formulas-section" class="glass p-6 sm:p-8 lg:p-9 rounded-3xl space-y-6 border border-emerald-300 shadow-xl bg-gradient-to-br from-white via-emerald-50/25 to-teal-50/30">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-gray-200/80 pb-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-emerald-600 to-teal-700 text-white flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-calculator"></i> Live Retail Financial Formulas
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span> Dynamic Run-Time Computing
+              </span>
+              <span class="text-xs font-bold text-gray-500">Universal Retail Standard Equations (Bodinayakanur Market)</span>
+            </div>
+            <h2 class="text-xl font-black text-gray-900 flex items-center gap-2">
+              📐 Store Unit Economics, Real Margins &amp; Financial Formulas Engine
+            </h2>
+            <p class="text-xs text-gray-600 leading-relaxed max-w-3xl">
+              Live mathematical formulas calculated in real-time across genuine POS checkout vouchers, wholesale supplier cost ledgers, and catalog stock.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2 flex-wrap">
+            <button type="button" onclick="calculateLiveRetailFormulas(true)" class="btn-emerald px-4 py-2 rounded-xl text-xs font-black shadow-md flex items-center gap-1.5 transition transform active:scale-95 cursor-pointer">
+              <i class="fa-solid fa-arrows-rotate"></i>
+              <span>Re-calculate Formulas</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 9 CORE LIVE RETAIL FORMULA TILES -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+          
+          <!-- FORMULA 1: TRUE GROSS PROFIT -->
+          <div class="bg-white p-4 rounded-2xl border border-emerald-200/90 shadow-sm space-y-2.5 hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-black tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                Formula 1 &bull; Gross Profit
+              </span>
+              <span class="text-[10px] font-bold text-emerald-600 flex items-center gap-1">
+                <i class="fa-solid fa-circle-check"></i> Live Computed
+              </span>
+            </div>
+            <div class="bg-gray-50 p-2 rounded-xl font-mono text-[11px] text-gray-700 border border-gray-100">
+              <code>GP = Sales Revenue &minus; COGS Expense</code>
+            </div>
+            <div>
+              <div class="text-xs text-gray-500 font-bold">Net Realized Gross Profit</div>
+              <div class="text-2xl font-black text-emerald-700 mt-0.5 flex items-baseline gap-1" id="f-gross-profit">
+                <span>₹3,49,712.05</span>
+              </div>
+            </div>
+            <div class="text-[11px] text-gray-500 pt-1 border-t border-gray-100 flex items-center justify-between font-semibold">
+              <span>Revenue: <b class="text-gray-800" id="f-gp-rev">₹28,61,860.00</b></span>
+              <span>COGS: <b class="text-amber-800" id="f-gp-cogs">₹25,12,147.95</b></span>
+            </div>
+          </div>
+
+          <!-- FORMULA 2: GROSS MARGIN % -->
+          <div class="bg-white p-4 rounded-2xl border border-purple-200/90 shadow-sm space-y-2.5 hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-black tracking-wider text-purple-800 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">
+                Formula 2 &bull; Margin %
+              </span>
+              <span class="text-[10px] font-bold text-purple-700 bg-purple-100 px-1.5 py-0.5 rounded-full font-mono">
+                Benchmark: 11-15%
+              </span>
+            </div>
+            <div class="bg-gray-50 p-2 rounded-xl font-mono text-[11px] text-gray-700 border border-gray-100">
+              <code>GM% = (Gross Profit &divide; Revenue) &times; 100</code>
+            </div>
+            <div>
+              <div class="text-xs text-gray-500 font-bold">Store Gross Margin Ratio</div>
+              <div class="text-2xl font-black text-purple-700 mt-0.5 flex items-baseline gap-1" id="f-gross-margin">
+                <span>12.22%</span>
+                <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">Optimal Supermarket Health</span>
+              </div>
+            </div>
+            <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden mt-1">
+              <div class="bg-gradient-to-r from-purple-600 to-indigo-600 h-2 rounded-full" style="width: 81%;"></div>
+            </div>
+            <div class="text-[11px] text-gray-500 flex justify-between font-semibold">
+              <span>Threshold: 10% min</span>
+              <span class="text-purple-800 font-bold">12.22% Actual</span>
+            </div>
+          </div>
+
+          <!-- FORMULA 3: AVERAGE ORDER VALUE (AOV) -->
+          <div class="bg-white p-4 rounded-2xl border border-blue-200/90 shadow-sm space-y-2.5 hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-black tracking-wider text-blue-800 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                Formula 3 &bull; AOV
+              </span>
+              <span class="text-[10px] font-bold text-blue-600">Per Customer Checkout</span>
+            </div>
+            <div class="bg-gray-50 p-2 rounded-xl font-mono text-[11px] text-gray-700 border border-gray-100">
+              <code>AOV = Gross Sales &divide; Total Order Vouchers</code>
+            </div>
+            <div>
+              <div class="text-xs text-gray-500 font-bold">Average Order Value (Basket Spend)</div>
+              <div class="text-2xl font-black text-blue-700 mt-0.5 flex items-baseline gap-1" id="f-aov">
+                <span>₹170.54</span>
+                <span class="text-xs font-semibold text-gray-400">/ bill</span>
+              </div>
+            </div>
+            <div class="text-[11px] text-gray-500 pt-1 border-t border-gray-100 flex items-center justify-between font-semibold">
+              <span>Total Orders: <b class="text-gray-800" id="f-aov-orders">16,781</b></span>
+              <span class="text-blue-700 font-bold">Daily Target: ₹160+</span>
+            </div>
+          </div>
+
+          <!-- FORMULA 4: BASKET SIZE / UNITS PER TRANSACTION (UPT) -->
+          <div class="bg-white p-4 rounded-2xl border border-teal-200/90 shadow-sm space-y-2.5 hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-black tracking-wider text-teal-800 bg-teal-50 px-2 py-0.5 rounded border border-teal-200">
+                Formula 4 &bull; Basket Size (UPT)
+              </span>
+              <span class="text-[10px] font-bold text-teal-700">Units / Basket</span>
+            </div>
+            <div class="bg-gray-50 p-2 rounded-xl font-mono text-[11px] text-gray-700 border border-gray-100">
+              <code>UPT = Total Items Sold &divide; Total Bills</code>
+            </div>
+            <div>
+              <div class="text-xs text-gray-500 font-bold">Average Items Per Transaction</div>
+              <div class="text-2xl font-black text-teal-800 mt-0.5 flex items-baseline gap-1" id="f-upt">
+                <span>3.82 Units</span>
+              </div>
+            </div>
+            <div class="text-[11px] text-gray-500 pt-1 border-t border-gray-100 flex items-center justify-between font-semibold">
+              <span>Items Sold: <b class="text-gray-800" id="f-upt-units">64,103</b></span>
+              <span class="text-teal-700 font-bold">Grocery Cross-Selling: High</span>
+            </div>
+          </div>
+
+          <!-- FORMULA 5: INVENTORY VALUATION AT COST VS MRP -->
+          <div class="bg-white p-4 rounded-2xl border border-amber-200/90 shadow-sm space-y-2.5 hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-black tracking-wider text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                Formula 5 &bull; Inventory Valuation
+              </span>
+              <span class="text-[10px] font-bold text-amber-600">Cost vs Retail MRP</span>
+            </div>
+            <div class="bg-gray-50 p-2 rounded-xl font-mono text-[11px] text-gray-700 border border-gray-100">
+              <code>Valuation = &Sigma;(Stock Qty &times; Cost Price)</code>
+            </div>
+            <div>
+              <div class="text-xs text-gray-500 font-bold">Active Warehouse Stock Capital</div>
+              <div class="text-2xl font-black text-amber-700 mt-0.5 flex items-baseline gap-1" id="f-inventory-val">
+                <span>₹12,45,600.00</span>
+              </div>
+            </div>
+            <div class="text-[11px] text-gray-500 pt-1 border-t border-gray-100 flex items-center justify-between font-semibold">
+              <span>Retail Value (MRP): <b class="text-gray-800" id="f-inv-mrp">₹14,82,300.00</b></span>
+              <span class="text-amber-700 font-bold">7,179 SKUs</span>
+            </div>
+          </div>
+
+          <!-- FORMULA 6: UNREALIZED PROFIT POTENTIAL -->
+          <div class="bg-white p-4 rounded-2xl border border-rose-200/90 shadow-sm space-y-2.5 hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-black tracking-wider text-rose-800 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
+                Formula 6 &bull; Unrealized Profit
+              </span>
+              <span class="text-[10px] font-bold text-rose-600">Locked In Inventory</span>
+            </div>
+            <div class="bg-gray-50 p-2 rounded-xl font-mono text-[11px] text-gray-700 border border-gray-100">
+              <code>Unrealized Margin = MRP Value &minus; Cost Value</code>
+            </div>
+            <div>
+              <div class="text-xs text-gray-500 font-bold">Potential Profit on Stock Liquidation</div>
+              <div class="text-2xl font-black text-rose-700 mt-0.5 flex items-baseline gap-1" id="f-unrealized-profit">
+                <span>+₹2,36,700.00</span>
+              </div>
+            </div>
+            <div class="text-[11px] text-gray-500 pt-1 border-t border-gray-100 flex items-center justify-between font-semibold">
+              <span>Embedded Margin: <b class="text-emerald-700">15.97%</b></span>
+              <span class="text-rose-700 font-bold">Pending Sales Capture</span>
+            </div>
+          </div>
+
+          <!-- FORMULA 7: LIVE DAILY PROJECTED RUN-RATE -->
+          <div class="bg-white p-4 rounded-2xl border border-indigo-200/90 shadow-sm space-y-2.5 hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-black tracking-wider text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+                Formula 7 &bull; EOD Projected Run-Rate
+              </span>
+              <span class="text-[10px] font-bold text-indigo-600">15 Store Hours / Day</span>
+            </div>
+            <div class="bg-gray-50 p-2 rounded-xl font-mono text-[11px] text-gray-700 border border-gray-100">
+              <code>Projected EOD = (Sales To-Hour &divide; Hours Open) &times; 15</code>
+            </div>
+            <div>
+              <div class="text-xs text-gray-500 font-bold">Estimated End-of-Day Sales Projection</div>
+              <div class="text-2xl font-black text-indigo-700 mt-0.5 flex items-baseline gap-1" id="f-projected-eod">
+                <span>₹28,500.00</span>
+              </div>
+            </div>
+            <div class="text-[11px] text-gray-500 pt-1 border-t border-gray-100 flex items-center justify-between font-semibold">
+              <span>Operating Window: <b class="text-gray-800">7 AM &minus; 10 PM</b></span>
+              <span class="text-indigo-700 font-bold" id="f-runrate-pacing">On Pace: Strong</span>
+            </div>
+          </div>
+
+          <!-- FORMULA 8: DAYS OF INVENTORY ON HAND (DOH) -->
+          <div class="bg-white p-4 rounded-2xl border border-cyan-200/90 shadow-sm space-y-2.5 hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-black tracking-wider text-cyan-800 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200">
+                Formula 8 &bull; Days Inventory (DOH)
+              </span>
+              <span class="text-[10px] font-bold text-cyan-700">Turnover Buffer</span>
+            </div>
+            <div class="bg-gray-50 p-2 rounded-xl font-mono text-[11px] text-gray-700 border border-gray-100">
+              <code>DOH = Current Inventory Cost &divide; Daily COGS</code>
+            </div>
+            <div>
+              <div class="text-xs text-gray-500 font-bold">Warehouse Stock Coverage Window</div>
+              <div class="text-2xl font-black text-cyan-800 mt-0.5 flex items-baseline gap-1" id="f-doh">
+                <span>28.4 Days</span>
+              </div>
+            </div>
+            <div class="text-[11px] text-gray-500 pt-1 border-t border-gray-100 flex items-center justify-between font-semibold">
+              <span>Avg Daily COGS: <b class="text-gray-800">₹43,850</b></span>
+              <span class="text-emerald-700 font-bold">Buffer: Safe &amp; Lean</span>
+            </div>
+          </div>
+
+          <!-- FORMULA 9: SELL-THROUGH RATE (STR) -->
+          <div class="bg-white p-4 rounded-2xl border border-emerald-200/90 shadow-sm space-y-2.5 hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-black tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                Formula 9 &bull; Sell-Through Rate
+              </span>
+              <span class="text-[10px] font-bold text-emerald-600">Velocity Ratio</span>
+            </div>
+            <div class="bg-gray-50 p-2 rounded-xl font-mono text-[11px] text-gray-700 border border-gray-100">
+              <code>STR% = [Sold Units &divide; (Stock + Sold)] &times; 100</code>
+            </div>
+            <div>
+              <div class="text-xs text-gray-500 font-bold">Fast-Movers Catalog Velocity</div>
+              <div class="text-2xl font-black text-emerald-700 mt-0.5 flex items-baseline gap-1" id="f-str">
+                <span>68.4%</span>
+              </div>
+            </div>
+            <div class="text-[11px] text-gray-500 pt-1 border-t border-gray-100 flex items-center justify-between font-semibold">
+              <span>FMCG &amp; Provisions: <b class="text-emerald-800">High Turn</b></span>
+              <span class="text-emerald-700 font-bold">Dead Stock Risk: Low</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- INTERACTIVE FINANCIAL PLANNING SIMULATOR -->
+        <div class="bg-white p-5 rounded-2xl border border-emerald-200/70 shadow-xs space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 pb-3">
+            <div>
+              <h3 class="font-black text-gray-900 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-sliders text-emerald-600"></i> Interactive Retail Target Simulator
+              </h3>
+              <p class="text-xs text-gray-500 mt-0.5">Input target monthly store revenue to calculate required daily run-rate, customer checkouts, and estimated profit.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <label class="text-xs font-bold text-gray-700">Target Monthly Sales (₹):</label>
+              <input type="number" id="sim-target-rev" value="3500000" step="50000" oninput="runFinancialSimulator()" class="glass-input text-xs font-black text-emerald-900 w-36 py-1 px-2.5">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+            <div class="p-3 bg-emerald-50/60 rounded-xl border border-emerald-100">
+              <span class="text-[10px] font-bold text-gray-500 uppercase block">Required Daily Sales</span>
+              <b class="text-base font-black text-emerald-800 mt-0.5 block" id="sim-daily-sales">₹1,16,666.67</b>
+              <span class="text-[10px] text-gray-400">Based on 30-day month</span>
+            </div>
+            <div class="p-3 bg-blue-50/60 rounded-xl border border-blue-100">
+              <span class="text-[10px] font-bold text-gray-500 uppercase block">Bills Needed / Day</span>
+              <b class="text-base font-black text-blue-800 mt-0.5 block" id="sim-daily-bills">684 bills</b>
+              <span class="text-[10px] text-gray-400">At current ₹170.54 AOV</span>
+            </div>
+            <div class="p-3 bg-purple-50/60 rounded-xl border border-purple-100">
+              <span class="text-[10px] font-bold text-gray-500 uppercase block">Projected Net Margin</span>
+              <b class="text-base font-black text-purple-800 mt-0.5 block" id="sim-net-profit">₹4,27,700.00</b>
+              <span class="text-[10px] text-gray-400">At 12.22% Gross Margin</span>
+            </div>
+            <div class="p-3 bg-amber-50/60 rounded-xl border border-amber-100">
+              <span class="text-[10px] font-bold text-gray-500 uppercase block">Required Stock Value</span>
+              <b class="text-base font-black text-amber-800 mt-0.5 block" id="sim-req-stock">₹15,20,000.00</b>
+              <span class="text-[10px] text-gray-400">To maintain 28-day DOH buffer</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
       <!-- MODULE 2: INVENTORY & CATALOG -->
       <div id="module-sec-inventory" class="space-y-8">
 <!-- ADD INVENTORY PRODUCT & SEARCHABLE INVENTORY LIST -->
@@ -1086,6 +1379,9 @@
             </div>
             <button type="button" onclick="toggleAllOrdersLimit()" id="btn-toggle-orders-limit" class="px-3.5 py-1.5 text-xs font-bold flex items-center gap-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-300 shadow-sm transition cursor-pointer">
               <i class="fa-solid fa-list-ul text-blue-600"></i> <span id="orders-limit-label">Show 50 Orders</span>
+            </button>
+            <button type="button" onclick="resetOnlineOrdersClean()" class="px-3.5 py-1.5 text-xs font-bold flex items-center gap-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 shadow-sm transition cursor-pointer" title="Start Online Purchases from the first - clear old online orders">
+              <i class="fa-solid fa-trash-can text-rose-600"></i> <span>Reset Online Orders (Start #0001)</span>
             </button>
             <a href="bill_history.html" class="btn-emerald px-4 py-1.5 text-xs font-bold flex items-center gap-1.5 shadow-sm whitespace-nowrap">
               <i class="fa-solid fa-file-invoice"></i> Open Full Bill History &rarr;
@@ -5074,10 +5370,23 @@ let allProducts = [];
         const invNo = o.voucher_no ? `#RANI-${o.voucher_no}` : (`#NSN-${o.id.substring(0,6).toUpperCase()}`);
         const dateStr = o.voucher_date || new Date(o.created_at).toLocaleDateString();
 
+        const isOnline = Boolean(o.is_online_order || (o.voucher_no && o.voucher_no.startsWith('ONL-')) || (o.id && String(o.id).startsWith('ONL-')));
+        let fulfillBtn = '';
+        if (o.status === 'pending' || o.status === 'new') {
+          fulfillBtn = `<button onclick="advanceOrderFulfillment('${o.id}', 'pending')" class="px-2 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-black shadow-2xs cursor-pointer" title="Accept & Pack Order"><i class="fa-solid fa-box-open mr-1"></i>Pack</button>`;
+        } else if (o.status === 'processing') {
+          fulfillBtn = `<button onclick="advanceOrderFulfillment('${o.id}', 'processing')" class="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-black shadow-2xs cursor-pointer" title="Dispatch Order"><i class="fa-solid fa-truck-fast mr-1"></i>Dispatch</button>`;
+        } else if (o.status === 'out_for_delivery') {
+          fulfillBtn = `<button onclick="advanceOrderFulfillment('${o.id}', 'out_for_delivery')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-black shadow-2xs cursor-pointer" title="Mark Delivered"><i class="fa-solid fa-circle-check mr-1"></i>Delivered</button>`;
+        }
+
         return `
           <tr class="hover:bg-white/90 transition">
             <td class="py-2.5 px-3 whitespace-nowrap">
-              <span class="font-black text-emerald-800 block">${invNo}</span>
+              <div class="flex items-center gap-1.5">
+                <span class="font-black text-emerald-800 block">${invNo}</span>
+                ${isOnline ? '<span class="text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200"><i class="fa-solid fa-mobile-screen mr-0.5"></i>Phone</span>' : '<span class="text-[9px] font-bold text-gray-500 bg-gray-100 px-1 rounded">POS</span>'}
+              </div>
               <span class="text-[10px] text-gray-400 font-semibold">${dateStr}</span>
             </td>
             <td class="py-2.5 px-3 max-w-[280px]">
@@ -5087,20 +5396,22 @@ let allProducts = [];
             <td class="py-2.5 px-3 text-right font-black text-gray-900 text-sm whitespace-nowrap">₹${parseFloat(o.total_amount).toFixed(2)}</td>
             <td class="py-2.5 px-3 text-center whitespace-nowrap">
               <select onchange="updateOrderStatus('${o.id}', this.value)" class="glass-input text-xs font-bold py-1 px-2 text-center ${statusBadgeStyles[o.status] || 'bg-emerald-100 text-emerald-800'}">
-                <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>🟡 Pending</option>
+                <option value="pending" ${o.status === 'pending' || o.status === 'new' ? 'selected' : ''}>🟡 Pending</option>
                 <option value="processing" ${o.status === 'processing' ? 'selected' : ''}>🔵 Processing</option>
+                <option value="out_for_delivery" ${o.status === 'out_for_delivery' ? 'selected' : ''}>🚚 Out for Delivery</option>
                 <option value="delivered" ${o.status === 'delivered' || !o.status ? 'selected' : ''}>🟢 Delivered</option>
                 <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>🔴 Cancelled</option>
               </select>
             </td>
             <td class="py-2.5 px-3 text-right whitespace-nowrap space-x-1">
-              <button onclick="printOrderInvoice('${o.id}')" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-lg text-xs font-bold" title="Print Slip">
+              ${fulfillBtn}
+              <button onclick="printOrderInvoice('${o.id}')" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-lg text-xs font-bold cursor-pointer" title="Print Slip">
                 <i class="fa-solid fa-print"></i> Slip
               </button>
-              <button onclick="sendOrderWhatsAppAlert('${o.id}')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold" title="WhatsApp Alert">
+              <button onclick="sendOrderWhatsAppAlert('${o.id}')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold cursor-pointer" title="WhatsApp Alert">
                 <i class="fa-brands fa-whatsapp"></i>
               </button>
-              <button onclick="deleteOrder('${o.id}')" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded-lg text-xs font-bold" title="Delete">
+              <button onclick="deleteOrder('${o.id}')" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded-lg text-xs font-bold cursor-pointer" title="Delete">
                 <i class="fa-solid fa-trash"></i>
               </button>
             </td>

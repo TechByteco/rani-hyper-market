@@ -10,9 +10,137 @@
  */
 
 const https = require('https');
+const fs = require('fs');
+const path = require('path');
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://lofykatlypiywrziwtdp.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY || 'sb_publishable_8-vFFctJnZYUTZFCmV2rqg_LgHuYjrn';
+
+const ONLINE_ORDERS_FILES = [
+  path.join(__dirname, 'data', 'online_orders.json'),
+  path.join(__dirname, 'public', 'online_orders.json'),
+  path.join(process.cwd(), 'data', 'online_orders.json')
+];
+
+function readLocalOnlineOrders() {
+  for (const fp of ONLINE_ORDERS_FILES) {
+    try {
+      if (fs.existsSync(fp)) {
+        const raw = fs.readFileSync(fp, 'utf8');
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (e) {}
+  }
+  return [];
+}
+
+function writeLocalOnlineOrders(orders) {
+  const data = JSON.stringify(orders, null, 2);
+  ONLINE_ORDERS_FILES.forEach(fp => {
+    try {
+      const dir = path.dirname(fp);
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(fp, data, 'utf8');
+    } catch (e) {}
+  });
+}
+
+/**
+ * Saves incoming customer phone order and syncs to Supabase
+ */
+async function saveOnlineOrder(orderData) {
+  if (!orderData) throw new Error('Order data is missing');
+
+  const orders = readLocalOnlineOrders();
+  const now = new Date();
+  const orderId = orderData.id || orderData.orderId || ('RHM-ORD-' + String(orders.length + 1).padStart(4, '0'));
+  const invId = orderData.invId || ('RANI-ONL-' + Math.floor(100000 + Math.random() * 900000));
+
+  // Sanitize and structure the new order
+  const newOrder = {
+    id: orderId,
+    invId: invId,
+    voucher_no: invId,
+    order_no: orderId,
+    customer_name: (orderData.customer_name || orderData.name || 'Valued Shopper').toString().replace(/[<>]/g, ''),
+    customer_phone: (orderData.customer_phone || orderData.phone || '').toString().replace(/[^0-9]/g, ''),
+    shipping_address: (orderData.shipping_address || orderData.fullAddress || 'Store Pickup / Bodinayakanur').toString().replace(/[<>]/g, ''),
+    delivery_notes: (orderData.delivery_notes || orderData.instructions || '').toString().replace(/[<>]/g, ''),
+    timeslot: orderData.timeslot || 'Standard Delivery (24-48 hrs)',
+    items: Array.isArray(orderData.items) ? orderData.items : [],
+    total_amount: parseFloat(orderData.total_amount || orderData.totalAmount || 0),
+    gross_mrp: parseFloat(orderData.gross_mrp || orderData.grossMrp || 0),
+    total_savings: parseFloat(orderData.total_savings || orderData.totalSavings || 0),
+    payment_method: orderData.payment_method || orderData.paymentMethod || 'Google Pay (GPay & UPI)',
+    payment_status: orderData.payment_status || (orderData.payment_method === 'Cash on Delivery' ? 'pending_cod' : 'paid'),
+    status: 'new', // 'new' | 'packed' | 'out_for_delivery' | 'delivered' | 'cancelled'
+    source: 'Mobile Online Storefront',
+    created_at: orderData.created_at || now.toISOString(),
+    timestamp: now.getTime()
+  };
+
+  // Prepend to local orders
+  orders.unshift(newOrder);
+  writeLocalOnlineOrders(orders);
+
+  // Sync upstream to Supabase with canonical tenant ID
+  try {
+    const tenantId = '37a64e83-514d-4b00-b90a-9af172dacdd6';
+    const prodSummary = (newOrder.items && newOrder.items.length > 0)
+      ? newOrder.items.map(i => `${i.title || i.name} (${i.quantity || i.qty || 1}x)`).join(', ')
+      : 'Online Grocery Delivery';
+
+    await syncPushSales([{
+      voucher_no: newOrder.invId,
+      total_amount: newOrder.total_amount,
+      customer_phone: newOrder.customer_phone,
+      customer_name: newOrder.customer_name,
+      shipping_address: `${newOrder.customer_name} | Ph: ${newOrder.customer_phone} | ${newOrder.shipping_address}`,
+      payment_method: newOrder.payment_method,
+      product_summary: prodSummary,
+      status: 'new',
+      created_at: newOrder.created_at
+    }], tenantId);
+  } catch (syncErr) {
+    console.warn('[Online Order] Cloud sync notice:', syncErr.message);
+  }
+
+  return { success: true, order: newOrder, orderId: newOrder.id };
+}
+
+/**
+ * Returns active online orders with optional status filter
+ */
+function getOnlineOrders(limit = 100, status = 'all') {
+  let orders = readLocalOnlineOrders();
+  if (status && status !== 'all') {
+    orders = orders.filter(o => o.status === status);
+  }
+  return orders.slice(0, limit);
+}
+
+/**
+ * Updates an online order's fulfillment status
+ */
+function updateOnlineOrderStatus(orderId, newStatus) {
+  const orders = readLocalOnlineOrders();
+  const target = orders.find(o => o.id === orderId || o.invId === orderId || o.voucher_no === orderId);
+  if (!target) return { success: false, error: 'Order not found' };
+
+  target.status = newStatus;
+  target.updated_at = new Date().toISOString();
+  writeLocalOnlineOrders(orders);
+  return { success: true, order: target };
+}
+
+/**
+ * Safely wipes old test orders so store starts completely fresh from #0001
+ */
+function resetOnlineOrders() {
+  writeLocalOnlineOrders([]);
+  return { success: true, count: 0, message: 'All online orders wiped cleanly. Pipeline reset to start from #0001.' };
+}
 
 /* ══════════════════════════════════════════════════════════════════
    1. BI-DIRECTIONAL LOCAL <-> CLOUD DELTA SYNC ENGINE
@@ -495,5 +623,9 @@ module.exports = {
   formatWhatsAppEbillMessage,
   predictCustomerReorders,
   generatePredictiveVendorPOs,
+  saveOnlineOrder,
+  getOnlineOrders,
+  updateOnlineOrderStatus,
+  resetOnlineOrders,
   VENDOR_CATALOG
 };

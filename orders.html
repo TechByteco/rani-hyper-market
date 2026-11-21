@@ -165,6 +165,11 @@
           <span>Purge Duplicates</span>
         </button>
 
+        <button type="button" onclick="resetAllOnlineOrdersClean()" class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs flex items-center gap-1.5 shadow-sm transition active:scale-95 cursor-pointer" title="Start Online Purchases from the first - clear old online orders">
+          <i class="fa-solid fa-trash-can text-white"></i>
+          <span>Reset Online Orders (Start #0001)</span>
+        </button>
+
         <button type="button" onclick="window.print()" class="px-3 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 no-print">
           <i class="fa-solid fa-print"></i>
           <span class="hidden sm:inline">Print Sheet</span>
@@ -648,15 +653,13 @@
         localStorage.setItem('nsn_orders', JSON.stringify(orders));
       } catch(e) {}
 
-      // 3. If zero orders exist, provide realistic sample orders for in-memory demonstration
-      // (NEVER write mock data to localStorage so live store orders remain 100% clean and unpolluted)
-      if (orders.length === 0) {
-        orders = generateSampleDaywiseOrders();
-      }
-
+      // 3. Do not inject dummy data when empty so the store starts clean from #0001
       allOrders = normalizeOrders(orders);
       applyFilters();
       updatePillsCount();
+
+      // Fetch latest orders asynchronously from backend API
+      fetchLiveOrdersFromBackend();
     }
 
     function refreshOrdersData() {
@@ -926,6 +929,43 @@
       const t = new Date(dateStr).getTime();
       return isNaN(t) ? 0 : t;
     }
+
+    // Reset all online orders to start clean from order #0001
+    async function resetAllOnlineOrdersClean() {
+      if (!confirm('⚠️ Start Online Purchases from the first?\n\nThis will permanently clear all previous test/demo online orders so customer purchases begin cleanly from order #0001.\n\nDo you wish to proceed?')) {
+        return;
+      }
+      try {
+        localStorage.removeItem('nsn_orders');
+        allOrders = [];
+        await fetch('/api/orders/reset', { method: 'POST' }).catch(() => {});
+        applyFilters();
+        updatePillsCount();
+        showToast('✓ All online orders reset! Online store is starting clean from order #0001.');
+      } catch(e) {
+        showToast('Reset error: ' + e.message);
+      }
+    }
+
+    async function fetchLiveOrdersFromBackend() {
+      try {
+        const res = await fetch('/api/orders?status=all').then(r => r.json()).catch(() => null);
+        if (res && res.success && Array.isArray(res.orders)) {
+          const local = JSON.parse(localStorage.getItem('nsn_orders') || '[]');
+          const combined = deduplicateOrders([...res.orders, ...local]);
+          if (combined.length > 0 && combined.length !== allOrders.length) {
+            allOrders = normalizeOrders(combined);
+            applyFilters();
+            updatePillsCount();
+          }
+        }
+      } catch(e) {
+        console.warn('fetchLiveOrders error:', e);
+      }
+    }
+
+    // Live poller every 4 seconds for phone customer orders
+    setInterval(fetchLiveOrdersFromBackend, 4000);
 
     // Purge mock demo orders and clear any duplicates in localStorage
     function purgeDemoAndDuplicates() {

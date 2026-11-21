@@ -17,10 +17,16 @@ const analytics = require('./analyticsService');
 const hypermarketBackend = require('./hypermarketBackend');
 
 const server = http.createServer((req, res) => {
-  // CORS headers
+  // CORS & Universal Web Security Headers (OWASP Top 10 Standards)
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-key, Authorization');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(self), microphone=(self), payment=(self "https://pay.google.com")');
+  res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
@@ -858,6 +864,58 @@ if (reqPath === '/api/pos/status') {
   // RETAIL POS ENHANCEMENTS API SUITE
   // ══════════════════════════════════════════════════════════════════
   const posEnhancement = require('./posEnhancementService');
+
+  // Live Customer Online Purchases Stream & Management
+  if (reqPath === '/api/orders' && req.method === 'GET') {
+    const limit = parseInt(queryParams.get('limit') || '50', 10);
+    const status = queryParams.get('status') || 'all';
+    const orders = posEnhancement.getOnlineOrders(limit, status);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ success: true, count: orders.length, orders }));
+    return;
+  }
+
+  if (reqPath === '/api/orders' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', async () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const result = await posEnhancement.saveOnlineOrder(parsed);
+        res.writeHead(201, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  if (reqPath === '/api/orders/update-status' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const { orderId, status } = JSON.parse(body || '{}');
+        if (!orderId || !status) throw new Error('orderId and status are required');
+        const result = posEnhancement.updateOnlineOrderStatus(orderId, status);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  if (reqPath === '/api/orders/reset' && req.method === 'POST') {
+    const result = posEnhancement.resetOnlineOrders();
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(result));
+    return;
+  }
 
   // 1. Delta Sync Push (Counter Bills -> Supabase Cloud)
   if (reqPath === '/api/sync/push' && req.method === 'POST') {

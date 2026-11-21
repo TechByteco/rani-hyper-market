@@ -1146,7 +1146,7 @@ function startSupabaseHeartbeat() {
   }
 
   ping();
-  setInterval(ping, 6 * 60 * 60 * 1000); // 6 hours
+  setInterval(ping, 5 * 60 * 1000); // Actively ping every 5 minutes to prevent auto-pause
 }
 
 startSupabaseHeartbeat();

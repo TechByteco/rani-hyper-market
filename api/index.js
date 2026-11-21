@@ -658,6 +658,21 @@ if (reqPath === '/api/pos/status') {
       return sendJson(200, []);
     }
 
+    if (reqPath === '/api/ai-analytics/indian-retail-companies' || reqPath === '/api/ai/indian-retail-companies') {
+      const force = reqUrl.searchParams.get('force') === 'true';
+      if (analyticsService && typeof analyticsService.getIndianRetailCompanies === 'function') {
+        try { return sendJson(200, analyticsService.getIndianRetailCompanies(force)); } catch {}
+      }
+      return sendJson(200, { success: false, error: 'Not available' });
+    }
+
+    if (reqPath === '/api/ai-analytics/updato' || reqPath === '/api/ai/updato') {
+      if (analyticsService && typeof analyticsService.runUpdatoAlgorithm === 'function') {
+        try { return sendJson(200, analyticsService.runUpdatoAlgorithm(true)); } catch {}
+      }
+      return sendJson(200, { success: false, error: 'Not available' });
+    }
+
     if (reqPath === '/api/ai/live-pulse' || reqPath === '/api/ai-analytics/live-pulse') {
       if (analyticsService && typeof analyticsService.getLivePulse === 'function') {
         try { return sendJson(200, analyticsService.getLivePulse()); } catch {}

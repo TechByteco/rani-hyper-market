@@ -481,6 +481,19 @@ if (reqPath === '/api/pos/status') {
     return;
   }
 
+  if (reqPath === '/api/ai-analytics/indian-retail-companies' || reqPath === '/api/ai/indian-retail-companies') {
+    const force = queryParams.get('force') === 'true';
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(analytics.getIndianRetailCompanies(force)));
+    return;
+  }
+
+  if (reqPath === '/api/ai-analytics/updato' || reqPath === '/api/ai/updato') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(analytics.runUpdatoAlgorithm(true)));
+    return;
+  }
+
   if (reqPath === '/api/ai/live-pulse' || reqPath === '/api/ai-analytics/live-pulse') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(analytics.getLivePulse()));

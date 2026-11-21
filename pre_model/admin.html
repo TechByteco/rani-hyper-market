@@ -1364,9 +1364,9 @@
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-gray-200/70 pb-3.5">
           <div>
             <h2 class="text-lg font-black text-gray-900 flex items-center gap-2">
-              <i class="fa-solid fa-receipt text-blue-600"></i> Recent Orders &amp; Live Counter Dispatch
+              <i class="fa-solid fa-cart-shopping text-blue-600"></i> Live Online Store Orders (Phone &amp; Web Only)
             </h2>
-            <p class="text-xs text-gray-500 mt-0.5">Quick status management for recent counter &amp; delivery orders. For full accounting archive, use dedicated Bill History.</p>
+            <p class="text-xs text-gray-500 mt-0.5">Showing strictly customer orders placed through the online storefront. Offline SNS Market software counter bills are managed separately in Counter Dispatches &amp; Bill History below.</p>
           </div>
 
           <div class="flex items-center gap-2 flex-wrap">
@@ -3218,7 +3218,8 @@
       }
     }
 let allProducts = [];
-    let allOrders = [];
+    let allOrders = []; // Strictly online store orders
+    let offlineCounterBills = []; // Strictly offline counter POS bills from SNS Market software
     let customerCrmList = [];
     let raniAnalytics = null;
     let currentOrderStatusFilter = 'all';
@@ -3410,55 +3411,56 @@ let allProducts = [];
           renderPosProducts();
         }
 
-        // 3. Orders: Prioritize live orders directly from SQLite database
-        let localOrders = (liveOrdersRes && liveOrdersRes.length > 0) ? liveOrdersRes : (ordersRes || []);
+        // 3. SEPARATE OFFLINE COUNTER POS BILLS VS ONLINE STORE ORDERS
+        // A. Offline POS Bills from SNS Market Desktop Software
+        offlineCounterBills = (liveOrdersRes && liveOrdersRes.length > 0) ? liveOrdersRes : (ordersRes || []);
 
-        // Merge real-time Supabase web store orders
+        // B. Online Store Orders (Strictly from Storefront / Phone checkouts)
+        let rawOnlineOrders = [];
+        try {
+          const onlineBackendRes = await fetch('/api/orders?status=all').then(r => r.json()).catch(() => null);
+          if (onlineBackendRes && onlineBackendRes.success && Array.isArray(onlineBackendRes.orders)) {
+            rawOnlineOrders.push(...onlineBackendRes.orders);
+          }
+        } catch(e) {}
+
+        try {
+          const localStored = JSON.parse(localStorage.getItem('nsn_orders') || '[]');
+          if (Array.isArray(localStored) && localStored.length > 0) {
+            rawOnlineOrders.push(...localStored);
+          }
+        } catch(e) {}
+
+        // Merge real-time Supabase web store orders (strictly online)
         try {
           const { data: sbOrders } = await sb.from('orders').select('*').order('created_at', { ascending: false });
           if (sbOrders && sbOrders.length > 0) {
-            const existingIds = new Set(localOrders.map(o => String(o.id)));
             sbOrders.forEach(o => {
-              if (!existingIds.has(String(o.id))) localOrders.unshift(o);
+              if (isStrictOnlineStoreOrder(o)) rawOnlineOrders.push(o);
             });
           }
         } catch(e) {}
 
-        // Merge local counter POS orders if any
-        try {
-          const posOrders = JSON.parse(localStorage.getItem('nsn_pos_orders') || '[]');
-          if (posOrders && posOrders.length > 0) {
-            const existingIds = new Set(localOrders.map(o => String(o.id)));
-            posOrders.forEach(o => {
-              if (!existingIds.has(String(o.id))) localOrders.unshift(o);
-            });
+        // Strictly filter to ensure zero offline POS bills leak into online orders table
+        const seenOnlineIds = new Set();
+        allOrders = [];
+        rawOnlineOrders.forEach(o => {
+          if (!o || !isStrictOnlineStoreOrder(o)) return;
+          const key = String(o.id || o.invId || o.voucher_no || '');
+          if (!seenOnlineIds.has(key)) {
+            seenOnlineIds.add(key);
+            allOrders.push(o);
           }
-        } catch(e) {}
+        });
 
-        if (localOrders.length > 0) {
-          allOrders = localOrders;
-          
-          const totalCount = posStatusRes && posStatusRes.liveStats ? posStatusRes.liveStats.totalBills : (raniAnalytics ? raniAnalytics.totalOrders : allOrders.length);
-          const counts = {
-            all: totalCount,
-            pending: allOrders.filter(o => o.status === 'pending').length,
-            processing: allOrders.filter(o => o.status === 'processing').length,
-            delivered: totalCount,
-            cancelled: allOrders.filter(o => o.status === 'cancelled').length
-          };
+        // Update Online Store Orders count pills (counts ONLY online orders)
+        updateOnlineOrdersCountPills();
 
-          if (document.getElementById('cnt-all')) document.getElementById('cnt-all').innerText = counts.all.toLocaleString('en-IN');
-          if (document.getElementById('cnt-pending')) document.getElementById('cnt-pending').innerText = counts.pending.toLocaleString('en-IN');
-          if (document.getElementById('cnt-processing')) document.getElementById('cnt-processing').innerText = counts.processing.toLocaleString('en-IN');
-          if (document.getElementById('cnt-delivered')) document.getElementById('cnt-delivered').innerText = counts.delivered.toLocaleString('en-IN');
-          if (document.getElementById('cnt-cancelled')) document.getElementById('cnt-cancelled').innerText = counts.cancelled.toLocaleString('en-IN');
-
-          renderOrdersListTable();
-          renderJournalLedger();
-          renderLiveCounterDispatches();
-          updatePaymentBreakdown();
-          updateTopSellersLeaderboard();
-        }
+        renderOrdersListTable();
+        renderJournalLedger();
+        renderLiveCounterDispatches();
+        updatePaymentBreakdown();
+        updateTopSellersLeaderboard();
 
         if (custRes && custRes.length > 0) {
           customerCrmList = custRes;
@@ -3655,7 +3657,8 @@ let allProducts = [];
         dateCostSum = dInfo.cost;
         dateProfitSum = dInfo.profit;
       } else {
-        const dateOrders = allOrders.filter(o => {
+        const orderPool = (offlineCounterBills && offlineCounterBills.length > 0) ? offlineCounterBills : allOrders;
+        const dateOrders = orderPool.filter(o => {
           const oDateStr = (o.voucher_date || new Date(o.created_at).toISOString().slice(0, 10));
           return oDateStr === pickerVal && o.status !== 'cancelled';
         });
@@ -4590,8 +4593,9 @@ let allProducts = [];
         }
 
       } else {
-        // Fallback calculation from allOrders
-        let validOrders = allOrders.filter(o => o.status !== 'cancelled');
+        // Fallback calculation from offlineCounterBills & allOrders
+        const orderPool = (offlineCounterBills && offlineCounterBills.length > 0) ? offlineCounterBills : allOrders;
+        let validOrders = orderPool.filter(o => o.status !== 'cancelled');
         if (selectedSpecificDate) {
           validOrders = validOrders.filter(o => (o.voucher_date || new Date(o.created_at).toISOString().slice(0, 10)) === selectedSpecificDate);
         }
@@ -5263,43 +5267,62 @@ let allProducts = [];
       }
     }
 
-    /* ORDERS MANAGEMENT */
+    /* ORDERS MANAGEMENT (STRICTLY ONLINE STORE PURCHASES) */
     async function loadOrders() {
-      let orders = null;
+      // 1. Load offline POS counter bills into offlineCounterBills
       try {
-        const res = await sb.from('orders').select('*').order('created_at', { ascending: false });
-        if (res && res.data && res.data.length > 0) orders = res.data;
+        const resp = await fetch('rani_orders.json');
+        if (resp.ok) {
+          offlineCounterBills = await resp.json();
+        }
       } catch (e) {}
 
-      if (!orders || orders.length === 0) {
-        try {
-          const resp = await fetch('rani_orders.json');
-          if (resp.ok) orders = await resp.json();
-        } catch (e) {}
+      // 2. Load strictly online customer orders into allOrders
+      let rawOnlineOrders = [];
+      try {
+        const onlineBackendRes = await fetch('/api/orders?status=all').then(r => r.json()).catch(() => null);
+        if (onlineBackendRes && onlineBackendRes.success && Array.isArray(onlineBackendRes.orders)) {
+          rawOnlineOrders.push(...onlineBackendRes.orders);
+        }
+      } catch(e) {}
+
+      try {
+        const localStored = JSON.parse(localStorage.getItem('nsn_orders') || '[]');
+        if (Array.isArray(localStored) && localStored.length > 0) {
+          rawOnlineOrders.push(...localStored);
+        }
+      } catch(e) {}
+
+      try {
+        const { data: sbOrders } = await sb.from('orders').select('*').order('created_at', { ascending: false });
+        if (sbOrders && sbOrders.length > 0) {
+          sbOrders.forEach(o => {
+            if (isStrictOnlineStoreOrder(o)) rawOnlineOrders.push(o);
+          });
+        }
+      } catch (e) {}
+
+      const seenOnlineIds = new Set();
+      allOrders = [];
+      rawOnlineOrders.forEach(o => {
+        if (!o || !isStrictOnlineStoreOrder(o)) return;
+        const key = String(o.id || o.invId || o.voucher_no || '');
+        if (!seenOnlineIds.has(key)) {
+          seenOnlineIds.add(key);
+          allOrders.push(o);
+        }
+      });
+
+      updateOnlineOrdersCountPills();
+
+      if (document.getElementById('stat-orders')) {
+        const totalBills = (offlineCounterBills.length || 0) + (allOrders.length || 0);
+        document.getElementById('stat-orders').innerText = totalBills.toLocaleString('en-IN');
       }
 
-      if (!orders || orders.length === 0) return;
-
-      allOrders = orders;
-      
-      const counts = {
-        all: orders.length,
-        pending: orders.filter(o => o.status === 'pending').length,
-        processing: orders.filter(o => o.status === 'processing').length,
-        delivered: orders.filter(o => o.status === 'delivered').length,
-        cancelled: orders.filter(o => o.status === 'cancelled').length
-      };
-
-      if (document.getElementById('cnt-all')) document.getElementById('cnt-all').innerText = counts.all;
-      if (document.getElementById('cnt-pending')) document.getElementById('cnt-pending').innerText = counts.pending;
-      if (document.getElementById('cnt-processing')) document.getElementById('cnt-processing').innerText = counts.processing;
-      if (document.getElementById('cnt-delivered')) document.getElementById('cnt-delivered').innerText = counts.delivered;
-      if (document.getElementById('cnt-cancelled')) document.getElementById('cnt-cancelled').innerText = counts.cancelled;
-
-      if (document.getElementById('stat-orders')) document.getElementById('stat-orders').innerText = orders.length;
-
-      const rev = orders.filter(o => o.status !== 'cancelled').reduce((sum, o) => sum + parseFloat(o.total_amount || 0), 0);
-      if (document.getElementById('stat-revenue')) document.getElementById('stat-revenue').innerText = '₹' + rev.toFixed(2);
+      const totalPool = [...offlineCounterBills, ...allOrders];
+      const rev = totalPool.filter(o => o.status !== 'cancelled').reduce((sum, o) => sum + parseFloat(o.total_amount || 0), 0);
+      if (document.getElementById('stat-revenue')) document.getElementById('stat-revenue').innerText = '₹' + rev.toLocaleString('en-IN', { minimumFractionDigits: 2 });
 
       renderOrdersListTable();
       renderJournalLedger();
@@ -5340,6 +5363,37 @@ let allProducts = [];
       renderOrdersListTable();
     }
 
+    // Strict Online Store Order Validator (Excludes all offline SNS Market software bills)
+    function isStrictOnlineStoreOrder(o) {
+      if (!o) return false;
+      const id = String(o.id || '').toUpperCase();
+      const inv = String(o.invId || o.voucher_no || '').toUpperCase();
+      // Exclude mock demo orders
+      if (id.startsWith('ORD-RHMTODAY') || id.startsWith('ORD-RHMYEST') || id.startsWith('ORD-RHM-YEST') || id.startsWith('ORD-RHM2DAYS') || id.startsWith('ORD-RHM3DAYS')) return false;
+      if (inv.includes('982101') || inv.includes('982102') || inv.includes('982103') || inv.includes('982104') || inv.includes('981902') || inv.includes('981701') || inv.includes('981601')) return false;
+      // Exclude offline POS counter bills from SNS Market software
+      if (o.source === 'Offline POS' || o.source === 'Desktop App' || o.is_offline_bill) return false;
+      if (id.startsWith('RANI-') && !o.items && !o.timeslot && !o.shipping_address) return false;
+      return true;
+    }
+
+    function updateOnlineOrdersCountPills() {
+      const counts = {
+        all: allOrders.length,
+        pending: allOrders.filter(o => o.status === 'pending' || o.status === 'new').length,
+        processing: allOrders.filter(o => o.status === 'processing').length,
+        out_for_delivery: allOrders.filter(o => o.status === 'out_for_delivery').length,
+        delivered: allOrders.filter(o => o.status === 'delivered').length,
+        cancelled: allOrders.filter(o => o.status === 'cancelled').length
+      };
+
+      if (document.getElementById('cnt-all')) document.getElementById('cnt-all').innerText = counts.all.toLocaleString('en-IN');
+      if (document.getElementById('cnt-pending')) document.getElementById('cnt-pending').innerText = counts.pending.toLocaleString('en-IN');
+      if (document.getElementById('cnt-processing')) document.getElementById('cnt-processing').innerText = counts.processing.toLocaleString('en-IN');
+      if (document.getElementById('cnt-delivered')) document.getElementById('cnt-delivered').innerText = counts.delivered.toLocaleString('en-IN');
+      if (document.getElementById('cnt-cancelled')) document.getElementById('cnt-cancelled').innerText = counts.cancelled.toLocaleString('en-IN');
+    }
+
     function renderOrdersListTable() {
       const tbody = document.getElementById('orders-list-tbody');
       let filtered = allOrders;
@@ -5352,7 +5406,19 @@ let allProducts = [];
       }
 
       if (filtered.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="py-6 text-center text-gray-400">No orders found matching current filter/date.</td></tr>';
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="py-12 text-center text-gray-400">
+              <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-2 text-xl shadow-xs">
+                <i class="fa-solid fa-cart-shopping"></i>
+              </div>
+              <p class="text-sm font-bold text-gray-800">No Online Store Orders Yet &bull; Clean Slate</p>
+              <p class="text-xs text-gray-500 max-w-md mx-auto mt-1">
+                Showing strictly customer purchases placed through the online storefront. Offline SNS Market software counter bills (24,901) are archived in Counter Dispatches and Bill History below.
+              </p>
+            </td>
+          </tr>
+        `;
         return;
       }
 
@@ -5433,6 +5499,7 @@ let allProducts = [];
       }
 
       tbody.innerHTML = rowsHtml;
+      updateOnlineOrdersCountPills();
     }
 
     function openPublicStore() {
@@ -5494,7 +5561,8 @@ let allProducts = [];
       const thead = document.getElementById('journal-thead');
       const tbody = document.getElementById('journal-tbody');
       if (!thead || !tbody) return;
-      let deliveredOrders = allOrders.filter(o => o.status === 'delivered' || !o.status);
+      const ledgerSource = (offlineCounterBills && offlineCounterBills.length > 0) ? offlineCounterBills : allOrders;
+      let deliveredOrders = ledgerSource.filter(o => o.status === 'delivered' || !o.status);
 
       if (selectedSpecificDate) {
         deliveredOrders = deliveredOrders.filter(o => (o.voucher_date || new Date(o.created_at).toISOString().slice(0, 10)) === selectedSpecificDate);
@@ -5725,15 +5793,16 @@ let allProducts = [];
       const tbody = document.getElementById('live-counter-tbody');
       if (!tbody) return;
 
-      if (!allOrders || allOrders.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="py-6 text-center text-gray-400">No recent orders recorded yet.</td></tr>';
+      const dataSource = (offlineCounterBills && offlineCounterBills.length > 0) ? offlineCounterBills : allOrders;
+      if (!dataSource || dataSource.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="py-6 text-center text-gray-400">No recent counter dispatches recorded yet.</td></tr>';
         return;
       }
 
       // Compute Live Today Counter Metrics from latest recorded date
-      const latestDateStr = (allOrders[0]?.voucher_date) || (allOrders[0]?.created_at ? new Date(allOrders[0].created_at).toISOString().slice(0,10) : '2026-10-21');
+      const latestDateStr = (dataSource[0]?.voucher_date) || (dataSource[0]?.created_at ? new Date(dataSource[0].created_at).toISOString().slice(0,10) : '2026-11-21');
       const targetDateStr = selectedSpecificDate || latestDateStr;
-      const todayOrders = allOrders.filter(o => {
+      const todayOrders = dataSource.filter(o => {
         const d = o.voucher_date || (o.created_at ? new Date(o.created_at).toISOString().slice(0,10) : '');
         return d === targetDateStr;
       });
@@ -5746,8 +5815,8 @@ let allProducts = [];
       if (countEl) countEl.innerText = todayCounterCount + ' bills (Live Today: ' + targetDateStr + ')';
       if (salesEl) salesEl.innerText = '₹' + todayCounterSales.toLocaleString('en-IN', { minimumFractionDigits: 2 });
 
-      // Filter orders for the table
-      let list = allOrders;
+      // Filter counter orders for the table
+      let list = dataSource;
       if (filter === 'pos') {
         list = list.filter(o => {
           const pm = (o.payment_method || '').toLowerCase();
@@ -6035,11 +6104,12 @@ let allProducts = [];
 
     /* FINANCIAL PAYMENT BREAKDOWN & TOP SELLERS */
     function updatePaymentBreakdown() {
-      if (!allOrders || allOrders.length === 0) return;
+      const breakSource = (offlineCounterBills && offlineCounterBills.length > 0) ? offlineCounterBills : allOrders;
+      if (!breakSource || breakSource.length === 0) return;
       let cashTotal = 0, upiTotal = 0, creditTotal = 0;
       let cashCount = 0, upiCount = 0, creditCount = 0;
 
-      allOrders.forEach(o => {
+      breakSource.forEach(o => {
         const amt = parseFloat(o.total_amount || 0);
         const m = (o.payment_method || '').toLowerCase();
         if (m.includes('upi') || m.includes('gpay') || m.includes('phonepe') || m.includes('online') || m.includes('qr')) {
@@ -6766,8 +6836,10 @@ ${itemsText}
           }
         });
 
-        // Add to allOrders at the very top
-        allOrders.unshift(newOrder);
+        // Add to offlineCounterBills at the very top (Counter POS bill, not online order)
+        newOrder.source = 'Offline POS';
+        newOrder.is_offline_bill = true;
+        offlineCounterBills.unshift(newOrder);
 
         // Persist local counter POS orders & enqueue for cloud sync
         try {
@@ -6797,11 +6869,11 @@ ${itemsText}
         playPosBeep();
         setTimeout(playPosBeep, 120);
 
-        if (document.getElementById('cnt-all')) document.getElementById('cnt-all').innerText = allOrders.length.toLocaleString('en-IN');
-        if (document.getElementById('cnt-delivered')) document.getElementById('cnt-delivered').innerText = allOrders.filter(o => o.status === 'delivered' || !o.status).length.toLocaleString('en-IN');
-        if (document.getElementById('stat-orders')) document.getElementById('stat-orders').innerText = allOrders.length.toLocaleString('en-IN');
-
-        renderOrdersListTable();
+        if (document.getElementById('stat-orders')) {
+          const totalBills = (offlineCounterBills.length || 0) + (allOrders.length || 0);
+          document.getElementById('stat-orders').innerText = totalBills.toLocaleString('en-IN');
+        }
+        updateOnlineOrdersCountPills();
         renderLiveCounterDispatches();
         renderInventoryList(filteredInventoryItems);
         updateInventoryCounters();

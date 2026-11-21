@@ -635,11 +635,12 @@
     function loadOrders() {
       let orders = [];
 
-      // 1. Read real orders placed in store from localStorage
+      // 1. Read real orders placed strictly in online store from localStorage
       try {
         const local = JSON.parse(localStorage.getItem('nsn_orders') || '[]');
         if (Array.isArray(local) && local.length > 0) {
-          orders = local;
+          // Strictly keep ONLY online store orders (exclude offline SNS Market bills)
+          orders = local.filter(isStrictOnlineStoreOrder);
         }
       } catch(e) {
         console.warn('Error reading nsn_orders:', e);
@@ -867,6 +868,20 @@
     }
 
     // 3. Strict Deduplication Logic to Prevent Repeated Records
+    // Strict Online Store Order Validator (Excludes all offline SNS Market desktop software bills)
+    function isStrictOnlineStoreOrder(o) {
+      if (!o) return false;
+      const id = String(o.id || '').toUpperCase();
+      const inv = String(o.invId || o.voucher_no || '').toUpperCase();
+      // Exclude mock demo orders
+      if (id.startsWith('ORD-RHMTODAY') || id.startsWith('ORD-RHMYEST') || id.startsWith('ORD-RHM-YEST') || id.startsWith('ORD-RHM2DAYS') || id.startsWith('ORD-RHM3DAYS')) return false;
+      if (inv.includes('982101') || inv.includes('982102') || inv.includes('982103') || inv.includes('982104') || inv.includes('981902') || inv.includes('981701') || inv.includes('981601')) return false;
+      // Exclude offline POS counter bills from SNS Market software
+      if (o.source === 'Offline POS' || o.source === 'Desktop App' || o.is_offline_bill) return false;
+      if (id.startsWith('RANI-') && !o.items && !o.timeslot) return false;
+      return true;
+    }
+
     function deduplicateOrders(orders) {
       if (!Array.isArray(orders)) return [];
       const seen = new Set();
@@ -951,9 +966,10 @@
       try {
         const res = await fetch('/api/orders?status=all').then(r => r.json()).catch(() => null);
         if (res && res.success && Array.isArray(res.orders)) {
-          const local = JSON.parse(localStorage.getItem('nsn_orders') || '[]');
-          const combined = deduplicateOrders([...res.orders, ...local]);
-          if (combined.length > 0 && combined.length !== allOrders.length) {
+          const local = JSON.parse(localStorage.getItem('nsn_orders') || '[]').filter(isStrictOnlineStoreOrder);
+          const validOnlineOrders = res.orders.filter(isStrictOnlineStoreOrder);
+          const combined = deduplicateOrders([...validOnlineOrders, ...local]);
+          if (combined.length !== allOrders.length) {
             allOrders = normalizeOrders(combined);
             applyFilters();
             updatePillsCount();

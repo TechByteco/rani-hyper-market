@@ -1409,36 +1409,68 @@ function getFestivalPredictions() {
   const overview = getOverview();
   const baselineDailyTurnover = Math.round(overview.totalSales / (overview.totalBills ? (overview.totalBills / 45) : 30) || 16500);
 
-  const currentDate = new Date('2026-09-13');
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  const todayStr = `${y}-${m}-${d}`;
+  const currentDate = new Date(y, now.getMonth(), now.getDate());
+
+  const parseLocalDate = (dStr) => {
+    if (!dStr || dStr === 'Monthly') return null;
+    const p = dStr.split('-');
+    if (p.length === 3) return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+    return null;
+  };
 
   const sourceFestivals = (ALL_YEAR_FESTIVALS && ALL_YEAR_FESTIVALS.length > 0) ? ALL_YEAR_FESTIVALS : [];
 
-  // Calculate days remaining and dynamic revenue projection across all 12 months (365 days)
+  // Calculate live days remaining and dynamic revenue projection from today
   const enhancedFestivals = sourceFestivals.map(f => {
     const d2026 = f.datesByYear?.['2026'] || {};
     const d2027 = f.datesByYear?.['2027'] || {};
-    const activeDateStr = d2026.date || d2027.date || '2026-10-01';
-    const startDateStr = d2026.window?.start || d2027.window?.start || activeDateStr;
-    const endDateStr = d2026.window?.end || d2027.window?.end || activeDateStr;
-    const cutoffStr = d2026.cutoff || d2027.cutoff || f.procurementCutoff || '7 days prior';
+    const d2026Date = d2026.date || d2026.window?.start || f.date;
+    const d2027Date = d2027.date || d2027.window?.start;
+
+    const t2026 = parseLocalDate(d2026Date);
+    const t2027 = parseLocalDate(d2027Date);
+
+    let chosenTarget = null;
+    let chosenDateStr = d2026.date || f.date || 'Monthly';
+    let chosenCutoff = d2026.cutoff || d2027.cutoff || f.procurementCutoff || '7 days prior';
 
     let daysRemaining = null;
-    if (activeDateStr && activeDateStr !== 'Monthly') {
-      const target = new Date(startDateStr);
-      const diffMs = target - currentDate;
-      daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-      // Normalize past events to show positive distance to next annual occurrence
-      if (daysRemaining < 0) {
-        if (d2027.window?.start) {
-          const nextTarget = new Date(d2027.window.start);
-          daysRemaining = Math.max(0, Math.ceil((nextTarget - currentDate) / (1000 * 60 * 60 * 24)));
-        } else {
-          daysRemaining = daysRemaining + 365;
-        }
-      }
+    if (f.date === 'Monthly' || f.quarter === 'Recurring') {
+      const nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+      daysRemaining = Math.max(1, Math.ceil((nextMonth - currentDate) / (1000 * 60 * 60 * 24)));
     } else {
-      daysRemaining = 18; // ~18 days until next payday
+      if (t2026 && t2026 >= currentDate) {
+        chosenTarget = t2026;
+        chosenDateStr = d2026.date || d2026Date;
+      } else if (t2027 && t2027 >= currentDate) {
+        chosenTarget = t2027;
+        chosenDateStr = d2027.date || d2027Date;
+      } else if (t2026) {
+        const nextYear = new Date(t2026);
+        nextYear.setFullYear(currentDate.getFullYear() + 1);
+        chosenTarget = nextYear;
+        const nyYear = nextYear.getFullYear();
+        const nyMonth = String(nextYear.getMonth() + 1).padStart(2, '0');
+        const nyDay = String(nextYear.getDate()).padStart(2, '0');
+        chosenDateStr = `${nyYear}-${nyMonth}-${nyDay}`;
+      }
+
+      if (chosenTarget) {
+        const diffMs = chosenTarget - currentDate;
+        daysRemaining = Math.max(0, Math.round(diffMs / (1000 * 60 * 60 * 24)));
+      }
     }
+
+    const is2027 = (chosenTarget === t2027);
+    const activeDateStr = chosenDateStr;
+    const cutoffStr = chosenCutoff;
+    const startDateStr = is2027 ? (d2027.window?.start || d2027Date || chosenDateStr) : (d2026.window?.start || d2026Date || chosenDateStr);
+    const endDateStr = is2027 ? (d2027.window?.end || chosenDateStr) : (d2026.window?.end || chosenDateStr);
 
     const surgeMultiplier = f.surgeMultiplier || 1.35;
     const projectedDailySales = Math.round(baselineDailyTurnover * surgeMultiplier);
@@ -1481,7 +1513,8 @@ function getFestivalPredictions() {
   });
 
   return {
-    asOfDate: '2026-09-13',
+    asOfDate: todayStr,
+    asOfTimestamp: now.toISOString(),
     baselineDailyTurnover,
     totalUpcomingEvents: sorted.length,
     nextImmediateEvent: sorted[0],
@@ -1493,8 +1526,9 @@ function getFestivalPredictions() {
 // WORLD TRADE & COMMODITY MARKET PREDICTIONS
 // ==========================================
 function getWorldTradePredictions() {
+  const liveDateStr = new Date().toISOString().slice(0, 10);
   return {
-    asOfDate: '2026-09-13',
+    asOfDate: liveDateStr,
     globalMarketSentiment: 'Cautiously Bullish on Edible Oils; Favorable on Pulses; Stable on Cereals',
     indicators: [
       {

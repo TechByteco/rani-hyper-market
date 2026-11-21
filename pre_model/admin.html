@@ -8965,6 +8965,47 @@ ${itemsText}
       const totalBudget = data.stockList.reduce((acc, c) => acc + (c.budget || 0), 0);
       const totalRev = data.stockList.reduce((acc, c) => acc + (c.rev || 0), 0);
 
+      // Compute live days left from current day
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      let liveDaysLeft = null;
+      let liveTargetYr = '2026';
+      const d2026Str = data.dates?.['2026'];
+      const d2027Str = data.dates?.['2027'];
+      
+      const parseFestDate = (str) => {
+        if (!str) return null;
+        const p = str.split('-');
+        if (p.length === 3) return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+        return null;
+      };
+
+      const t26 = parseFestDate(d2026Str);
+      const t27 = parseFestDate(d2027Str);
+
+      if (t26 && t26 >= today) {
+        liveDaysLeft = Math.max(0, Math.round((t26 - today) / (1000 * 60 * 60 * 24)));
+        liveTargetYr = '2026';
+      } else if (t27 && t27 >= today) {
+        liveDaysLeft = Math.max(0, Math.round((t27 - today) / (1000 * 60 * 60 * 24)));
+        liveTargetYr = '2027';
+      } else if (t26) {
+        const nextYr = new Date(t26);
+        nextYr.setFullYear(today.getFullYear() + 1);
+        liveDaysLeft = Math.max(0, Math.round((nextYr - today) / (1000 * 60 * 60 * 24)));
+        liveTargetYr = String(nextYr.getFullYear());
+      }
+
+      const countdownBadge = liveDaysLeft !== null
+        ? (liveDaysLeft === 0 
+            ? `<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-100 text-emerald-900 border border-emerald-300 animate-pulse">🎉 TODAY!</span>`
+            : liveDaysLeft === 1
+            ? `<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-100 text-amber-900 border border-amber-300">⚡ Tomorrow (1 day left)</span>`
+            : liveDaysLeft <= 7
+            ? `<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-100 text-amber-900 border border-amber-300">⏳ ${liveDaysLeft} Days Left (${liveTargetYr})</span>`
+            : `<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-purple-100 text-purple-900 border border-purple-300">⏳ ${liveDaysLeft} Days Left (${liveTargetYr})</span>`)
+        : '';
+
       return `
         <div class="space-y-3" id="festival-copilot-card">
           <div class="flex flex-wrap items-center justify-between gap-1 border-b border-amber-200/60 pb-2">
@@ -8976,9 +9017,12 @@ ${itemsText}
                 ${escapeAiHtml(data.tamil)} &bull; <span class="font-bold text-amber-900">${escapeAiHtml(data.tier)}</span>
               </div>
             </div>
-            <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-100 text-amber-900 border border-amber-300 shrink-0">
-              141,312 Invoices Mined
-            </span>
+            <div class="flex items-center gap-1 shrink-0">
+              ${countdownBadge}
+              <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-100 text-amber-900 border border-amber-300">
+                141,312 Invoices
+              </span>
+            </div>
           </div>
 
           <!-- Festival Selector Tabs -->

@@ -514,32 +514,64 @@ if (reqPath === '/api/pos/status') {
         try { return sendJson(200, analyticsService.getFestivalPredictions()); } catch {}
       }
       if (festivalMaster && festivalMaster.ALL_YEAR_FESTIVALS) {
-        const currentDate = new Date('2026-09-13');
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, '0');
+        const d = String(now.getDate()).padStart(2, '0');
+        const todayStr = `${y}-${m}-${d}`;
+        const currentDate = new Date(y, now.getMonth(), now.getDate());
+
+        const parseLocalDate = (dStr) => {
+          if (!dStr || dStr === 'Monthly') return null;
+          const p = dStr.split('-');
+          if (p.length === 3) return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+          return null;
+        };
+
         const baselineDailyTurnover = 16500;
         const enhancedFestivals = festivalMaster.ALL_YEAR_FESTIVALS.map(f => {
           const d2026 = f.datesByYear?.['2026'] || {};
           const d2027 = f.datesByYear?.['2027'] || {};
-          const activeDateStr = d2026.date || d2027.date || '2026-10-01';
-          const startDateStr = d2026.window?.start || d2027.window?.start || activeDateStr;
-          const endDateStr = d2026.window?.end || d2027.window?.end || activeDateStr;
-          const cutoffStr = d2026.cutoff || d2027.cutoff || f.procurementCutoff || '7 days prior';
+          const d2026Date = d2026.date || d2026.window?.start || f.date;
+          const d2027Date = d2027.date || d2027.window?.start;
+
+          const t2026 = parseLocalDate(d2026Date);
+          const t2027 = parseLocalDate(d2027Date);
+
+          let chosenTarget = null;
+          let chosenDateStr = d2026.date || f.date || 'Monthly';
+          let chosenCutoff = d2026.cutoff || d2027.cutoff || f.procurementCutoff || '7 days prior';
 
           let daysRemaining = null;
-          if (activeDateStr && activeDateStr !== 'Monthly') {
-            const target = new Date(startDateStr);
-            const diffMs = target - currentDate;
-            daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-            if (daysRemaining < 0) {
-              if (d2027.window?.start) {
-                const nextTarget = new Date(d2027.window.start);
-                daysRemaining = Math.max(0, Math.ceil((nextTarget - currentDate) / (1000 * 60 * 60 * 24)));
-              } else {
-                daysRemaining = daysRemaining + 365;
-              }
-            }
+          if (f.date === 'Monthly' || f.quarter === 'Recurring') {
+            const nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+            daysRemaining = Math.max(1, Math.ceil((nextMonth - currentDate) / (1000 * 60 * 60 * 24)));
           } else {
-            daysRemaining = 18;
+            if (t2026 && t2026 >= currentDate) {
+              chosenTarget = t2026;
+              chosenDateStr = d2026.date || d2026Date;
+            } else if (t2027 && t2027 >= currentDate) {
+              chosenTarget = t2027;
+              chosenDateStr = d2027.date || d2027Date;
+            } else if (t2026) {
+              const nextYear = new Date(t2026);
+              nextYear.setFullYear(currentDate.getFullYear() + 1);
+              chosenTarget = nextYear;
+              const nyYear = nextYear.getFullYear();
+              const nyMonth = String(nextYear.getMonth() + 1).padStart(2, '0');
+              const nyDay = String(nextYear.getDate()).padStart(2, '0');
+              chosenDateStr = `${nyYear}-${nyMonth}-${nyDay}`;
+            }
+
+            if (chosenTarget) {
+              const diffMs = chosenTarget - currentDate;
+              daysRemaining = Math.max(0, Math.round(diffMs / (1000 * 60 * 60 * 24)));
+            }
           }
+
+          const is2027 = (chosenTarget === t2027);
+          const startDateStr = is2027 ? (d2027.window?.start || d2027Date || chosenDateStr) : (d2026.window?.start || d2026Date || chosenDateStr);
+          const endDateStr = is2027 ? (d2027.window?.end || chosenDateStr) : (d2026.window?.end || chosenDateStr);
 
           const surgeMultiplier = f.surgeMultiplier || 1.35;
           const projectedDailySales = Math.round(baselineDailyTurnover * surgeMultiplier);
@@ -554,7 +586,7 @@ if (reqPath === '/api/pos/status') {
             month: f.month,
             monthName: f.monthName,
             quarter: f.quarter,
-            date: activeDateStr,
+            date: chosenDateStr,
             startDate: startDateStr,
             endDate: endDateStr,
             surgeMultiplier,
@@ -563,7 +595,7 @@ if (reqPath === '/api/pos/status') {
             tag: f.tag || 'Regional Celebration',
             description: f.description,
             stockingAdvice: f.stockingAdvice,
-            procurementCutoff: cutoffStr,
+            procurementCutoff: chosenCutoff,
             calendarRule: f.calendarRule,
             keyCategories: f.keyCategories || [],
             sampleSkus: f.sampleSkus || [],
@@ -581,7 +613,8 @@ if (reqPath === '/api/pos/status') {
         });
 
         return sendJson(200, {
-          asOfDate: '2026-09-13',
+          asOfDate: todayStr,
+          asOfTimestamp: now.toISOString(),
           baselineDailyTurnover,
           totalUpcomingEvents: sorted.length,
           nextImmediateEvent: sorted[0],

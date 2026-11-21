@@ -287,7 +287,11 @@
             <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center gap-1">
               <i data-lucide="sparkles" class="w-3 h-3"></i> AI Event Intelligence
             </span>
-            <span class="text-xs text-gray-400">Tamil Nadu & Regional Calendar</span>
+            <span class="text-xs text-gray-400">Tamil Nadu &amp; Regional Calendar</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="festival-live-today-pill">Live Daily Countdown</span>
+            </span>
           </div>
           <h3 class="text-lg font-black text-white mt-1 flex items-center gap-2">
             <span>🎪 Local Festival Demand Forecaster & Event Pulse</span>
@@ -1062,9 +1066,129 @@ Loading live briefing...
       applyFestivalFilters();
     }
 
+    // Live Festival Countdown Calculator: Computes exact days left dynamically from today
+    function getLiveFestivalCountdown(f) {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+      if (!f || f.date === 'Monthly' || f.quarter === 'Recurring') {
+        const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+        const diffDays = Math.max(1, Math.ceil((nextMonth - today) / (1000 * 60 * 60 * 24)));
+        return {
+          daysRemaining: diffDays,
+          badgeText: `${diffDays} days left • Next Cycle`,
+          badgeClass: 'text-purple-300 font-semibold',
+          dateDisplay: 'Monthly Cycle'
+        };
+      }
+
+      const parseDate = (dStr) => {
+        if (!dStr || dStr === 'Monthly') return null;
+        const p = dStr.split('-');
+        if (p.length === 3) return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+        return null;
+      };
+
+      const d2026 = f.datesByYear?.['2026'] || {};
+      const d2027 = f.datesByYear?.['2027'] || {};
+      const d2026Start = d2026.date || d2026.window?.start || f.startDate || f.date;
+      const d2027Start = d2027.date || d2027.window?.start;
+
+      const t2026 = parseDate(d2026Start);
+      const t2027 = parseDate(d2027Start);
+
+      let chosenTarget = null;
+      let chosenDateStr = d2026.date || f.date || '';
+
+      if (t2026 && t2026 >= today) {
+        chosenTarget = t2026;
+        chosenDateStr = d2026.date || d2026Start;
+      } else if (t2027 && t2027 >= today) {
+        chosenTarget = t2027;
+        chosenDateStr = d2027.date || d2027Start;
+      } else if (t2026) {
+        chosenTarget = new Date(t2026);
+        chosenTarget.setFullYear(today.getFullYear() + 1);
+        const nyYear = chosenTarget.getFullYear();
+        const nyMonth = String(chosenTarget.getMonth() + 1).padStart(2, '0');
+        const nyDay = String(chosenTarget.getDate()).padStart(2, '0');
+        chosenDateStr = `${nyYear}-${nyMonth}-${nyDay}`;
+      } else if (f.daysRemaining !== null && f.daysRemaining !== undefined) {
+        return {
+          daysRemaining: f.daysRemaining,
+          badgeText: f.daysRemaining === 0 ? 'Today! 🎉' : `${f.daysRemaining} days left`,
+          badgeClass: f.daysRemaining <= 7 ? 'text-amber-300 font-bold' : 'text-purple-300 font-semibold',
+          dateDisplay: f.date || 'Upcoming'
+        };
+      }
+
+      if (!chosenTarget) {
+        return {
+          daysRemaining: null,
+          badgeText: 'Annual Cycle',
+          badgeClass: 'text-gray-400 font-semibold',
+          dateDisplay: f.date || 'Seasonal'
+        };
+      }
+
+      const diffMs = chosenTarget - today;
+      const daysLeft = Math.max(0, Math.round(diffMs / (1000 * 60 * 60 * 24)));
+
+      let badgeText = '';
+      let badgeClass = 'text-purple-300 font-semibold';
+
+      if (daysLeft === 0) {
+        badgeText = '🎉 Today! Peak Shopping Rush';
+        badgeClass = 'text-emerald-400 font-black animate-pulse';
+      } else if (daysLeft === 1) {
+        badgeText = '⚡ Tomorrow! (1 day left)';
+        badgeClass = 'text-amber-300 font-black';
+      } else if (daysLeft <= 7) {
+        badgeText = `⏳ ${daysLeft} days left • Final Procurement`;
+        badgeClass = 'text-amber-300 font-bold';
+      } else if (daysLeft <= 30) {
+        badgeText = `${daysLeft} days left • Reorder Phase`;
+        badgeClass = 'text-purple-300 font-semibold';
+      } else {
+        badgeText = `${daysLeft} days left`;
+        badgeClass = 'text-gray-300 font-medium';
+      }
+
+      return {
+        daysRemaining: daysLeft,
+        badgeText,
+        badgeClass,
+        dateDisplay: chosenDateStr
+      };
+    }
+
     function applyFestivalFilters() {
       if (!allFestivalsDataCache || allFestivalsDataCache.length === 0) return;
-      let filtered = allFestivalsDataCache;
+
+      const pill = document.getElementById('festival-live-today-pill');
+      if (pill) {
+        pill.textContent = 'Live Today: ' + new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+      }
+
+      // Compute live days remaining for each festival from current date
+      let filtered = allFestivalsDataCache.map(f => {
+        const cd = getLiveFestivalCountdown(f);
+        return {
+          ...f,
+          daysRemaining: cd.daysRemaining,
+          liveBadgeText: cd.badgeText,
+          liveBadgeClass: cd.badgeClass,
+          liveDateDisplay: cd.dateDisplay
+        };
+      });
+
+      // Sort festivals dynamically: closest upcoming festival is always first
+      filtered.sort((a, b) => {
+        if (a.daysRemaining === null && b.daysRemaining === null) return 0;
+        if (a.daysRemaining === null) return 1;
+        if (b.daysRemaining === null) return -1;
+        return a.daysRemaining - b.daysRemaining;
+      });
 
       if (currentQuarterFilter !== 'all') {
         if (currentQuarterFilter === 'recurring') {
@@ -1162,7 +1286,7 @@ Loading live briefing...
                   <span>${f.name}</span>
                   ${f.tamilName ? `<span class="text-[11px] font-medium text-purple-300 ml-1">(${f.tamilName})</span>` : ''}
                 </h4>
-                <p class="text-[11px] text-gray-400 mt-0.5">${f.date} • <span class="text-purple-300 font-semibold">${f.daysRemaining !== null ? f.daysRemaining + ' days left' : 'Monthly Cycle'}</span></p>
+                <p class="text-[11px] text-gray-400 mt-0.5">${f.liveDateDisplay || f.date} • <span class="${f.liveBadgeClass || 'text-purple-300 font-semibold'}">${f.liveBadgeText || (f.daysRemaining !== null ? f.daysRemaining + ' days left' : 'Monthly Cycle')}</span></p>
               </div>
               <div class="text-right shrink-0">
                 <span class="text-base font-black text-emerald-400">${f.surgePercent}</span>

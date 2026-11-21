@@ -759,7 +759,21 @@ function predictSingleDay(dStr, baseTurnover = 16800, avgBasket = 150) {
       tier: activeFest.tier || 'Event',
       isPeakDay,
       stockingAdvice: activeFest.stockingAdvice || '',
-      sampleSkus: activeFest.sampleSkus || [],
+      sampleSkus: (function() {
+        const minedFest = MINED_FESTIVAL_EMPIRICAL_DATA && MINED_FESTIVAL_EMPIRICAL_DATA[activeFest.id];
+        if (minedFest && minedFest.recommended_stock_needs && minedFest.recommended_stock_needs.length > 0) {
+          return minedFest.recommended_stock_needs.slice(0, 8).map(item => ({
+            name: item.name,
+            rate: item.price,
+            cost: item.cost,
+            surge: '+' + Math.min(120, Math.round(((item.recommended_order_qty / Math.max(1, item.avg_historical_qty)) - 1) * 100 + 40)) + '%',
+            priority: item.priority || 'HIGH',
+            recOrder: item.recommended_order_qty,
+            avgQty: item.avg_historical_qty
+          }));
+        }
+        return activeFest.sampleSkus || [];
+      })(),
       lastYearReferenceYear: emp ? emp.lastYearReferenceYear : null,
       lastYearDate: emp ? emp.lastYearDate : null,
       lastYearSales: emp ? emp.lastYearSales : null,
@@ -2118,10 +2132,16 @@ function getHistoricalFestivalAnalysis(targetId) {
       const totalBudget = stockList.reduce((acc, c) => acc + (c.estPurchaseBudget || 0), 0);
       const totalRev = stockList.reduce((acc, c) => acc + (c.estGrossRevenue || 0), 0);
       const w26 = windows['2026'] || [];
-      const date2026 = w26[1] || '2026-11-08';
-      const dObj = new Date(date2026);
-      dObj.setDate(dObj.getDate() - 10);
-      const cutoff2026 = dObj.toISOString().slice(0, 10);
+      let date2026 = w26[1] || '2026-11-08';
+      let cutoff2026 = '2026-10-28';
+      if (k === 'karthigai_deepam') {
+        date2026 = '2026-11-24';
+        cutoff2026 = '2026-11-18';
+      } else {
+        const dObj = new Date(date2026);
+        dObj.setDate(dObj.getDate() - 7);
+        cutoff2026 = dObj.toISOString().slice(0, 10);
+      }
 
       return {
         festivalId: k,

@@ -584,6 +584,58 @@ if (reqPath === '/api/pos/status') {
     return;
   }
 
+    // 7c. Analytics: Customers CRM endpoint
+  if (reqPath === '/api/analytics/customers' && req.method === 'GET') {
+    let customers = [];
+    const custPath = path.join(__dirname, 'rani_customers.json');
+    const pubCustPath = path.join(__dirname, 'public', 'rani_customers.json');
+    if (fs.existsSync(custPath)) {
+      try { customers = JSON.parse(fs.readFileSync(custPath, 'utf8')); } catch(e) {}
+    } else if (fs.existsSync(pubCustPath)) {
+      try { customers = JSON.parse(fs.readFileSync(pubCustPath, 'utf8')); } catch(e) {}
+    }
+    if (!Array.isArray(customers) && customers && Array.isArray(customers.value)) {
+      customers = customers.value;
+    }
+    const withSpend = customers.filter(c => (parseFloat(c.totalSpent) || 0) > 0);
+    const sorted = [...withSpend].sort((a, b) => (parseFloat(b.totalSpent) || 0) - (parseFloat(a.totalSpent) || 0));
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      total: customers.length,
+      withSpend: withSpend.length,
+      customers: customers,
+      top10: sorted.slice(0, 10)
+    }));
+    return;
+  }
+
+  // 7d. Top customers shortcut
+  if (reqPath === '/api/analytics/top-customers' && req.method === 'GET') {
+    let customers = [];
+    const custPath = path.join(__dirname, 'rani_customers.json');
+    const pubCustPath = path.join(__dirname, 'public', 'rani_customers.json');
+    if (fs.existsSync(custPath)) {
+      try { customers = JSON.parse(fs.readFileSync(custPath, 'utf8')); } catch(e) {}
+    } else if (fs.existsSync(pubCustPath)) {
+      try { customers = JSON.parse(fs.readFileSync(pubCustPath, 'utf8')); } catch(e) {}
+    }
+    if (!Array.isArray(customers) && customers && Array.isArray(customers.value)) {
+      customers = customers.value;
+    }
+    const withSpend = customers.filter(c => {
+      const n = (c.name || '').toLowerCase();
+      return !n.includes('walk-in') && !n.includes('cash') && (parseFloat(c.totalSpent) || 0) > 0;
+    });
+    const sorted = [...withSpend].sort((a, b) => (parseFloat(b.totalSpent) || 0) - (parseFloat(a.totalSpent) || 0));
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      total: withSpend.length,
+      customers: sorted.slice(0, 10),
+      top10: sorted.slice(0, 10)
+    }));
+    return;
+  }
+
   if (reqPath === '/api/ai-analytics/chat' && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => { body += chunk; });

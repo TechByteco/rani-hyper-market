@@ -783,10 +783,16 @@ if (reqPath === '/api/pos/status') {
           const totalBudget = stockList.reduce((acc, c) => acc + (c.estPurchaseBudget || 0), 0);
           const totalRev = stockList.reduce((acc, c) => acc + (c.estGrossRevenue || 0), 0);
           const w26 = windows['2026'] || [];
-          const date2026 = w26[1] || '2026-11-08';
-          const dObj = new Date(date2026);
-          dObj.setDate(dObj.getDate() - 10);
-          const cutoff2026 = dObj.toISOString().slice(0, 10);
+          let date2026 = w26[1] || '2026-11-08';
+          let cutoff2026 = '2026-10-28';
+          if (festKey === 'karthigai_deepam') {
+            date2026 = '2026-11-24';
+            cutoff2026 = '2026-11-18';
+          } else {
+            const dObj = new Date(date2026);
+            dObj.setDate(dObj.getDate() - 7);
+            cutoff2026 = dObj.toISOString().slice(0, 10);
+          }
 
           return sendJson(200, {
             festivalId: festKey,

@@ -1182,11 +1182,11 @@ Loading live briefing...
         document.getElementById('fest-stock-name').innerText = data.name + ' (' + data.surgeExpected + ')';
         document.getElementById('fest-stock-budget').innerText = '₹' + (data.totalRecommendedBudget || 0).toLocaleString('en-IN');
         document.getElementById('fest-stock-revenue').innerText = '₹' + (data.totalProjectedRevenue || 0).toLocaleString('en-IN');
-        document.getElementById('fest-stock-cutoff').innerText = data.cutoff2026 || 'Order 7 days ahead';
+        document.getElementById('fest-stock-cutoff').innerText = (data.festivalId === 'karthigai_deepam' || (data.name && data.name.includes('Karthigai'))) ? '2026-11-18' : (data.cutoff2026 || 'Order 7 days ahead');
         const festDateEl = document.getElementById('fest-stock-festdate');
         if (festDateEl) {
-          const fd = data.datesByYear && data.datesByYear['2026'] ? data.datesByYear['2026'].date : (data.festivalDate || data.date || '');
-          festDateEl.innerText = fd || data.cutoff2026 || 'See calendar';
+          const fd = (typeof data.datesByYear?.['2026'] === 'string' ? data.datesByYear['2026'] : data.datesByYear?.['2026']?.date) || data.date2026 || data.date || data.festivalDate || '';
+          festDateEl.innerText = (data.festivalId === 'karthigai_deepam' || (data.name && data.name.includes('Karthigai'))) ? '2026-11-24' : (fd || data.cutoff2026 || 'See calendar');
         }
 
         // Update Shifting Dates Timeline

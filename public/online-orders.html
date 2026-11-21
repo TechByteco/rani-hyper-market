@@ -362,9 +362,10 @@
       <div>
         <select id="filter-payment-method" onchange="handleFiltersChange()" class="glass-input w-full text-xs font-bold text-gray-700">
           <option value="all">💳 All Payment Methods</option>
-          <option value="razorpay">Razorpay Online Gateway</option>
-          <option value="upi">Instant UPI (GPay/PhonePe/Paytm)</option>
+          <option value="gpay">Google Pay (Direct UPI)</option>
+          <option value="upi">Instant UPI (PhonePe/Paytm/BHIM)</option>
           <option value="cod">Cash on Delivery (COD)</option>
+          <option value="razorpay">Cards / Netbanking</option>
         </select>
       </div>
 
@@ -372,7 +373,7 @@
       <div>
         <select id="filter-payment-status" onchange="handleFiltersChange()" class="glass-input w-full text-xs font-bold text-gray-700">
           <option value="all">💰 All Payment Statuses</option>
-          <option value="paid">🟢 Paid Online (Razorpay / UPI)</option>
+          <option value="paid">🟢 Paid Online (GPay / UPI)</option>
           <option value="unpaid">🟡 Unpaid / COD Pending</option>
         </select>
       </div>
@@ -1042,11 +1043,12 @@
 
         // Determine Payment Classification
         const method = o.paymentMethod || o.payment_method || 'Cash on Delivery';
+        let isGpay = method.toLowerCase().includes('gpay') || method.toLowerCase().includes('google pay');
         let isRazorpay = method.toLowerCase().includes('razorpay');
-        let isUpi = method.toLowerCase().includes('upi') || method.toLowerCase().includes('gpay') || method.toLowerCase().includes('phonepe');
+        let isUpi = method.toLowerCase().includes('upi') || method.toLowerCase().includes('phonepe') || method.toLowerCase().includes('paytm');
         let isCod = method.toLowerCase().includes('cash') || method.toLowerCase().includes('cod');
 
-        let payCategory = isRazorpay ? 'razorpay' : isUpi ? 'upi' : 'cod';
+        let payCategory = isGpay ? 'gpay' : isRazorpay ? 'razorpay' : isUpi ? 'upi' : 'cod';
         let payStatus = (o.paymentStatus || (isCod ? 'UNPAID (Collect at Doorstep)' : 'PAID'));
 
         return {
@@ -1174,8 +1176,9 @@
 
         // Payment Method filter
         if (payMethod !== 'all') {
+          if (payMethod === 'gpay' && o.payCategory !== 'gpay') return false;
           if (payMethod === 'razorpay' && o.payCategory !== 'razorpay') return false;
-          if (payMethod === 'upi' && o.payCategory !== 'upi') return false;
+          if (payMethod === 'upi' && o.payCategory !== 'upi' && o.payCategory !== 'gpay') return false;
           if (payMethod === 'cod' && o.payCategory !== 'cod') return false;
         }
 
@@ -1210,8 +1213,8 @@
       const totalOrders = filteredOrders.length;
       const totalRev = filteredOrders.reduce((sum, o) => sum + o.totalAmount, 0);
       const totalGross = filteredOrders.reduce((sum, o) => sum + o.grossMrp, 0);
-      const onlineRev = filteredOrders.filter(o => o.payCategory === 'razorpay' || o.payCategory === 'upi').reduce((sum, o) => sum + o.totalAmount, 0);
-      const onlineCount = filteredOrders.filter(o => o.payCategory === 'razorpay' || o.payCategory === 'upi').length;
+      const onlineRev = filteredOrders.filter(o => o.payCategory === 'gpay' || o.payCategory === 'razorpay' || o.payCategory === 'upi').reduce((sum, o) => sum + o.totalAmount, 0);
+      const onlineCount = filteredOrders.filter(o => o.payCategory === 'gpay' || o.payCategory === 'razorpay' || o.payCategory === 'upi').length;
       const codRev = filteredOrders.filter(o => o.payCategory === 'cod').reduce((sum, o) => sum + o.totalAmount, 0);
       const codCount = filteredOrders.filter(o => o.payCategory === 'cod').length;
 
@@ -1345,7 +1348,7 @@
         });
 
         const dayTotal = dayOrders.reduce((sum, o) => sum + o.totalAmount, 0);
-        const dayOnline = dayOrders.filter(o => o.payCategory === 'razorpay' || o.payCategory === 'upi').reduce((sum, o) => sum + o.totalAmount, 0);
+        const dayOnline = dayOrders.filter(o => o.payCategory === 'gpay' || o.payCategory === 'razorpay' || o.payCategory === 'upi').reduce((sum, o) => sum + o.totalAmount, 0);
         const dayCod = dayOrders.filter(o => o.payCategory === 'cod').reduce((sum, o) => sum + o.totalAmount, 0);
 
         const isToday = isSameDay(dayDate, new Date());
@@ -1401,10 +1404,16 @@
     function renderOrderCardHtml(order, orderIdx, totalDayOrders) {
       // Payment badge styling
       let payBadge = '';
-      if (order.payCategory === 'razorpay') {
+      if (order.payCategory === 'gpay') {
         payBadge = `
           <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
-            <i class="fa-solid fa-shield-halved text-blue-600"></i> Razorpay Online (PAID)
+            <i class="fa-brands fa-google-pay text-lg text-blue-600"></i> GPay (Ref: ${order.transactionId || 'Verified'})
+          </span>
+        `;
+      } else if (order.payCategory === 'razorpay') {
+        payBadge = `
+          <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
+            <i class="fa-solid fa-shield-halved text-blue-600"></i> Online (PAID)
           </span>
         `;
       } else if (order.payCategory === 'upi') {
@@ -1758,8 +1767,10 @@
       const txnRow = document.getElementById('modal-txn-row');
       const txnId = document.getElementById('modal-txn-id');
 
-      if (order.payCategory === 'razorpay') {
-        payEl.innerHTML = `<span class="text-blue-700 font-black">Online via Razorpay (PAID)</span>`;
+      if (order.payCategory === 'gpay') {
+        payEl.innerHTML = `<span class="text-blue-700 font-black flex items-center gap-1"><i class="fa-brands fa-google-pay text-lg text-blue-600"></i> Google Pay (PAID)</span>`;
+      } else if (order.payCategory === 'razorpay') {
+        payEl.innerHTML = `<span class="text-blue-700 font-black">Online Payment (PAID)</span>`;
       } else if (order.payCategory === 'upi') {
         payEl.innerHTML = `<span class="text-purple-700 font-black">Instant UPI (PAID)</span>`;
       } else {

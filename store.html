@@ -2345,8 +2345,37 @@
               </button>
               <div id="gpay-button-container" class="flex-shrink-0"></div>
             </div>
+
+            <!-- Official Store GPay QR Code Preview -->
+            <div class="flex flex-col sm:flex-row items-center gap-3 bg-white p-3 rounded-xl border border-blue-200/90 shadow-xs mt-2">
+              <div class="relative shrink-0 text-center">
+                <img src="/images/gpay_qr.jpg" alt="Official GPay QR" class="w-32 h-32 object-contain rounded-xl border border-blue-100 shadow-xs">
+                <div class="mt-1 text-[9px] font-black uppercase tracking-wider text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200 flex items-center justify-center gap-1">
+                  <i class="fa-brands fa-google-pay text-xs"></i> Official GPay QR
+                </div>
+              </div>
+              <div class="text-left space-y-2 flex-1 w-full text-[11px]">
+                <div class="font-bold text-gray-800 flex items-center gap-1.5">
+                  <i class="fa-solid fa-camera text-blue-600"></i> Scan to pay via Google Pay or any UPI app
+                </div>
+                <div class="flex items-center justify-between bg-blue-50/80 p-2 rounded-lg border border-blue-200">
+                  <div>
+                    <div class="text-[9px] uppercase tracking-wider text-gray-500 font-bold">UPI ID:</div>
+                    <span class="font-mono font-bold text-blue-950 text-xs" id="gpay-vpa-display-panel">saalimin21@oksbi</span>
+                  </div>
+                  <button type="button" onclick="copyUpiVpa()" class="text-[10px] font-extrabold text-blue-700 hover:text-blue-900 bg-white px-2.5 py-1 rounded-md shadow-xs border border-blue-200 cursor-pointer active:scale-95 transition">
+                    <i class="fa-regular fa-copy"></i> Copy
+                  </button>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-gray-700 mb-0.5">UPI Reference / UTR Number (Optional):</label>
+                  <input type="text" id="ord-gpay-ref" placeholder="Enter 12-digit UPI Ref/UTR from GPay" class="glass-input text-[11px] py-1">
+                </div>
+              </div>
+            </div>
+
             <div class="flex items-center justify-between pt-1 border-t border-blue-100 text-[10px]">
-              <span class="text-gray-500 font-semibold">GPay VPA: <span id="display-gpay-vpa-id" class="font-mono font-bold text-gray-800">7708834547@okaxis</span></span>
+              <span class="text-gray-500 font-semibold">GPay VPA: <span id="display-gpay-vpa-id" class="font-mono font-bold text-gray-800">saalimin21@oksbi</span></span>
               <button type="button" onclick="openGpaySettingsModal()" class="text-blue-700 hover:underline font-bold flex items-center gap-1 cursor-pointer">
                 <i class="fa-solid fa-pen-to-square"></i> Change Account
               </button>
@@ -2408,7 +2437,7 @@
                     Exact payable amount is embedded. Scan with GPay, PhonePe, or Paytm to pay directly.
                   </div>
                   <div class="flex items-center justify-between bg-purple-50 p-1.5 rounded-lg border border-purple-100">
-                    <span class="font-mono font-bold text-purple-950 text-[11px]" id="checkout-upi-vpa-display">7708834547@okaxis</span>
+                    <span class="font-mono font-bold text-purple-950 text-[11px]" id="checkout-upi-vpa-display">saalimin21@oksbi</span>
                     <button type="button" onclick="copyUpiVpa()" class="text-[10px] font-extrabold text-purple-700 hover:text-purple-900 bg-white px-2 py-0.5 rounded shadow-xs border border-purple-200">
                       Copy
                     </button>
@@ -2641,7 +2670,7 @@
       <form onsubmit="saveGpayPaymentSettings(event)" class="space-y-3 text-xs">
         <div>
           <label class="block font-bold text-gray-700 mb-1">Google Pay UPI VPA / ID (For GPay App &amp; QR) *</label>
-          <input type="text" id="setting-gpay-vpa" placeholder="7708834547@okaxis or ranihypermarket@okaxis" required class="glass-input text-xs font-mono font-semibold">
+          <input type="text" id="setting-gpay-vpa" placeholder="saalimin21@oksbi" required class="glass-input text-xs font-mono font-semibold">
           <p class="text-[10px] text-gray-500 mt-1">
             Linked to your Google Pay / UPI merchant account.
           </p>
@@ -3708,7 +3737,7 @@
     }
 
     function getMerchantVpa() {
-      return (localStorage.getItem('rhm_gpay_vpa') || localStorage.getItem('rhm_merchant_vpa') || '').trim() || '7708834547@okaxis';
+      return (localStorage.getItem('rhm_gpay_vpa') || localStorage.getItem('rhm_merchant_vpa') || '').trim() || 'saalimin21@oksbi';
     }
 
     function getMerchantName() {
@@ -3786,7 +3815,9 @@
         window.location.href = upiUrl;
       } else {
         // Desktop: show QR dialog or prompt
-        if (typeof openUpiModal === 'function') {
+        if (typeof openUpiPaymentModal === 'function') {
+          openUpiPaymentModal(total);
+        } else if (typeof openUpiModal === 'function') {
           openUpiModal();
         } else {
           window.location.href = upiUrl;
@@ -3924,11 +3955,13 @@
       const vpa = getMerchantVpa();
       const gpayBadge = document.getElementById('gpay-key-status-badge');
       const gpayDisplayVpa = document.getElementById('display-gpay-vpa-id');
+      const gpayPanelVpa = document.getElementById('gpay-vpa-display-panel');
       if (gpayBadge && gpayDisplayVpa) {
         gpayBadge.innerText = 'Connected &bull; Active';
         gpayBadge.className = 'text-[9px] font-black bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full border border-emerald-300';
         gpayDisplayVpa.innerText = vpa;
       }
+      if (gpayPanelVpa) gpayPanelVpa.innerText = vpa;
 
       // Update UPI VPA displays
       const vpaDisp = document.getElementById('checkout-upi-vpa-display');
@@ -3945,15 +3978,14 @@
       const vpa = getMerchantVpa();
       const name = encodeURIComponent(getMerchantName());
 
-      let upiUrl = '';
+      let qrUrl = '';
       if (currentUpiQrTab === 'dynamic') {
-        upiUrl = `upi://pay?pa=${vpa}&pn=${name}&am=${amt}&cu=INR&tn=${encodeURIComponent('Rani Market Order')}`;
+        const upiUrl = `upi://pay?pa=${vpa}&pn=${name}&am=${amt}&cu=INR&tn=${encodeURIComponent('Rani Market Order')}`;
+        qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUrl)}`;
       } else {
-        // Fixed Merchant QR without static amount
-        upiUrl = `upi://pay?pa=${vpa}&pn=${name}&cu=INR`;
+        // Fixed Merchant QR: Official uploaded GPay QR code image
+        qrUrl = '/images/gpay_qr.jpg';
       }
-
-      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUrl)}`;
 
       const checkoutQr = document.getElementById('checkout-upi-qr-img');
       if (checkoutQr) checkoutQr.src = qrUrl;
@@ -3962,7 +3994,9 @@
       if (modalQr) modalQr.src = qrUrl;
 
       const modalAmt = document.getElementById('upi-modal-amount');
-      if (modalAmt) modalAmt.innerText = 'Payable: ₹' + amt;
+      if (modalAmt) {
+        modalAmt.innerText = currentUpiQrTab === 'dynamic' ? ('Payable: ₹' + amt) : ('UPI ID: ' + vpa);
+      }
     }
 
     function switchUpiQrTab(tab) {
@@ -5107,13 +5141,14 @@
       // 1. GOOGLE PAY & FASTPAY CHECKOUT PATH
       if (selectedPaymentOption === 'gpay' || selectedPaymentOption === 'razorpay') {
         const vpa = getMerchantVpa();
-        const upiRef = (document.getElementById('ord-upi-ref')?.value || '').trim();
+        const upiRef = (document.getElementById('ord-gpay-ref')?.value || document.getElementById('ord-upi-ref')?.value || '').trim();
         const txnId = upiRef || ('GPAY-' + Date.now().toString(36).toUpperCase());
 
-        orderDraft.paymentMethod = 'Google Pay (UPI)';
+        orderDraft.paymentMethod = upiRef ? ('Google Pay UPI (UTR: ' + upiRef + ')') : 'Google Pay & Fast UPI';
         orderDraft.paymentStatus = 'PAID (Google Pay)';
         orderDraft.gpayVpa = vpa;
         orderDraft.transactionId = txnId;
+        orderDraft.upiReference = upiRef || txnId;
 
         // On mobile, trigger direct UPI intent to Google Pay
         const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);

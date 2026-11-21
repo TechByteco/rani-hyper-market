@@ -455,9 +455,17 @@ if (reqPath === '/api/pos/status') {
   }
 
   if (reqPath === '/api/ai-analytics/forecast' || reqPath === '/api/ai/forecast') {
-    const days = parseInt(queryParams.get('days') || '14', 10);
+    const days = parseInt(queryParams.get('days') || '15', 10);
+    const from = queryParams.get('from');
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(analytics.getForecast(days)));
+    res.end(JSON.stringify(analytics.getForecast(days, from)));
+    return;
+  }
+
+  if (reqPath === '/api/ai/predict-date' || reqPath === '/api/ai-analytics/predict-date') {
+    const targetDate = queryParams.get('date');
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(analytics.predictDate(targetDate)));
     return;
   }
 

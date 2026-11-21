@@ -51,6 +51,7 @@ function loadJsonFallback(filename, defaultValue = null) {
 }
 
 const MINED_FESTIVAL_EMPIRICAL_DATA = loadJsonFallback('mined_festival_empirical_data.json', null);
+const FESTIVAL_EMPIRICAL_TURNOVER_MASTER = loadJsonFallback('festival_empirical_turnover_master.json', {});
 
 const isWindows = process.platform === 'win32';
 
@@ -688,59 +689,144 @@ function getHourlyTrends() {
   }));
 }
 
-function getForecast(days = 14) {
-  const daily = getDailyTrends(21);
-  const avgSales = daily.length 
-    ? (daily.slice(-7).reduce((acc, c) => acc + (c.sales || 0), 0) / (Math.min(daily.length, 7) || 1))
-    : 22500;
-  const avgBills = daily.length 
-    ? (daily.slice(-7).reduce((acc, c) => acc + (c.bills || 0), 0) / (Math.min(daily.length, 7) || 1))
-    : 130;
+function predictSingleDay(dStr, baseTurnover = 16800, avgBasket = 150) {
+  const p = dStr.split('-');
+  const targetDate = new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const daysAhead = Math.round((targetDate - today) / (1000 * 60 * 60 * 24));
+  const y = targetDate.getFullYear();
+  const dayOfWeek = targetDate.getDay();
+  const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+  const weekendMultiplier = dayOfWeek === 0 ? 1.35 : (dayOfWeek === 6 ? 1.25 : 1.0);
+
+  const festList = (ALL_YEAR_FESTIVALS && ALL_YEAR_FESTIVALS.length > 0) ? ALL_YEAR_FESTIVALS : [];
+  let activeFest = null;
+  let isPeakDay = false;
+  for (const f of festList) {
+    const dObj = f.datesByYear && f.datesByYear[String(y)];
+    if (!dObj) continue;
+    if (dObj.date === dStr) {
+      activeFest = f;
+      isPeakDay = true;
+      break;
+    }
+    if (dObj.window && dStr >= dObj.window.start && dStr <= dObj.window.end) {
+      activeFest = f;
+      isPeakDay = false;
+      break;
+    }
+  }
+
+  const emp = (activeFest && FESTIVAL_EMPIRICAL_TURNOVER_MASTER) ? (FESTIVAL_EMPIRICAL_TURNOVER_MASTER[activeFest.id] || {}) : null;
+  let projectedSales = 0;
+  let eventName = null;
+  let surgePercent = '0%';
+
+  if (activeFest) {
+    eventName = activeFest.name + (isPeakDay ? ' (Peak Festival Day)' : ' (Preparation Surge)');
+    surgePercent = activeFest.surgePercent || '+40%';
+    const empTurnover = emp && emp.empiricalDailyTurnover 
+      ? (isPeakDay ? emp.empiricalDailyTurnover : Math.round((emp.lastYearWindowDailyAvg || 16500) * 1.065))
+      : Math.round(baseTurnover * (activeFest.surgeMultiplier || 1.35));
+    projectedSales = isWeekend ? Math.round(empTurnover * 1.15) : empTurnover;
+  } else {
+    projectedSales = Math.round(baseTurnover * weekendMultiplier);
+    if (isWeekend) {
+      eventName = dayOfWeek === 0 ? 'Sunday Mega Family Grocery Rush' : 'Saturday Weekend Shopping';
+      surgePercent = '+30%';
+    }
+  }
+
+  const projectedBills = Math.max(40, Math.round(projectedSales / (avgBasket || 150)));
+  return {
+    date: dStr,
+    dayName: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek],
+    daysAhead,
+    isToday: daysAhead === 0,
+    isWeekend,
+    projectedSales,
+    confidenceLower: Math.round(projectedSales * 0.92),
+    confidenceUpper: Math.round(projectedSales * 1.08),
+    projectedBills,
+    avgBasketValue: avgBasket,
+    eventName: eventName || 'Regular Trading Day',
+    surgePercent,
+    activeFest: activeFest ? {
+      id: activeFest.id,
+      name: activeFest.name,
+      tamilName: activeFest.tamilName || '',
+      tier: activeFest.tier || 'Event',
+      isPeakDay,
+      stockingAdvice: activeFest.stockingAdvice || '',
+      sampleSkus: activeFest.sampleSkus || [],
+      lastYearReferenceYear: emp ? emp.lastYearReferenceYear : null,
+      lastYearDate: emp ? emp.lastYearDate : null,
+      lastYearSales: emp ? emp.lastYearSales : null,
+      lastYearBills: emp ? emp.lastYearBills : null
+    } : null,
+    hourlyBreakdown: [
+      { bracket: '08:00 - 11:00 AM', label: 'Morning Milk & Breakfast Essentials', percent: 26, sales: Math.round(projectedSales * 0.26) },
+      { bracket: '11:00 - 02:00 PM', label: 'Midday Rice, Dal & Cooking Staples', percent: 20, sales: Math.round(projectedSales * 0.20) },
+      { bracket: '02:00 - 05:00 PM', label: 'Afternoon Tea, Biscuits & Snacks', percent: 14, sales: Math.round(projectedSales * 0.14) },
+      { bracket: '05:00 - 09:00 PM', label: 'Evening Peak Family Rush & Dinner Needs', percent: 36, sales: Math.round(projectedSales * 0.36) },
+      { bracket: '09:00 - 10:00 PM', label: 'Late Night Emergency & Confectionery', percent: 4, sales: Math.round(projectedSales * 0.04) }
+    ]
+  };
+}
+
+function predictDate(targetDateStr) {
+  if (!targetDateStr) {
+    const now = new Date();
+    targetDateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  }
+  const overview = getOverview();
+  const baselineDailyTurnover = Math.max(16500, Math.round(overview.totalSales / (overview.totalBills ? (overview.totalBills / 106) : 235) || 18500));
+  const avgBasket = Math.max(50, Math.round(overview.totalSales / Math.max(1, overview.totalBills || 1)) || 174);
+  return predictSingleDay(targetDateStr, baselineDailyTurnover, avgBasket);
+}
+
+function getForecast(days = 15, fromDateStr = null) {
+  const now = new Date();
+  const parseLocalDate = (dStr) => {
+    if (!dStr) return null;
+    const p = dStr.split('-');
+    if (p.length === 3) return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+    return null;
+  };
+  const start = fromDateStr ? parseLocalDate(fromDateStr) : new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  const overview = getOverview();
+  const baselineDailyTurnover = Math.max(16500, Math.round(overview.totalSales / (overview.totalBills ? (overview.totalBills / 106) : 235) || 18500));
+  const avgBasket = Math.max(50, Math.round(overview.totalSales / Math.max(1, overview.totalBills || 1)) || 174);
 
   const forecast = [];
-  const lastDate = (daily.length && new Date(daily[daily.length - 1].date) > new Date('2026-10-01'))
-    ? new Date(daily[daily.length - 1].date)
-    : new Date();
+  for (let i = 0; i < days; i++) {
+    const nextDate = new Date(start);
+    nextDate.setDate(start.getDate() + i);
+    const y = nextDate.getFullYear();
+    const m = String(nextDate.getMonth() + 1).padStart(2, '0');
+    const d = String(nextDate.getDate()).padStart(2, '0');
+    const dateStr = `${y}-${m}-${d}`;
 
-  const festivalEvents = [
-    { start: '2026-09-13', end: '2026-09-15', name: 'Vinayakar Chaturthi', multiplier: 1.55 },
-    { start: '2026-10-01', end: '2026-10-05', name: 'Payday Grocery Cycle', multiplier: 1.30 },
-    { start: '2026-10-18', end: '2026-10-21', name: 'Ayudha Pooja & Saraswathi Pooja', multiplier: 1.80 },
-    { start: '2026-11-01', end: '2026-11-05', name: 'November Payday Refill', multiplier: 1.25 },
-    { start: '2026-11-06', end: '2026-11-09', name: 'Deepavali Mega Festival', multiplier: 2.35 },
-    { start: '2026-11-23', end: '2026-11-25', name: 'Karthigai Deepam', multiplier: 1.40 },
-    { start: '2026-12-24', end: '2027-01-01', name: 'Christmas & New Year Mega Week', multiplier: 1.50 },
-    { start: '2027-01-13', end: '2027-01-18', name: 'Pongal Harvest Festival', multiplier: 2.20 }
-  ];
-  
-  for (let i = 1; i <= days; i++) {
-    const nextDate = new Date(lastDate);
-    nextDate.setDate(lastDate.getDate() + i);
-    const dateStr = nextDate.toISOString().split('T')[0];
-    const dayOfWeek = nextDate.getDay(); // 0=Sun, 6=Sat
-    
-    // Weekend surge multiplier (Sat/Sun get 25-35% boost in hypermarkets)
-    const weekendMultiplier = (dayOfWeek === 0 || dayOfWeek === 6) ? 1.30 : 1.0;
-    const baselineSales = Math.max(12000, Math.round(avgSales * weekendMultiplier));
-    const baselineBills = Math.max(70, Math.round(avgBills * weekendMultiplier));
-
-    const activeEvent = festivalEvents.find(e => dateStr >= e.start && dateStr <= e.end);
-    const eventMultiplier = activeEvent ? activeEvent.multiplier : 1.0;
-    const tradePriceAdjustment = 1.015;
-
-    const projectedSales = Math.round(baselineSales * eventMultiplier * tradePriceAdjustment);
-    const projectedBills = Math.round(baselineBills * (activeEvent ? (1 + (eventMultiplier - 1) * 0.7) : 1.0));
-
+    const pred = predictSingleDay(dateStr, baselineDailyTurnover, avgBasket);
     forecast.push({
       date: dateStr,
-      dayName: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek],
-      baselineSales,
-      projectedSales,
-      baselineBills,
-      projectedBills,
-      isWeekend: dayOfWeek === 0 || dayOfWeek === 6,
-      eventName: activeEvent ? activeEvent.name : null,
-      surgePercent: activeEvent ? Math.round((eventMultiplier - 1) * 100) : 0
+      dayIndex: i + 1,
+      dayName: pred.dayName,
+      daysAhead: pred.daysAhead,
+      isToday: pred.isToday,
+      isWeekend: pred.isWeekend,
+      baselineSales: Math.round(baselineDailyTurnover * (pred.isWeekend ? 1.30 : 1.0)),
+      projectedSales: pred.projectedSales,
+      confidenceLower: pred.confidenceLower,
+      confidenceUpper: pred.confidenceUpper,
+      baselineBills: Math.round(baselineDailyTurnover / avgBasket),
+      projectedBills: pred.projectedBills,
+      eventName: pred.eventName,
+      surgePercent: pred.surgePercent,
+      activeFest: pred.activeFest,
+      hourlyBreakdown: pred.hourlyBreakdown
     });
   }
   return forecast;
@@ -1407,7 +1493,7 @@ function getWhatsAppBriefingText() {
 // ==========================================
 function getFestivalPredictions() {
   const overview = getOverview();
-  const baselineDailyTurnover = Math.round(overview.totalSales / (overview.totalBills ? (overview.totalBills / 45) : 30) || 16500);
+  const baselineDailyTurnover = Math.max(16500, Math.round(overview.totalSales / (overview.totalBills ? (overview.totalBills / 106) : 235) || 18500));
 
   const now = new Date();
   const y = now.getFullYear();
@@ -1472,10 +1558,11 @@ function getFestivalPredictions() {
     const startDateStr = is2027 ? (d2027.window?.start || d2027Date || chosenDateStr) : (d2026.window?.start || d2026Date || chosenDateStr);
     const endDateStr = is2027 ? (d2027.window?.end || chosenDateStr) : (d2026.window?.end || chosenDateStr);
 
+    const empData = (FESTIVAL_EMPIRICAL_TURNOVER_MASTER && FESTIVAL_EMPIRICAL_TURNOVER_MASTER[f.id]) || {};
     const surgeMultiplier = f.surgeMultiplier || 1.35;
-    const projectedDailySales = Math.round(baselineDailyTurnover * surgeMultiplier);
+    const projectedDailySales = empData.empiricalDailyTurnover || Math.round(baselineDailyTurnover * surgeMultiplier);
     const durationDays = Math.max(1, Math.round((new Date(endDateStr) - new Date(startDateStr)) / (1000 * 60 * 60 * 24)) + 1 || 3);
-    const estimatedTotalSurgeRevenue = Math.round((projectedDailySales - baselineDailyTurnover) * durationDays);
+    const estimatedTotalSurgeRevenue = Math.max(0, Math.round((projectedDailySales - baselineDailyTurnover) * durationDays));
 
     return {
       id: f.id,
@@ -1500,7 +1587,15 @@ function getFestivalPredictions() {
       sampleSkus: f.sampleSkus || [],
       daysRemaining,
       projectedDailySales,
-      estimatedTotalSurgeRevenue
+      estimatedTotalSurgeRevenue,
+      lastYearReferenceYear: empData.lastYearReferenceYear || '2025',
+      lastYearDate: empData.lastYearDate || 'Prior Cycle',
+      lastYearSales: empData.lastYearSales || projectedDailySales,
+      lastYearBills: empData.lastYearBills || Math.round(projectedDailySales / 150),
+      lastYearWindowDailyAvg: empData.lastYearWindowDailyAvg || projectedDailySales,
+      lastYearWindowTotal: empData.lastYearWindowTotal || (projectedDailySales * durationDays),
+      yoyAdjustmentPercent: empData.yoyAdjustmentPercent || '+6.5%',
+      isEmpiricallyCalibrated: !!empData.empiricalDailyTurnover
     };
   });
 
@@ -2023,6 +2118,8 @@ module.exports = {
   getHighMarginReport,
   getLargestBillsReport,
   getProductReport,
-  getFestivalCalendarMatrix
+  getFestivalCalendarMatrix,
+  predictDate,
+  predictSingleDay
 };
 

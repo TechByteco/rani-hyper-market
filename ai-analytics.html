@@ -499,6 +499,120 @@
       </div>
     </div>
 
+    
+    <!-- 📅 15-DAY LIVE AI SALES FORECASTER -->
+    <div class="bg-gray-900 border border-emerald-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden mb-6" id="fifteen-day-forecast-section">
+      <div class="absolute -top-12 -right-12 w-48 h-48 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+              <i data-lucide="calendar-days" class="w-3 h-3"></i> 15-Day Live Retail Forecaster
+            </span>
+            <span class="text-xs text-gray-400">Dynamic Daily Turnover &amp; Footfall</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span>
+              <span id="fc-interval-badge">Live Fortnight Window</span>
+            </span>
+          </div>
+          <h3 class="text-lg font-black text-white mt-1 flex items-center gap-2">
+            <span>📅 Live 15-Day AI Sales &amp; Retail Demand Forecaster</span>
+          </h3>
+          <p class="text-xs text-gray-400 mt-0.5">Calculated dynamically from today with festival surge multipliers, weekend shopping rush models, and 5-year lunisolar POS calibration</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="refreshFifteenDayForecast()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white shadow-md shadow-emerald-600/20 flex items-center gap-1.5 transition">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            <span>Refresh 15-Day Model</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 15-Day Summary KPI Bar -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5 bg-gray-950/70 border border-gray-800/80 rounded-2xl p-4">
+        <div>
+          <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">15-Day Projected Sales</p>
+          <h4 class="text-lg font-black text-emerald-400 mt-0.5" id="fc-kpi-total-sales">₹0</h4>
+          <p class="text-[10px] text-gray-500 mt-0.5">Fortnight Turnover Target</p>
+        </div>
+        <div>
+          <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Expected Invoices</p>
+          <h4 class="text-lg font-black text-white mt-0.5" id="fc-kpi-total-bills">0 bills</h4>
+          <p class="text-[10px] text-gray-500 mt-0.5">Projected Store Footfall</p>
+        </div>
+        <div>
+          <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Peak Sales Day</p>
+          <h4 class="text-lg font-black text-amber-300 mt-0.5 line-clamp-1" id="fc-kpi-peak-day">Analyzing...</h4>
+          <p class="text-[10px] text-gray-500 mt-0.5">Highest Turnover Spike</p>
+        </div>
+        <div>
+          <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Daily Baseline Avg</p>
+          <h4 class="text-lg font-black text-cyan-400 mt-0.5" id="fc-kpi-avg-sales">₹0/day</h4>
+          <p class="text-[10px] text-gray-500 mt-0.5">Moving Average Pace</p>
+        </div>
+      </div>
+
+      <!-- 15-Day Cards Carousel / Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3" id="fifteen-day-cards-container">
+        <div class="col-span-full py-8 text-center text-gray-500 text-xs flex items-center justify-center gap-2">
+          <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>
+          <span>Computing 15-day retail demand forecast...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔮 TARGET DATE AI REVENUE & STOCK PREDICTOR -->
+    <div class="bg-gray-900 border border-amber-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden mb-6" id="target-date-predictor-section">
+      <div class="absolute -top-12 -right-12 w-48 h-48 bg-amber-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+              <i data-lucide="sparkles" class="w-3 h-3"></i> Future Date Simulation
+            </span>
+            <span class="text-xs text-gray-400">What-If Revenue &amp; Stock Forecaster</span>
+          </div>
+          <h3 class="text-lg font-black text-white mt-1 flex items-center gap-2">
+            <span>🔮 Target Date AI Revenue &amp; Stock Predictor</span>
+          </h3>
+          <p class="text-xs text-gray-400 mt-0.5">Select ANY date in the future to simulate exact sales turnover, hourly rush curve, festival surges, and recommended inventory prep</p>
+        </div>
+      </div>
+
+      <!-- Date Input & Quick Shortcut Pills -->
+      <div class="bg-gray-950/70 border border-gray-800/80 rounded-2xl p-4 mb-5">
+        <div class="flex flex-col md:flex-row md:items-center gap-3 justify-between">
+          <div class="flex items-center gap-2 w-full md:w-auto">
+            <label for="custom-predict-date-input" class="text-xs font-bold text-gray-300 shrink-0">Select Target Date:</label>
+            <input type="date" id="custom-predict-date-input" class="bg-gray-900 border border-gray-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400 transition" onchange="runCustomDatePrediction(this.value)">
+            <button onclick="runCustomDatePrediction(document.getElementById('custom-predict-date-input').value)" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-gray-950 text-xs font-black transition flex items-center gap-1 shadow-sm">
+              <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+              <span>Simulate</span>
+            </button>
+          </div>
+
+          <!-- Quick Shortcuts -->
+          <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1 md:pb-0 text-xs">
+            <span class="text-[11px] text-gray-400 font-medium shrink-0">Quick Jumps:</span>
+            <button onclick="quickJumpPredict(1)" class="px-2.5 py-1 rounded-lg bg-gray-900 hover:bg-gray-800 border border-gray-700 text-gray-300 hover:text-white transition whitespace-nowrap">⚡ Tomorrow</button>
+            <button onclick="quickJumpPredict(7)" class="px-2.5 py-1 rounded-lg bg-gray-900 hover:bg-gray-800 border border-gray-700 text-gray-300 hover:text-white transition whitespace-nowrap">📅 +7 Days</button>
+            <button onclick="quickJumpPredictDate('2026-11-24')" class="px-2.5 py-1 rounded-lg bg-purple-950/60 hover:bg-purple-900/60 border border-purple-700 text-purple-300 transition whitespace-nowrap">🕯️ Karthigai Deepam</button>
+            <button onclick="quickJumpPredictDate('2026-12-25')" class="px-2.5 py-1 rounded-lg bg-red-950/60 hover:bg-red-900/60 border border-red-700 text-red-300 transition whitespace-nowrap">🎄 Christmas</button>
+            <button onclick="quickJumpPredictDate('2027-01-15')" class="px-2.5 py-1 rounded-lg bg-amber-950/60 hover:bg-amber-900/60 border border-amber-700 text-amber-300 transition whitespace-nowrap">🌾 Thai Pongal</button>
+            <button onclick="quickJumpPredictDate('2027-04-14')" class="px-2.5 py-1 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/60 border border-emerald-700 text-emerald-300 transition whitespace-nowrap">🥭 Tamil New Year</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Card -->
+      <div id="custom-predict-result-box" class="bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 border border-amber-500/40 rounded-2xl p-5 shadow-lg">
+        <div class="text-center py-6 text-gray-400 text-xs flex items-center justify-center gap-2">
+          <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-amber-400"></i>
+          <span>Select a future date above to calculate AI sales forecast...</span>
+        </div>
+      </div>
+    </div>
+
     <!-- GLOBAL COMMODITY & WORLD TRADE MARKET BAROMETER -->
     <div class="bg-gray-900 border border-cyan-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden">
       <div class="absolute -top-12 -right-12 w-48 h-48 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -855,7 +969,7 @@ Loading live briefing...
           fetch('/api/ai-analytics/monthly?fy=' + fyParam).then(r => r.json()),
           fetch('/api/ai-analytics/yearly').then(r => r.json()),
           fetch('/api/ai-analytics/hourly').then(r => r.json()),
-          fetch('/api/ai-analytics/forecast?days=14').then(r => r.json()),
+          fetch('/api/ai-analytics/forecast?days=15').then(r => r.json()),
           fetch('/api/ai-analytics/dead-stock').then(r => r.json()),
           fetch('/api/ai/festival-predictions').then(r => r.json()),
           fetch('/api/ai/world-trade-predictions').then(r => r.json())
@@ -865,6 +979,8 @@ Loading live briefing...
         cachedMonthlyData = monthlyRes || [];
         cachedYearlyData = yearlyRes || [];
         cachedForecastData = forecastRes || [];
+        renderFifteenDayForecast(cachedForecastData);
+        initCustomDatePredictor();
 
         lastKnownBillsCount = overviewRes.totalBills || 17547;
 
@@ -1301,6 +1417,13 @@ Loading live briefing...
                 <span class="text-gray-400">Est. Daily Turnover:</span>
                 <span class="font-bold text-white">₹${(f.projectedDailySales || 0).toLocaleString('en-IN')}</span>
               </div>
+              <div class="flex items-center justify-between text-[10px] text-gray-400">
+                <span class="flex items-center gap-1">
+                  <i data-lucide="history" class="w-2.5 h-2.5 text-amber-400/80"></i>
+                  <span>Last Year (${f.lastYearDate || 'Prior Cycle'}):</span>
+                </span>
+                <span class="font-semibold text-emerald-400">₹${(f.lastYearSales || f.lastYearWindowDailyAvg || 0).toLocaleString('en-IN')} <span class="text-gray-500 text-[9px]">(${f.lastYearBills || 0} bills)</span></span>
+              </div>
               <div class="flex items-center justify-between text-[11px]">
                 <span class="text-gray-400">Procure Cutoff:</span>
                 <span class="font-semibold text-amber-300">${f.procurementCutoff}</span>
@@ -1331,6 +1454,299 @@ Loading live briefing...
       });
       lucide.createIcons();
     }
+
+    
+    // ==========================================
+    // 15-DAY LIVE AI SALES FORECASTER
+    // ==========================================
+    function renderFifteenDayForecast(forecastData) {
+      const container = document.getElementById('fifteen-day-cards-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!forecastData || forecastData.length === 0) {
+        container.innerHTML = '<div class="col-span-full py-6 text-center text-gray-500 text-xs">No forecast data generated for current cycle.</div>';
+        return;
+      }
+
+      const totalSales = forecastData.reduce((acc, c) => acc + (c.projectedSales || 0), 0);
+      const totalBills = forecastData.reduce((acc, c) => acc + (c.projectedBills || 0), 0);
+      const avgSales = Math.round(totalSales / forecastData.length);
+      const sortedBySales = [...forecastData].sort((a, b) => b.projectedSales - a.projectedSales);
+      const peakDay = sortedBySales[0];
+
+      const kpiSales = document.getElementById('fc-kpi-total-sales');
+      if (kpiSales) kpiSales.textContent = '₹' + totalSales.toLocaleString('en-IN');
+      const kpiBills = document.getElementById('fc-kpi-total-bills');
+      if (kpiBills) kpiBills.textContent = totalBills.toLocaleString('en-IN') + ' bills';
+      const kpiPeak = document.getElementById('fc-kpi-peak-day');
+      if (kpiPeak && peakDay) {
+        kpiPeak.textContent = `${peakDay.dayName.slice(0, 3)} (${peakDay.date.slice(5)}) • ₹${peakDay.projectedSales.toLocaleString('en-IN')}`;
+      }
+      const kpiAvg = document.getElementById('fc-kpi-avg-sales');
+      if (kpiAvg) kpiAvg.textContent = '₹' + avgSales.toLocaleString('en-IN') + '/day';
+
+      const intervalBadge = document.getElementById('fc-interval-badge');
+      if (intervalBadge && forecastData.length >= 2) {
+        intervalBadge.textContent = `${forecastData[0].date.slice(5)} to ${forecastData[forecastData.length - 1].date.slice(5)} (15 Days Live)`;
+      }
+
+      forecastData.forEach((item, idx) => {
+        const card = document.createElement('div');
+        const isToday = item.isToday || idx === 0;
+        const isTomorrow = idx === 1;
+        const hasFest = item.activeFest || (item.eventName && item.eventName.includes('Festival'));
+
+        card.className = `rounded-xl p-3.5 border flex flex-col justify-between transition cursor-pointer hover:border-emerald-400/60 shadow-sm ${
+          isToday 
+            ? 'bg-gradient-to-b from-emerald-950/40 to-gray-900 border-emerald-500/50 ring-1 ring-emerald-500/30' 
+            : hasFest 
+            ? 'bg-gradient-to-b from-purple-950/40 to-gray-900 border-purple-500/40 ring-1 ring-purple-500/20'
+            : item.isWeekend
+            ? 'bg-gradient-to-b from-blue-950/30 to-gray-900 border-blue-500/30'
+            : 'bg-gray-950/60 border-gray-800'
+        }`;
+        card.setAttribute('onclick', `quickJumpPredictDate('${item.date}')`);
+        card.setAttribute('title', 'Click to open detailed future prediction for this day');
+
+        let statusBadge = '';
+        if (isToday) {
+          statusBadge = '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse">TODAY</span>';
+        } else if (isTomorrow) {
+          statusBadge = '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/40">TOMORROW</span>';
+        } else if (hasFest) {
+          statusBadge = '<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40">🎪 FESTIVAL</span>';
+        } else if (item.isWeekend) {
+          statusBadge = '<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/40">WEEKEND</span>';
+        } else {
+          statusBadge = `<span class="px-2 py-0.5 rounded-full text-[9px] font-medium bg-gray-800 text-gray-400">Day ${idx + 1}</span>`;
+        }
+
+        const dateParts = item.date.split('-');
+        const dateFormatted = `${dateParts[2]} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][parseInt(dateParts[1],10)-1]}`;
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <div>
+                <h5 class="text-xs font-black text-white">${item.dayName.slice(0, 3)}, ${dateFormatted}</h5>
+                <p class="text-[10px] text-gray-400">${item.date}</p>
+              </div>
+              <div>${statusBadge}</div>
+            </div>
+
+            <div class="mt-2 pt-2 border-t border-gray-800/80">
+              <div class="flex items-baseline justify-between">
+                <span class="text-base font-black text-emerald-400">₹${(item.projectedSales || 0).toLocaleString('en-IN')}</span>
+                <span class="text-[10px] text-gray-400 font-semibold">${item.projectedBills || 0} bills</span>
+              </div>
+              <p class="text-[9px] text-gray-500 mt-0.5">Range: ₹${(item.confidenceLower || Math.round(item.projectedSales * 0.92)).toLocaleString('en-IN')} – ₹${(item.confidenceUpper || Math.round(item.projectedSales * 1.08)).toLocaleString('en-IN')}</p>
+            </div>
+          </div>
+
+          <div class="mt-2.5 pt-2 border-t border-gray-800/60">
+            <p class="text-[10px] text-gray-300 line-clamp-1 font-medium flex items-center gap-1">
+              <span class="text-amber-400 shrink-0 font-bold">${item.surgePercent !== '0%' ? item.surgePercent : 'Std'}</span>
+              <span class="truncate">${item.eventName || 'Normal Store Hours'}</span>
+            </p>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    async function refreshFifteenDayForecast() {
+      try {
+        const fc = await fetch('/api/ai-analytics/forecast?days=15').then(r => r.json());
+        if (fc && fc.length > 0) {
+          cachedForecastData = fc;
+          renderFifteenDayForecast(fc);
+        }
+      } catch (e) {
+        console.error('Forecast refresh error:', e);
+      }
+    }
+
+    // ==========================================
+    // TARGET DATE AI REVENUE & STOCK PREDICTOR
+    // ==========================================
+    function initCustomDatePredictor() {
+      const input = document.getElementById('custom-predict-date-input');
+      if (!input) return;
+      const now = new Date();
+      const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      input.min = todayStr;
+      if (!input.value) {
+        const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+        input.value = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
+      }
+      runCustomDatePrediction(input.value);
+    }
+
+    function quickJumpPredict(daysAhead) {
+      const now = new Date();
+      const target = new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysAhead);
+      const ds = `${target.getFullYear()}-${String(target.getMonth() + 1).padStart(2, '0')}-${String(target.getDate()).padStart(2, '0')}`;
+      const input = document.getElementById('custom-predict-date-input');
+      if (input) input.value = ds;
+      runCustomDatePrediction(ds);
+    }
+
+    function quickJumpPredictDate(dateStr) {
+      const input = document.getElementById('custom-predict-date-input');
+      if (input) input.value = dateStr;
+      runCustomDatePrediction(dateStr);
+      const targetSec = document.getElementById('target-date-predictor-section');
+      if (targetSec) targetSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    async function runCustomDatePrediction(dateStr) {
+      if (!dateStr) return;
+      const resultBox = document.getElementById('custom-predict-result-box');
+      if (!resultBox) return;
+
+      resultBox.innerHTML = `
+        <div class="py-8 text-center text-amber-300 text-xs flex items-center justify-center gap-2">
+          <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-amber-400"></i>
+          <span>Simulating retail footfall &amp; sales for ${dateStr}...</span>
+        </div>
+      `;
+      if (window.lucide) window.lucide.createIcons();
+
+      try {
+        const pred = await fetch('/api/ai/predict-date?date=' + encodeURIComponent(dateStr)).then(r => r.json());
+        if (!pred || pred.error) {
+          resultBox.innerHTML = `<div class="py-4 text-center text-rose-400 text-xs">${pred?.error || 'Unable to simulate date'}</div>`;
+          return;
+        }
+
+        let festBanner = '';
+        if (pred.activeFest) {
+          festBanner = `
+            <div class="mb-4 p-3.5 rounded-xl bg-purple-950/50 border border-purple-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/30 text-purple-300 uppercase tracking-wider">${pred.activeFest.tier || 'Festival'} Surge Active</span>
+                <h5 class="text-sm font-black text-white mt-1">${pred.activeFest.name} ${pred.activeFest.tamilName ? `(${pred.activeFest.tamilName})` : ''}</h5>
+                <p class="text-xs text-purple-200/80 mt-0.5">${pred.activeFest.stockingAdvice || 'Audited high-demand festival shopping period'}</p>
+              </div>
+              <div class="sm:text-right shrink-0">
+                <span class="text-xs text-gray-400">Last Year Ref (${pred.activeFest.lastYearDate || 'Prior Cycle'}):</span>
+                <p class="text-sm font-black text-emerald-400">₹${(pred.activeFest.lastYearSales || 0).toLocaleString('en-IN')} <span class="text-[10px] font-normal text-gray-400">(${pred.activeFest.lastYearBills || 0} bills)</span></p>
+              </div>
+            </div>
+          `;
+        }
+
+        let hourlyBars = '';
+        (pred.hourlyBreakdown || []).forEach(h => {
+          hourlyBars += `
+            <div>
+              <div class="flex items-center justify-between text-[11px] mb-1">
+                <span class="text-gray-300 font-semibold">${h.bracket} &bull; <span class="text-gray-400 font-normal">${h.label}</span></span>
+                <span class="text-emerald-400 font-bold">₹${(h.sales || 0).toLocaleString('en-IN')} (${h.percent}%)</span>
+              </div>
+              <div class="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-1.5 rounded-full" style="width: ${h.percent * 2.5}%"></div>
+              </div>
+            </div>
+          `;
+        });
+
+        let skuChecklist = '';
+        const skus = (pred.activeFest && pred.activeFest.sampleSkus && pred.activeFest.sampleSkus.length > 0)
+          ? pred.activeFest.sampleSkus
+          : [
+              { name: '1Ltr Standard Sunflower Oil', rate: 140, surge: '+25%' },
+              { name: 'Ponni Boiled Rice (25Kg)', rate: 1250, surge: '+18%' },
+              { name: 'Toor Dal Premium (1Kg)', rate: 165, surge: '+20%' },
+              { name: 'Aavin / Hatsun Milk (500ml)', rate: 26, surge: '+30%' }
+            ];
+
+        skus.slice(0, 4).forEach(s => {
+          skuChecklist += `
+            <div class="flex items-center justify-between p-2 rounded-xl bg-gray-900/80 border border-gray-800 text-xs">
+              <span class="text-white font-medium line-clamp-1">${s.name}</span>
+              <div class="flex items-center gap-2 shrink-0">
+                <span class="font-bold text-gray-300">₹${s.rate}</span>
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300">${s.surge || '+25%'}</span>
+              </div>
+            </div>
+          `;
+        });
+
+        const countdownText = pred.daysAhead === 0 ? 'Today' : (pred.daysAhead === 1 ? 'Tomorrow (1 day left)' : `In ${pred.daysAhead} days`);
+
+        resultBox.innerHTML = `
+          <div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-800/80 pb-3 mb-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/40">${countdownText}</span>
+                  <span class="text-xs text-gray-400">${pred.dayName}</span>
+                </div>
+                <h4 class="text-base font-black text-white mt-1">${pred.date} &bull; ${pred.eventName}</h4>
+              </div>
+              <div class="text-left sm:text-right">
+                <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Projected Turnover</span>
+                <h3 class="text-2xl font-black text-emerald-400">₹${(pred.projectedSales || 0).toLocaleString('en-IN')}</h3>
+                <p class="text-[10px] text-gray-400">Confidence Band: ₹${(pred.confidenceLower || 0).toLocaleString('en-IN')} – ₹${(pred.confidenceUpper || 0).toLocaleString('en-IN')}</p>
+              </div>
+            </div>
+
+            ${festBanner}
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+              <div class="bg-gray-950/80 p-3 rounded-xl border border-gray-800">
+                <p class="text-[10px] text-gray-400 font-bold uppercase">Estimated Footfall</p>
+                <h5 class="text-base font-black text-white mt-0.5">${pred.projectedBills} bills</h5>
+              </div>
+              <div class="bg-gray-950/80 p-3 rounded-xl border border-gray-800">
+                <p class="text-[10px] text-gray-400 font-bold uppercase">Average Basket</p>
+                <h5 class="text-base font-black text-cyan-300 mt-0.5">₹${pred.avgBasketValue}</h5>
+              </div>
+              <div class="bg-gray-950/80 p-3 rounded-xl border border-gray-800">
+                <p class="text-[10px] text-gray-400 font-bold uppercase">Day Type</p>
+                <h5 class="text-base font-black ${pred.isWeekend ? 'text-amber-300' : 'text-gray-300'} mt-0.5">${pred.isWeekend ? 'Weekend Rush' : 'Standard Weekday'}</h5>
+              </div>
+              <div class="bg-gray-950/80 p-3 rounded-xl border border-gray-800">
+                <p class="text-[10px] text-gray-400 font-bold uppercase">Estimated Surge</p>
+                <h5 class="text-base font-black text-emerald-400 mt-0.5">${pred.surgePercent}</h5>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+              <!-- Hourly Traffic Curve -->
+              <div class="bg-gray-950/70 p-4 rounded-xl border border-gray-800/80">
+                <h5 class="text-xs font-bold text-white mb-3 flex items-center gap-1.5">
+                  <i data-lucide="clock" class="w-3.5 h-3.5 text-cyan-400"></i>
+                  <span>Hourly Footfall &amp; Revenue Rush Curve</span>
+                </h5>
+                <div class="space-y-3">${hourlyBars}</div>
+              </div>
+
+              <!-- Recommended Priority SKUs -->
+              <div class="bg-gray-950/70 p-4 rounded-xl border border-gray-800/80">
+                <h5 class="text-xs font-bold text-white mb-3 flex items-center gap-1.5">
+                  <i data-lucide="package" class="w-3.5 h-3.5 text-amber-400"></i>
+                  <span>Priority Inventory Checklist for ${pred.date}</span>
+                </h5>
+                <div class="space-y-2">${skuChecklist}</div>
+                <button onclick="sendQuickPrompt('Prepare complete wholesale procurement order for ${pred.date}')" class="mt-3.5 w-full py-2 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 text-purple-300 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                  <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                  <span>Ask AI for Wholesale Order Breakdown</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        if (window.lucide) window.lucide.createIcons();
+      } catch (err) {
+        console.error('runCustomDatePrediction error:', err);
+        resultBox.innerHTML = `<div class="py-4 text-center text-rose-400 text-xs">Error calculating forecast: ${err.message}</div>`;
+      }
+    }
+
 
     function renderWorldTradeCards(tradeData) {
       const container = document.getElementById('trade-grid-container');

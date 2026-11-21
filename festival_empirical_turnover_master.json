@@ -1,0 +1,1896 @@
+{
+  "new_year_day": {
+    "id": "new_year_day",
+    "name": "New Year's Day Celebration",
+    "empiricalDailyTurnover": 19318,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-01-01",
+    "lastYearSales": 18139.0,
+    "lastYearBills": 105,
+    "lastYearWindowDailyAvg": 14990.5,
+    "lastYearWindowTotal": 59962.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-01-01",
+        "windowStart": "2022-12-30",
+        "windowEnd": "2023-01-02",
+        "exactDaySales": 29940.0,
+        "exactDayBills": 184,
+        "windowSales": 88008.0,
+        "windowBills": 586,
+        "windowDays": 4,
+        "windowDailyAvg": 22002.0
+      },
+      "2024": {
+        "festivalDate": "2024-01-01",
+        "windowStart": "2023-12-30",
+        "windowEnd": "2024-01-02",
+        "exactDaySales": 18812.0,
+        "exactDayBills": 110,
+        "windowSales": 94095.0,
+        "windowBills": 515,
+        "windowDays": 4,
+        "windowDailyAvg": 23523.75
+      },
+      "2025": {
+        "festivalDate": "2025-01-01",
+        "windowStart": "2024-12-30",
+        "windowEnd": "2025-01-02",
+        "exactDaySales": 13286.0,
+        "exactDayBills": 92,
+        "windowSales": 68559.0,
+        "windowBills": 347,
+        "windowDays": 4,
+        "windowDailyAvg": 17139.75
+      },
+      "2026": {
+        "festivalDate": "2026-01-01",
+        "windowStart": "2025-12-30",
+        "windowEnd": "2026-01-02",
+        "exactDaySales": 18139.0,
+        "exactDayBills": 105,
+        "windowSales": 59962.0,
+        "windowBills": 390,
+        "windowDays": 4,
+        "windowDailyAvg": 14990.5
+      }
+    }
+  },
+  "bhogi_festival": {
+    "id": "bhogi_festival",
+    "name": "Bhogi Festival (Pre-Pongal Cleaning)",
+    "empiricalDailyTurnover": 25204,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-01-14",
+    "lastYearSales": 23666.0,
+    "lastYearBills": 122,
+    "lastYearWindowDailyAvg": 21079.33,
+    "lastYearWindowTotal": 63238.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-01-14",
+        "windowStart": "2023-01-12",
+        "windowEnd": "2023-01-14",
+        "exactDaySales": 33040.0,
+        "exactDayBills": 178,
+        "windowSales": 62931.0,
+        "windowBills": 355,
+        "windowDays": 3,
+        "windowDailyAvg": 20977.0
+      },
+      "2024": {
+        "festivalDate": "2024-01-14",
+        "windowStart": "2024-01-12",
+        "windowEnd": "2024-01-14",
+        "exactDaySales": 39956.0,
+        "exactDayBills": 124,
+        "windowSales": 80946.0,
+        "windowBills": 336,
+        "windowDays": 3,
+        "windowDailyAvg": 26982.0
+      },
+      "2025": {
+        "festivalDate": "2025-01-13",
+        "windowStart": "2025-01-11",
+        "windowEnd": "2025-01-13",
+        "exactDaySales": 21512.0,
+        "exactDayBills": 93,
+        "windowSales": 59303.0,
+        "windowBills": 254,
+        "windowDays": 3,
+        "windowDailyAvg": 19767.67
+      },
+      "2026": {
+        "festivalDate": "2026-01-14",
+        "windowStart": "2026-01-12",
+        "windowEnd": "2026-01-14",
+        "exactDaySales": 23666.0,
+        "exactDayBills": 122,
+        "windowSales": 63238.0,
+        "windowBills": 297,
+        "windowDays": 3,
+        "windowDailyAvg": 21079.33
+      }
+    }
+  },
+  "pongal_harvest": {
+    "id": "pongal_harvest",
+    "name": "Thai Pongal (Tamil Harvest Festival)",
+    "empiricalDailyTurnover": 27489,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-01-15",
+    "lastYearSales": 25811.0,
+    "lastYearBills": 138,
+    "lastYearWindowDailyAvg": 22486.17,
+    "lastYearWindowTotal": 134917.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-01-15",
+        "windowStart": "2023-01-12",
+        "windowEnd": "2023-01-17",
+        "exactDaySales": 26160.0,
+        "exactDayBills": 138,
+        "windowSales": 131307.0,
+        "windowBills": 785,
+        "windowDays": 6,
+        "windowDailyAvg": 21884.5
+      },
+      "2024": {
+        "festivalDate": "2024-01-15",
+        "windowStart": "2024-01-12",
+        "windowEnd": "2024-01-17",
+        "exactDaySales": 26266.0,
+        "exactDayBills": 132,
+        "windowSales": 146466.0,
+        "windowBills": 750,
+        "windowDays": 6,
+        "windowDailyAvg": 24411.0
+      },
+      "2025": {
+        "festivalDate": "2025-01-14",
+        "windowStart": "2025-01-11",
+        "windowEnd": "2025-01-16",
+        "exactDaySales": 9799.0,
+        "exactDayBills": 99,
+        "windowSales": 100003.0,
+        "windowBills": 586,
+        "windowDays": 6,
+        "windowDailyAvg": 16667.17
+      },
+      "2026": {
+        "festivalDate": "2026-01-15",
+        "windowStart": "2026-01-12",
+        "windowEnd": "2026-01-17",
+        "exactDaySales": 25811.0,
+        "exactDayBills": 138,
+        "windowSales": 134917.0,
+        "windowBills": 749,
+        "windowDays": 6,
+        "windowDailyAvg": 22486.17
+      }
+    }
+  },
+  "mattu_kanum_pongal": {
+    "id": "mattu_kanum_pongal",
+    "name": "Mattu & Kanum Pongal (Jallikattu Season)",
+    "empiricalDailyTurnover": 32135,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-01-16",
+    "lastYearSales": 30174.0,
+    "lastYearBills": 196,
+    "lastYearWindowDailyAvg": 22797.5,
+    "lastYearWindowTotal": 91190.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-01-16",
+        "windowStart": "2023-01-15",
+        "windowEnd": "2023-01-18",
+        "exactDaySales": 28073.0,
+        "exactDayBills": 167,
+        "windowSales": 79719.0,
+        "windowBills": 526,
+        "windowDays": 4,
+        "windowDailyAvg": 19929.75
+      },
+      "2024": {
+        "festivalDate": "2024-01-16",
+        "windowStart": "2024-01-15",
+        "windowEnd": "2024-01-18",
+        "exactDaySales": 20019.0,
+        "exactDayBills": 142,
+        "windowSales": 89355.0,
+        "windowBills": 524,
+        "windowDays": 4,
+        "windowDailyAvg": 22338.75
+      },
+      "2025": {
+        "festivalDate": "2025-01-15",
+        "windowStart": "2025-01-14",
+        "windowEnd": "2025-01-17",
+        "exactDaySales": 18743.0,
+        "exactDayBills": 131,
+        "windowSales": 50738.0,
+        "windowBills": 415,
+        "windowDays": 4,
+        "windowDailyAvg": 12684.5
+      },
+      "2026": {
+        "festivalDate": "2026-01-16",
+        "windowStart": "2026-01-15",
+        "windowEnd": "2026-01-18",
+        "exactDaySales": 30174.0,
+        "exactDayBills": 196,
+        "windowSales": 91190.0,
+        "windowBills": 576,
+        "windowDays": 4,
+        "windowDailyAvg": 22797.5
+      }
+    }
+  },
+  "thai_poosam": {
+    "id": "thai_poosam",
+    "name": "Thai Poosam (Palani Padayatra Pilgrim Season)",
+    "empiricalDailyTurnover": 30300,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-02-01",
+    "lastYearSales": 28451.0,
+    "lastYearBills": 121,
+    "lastYearWindowDailyAvg": 19885.8,
+    "lastYearWindowTotal": 99429.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-02-05",
+        "windowStart": "2023-02-02",
+        "windowEnd": "2023-02-06",
+        "exactDaySales": 79227.0,
+        "exactDayBills": 142,
+        "windowSales": 173384.0,
+        "windowBills": 563,
+        "windowDays": 5,
+        "windowDailyAvg": 34676.8
+      },
+      "2024": {
+        "festivalDate": "2024-01-25",
+        "windowStart": "2024-01-22",
+        "windowEnd": "2024-01-26",
+        "exactDaySales": 14074.0,
+        "exactDayBills": 106,
+        "windowSales": 86782.0,
+        "windowBills": 518,
+        "windowDays": 5,
+        "windowDailyAvg": 17356.4
+      },
+      "2025": {
+        "festivalDate": "2025-02-11",
+        "windowStart": "2025-02-08",
+        "windowEnd": "2025-02-12",
+        "exactDaySales": 10022.0,
+        "exactDayBills": 73,
+        "windowSales": 76976.0,
+        "windowBills": 424,
+        "windowDays": 5,
+        "windowDailyAvg": 15395.2
+      },
+      "2026": {
+        "festivalDate": "2026-02-01",
+        "windowStart": "2026-01-29",
+        "windowEnd": "2026-02-02",
+        "exactDaySales": 28451.0,
+        "exactDayBills": 121,
+        "windowSales": 99429.0,
+        "windowBills": 493,
+        "windowDays": 5,
+        "windowDailyAvg": 19885.8
+      }
+    }
+  },
+  "republic_day_sale": {
+    "id": "republic_day_sale",
+    "name": "Republic Day Long Weekend Sale",
+    "empiricalDailyTurnover": 19338,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-01-26",
+    "lastYearSales": 14153.0,
+    "lastYearBills": 95,
+    "lastYearWindowDailyAvg": 18158.0,
+    "lastYearWindowTotal": 72632.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-01-26",
+        "windowStart": "2023-01-24",
+        "windowEnd": "2023-01-27",
+        "exactDaySales": 10301.0,
+        "exactDayBills": 110,
+        "windowSales": 61958.0,
+        "windowBills": 416,
+        "windowDays": 4,
+        "windowDailyAvg": 15489.5
+      },
+      "2024": {
+        "festivalDate": "2024-01-26",
+        "windowStart": "2024-01-24",
+        "windowEnd": "2024-01-27",
+        "exactDaySales": 18943.0,
+        "exactDayBills": 105,
+        "windowSales": 75699.0,
+        "windowBills": 422,
+        "windowDays": 4,
+        "windowDailyAvg": 18924.75
+      },
+      "2025": {
+        "festivalDate": "2025-01-26",
+        "windowStart": "2025-01-24",
+        "windowEnd": "2025-01-27",
+        "exactDaySales": 13730.0,
+        "exactDayBills": 111,
+        "windowSales": 40238.0,
+        "windowBills": 278,
+        "windowDays": 4,
+        "windowDailyAvg": 10059.5
+      },
+      "2026": {
+        "festivalDate": "2026-01-26",
+        "windowStart": "2026-01-24",
+        "windowEnd": "2026-01-27",
+        "exactDaySales": 14153.0,
+        "exactDayBills": 95,
+        "windowSales": 72632.0,
+        "windowBills": 368,
+        "windowDays": 4,
+        "windowDailyAvg": 18158.0
+      }
+    }
+  },
+  "valentines_snack_week": {
+    "id": "valentines_snack_week",
+    "name": "Valentine's & Youth Snacking Week",
+    "empiricalDailyTurnover": 24799,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-02-14",
+    "lastYearSales": 23285.0,
+    "lastYearBills": 119,
+    "lastYearWindowDailyAvg": 16727.0,
+    "lastYearWindowTotal": 100362.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-02-14",
+        "windowStart": "2023-02-10",
+        "windowEnd": "2023-02-15",
+        "exactDaySales": 13541.0,
+        "exactDayBills": 107,
+        "windowSales": 97561.0,
+        "windowBills": 734,
+        "windowDays": 6,
+        "windowDailyAvg": 16260.17
+      },
+      "2024": {
+        "festivalDate": "2024-02-14",
+        "windowStart": "2024-02-10",
+        "windowEnd": "2024-02-15",
+        "exactDaySales": 18009.0,
+        "exactDayBills": 114,
+        "windowSales": 106344.0,
+        "windowBills": 678,
+        "windowDays": 6,
+        "windowDailyAvg": 17724.0
+      },
+      "2025": {
+        "festivalDate": "2025-02-14",
+        "windowStart": "2025-02-10",
+        "windowEnd": "2025-02-15",
+        "exactDaySales": 15875.0,
+        "exactDayBills": 77,
+        "windowSales": 83913.0,
+        "windowBills": 435,
+        "windowDays": 6,
+        "windowDailyAvg": 13985.5
+      },
+      "2026": {
+        "festivalDate": "2026-02-14",
+        "windowStart": "2026-02-10",
+        "windowEnd": "2026-02-15",
+        "exactDaySales": 23285.0,
+        "exactDayBills": 119,
+        "windowSales": 100362.0,
+        "windowBills": 614,
+        "windowDays": 6,
+        "windowDailyAvg": 16727.0
+      }
+    }
+  },
+  "maha_shivaratri": {
+    "id": "maha_shivaratri",
+    "name": "Maha Shivaratri (All-Night Fasting & Vigil)",
+    "empiricalDailyTurnover": 29917,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-02-15",
+    "lastYearSales": 21423.0,
+    "lastYearBills": 107,
+    "lastYearWindowDailyAvg": 28090.67,
+    "lastYearWindowTotal": 84272.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-02-18",
+        "windowStart": "2023-02-17",
+        "windowEnd": "2023-02-19",
+        "exactDaySales": 23040.0,
+        "exactDayBills": 135,
+        "windowSales": 64617.0,
+        "windowBills": 435,
+        "windowDays": 3,
+        "windowDailyAvg": 21539.0
+      },
+      "2024": {
+        "festivalDate": "2024-03-08",
+        "windowStart": "2024-03-07",
+        "windowEnd": "2024-03-09",
+        "exactDaySales": 23311.0,
+        "exactDayBills": 109,
+        "windowSales": 71231.0,
+        "windowBills": 331,
+        "windowDays": 3,
+        "windowDailyAvg": 23743.67
+      },
+      "2025": {
+        "festivalDate": "2025-02-26",
+        "windowStart": "2025-02-25",
+        "windowEnd": "2025-02-27",
+        "exactDaySales": 12545.0,
+        "exactDayBills": 77,
+        "windowSales": 31233.0,
+        "windowBills": 227,
+        "windowDays": 3,
+        "windowDailyAvg": 10411.0
+      },
+      "2026": {
+        "festivalDate": "2026-02-15",
+        "windowStart": "2026-02-14",
+        "windowEnd": "2026-02-16",
+        "exactDaySales": 21423.0,
+        "exactDayBills": 107,
+        "windowSales": 84272.0,
+        "windowBills": 324,
+        "windowDays": 3,
+        "windowDailyAvg": 28090.67
+      }
+    }
+  },
+  "thai_masi_weddings": {
+    "id": "thai_masi_weddings",
+    "name": "Thai & Masi Subha Muhurtham Wedding Season",
+    "empiricalDailyTurnover": 22319,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-02-18",
+    "lastYearSales": 18743.0,
+    "lastYearBills": 104,
+    "lastYearWindowDailyAvg": 20956.93,
+    "lastYearWindowTotal": 314354.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-02-15",
+        "windowStart": "2023-02-10",
+        "windowEnd": "2023-02-25",
+        "exactDaySales": 17347.0,
+        "exactDayBills": 109,
+        "windowSales": 281437.0,
+        "windowBills": 1917,
+        "windowDays": 16,
+        "windowDailyAvg": 17589.81
+      },
+      "2024": {
+        "festivalDate": "2024-02-18",
+        "windowStart": "2024-02-12",
+        "windowEnd": "2024-02-26",
+        "exactDaySales": 29475.0,
+        "exactDayBills": 154,
+        "windowSales": 327807.0,
+        "windowBills": 1701,
+        "windowDays": 15,
+        "windowDailyAvg": 21853.8
+      },
+      "2025": {
+        "festivalDate": "2025-02-20",
+        "windowStart": "2025-02-14",
+        "windowEnd": "2025-02-28",
+        "exactDaySales": 7774.0,
+        "exactDayBills": 53,
+        "windowSales": 195844.0,
+        "windowBills": 1102,
+        "windowDays": 15,
+        "windowDailyAvg": 13056.27
+      },
+      "2026": {
+        "festivalDate": "2026-02-18",
+        "windowStart": "2026-02-12",
+        "windowEnd": "2026-02-26",
+        "exactDaySales": 18743.0,
+        "exactDayBills": 104,
+        "windowSales": 314354.0,
+        "windowBills": 1467,
+        "windowDays": 15,
+        "windowDailyAvg": 20956.93
+      }
+    }
+  },
+  "holi_festival": {
+    "id": "holi_festival",
+    "name": "Holi Festival Celebration",
+    "empiricalDailyTurnover": 45416,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-03-03",
+    "lastYearSales": 42644.0,
+    "lastYearBills": 85,
+    "lastYearWindowDailyAvg": 26532.5,
+    "lastYearWindowTotal": 106130.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-03-08",
+        "windowStart": "2023-03-06",
+        "windowEnd": "2023-03-09",
+        "exactDaySales": 12437.0,
+        "exactDayBills": 108,
+        "windowSales": 83535.0,
+        "windowBills": 459,
+        "windowDays": 4,
+        "windowDailyAvg": 20883.75
+      },
+      "2024": {
+        "festivalDate": "2024-03-25",
+        "windowStart": "2024-03-23",
+        "windowEnd": "2024-03-26",
+        "exactDaySales": 18246.0,
+        "exactDayBills": 102,
+        "windowSales": 76533.0,
+        "windowBills": 401,
+        "windowDays": 4,
+        "windowDailyAvg": 19133.25
+      },
+      "2025": {
+        "festivalDate": "2025-03-14",
+        "windowStart": "2025-03-12",
+        "windowEnd": "2025-03-15",
+        "exactDaySales": 12556.0,
+        "exactDayBills": 65,
+        "windowSales": 55142.0,
+        "windowBills": 284,
+        "windowDays": 4,
+        "windowDailyAvg": 13785.5
+      },
+      "2026": {
+        "festivalDate": "2026-03-03",
+        "windowStart": "2026-03-01",
+        "windowEnd": "2026-03-04",
+        "exactDaySales": 42644.0,
+        "exactDayBills": 85,
+        "windowSales": 106130.0,
+        "windowBills": 380,
+        "windowDays": 4,
+        "windowDailyAvg": 26532.5
+      }
+    }
+  },
+  "ugadi_telugu_new_year": {
+    "id": "ugadi_telugu_new_year",
+    "name": "Ugadi (Telugu / Kannada New Year)",
+    "empiricalDailyTurnover": 27694,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-03-19",
+    "lastYearSales": 26004.0,
+    "lastYearBills": 90,
+    "lastYearWindowDailyAvg": 20615.5,
+    "lastYearWindowTotal": 82462.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-03-22",
+        "windowStart": "2023-03-20",
+        "windowEnd": "2023-03-23",
+        "exactDaySales": 24921.0,
+        "exactDayBills": 110,
+        "windowSales": 77450.0,
+        "windowBills": 430,
+        "windowDays": 4,
+        "windowDailyAvg": 19362.5
+      },
+      "2024": {
+        "festivalDate": "2024-04-09",
+        "windowStart": "2024-04-07",
+        "windowEnd": "2024-04-10",
+        "exactDaySales": 24351.0,
+        "exactDayBills": 92,
+        "windowSales": 98095.0,
+        "windowBills": 470,
+        "windowDays": 4,
+        "windowDailyAvg": 24523.75
+      },
+      "2025": {
+        "festivalDate": "2025-03-30",
+        "windowStart": "2025-03-28",
+        "windowEnd": "2025-03-31",
+        "exactDaySales": 20247.0,
+        "exactDayBills": 122,
+        "windowSales": 73163.0,
+        "windowBills": 364,
+        "windowDays": 4,
+        "windowDailyAvg": 18290.75
+      },
+      "2026": {
+        "festivalDate": "2026-03-19",
+        "windowStart": "2026-03-17",
+        "windowEnd": "2026-03-20",
+        "exactDaySales": 26004.0,
+        "exactDayBills": 90,
+        "windowSales": 82462.0,
+        "windowBills": 376,
+        "windowDays": 4,
+        "windowDailyAvg": 20615.5
+      }
+    }
+  },
+  "panguni_uthiram": {
+    "id": "panguni_uthiram",
+    "name": "Panguni Uthiram Divine Marriage Festival",
+    "empiricalDailyTurnover": 20522,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-03-31",
+    "lastYearSales": 18902.0,
+    "lastYearBills": 120,
+    "lastYearWindowDailyAvg": 19269.33,
+    "lastYearWindowTotal": 57808.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-04-05",
+        "windowStart": "2023-04-03",
+        "windowEnd": "2023-04-06",
+        "exactDaySales": 27111.0,
+        "exactDayBills": 107,
+        "windowSales": 110169.0,
+        "windowBills": 393,
+        "windowDays": 4,
+        "windowDailyAvg": 27542.25
+      },
+      "2024": {
+        "festivalDate": "2024-03-24",
+        "windowStart": "2024-03-22",
+        "windowEnd": "2024-03-25",
+        "exactDaySales": 26246.0,
+        "exactDayBills": 116,
+        "windowSales": 95392.0,
+        "windowBills": 411,
+        "windowDays": 4,
+        "windowDailyAvg": 23848.0
+      },
+      "2025": {
+        "festivalDate": "2025-04-11",
+        "windowStart": "2025-04-09",
+        "windowEnd": "2025-04-12",
+        "exactDaySales": 6862.0,
+        "exactDayBills": 61,
+        "windowSales": 55490.0,
+        "windowBills": 277,
+        "windowDays": 4,
+        "windowDailyAvg": 13872.5
+      },
+      "2026": {
+        "festivalDate": "2026-03-31",
+        "windowStart": "2026-03-29",
+        "windowEnd": "2026-04-01",
+        "exactDaySales": 18902.0,
+        "exactDayBills": 120,
+        "windowSales": 57808.0,
+        "windowBills": 332,
+        "windowDays": 3,
+        "windowDailyAvg": 19269.33
+      }
+    }
+  },
+  "tamil_new_year": {
+    "id": "tamil_new_year",
+    "name": "Tamil New Year (Puthandu / Chithirai 1)",
+    "empiricalDailyTurnover": 16982,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-04-14",
+    "lastYearSales": 13073.0,
+    "lastYearBills": 104,
+    "lastYearWindowDailyAvg": 15946.0,
+    "lastYearWindowTotal": 63784.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-04-14",
+        "windowStart": "2023-04-12",
+        "windowEnd": "2023-04-15",
+        "exactDaySales": 24054.0,
+        "exactDayBills": 86,
+        "windowSales": 96389.0,
+        "windowBills": 363,
+        "windowDays": 4,
+        "windowDailyAvg": 24097.25
+      },
+      "2024": {
+        "festivalDate": "2024-04-14",
+        "windowStart": "2024-04-12",
+        "windowEnd": "2024-04-15",
+        "exactDaySales": 19134.0,
+        "exactDayBills": 122,
+        "windowSales": 76121.0,
+        "windowBills": 435,
+        "windowDays": 4,
+        "windowDailyAvg": 19030.25
+      },
+      "2025": {
+        "festivalDate": "2025-04-14",
+        "windowStart": "2025-04-12",
+        "windowEnd": "2025-04-15",
+        "exactDaySales": 13783.0,
+        "exactDayBills": 105,
+        "windowSales": 62751.0,
+        "windowBills": 344,
+        "windowDays": 4,
+        "windowDailyAvg": 15687.75
+      },
+      "2026": {
+        "festivalDate": "2026-04-14",
+        "windowStart": "2026-04-12",
+        "windowEnd": "2026-04-15",
+        "exactDaySales": 13073.0,
+        "exactDayBills": 104,
+        "windowSales": 63784.0,
+        "windowBills": 434,
+        "windowDays": 4,
+        "windowDailyAvg": 15946.0
+      }
+    }
+  },
+  "easter_good_friday": {
+    "id": "easter_good_friday",
+    "name": "Good Friday & Easter Sunday",
+    "empiricalDailyTurnover": 26745,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-04-05",
+    "lastYearSales": 25113.0,
+    "lastYearBills": 132,
+    "lastYearWindowDailyAvg": 24010.75,
+    "lastYearWindowTotal": 96043.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-04-09",
+        "windowStart": "2023-04-07",
+        "windowEnd": "2023-04-10",
+        "exactDaySales": 30299.0,
+        "exactDayBills": 82,
+        "windowSales": 112779.0,
+        "windowBills": 388,
+        "windowDays": 4,
+        "windowDailyAvg": 28194.75
+      },
+      "2024": {
+        "festivalDate": "2024-03-31",
+        "windowStart": "2024-03-29",
+        "windowEnd": "2024-04-01",
+        "exactDaySales": 22582.0,
+        "exactDayBills": 134,
+        "windowSales": 64104.0,
+        "windowBills": 384,
+        "windowDays": 3,
+        "windowDailyAvg": 21368.0
+      },
+      "2025": {
+        "festivalDate": "2025-04-20",
+        "windowStart": "2025-04-18",
+        "windowEnd": "2025-04-21",
+        "exactDaySales": 15400.0,
+        "exactDayBills": 99,
+        "windowSales": 53725.0,
+        "windowBills": 352,
+        "windowDays": 4,
+        "windowDailyAvg": 13431.25
+      },
+      "2026": {
+        "festivalDate": "2026-04-05",
+        "windowStart": "2026-04-03",
+        "windowEnd": "2026-04-06",
+        "exactDaySales": 25113.0,
+        "exactDayBills": 132,
+        "windowSales": 96043.0,
+        "windowBills": 483,
+        "windowDays": 4,
+        "windowDailyAvg": 24010.75
+      }
+    }
+  },
+  "chithirai_thiruvizha": {
+    "id": "chithirai_thiruvizha",
+    "name": "Chithirai Thiruvizha (Madurai & Theni)",
+    "empiricalDailyTurnover": 21118,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-04-29",
+    "lastYearSales": 13166.0,
+    "lastYearBills": 112,
+    "lastYearWindowDailyAvg": 19829.25,
+    "lastYearWindowTotal": 158634.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-04-25",
+        "windowStart": "2023-04-20",
+        "windowEnd": "2023-04-28",
+        "exactDaySales": 17848.0,
+        "exactDayBills": 106,
+        "windowSales": 171517.0,
+        "windowBills": 1036,
+        "windowDays": 9,
+        "windowDailyAvg": 19057.44
+      },
+      "2024": {
+        "festivalDate": "2024-04-20",
+        "windowStart": "2024-04-16",
+        "windowEnd": "2024-04-23",
+        "exactDaySales": 20442.0,
+        "exactDayBills": 132,
+        "windowSales": 151889.0,
+        "windowBills": 918,
+        "windowDays": 8,
+        "windowDailyAvg": 18986.12
+      },
+      "2025": {
+        "festivalDate": "2025-05-09",
+        "windowStart": "2025-05-05",
+        "windowEnd": "2025-05-12",
+        "exactDaySales": 13833.0,
+        "exactDayBills": 96,
+        "windowSales": 114054.0,
+        "windowBills": 675,
+        "windowDays": 8,
+        "windowDailyAvg": 14256.75
+      },
+      "2026": {
+        "festivalDate": "2026-04-29",
+        "windowStart": "2026-04-25",
+        "windowEnd": "2026-05-02",
+        "exactDaySales": 13166.0,
+        "exactDayBills": 112,
+        "windowSales": 158634.0,
+        "windowBills": 986,
+        "windowDays": 8,
+        "windowDailyAvg": 19829.25
+      }
+    }
+  },
+  "summer_cool_beverage_surge": {
+    "id": "summer_cool_beverage_surge",
+    "name": "Peak Agni Nakshatram Summer Surge",
+    "empiricalDailyTurnover": 24402,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-05-15",
+    "lastYearSales": 22913.0,
+    "lastYearBills": 131,
+    "lastYearWindowDailyAvg": 21777.24,
+    "lastYearWindowTotal": 544431.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-05-15",
+        "windowStart": "2023-05-04",
+        "windowEnd": "2023-05-28",
+        "exactDaySales": 17123.0,
+        "exactDayBills": 109,
+        "windowSales": 499723.0,
+        "windowBills": 2869,
+        "windowDays": 25,
+        "windowDailyAvg": 19988.92
+      },
+      "2024": {
+        "festivalDate": "2024-05-15",
+        "windowStart": "2024-05-04",
+        "windowEnd": "2024-05-28",
+        "exactDaySales": 22869.0,
+        "exactDayBills": 100,
+        "windowSales": 463363.0,
+        "windowBills": 2666,
+        "windowDays": 25,
+        "windowDailyAvg": 18534.52
+      },
+      "2025": {
+        "festivalDate": "2025-05-15",
+        "windowStart": "2025-05-04",
+        "windowEnd": "2025-05-28",
+        "exactDaySales": 17293.0,
+        "exactDayBills": 87,
+        "windowSales": 328929.0,
+        "windowBills": 2161,
+        "windowDays": 25,
+        "windowDailyAvg": 13157.16
+      },
+      "2026": {
+        "festivalDate": "2026-05-15",
+        "windowStart": "2026-05-04",
+        "windowEnd": "2026-05-28",
+        "exactDaySales": 22913.0,
+        "exactDayBills": 131,
+        "windowSales": 544431.0,
+        "windowBills": 3140,
+        "windowDays": 25,
+        "windowDailyAvg": 21777.24
+      }
+    }
+  },
+  "mariamman_koozh_thiruvizha": {
+    "id": "mariamman_koozh_thiruvizha",
+    "name": "Theni & Bodi Mariamman Temple Koozh Thiruvizha",
+    "empiricalDailyTurnover": 20294,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-05-17",
+    "lastYearSales": 18917.0,
+    "lastYearBills": 149,
+    "lastYearWindowDailyAvg": 19055.8,
+    "lastYearWindowTotal": 95279.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-05-16",
+        "windowStart": "2023-05-14",
+        "windowEnd": "2023-05-18",
+        "exactDaySales": 15285.0,
+        "exactDayBills": 112,
+        "windowSales": 79895.0,
+        "windowBills": 548,
+        "windowDays": 5,
+        "windowDailyAvg": 15979.0
+      },
+      "2024": {
+        "festivalDate": "2024-05-19",
+        "windowStart": "2024-05-17",
+        "windowEnd": "2024-05-21",
+        "exactDaySales": 18436.0,
+        "exactDayBills": 116,
+        "windowSales": 83502.0,
+        "windowBills": 578,
+        "windowDays": 5,
+        "windowDailyAvg": 16700.4
+      },
+      "2025": {
+        "festivalDate": "2025-05-18",
+        "windowStart": "2025-05-16",
+        "windowEnd": "2025-05-20",
+        "exactDaySales": 13223.0,
+        "exactDayBills": 127,
+        "windowSales": 58386.0,
+        "windowBills": 495,
+        "windowDays": 5,
+        "windowDailyAvg": 11677.2
+      },
+      "2026": {
+        "festivalDate": "2026-05-17",
+        "windowStart": "2026-05-15",
+        "windowEnd": "2026-05-19",
+        "exactDaySales": 18917.0,
+        "exactDayBills": 149,
+        "windowSales": 95279.0,
+        "windowBills": 646,
+        "windowDays": 5,
+        "windowDailyAvg": 19055.8
+      }
+    }
+  },
+  "school_reopening_rush": {
+    "id": "school_reopening_rush",
+    "name": "School & College Reopening Rush",
+    "empiricalDailyTurnover": 21671,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-06-05",
+    "lastYearSales": 20348.0,
+    "lastYearBills": 104,
+    "lastYearWindowDailyAvg": 19893.25,
+    "lastYearWindowTotal": 238719.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-06-05",
+        "windowStart": "2023-06-01",
+        "windowEnd": "2023-06-12",
+        "exactDaySales": 16945.0,
+        "exactDayBills": 119,
+        "windowSales": 248498.0,
+        "windowBills": 1353,
+        "windowDays": 12,
+        "windowDailyAvg": 20708.17
+      },
+      "2024": {
+        "festivalDate": "2024-06-06",
+        "windowStart": "2024-06-01",
+        "windowEnd": "2024-06-12",
+        "exactDaySales": 22373.0,
+        "exactDayBills": 104,
+        "windowSales": 223575.0,
+        "windowBills": 1078,
+        "windowDays": 12,
+        "windowDailyAvg": 18631.25
+      },
+      "2025": {
+        "festivalDate": "2025-06-04",
+        "windowStart": "2025-06-01",
+        "windowEnd": "2025-06-12",
+        "exactDaySales": 7742.0,
+        "exactDayBills": 63,
+        "windowSales": 184294.0,
+        "windowBills": 1025,
+        "windowDays": 12,
+        "windowDailyAvg": 15357.83
+      },
+      "2026": {
+        "festivalDate": "2026-06-05",
+        "windowStart": "2026-06-01",
+        "windowEnd": "2026-06-12",
+        "exactDaySales": 20348.0,
+        "exactDayBills": 104,
+        "windowSales": 238719.0,
+        "windowBills": 1186,
+        "windowDays": 12,
+        "windowDailyAvg": 19893.25
+      }
+    }
+  },
+  "bakrid_eid": {
+    "id": "bakrid_eid",
+    "name": "Bakrid (Eid al-Adha Grand Feast)",
+    "empiricalDailyTurnover": 33835,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-05-27",
+    "lastYearSales": 31770.0,
+    "lastYearBills": 148,
+    "lastYearWindowDailyAvg": 24559.6,
+    "lastYearWindowTotal": 122798.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-06-29",
+        "windowStart": "2023-06-26",
+        "windowEnd": "2023-06-30",
+        "exactDaySales": 20844.0,
+        "exactDayBills": 155,
+        "windowSales": 88109.0,
+        "windowBills": 567,
+        "windowDays": 5,
+        "windowDailyAvg": 17621.8
+      },
+      "2024": {
+        "festivalDate": "2024-06-17",
+        "windowStart": "2024-06-14",
+        "windowEnd": "2024-06-18",
+        "exactDaySales": 17648.0,
+        "exactDayBills": 122,
+        "windowSales": 106475.0,
+        "windowBills": 555,
+        "windowDays": 5,
+        "windowDailyAvg": 21295.0
+      },
+      "2025": {
+        "festivalDate": "2025-06-07",
+        "windowStart": "2025-06-04",
+        "windowEnd": "2025-06-08",
+        "exactDaySales": 27740.0,
+        "exactDayBills": 111,
+        "windowSales": 92195.0,
+        "windowBills": 503,
+        "windowDays": 5,
+        "windowDailyAvg": 18439.0
+      },
+      "2026": {
+        "festivalDate": "2026-05-27",
+        "windowStart": "2026-05-24",
+        "windowEnd": "2026-05-28",
+        "exactDaySales": 31770.0,
+        "exactDayBills": 148,
+        "windowSales": 122798.0,
+        "windowBills": 724,
+        "windowDays": 5,
+        "windowDailyAvg": 24559.6
+      }
+    }
+  },
+  "aadi_month_kickoff": {
+    "id": "aadi_month_kickoff",
+    "name": "Aadi Month Kickoff (Aadi 1st)",
+    "empiricalDailyTurnover": 16004,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-07-17",
+    "lastYearSales": 15027.0,
+    "lastYearBills": 90,
+    "lastYearWindowDailyAvg": 14219.75,
+    "lastYearWindowTotal": 56879.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-07-17",
+        "windowStart": "2023-07-15",
+        "windowEnd": "2023-07-18",
+        "exactDaySales": 17904.0,
+        "exactDayBills": 135,
+        "windowSales": 57841.0,
+        "windowBills": 422,
+        "windowDays": 4,
+        "windowDailyAvg": 14460.25
+      },
+      "2024": {
+        "festivalDate": "2024-07-16",
+        "windowStart": "2024-07-15",
+        "windowEnd": "2024-07-18",
+        "exactDaySales": 14308.0,
+        "exactDayBills": 78,
+        "windowSales": 55836.0,
+        "windowBills": 325,
+        "windowDays": 4,
+        "windowDailyAvg": 13959.0
+      },
+      "2025": {
+        "festivalDate": "2025-07-16",
+        "windowStart": "2025-07-15",
+        "windowEnd": "2025-07-18",
+        "exactDaySales": 10949.0,
+        "exactDayBills": 55,
+        "windowSales": 42488.0,
+        "windowBills": 264,
+        "windowDays": 4,
+        "windowDailyAvg": 10622.0
+      },
+      "2026": {
+        "festivalDate": "2026-07-17",
+        "windowStart": "2026-07-15",
+        "windowEnd": "2026-07-18",
+        "exactDaySales": 15027.0,
+        "exactDayBills": 90,
+        "windowSales": 56879.0,
+        "windowBills": 349,
+        "windowDays": 4,
+        "windowDailyAvg": 14219.75
+      }
+    }
+  },
+  "aadi_velli_pooja": {
+    "id": "aadi_velli_pooja",
+    "name": "Aadi Velli (Aadi Friday Goddess Poojas)",
+    "empiricalDailyTurnover": 17020,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-07-24",
+    "lastYearSales": 12346.0,
+    "lastYearBills": 73,
+    "lastYearWindowDailyAvg": 15981.48,
+    "lastYearWindowTotal": 367574.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-07-21",
+        "windowStart": "2023-07-20",
+        "windowEnd": "2023-08-15",
+        "exactDaySales": 16713.0,
+        "exactDayBills": 111,
+        "windowSales": 499901.0,
+        "windowBills": 2568,
+        "windowDays": 27,
+        "windowDailyAvg": 18514.85
+      },
+      "2024": {
+        "festivalDate": "2024-07-26",
+        "windowStart": "2024-07-25",
+        "windowEnd": "2024-08-16",
+        "exactDaySales": 16006.0,
+        "exactDayBills": 83,
+        "windowSales": 415368.0,
+        "windowBills": 1784,
+        "windowDays": 23,
+        "windowDailyAvg": 18059.48
+      },
+      "2025": {
+        "festivalDate": "2025-07-25",
+        "windowStart": "2025-07-24",
+        "windowEnd": "2025-08-15",
+        "exactDaySales": 6940.0,
+        "exactDayBills": 55,
+        "windowSales": 283017.0,
+        "windowBills": 1579,
+        "windowDays": 23,
+        "windowDailyAvg": 12305.09
+      },
+      "2026": {
+        "festivalDate": "2026-07-24",
+        "windowStart": "2026-07-23",
+        "windowEnd": "2026-08-14",
+        "exactDaySales": 12346.0,
+        "exactDayBills": 73,
+        "windowSales": 367574.0,
+        "windowBills": 2126,
+        "windowDays": 23,
+        "windowDailyAvg": 15981.48
+      }
+    }
+  },
+  "aadi_18_perukku": {
+    "id": "aadi_18_perukku",
+    "name": "Aadi 18 Perukku (River Feast & 5 Variety Rice)",
+    "empiricalDailyTurnover": 23863,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-08-03",
+    "lastYearSales": 22407.0,
+    "lastYearBills": 117,
+    "lastYearWindowDailyAvg": 20522.75,
+    "lastYearWindowTotal": 82091.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-08-03",
+        "windowStart": "2023-08-01",
+        "windowEnd": "2023-08-04",
+        "exactDaySales": 15557.0,
+        "exactDayBills": 100,
+        "windowSales": 84800.0,
+        "windowBills": 376,
+        "windowDays": 4,
+        "windowDailyAvg": 21200.0
+      },
+      "2024": {
+        "festivalDate": "2024-08-02",
+        "windowStart": "2024-08-01",
+        "windowEnd": "2024-08-04",
+        "exactDaySales": 35810.0,
+        "exactDayBills": 95,
+        "windowSales": 100114.0,
+        "windowBills": 412,
+        "windowDays": 4,
+        "windowDailyAvg": 25028.5
+      },
+      "2025": {
+        "festivalDate": "2025-08-03",
+        "windowStart": "2025-08-01",
+        "windowEnd": "2025-08-04",
+        "exactDaySales": 18288.0,
+        "exactDayBills": 101,
+        "windowSales": 66660.0,
+        "windowBills": 290,
+        "windowDays": 4,
+        "windowDailyAvg": 16665.0
+      },
+      "2026": {
+        "festivalDate": "2026-08-03",
+        "windowStart": "2026-08-01",
+        "windowEnd": "2026-08-04",
+        "exactDaySales": 22407.0,
+        "exactDayBills": 117,
+        "windowSales": 82091.0,
+        "windowBills": 442,
+        "windowDays": 4,
+        "windowDailyAvg": 20522.75
+      }
+    }
+  },
+  "independence_day_sale": {
+    "id": "independence_day_sale",
+    "name": "Independence Day Freedom Mega Sale",
+    "empiricalDailyTurnover": 17101,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-08-15",
+    "lastYearSales": 16057.0,
+    "lastYearBills": 87,
+    "lastYearWindowDailyAvg": 15286.6,
+    "lastYearWindowTotal": 76433.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-08-15",
+        "windowStart": "2023-08-12",
+        "windowEnd": "2023-08-16",
+        "exactDaySales": 14357.0,
+        "exactDayBills": 74,
+        "windowSales": 95821.0,
+        "windowBills": 452,
+        "windowDays": 5,
+        "windowDailyAvg": 19164.2
+      },
+      "2024": {
+        "festivalDate": "2024-08-15",
+        "windowStart": "2024-08-12",
+        "windowEnd": "2024-08-16",
+        "exactDaySales": 19468.0,
+        "exactDayBills": 91,
+        "windowSales": 97448.0,
+        "windowBills": 323,
+        "windowDays": 5,
+        "windowDailyAvg": 19489.6
+      },
+      "2025": {
+        "festivalDate": "2025-08-15",
+        "windowStart": "2025-08-12",
+        "windowEnd": "2025-08-16",
+        "exactDaySales": 11431.0,
+        "exactDayBills": 77,
+        "windowSales": 59949.0,
+        "windowBills": 330,
+        "windowDays": 5,
+        "windowDailyAvg": 11989.8
+      },
+      "2026": {
+        "festivalDate": "2026-08-15",
+        "windowStart": "2026-08-12",
+        "windowEnd": "2026-08-16",
+        "exactDaySales": 16057.0,
+        "exactDayBills": 87,
+        "windowSales": 76433.0,
+        "windowBills": 446,
+        "windowDays": 5,
+        "windowDailyAvg": 15286.6
+      }
+    }
+  },
+  "varalakshmi_vratham": {
+    "id": "varalakshmi_vratham",
+    "name": "Varalakshmi Vratham (Sumangali Pooja)",
+    "empiricalDailyTurnover": 12935,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-08-28",
+    "lastYearSales": 9295.0,
+    "lastYearBills": 68,
+    "lastYearWindowDailyAvg": 12145.75,
+    "lastYearWindowTotal": 48583.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-08-25",
+        "windowStart": "2023-08-23",
+        "windowEnd": "2023-08-26",
+        "exactDaySales": 15637.0,
+        "exactDayBills": 87,
+        "windowSales": 60479.0,
+        "windowBills": 359,
+        "windowDays": 4,
+        "windowDailyAvg": 15119.75
+      },
+      "2024": {
+        "festivalDate": "2024-08-16",
+        "windowStart": "2024-08-14",
+        "windowEnd": "2024-08-17",
+        "exactDaySales": 17959.0,
+        "exactDayBills": 54,
+        "windowSales": 75854.0,
+        "windowBills": 292,
+        "windowDays": 4,
+        "windowDailyAvg": 18963.5
+      },
+      "2025": {
+        "festivalDate": "2025-08-08",
+        "windowStart": "2025-08-06",
+        "windowEnd": "2025-08-09",
+        "exactDaySales": 5465.0,
+        "exactDayBills": 49,
+        "windowSales": 39950.0,
+        "windowBills": 272,
+        "windowDays": 4,
+        "windowDailyAvg": 9987.5
+      },
+      "2026": {
+        "festivalDate": "2026-08-28",
+        "windowStart": "2026-08-26",
+        "windowEnd": "2026-08-29",
+        "exactDaySales": 9295.0,
+        "exactDayBills": 68,
+        "windowSales": 48583.0,
+        "windowBills": 332,
+        "windowDays": 4,
+        "windowDailyAvg": 12145.75
+      }
+    }
+  },
+  "krishna_jayanthi": {
+    "id": "krishna_jayanthi",
+    "name": "Sri Krishna Jayanthi (Gokulashtami)",
+    "empiricalDailyTurnover": 18879,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-09-04",
+    "lastYearSales": 17727.0,
+    "lastYearBills": 128,
+    "lastYearWindowDailyAvg": 16740.5,
+    "lastYearWindowTotal": 66962.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-09-06",
+        "windowStart": "2023-09-04",
+        "windowEnd": "2023-09-07",
+        "exactDaySales": 20630.0,
+        "exactDayBills": 88,
+        "windowSales": 66229.0,
+        "windowBills": 360,
+        "windowDays": 4,
+        "windowDailyAvg": 16557.25
+      },
+      "2024": {
+        "festivalDate": "2024-08-26",
+        "windowStart": "2024-08-24",
+        "windowEnd": "2024-08-27",
+        "exactDaySales": 10362.0,
+        "exactDayBills": 96,
+        "windowSales": 45142.0,
+        "windowBills": 388,
+        "windowDays": 4,
+        "windowDailyAvg": 11285.5
+      },
+      "2025": {
+        "festivalDate": "2025-08-16",
+        "windowStart": "2025-08-14",
+        "windowEnd": "2025-08-17",
+        "exactDaySales": 16784.0,
+        "exactDayBills": 77,
+        "windowSales": 56688.0,
+        "windowBills": 314,
+        "windowDays": 4,
+        "windowDailyAvg": 14172.0
+      },
+      "2026": {
+        "festivalDate": "2026-09-04",
+        "windowStart": "2026-09-02",
+        "windowEnd": "2026-09-05",
+        "exactDaySales": 17727.0,
+        "exactDayBills": 128,
+        "windowSales": 66962.0,
+        "windowBills": 427,
+        "windowDays": 4,
+        "windowDailyAvg": 16740.5
+      }
+    }
+  },
+  "vinayakar_chaturthi": {
+    "id": "vinayakar_chaturthi",
+    "name": "Vinayakar Chaturthi (Ganesha Festival)",
+    "empiricalDailyTurnover": 27331,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-09-14",
+    "lastYearSales": 25663.0,
+    "lastYearBills": 139,
+    "lastYearWindowDailyAvg": 20881.6,
+    "lastYearWindowTotal": 104408.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-09-18",
+        "windowStart": "2023-09-15",
+        "windowEnd": "2023-09-19",
+        "exactDaySales": 15917.0,
+        "exactDayBills": 93,
+        "windowSales": 86583.0,
+        "windowBills": 524,
+        "windowDays": 5,
+        "windowDailyAvg": 17316.6
+      },
+      "2024": {
+        "festivalDate": "2024-09-07",
+        "windowStart": "2024-09-04",
+        "windowEnd": "2024-09-08",
+        "exactDaySales": 18243.0,
+        "exactDayBills": 112,
+        "windowSales": 81475.0,
+        "windowBills": 435,
+        "windowDays": 5,
+        "windowDailyAvg": 16295.0
+      },
+      "2025": {
+        "festivalDate": "2025-08-27",
+        "windowStart": "2025-08-24",
+        "windowEnd": "2025-08-28",
+        "exactDaySales": 13518.0,
+        "exactDayBills": 103,
+        "windowSales": 67819.0,
+        "windowBills": 441,
+        "windowDays": 5,
+        "windowDailyAvg": 13563.8
+      },
+      "2026": {
+        "festivalDate": "2026-09-14",
+        "windowStart": "2026-09-11",
+        "windowEnd": "2026-09-15",
+        "exactDaySales": 25663.0,
+        "exactDayBills": 139,
+        "windowSales": 104408.0,
+        "windowBills": 640,
+        "windowDays": 5,
+        "windowDailyAvg": 20881.6
+      }
+    }
+  },
+  "onam_sadhya": {
+    "id": "onam_sadhya",
+    "name": "Onam Festival (Grand Sadhya Feast)",
+    "empiricalDailyTurnover": 22411,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-08-25",
+    "lastYearSales": 21043.0,
+    "lastYearBills": 89,
+    "lastYearWindowDailyAvg": 17081.25,
+    "lastYearWindowTotal": 68325.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-08-29",
+        "windowStart": "2023-08-27",
+        "windowEnd": "2023-08-30",
+        "exactDaySales": 15835.0,
+        "exactDayBills": 90,
+        "windowSales": 70578.0,
+        "windowBills": 407,
+        "windowDays": 4,
+        "windowDailyAvg": 17644.5
+      },
+      "2024": {
+        "festivalDate": "2024-09-15",
+        "windowStart": "2024-09-13",
+        "windowEnd": "2024-09-16",
+        "exactDaySales": 26442.0,
+        "exactDayBills": 110,
+        "windowSales": 162588.0,
+        "windowBills": 369,
+        "windowDays": 4,
+        "windowDailyAvg": 40647.0
+      },
+      "2025": {
+        "festivalDate": "2025-09-05",
+        "windowStart": "2025-09-03",
+        "windowEnd": "2025-09-06",
+        "exactDaySales": 16199.0,
+        "exactDayBills": 100,
+        "windowSales": 54047.0,
+        "windowBills": 323,
+        "windowDays": 4,
+        "windowDailyAvg": 13511.75
+      },
+      "2026": {
+        "festivalDate": "2026-08-25",
+        "windowStart": "2026-08-23",
+        "windowEnd": "2026-08-26",
+        "exactDaySales": 21043.0,
+        "exactDayBills": 89,
+        "windowSales": 68325.0,
+        "windowBills": 366,
+        "windowDays": 4,
+        "windowDailyAvg": 17081.25
+      }
+    }
+  },
+  "navaratri_sundal_days": {
+    "id": "navaratri_sundal_days",
+    "name": "Navaratri 9 Days of Sundal & Golu",
+    "empiricalDailyTurnover": 21378,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-10-11",
+    "lastYearSales": 20073.0,
+    "lastYearBills": 116,
+    "lastYearWindowDailyAvg": 18284.1,
+    "lastYearWindowTotal": 182841.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-10-15",
+        "windowStart": "2023-10-14",
+        "windowEnd": "2023-10-23",
+        "exactDaySales": 30832.0,
+        "exactDayBills": 133,
+        "windowSales": 185971.0,
+        "windowBills": 1038,
+        "windowDays": 10,
+        "windowDailyAvg": 18597.1
+      },
+      "2024": {
+        "festivalDate": "2024-10-03",
+        "windowStart": "2024-10-02",
+        "windowEnd": "2024-10-11",
+        "exactDaySales": 18324.0,
+        "exactDayBills": 75,
+        "windowSales": 179621.0,
+        "windowBills": 819,
+        "windowDays": 10,
+        "windowDailyAvg": 17962.1
+      },
+      "2025": {
+        "festivalDate": "2025-09-22",
+        "windowStart": "2025-09-21",
+        "windowEnd": "2025-09-30",
+        "exactDaySales": 14947.0,
+        "exactDayBills": 94,
+        "windowSales": 129873.0,
+        "windowBills": 941,
+        "windowDays": 10,
+        "windowDailyAvg": 12987.3
+      },
+      "2026": {
+        "festivalDate": "2026-10-11",
+        "windowStart": "2026-10-10",
+        "windowEnd": "2026-10-19",
+        "exactDaySales": 20073.0,
+        "exactDayBills": 116,
+        "windowSales": 182841.0,
+        "windowBills": 1061,
+        "windowDays": 10,
+        "windowDailyAvg": 18284.1
+      }
+    }
+  },
+  "ayudha_pooja": {
+    "id": "ayudha_pooja",
+    "name": "Ayudha Pooja & Saraswathi Pooja",
+    "empiricalDailyTurnover": 27102,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-10-19",
+    "lastYearSales": 25448.0,
+    "lastYearBills": 144,
+    "lastYearWindowDailyAvg": 21247.8,
+    "lastYearWindowTotal": 106239.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-10-23",
+        "windowStart": "2023-10-19",
+        "windowEnd": "2023-10-24",
+        "exactDaySales": 25224.0,
+        "exactDayBills": 130,
+        "windowSales": 122420.0,
+        "windowBills": 632,
+        "windowDays": 6,
+        "windowDailyAvg": 20403.33
+      },
+      "2024": {
+        "festivalDate": "2024-10-11",
+        "windowStart": "2024-10-08",
+        "windowEnd": "2024-10-13",
+        "exactDaySales": 15742.0,
+        "exactDayBills": 86,
+        "windowSales": 108541.0,
+        "windowBills": 519,
+        "windowDays": 6,
+        "windowDailyAvg": 18090.17
+      },
+      "2025": {
+        "festivalDate": "2025-10-01",
+        "windowStart": "2025-09-27",
+        "windowEnd": "2025-10-02",
+        "exactDaySales": 24279.0,
+        "exactDayBills": 131,
+        "windowSales": 108096.0,
+        "windowBills": 651,
+        "windowDays": 6,
+        "windowDailyAvg": 18016.0
+      },
+      "2026": {
+        "festivalDate": "2026-10-19",
+        "windowStart": "2026-10-16",
+        "windowEnd": "2026-10-20",
+        "exactDaySales": 25448.0,
+        "exactDayBills": 144,
+        "windowSales": 106239.0,
+        "windowBills": 638,
+        "windowDays": 5,
+        "windowDailyAvg": 21247.8
+      }
+    }
+  },
+  "deepavali": {
+    "id": "deepavali",
+    "name": "Deepavali (Diwali Mega Shopping Week)",
+    "empiricalDailyTurnover": 33401,
+    "lastYearReferenceYear": "2026",
+    "lastYearDate": "2026-11-08",
+    "lastYearSales": 31362.0,
+    "lastYearBills": 187,
+    "lastYearWindowDailyAvg": 25851.67,
+    "lastYearWindowTotal": 155110.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-11-12",
+        "windowStart": "2023-11-07",
+        "windowEnd": "2023-11-12",
+        "exactDaySales": 22799.0,
+        "exactDayBills": 193,
+        "windowSales": 137849.0,
+        "windowBills": 717,
+        "windowDays": 6,
+        "windowDailyAvg": 22974.83
+      },
+      "2024": {
+        "festivalDate": "2024-10-31",
+        "windowStart": "2024-10-26",
+        "windowEnd": "2024-10-31",
+        "exactDaySales": 23937.0,
+        "exactDayBills": 207,
+        "windowSales": 157104.0,
+        "windowBills": 766,
+        "windowDays": 6,
+        "windowDailyAvg": 26184.0
+      },
+      "2025": {
+        "festivalDate": "2025-10-20",
+        "windowStart": "2025-10-15",
+        "windowEnd": "2025-10-20",
+        "exactDaySales": 22145.0,
+        "exactDayBills": 154,
+        "windowSales": 136789.0,
+        "windowBills": 664,
+        "windowDays": 6,
+        "windowDailyAvg": 22798.17
+      },
+      "2026": {
+        "festivalDate": "2026-11-08",
+        "windowStart": "2026-11-03",
+        "windowEnd": "2026-11-08",
+        "exactDaySales": 31362.0,
+        "exactDayBills": 187,
+        "windowSales": 155110.0,
+        "windowBills": 675,
+        "windowDays": 6,
+        "windowDailyAvg": 25851.67
+      }
+    }
+  },
+  "karthigai_deepam": {
+    "id": "karthigai_deepam",
+    "name": "Karthigai Deepam (Festival of 1,000 Lamps)",
+    "empiricalDailyTurnover": 14144,
+    "lastYearReferenceYear": "2025",
+    "lastYearDate": "2025-12-04",
+    "lastYearSales": 10822.0,
+    "lastYearBills": 87,
+    "lastYearWindowDailyAvg": 13280.5,
+    "lastYearWindowTotal": 53122.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-11-26",
+        "windowStart": "2023-11-24",
+        "windowEnd": "2023-11-27",
+        "exactDaySales": 17356.0,
+        "exactDayBills": 127,
+        "windowSales": 62346.0,
+        "windowBills": 398,
+        "windowDays": 4,
+        "windowDailyAvg": 15586.5
+      },
+      "2024": {
+        "festivalDate": "2024-12-13",
+        "windowStart": "2024-12-11",
+        "windowEnd": "2024-12-14",
+        "exactDaySales": 13467.0,
+        "exactDayBills": 117,
+        "windowSales": 59754.0,
+        "windowBills": 356,
+        "windowDays": 4,
+        "windowDailyAvg": 14938.5
+      },
+      "2025": {
+        "festivalDate": "2025-12-04",
+        "windowStart": "2025-12-02",
+        "windowEnd": "2025-12-05",
+        "exactDaySales": 10822.0,
+        "exactDayBills": 87,
+        "windowSales": 53122.0,
+        "windowBills": 356,
+        "windowDays": 4,
+        "windowDailyAvg": 13280.5
+      }
+    }
+  },
+  "margazhi_temple_month": {
+    "id": "margazhi_temple_month",
+    "name": "Margazhi Devotional Month Begins",
+    "empiricalDailyTurnover": 14832,
+    "lastYearReferenceYear": "2025",
+    "lastYearDate": "2025-12-16",
+    "lastYearSales": 12196.0,
+    "lastYearBills": 57,
+    "lastYearWindowDailyAvg": 13927.17,
+    "lastYearWindowTotal": 83563.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-12-16",
+        "windowStart": "2023-12-15",
+        "windowEnd": "2023-12-20",
+        "exactDaySales": 16961.0,
+        "exactDayBills": 113,
+        "windowSales": 86387.0,
+        "windowBills": 599,
+        "windowDays": 6,
+        "windowDailyAvg": 14397.83
+      },
+      "2024": {
+        "festivalDate": "2024-12-16",
+        "windowStart": "2024-12-15",
+        "windowEnd": "2024-12-20",
+        "exactDaySales": 16878.0,
+        "exactDayBills": 59,
+        "windowSales": 62092.0,
+        "windowBills": 281,
+        "windowDays": 6,
+        "windowDailyAvg": 10348.67
+      },
+      "2025": {
+        "festivalDate": "2025-12-16",
+        "windowStart": "2025-12-15",
+        "windowEnd": "2025-12-20",
+        "exactDaySales": 12196.0,
+        "exactDayBills": 57,
+        "windowSales": 83563.0,
+        "windowBills": 467,
+        "windowDays": 6,
+        "windowDailyAvg": 13927.17
+      }
+    }
+  },
+  "christmas_newyear": {
+    "id": "christmas_newyear",
+    "name": "Christmas Eve & Christmas Grand Day",
+    "empiricalDailyTurnover": 17300,
+    "lastYearReferenceYear": "2025",
+    "lastYearDate": "2025-12-25",
+    "lastYearSales": 16244.0,
+    "lastYearBills": 108,
+    "lastYearWindowDailyAvg": 13460.0,
+    "lastYearWindowTotal": 53840.0,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {
+      "2023": {
+        "festivalDate": "2023-12-25",
+        "windowStart": "2023-12-23",
+        "windowEnd": "2023-12-26",
+        "exactDaySales": 18498.0,
+        "exactDayBills": 121,
+        "windowSales": 85955.0,
+        "windowBills": 503,
+        "windowDays": 4,
+        "windowDailyAvg": 21488.75
+      },
+      "2024": {
+        "festivalDate": "2024-12-25",
+        "windowStart": "2024-12-23",
+        "windowEnd": "2024-12-26",
+        "exactDaySales": 11492.0,
+        "exactDayBills": 88,
+        "windowSales": 54097.0,
+        "windowBills": 385,
+        "windowDays": 4,
+        "windowDailyAvg": 13524.25
+      },
+      "2025": {
+        "festivalDate": "2025-12-25",
+        "windowStart": "2025-12-23",
+        "windowEnd": "2025-12-26",
+        "exactDaySales": 16244.0,
+        "exactDayBills": 108,
+        "windowSales": 53840.0,
+        "windowBills": 351,
+        "windowDays": 4,
+        "windowDailyAvg": 13460.0
+      }
+    }
+  },
+  "payday_cycle": {
+    "id": "payday_cycle",
+    "name": "Monthly Payday Grocery Cycle (1st\u20135th)",
+    "empiricalDailyTurnover": 22275,
+    "lastYearReferenceYear": "2025",
+    "lastYearDate": "Prior Cycle",
+    "lastYearSales": 22275,
+    "lastYearBills": 148,
+    "lastYearWindowDailyAvg": 22275,
+    "lastYearWindowTotal": 66825,
+    "yoyAdjustmentPercent": "+6.5%",
+    "history": {}
+  }
+}

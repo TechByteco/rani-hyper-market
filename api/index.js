@@ -4,6 +4,7 @@ const path = require('path');
 // Safe imports with fallbacks
 let analyticsService = null;
 let generativeAi = null;
+let hypermarketBackend = null;
 try {
   analyticsService = require('../analyticsService');
 } catch (e) {
@@ -13,6 +14,11 @@ try {
   generativeAi = require('../generativeAiAdvisor');
 } catch (e) {
   console.warn('generativeAiAdvisor load warning:', e.message);
+}
+try {
+  hypermarketBackend = require('../hypermarketBackend');
+} catch (e) {
+  console.warn('hypermarketBackend load warning:', e.message);
 }
 let festivalMaster = null;
 try {
@@ -140,6 +146,33 @@ module.exports = async (req, res) => {
           }
           return res.send ? res.send(xml) : res.end(xml);
         }
+      }
+    }
+
+    // National Hypermarket Backend API v1
+    if (reqPath === '/api/v1/products') {
+      const search = queryParams.get('search') || '';
+      const category = queryParams.get('category') || '';
+      const page = parseInt(queryParams.get('page') || '1', 10);
+      const limit = parseInt(queryParams.get('limit') || '50', 10);
+
+      if (hypermarketBackend && typeof hypermarketBackend.getProducts === 'function') {
+        const result = hypermarketBackend.getProducts({ search, category, page, limit });
+        return sendJson(200, result);
+      } else {
+        // Fallback: read catalog JSON directly
+        const catalog = readLocalJson('products_catalog.json', readLocalJson('rani_products.json', []));
+        let filtered = catalog;
+        if (search) {
+          const q = search.toLowerCase();
+          filtered = filtered.filter(p => (p.title || '').toLowerCase().includes(q) || (p.barcode || '').includes(q));
+        }
+        if (category) {
+          filtered = filtered.filter(p => (p.category || '').toLowerCase() === category.toLowerCase());
+        }
+        const start = (page - 1) * limit;
+        const paged = filtered.slice(start, start + limit);
+        return sendJson(200, { products: paged, total: filtered.length, page, limit });
       }
     }
 

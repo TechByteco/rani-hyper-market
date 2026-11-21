@@ -1,11 +1,299 @@
 [
   {
+    "id": 346,
+    "name": "T Vijaya",
+    "phone": "9626274697",
+    "address": "Bodinayakanur",
+    "frequency": 9,
+    "totalSpent": 9506,
+    "lastOrder": "2026-11-01T13:02:43.726944Z"
+  },
+  {
+    "id": 370,
+    "name": "KAVIN SAALI FRIEND",
+    "phone": "9361351996",
+    "address": "Bodinayakanur",
+    "frequency": 6,
+    "totalSpent": 8475,
+    "lastOrder": "2026-09-06T12:29:28.890546Z"
+  },
+  {
+    "id": 120,
+    "name": "Saratha",
+    "phone": "8608449610",
+    "address": "Bodinayakanur",
+    "frequency": 13,
+    "totalSpent": 7327,
+    "lastOrder": "2026-11-18T14:26:14.080095Z"
+  },
+  {
+    "id": 23,
+    "name": "N.Chellapandi",
+    "phone": "9876181931",
+    "address": "Bodinayakanur",
+    "frequency": 7,
+    "totalSpent": 6939,
+    "lastOrder": "2026-11-12T08:39:44.492884Z"
+  },
+  {
+    "id": 293,
+    "name": "NANDHA KUMAR",
+    "phone": "9042523140",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 6154,
+    "lastOrder": "2026-05-21T13:33:25.493458Z"
+  },
+  {
+    "id": 211,
+    "name": "Dhanush",
+    "phone": "7708531628",
+    "address": "Bodinayakanur",
+    "frequency": 13,
+    "totalSpent": 5679,
+    "lastOrder": "2026-08-30T15:27:26.110822Z"
+  },
+  {
+    "id": 227,
+    "name": "THE HEAD MASTER PLPS POOPPARA",
+    "phone": "9976637319",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 5041,
+    "lastOrder": "2026-08-02T15:54:47.257287Z"
+  },
+  {
+    "id": 334,
+    "name": "Muthu Selvam",
+    "phone": "9344066388",
+    "address": "Bodinayakanur",
+    "frequency": 27,
+    "totalSpent": 4767,
+    "lastOrder": "2026-11-09T13:18:35.565579Z"
+  },
+  {
+    "id": 154,
+    "name": "GEETHA KUMARE",
+    "phone": "9965007900",
+    "address": "Bodinayakanur",
+    "frequency": 13,
+    "totalSpent": 4143,
+    "lastOrder": "2026-11-18T11:28:56.021775Z"
+  },
+  {
+    "id": 366,
+    "name": "SINGH WATER",
+    "phone": "7598776764",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 3723,
+    "lastOrder": "2026-09-20T07:38:47.803443Z"
+  },
+  {
+    "id": 375,
+    "name": "UMA MAHESWARI",
+    "phone": "9600600872",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 3325,
+    "lastOrder": "2026-11-06T08:48:25.806594Z"
+  },
+  {
+    "id": 215,
+    "name": "Harun",
+    "phone": "9597982010",
+    "address": "Bodinayakanur",
+    "frequency": 4,
+    "totalSpent": 3282,
+    "lastOrder": "2026-11-14T12:38:25.114673Z"
+  },
+  {
+    "id": 40,
+    "name": "Rabik",
+    "phone": "9976575436",
+    "address": "Bodinayakanur",
+    "frequency": 10,
+    "totalSpent": 3217,
+    "lastOrder": "2026-10-14T14:38:22.816976Z"
+  },
+  {
+    "id": 82,
+    "name": "GEETHA",
+    "phone": "8344724426",
+    "address": "Bodinayakanur",
+    "frequency": 8,
+    "totalSpent": 3208,
+    "lastOrder": "2026-10-01T12:20:47.610731Z"
+  },
+  {
+    "id": 374,
+    "name": "SARASVATHI",
+    "phone": "8015141495",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 2887,
+    "lastOrder": "2026-11-06T08:03:10.371449Z"
+  },
+  {
+    "id": 373,
+    "name": "Veeramani",
+    "phone": "8015870949",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 2230,
+    "lastOrder": "2026-11-04T14:45:18.955831Z"
+  },
+  {
+    "id": 360,
+    "name": "CHITHRA",
+    "phone": "8608650938",
+    "address": "Bodinayakanur",
+    "frequency": 6,
+    "totalSpent": 1667,
+    "lastOrder": "2026-06-28T15:58:08.446353Z"
+  },
+  {
+    "id": 123,
+    "name": "SAMAD AATHIQ (AUTO)",
+    "phone": "9500295945",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1621,
+    "lastOrder": "2026-07-03T07:39:53.429059Z"
+  },
+  {
+    "id": 141,
+    "name": "AS DHAKSHANA",
+    "phone": "8925204400",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 1590,
+    "lastOrder": "2026-05-01T13:24:14.271487Z"
+  },
+  {
+    "id": 301,
+    "name": "ARULPAVAI",
+    "phone": "9566902146",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 1441,
+    "lastOrder": "2026-10-13T12:01:23.420224Z"
+  },
+  {
+    "id": 361,
+    "name": "JEGATHEESWARI",
+    "phone": "9344104574",
+    "address": "Bodinayakanur",
+    "frequency": 8,
+    "totalSpent": 1364,
+    "lastOrder": "2026-10-29T15:29:58.274445Z"
+  },
+  {
+    "id": 63,
+    "name": "Aadil",
+    "phone": "8012934284",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 1123,
+    "lastOrder": "2026-09-02T15:29:41.872735Z"
+  },
+  {
+    "id": 326,
+    "name": "SURESH",
+    "phone": "7904859468",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 820,
+    "lastOrder": "2026-05-02T16:44:57.092281Z"
+  },
+  {
+    "id": 99,
+    "name": "SARASWATHI BAI",
+    "phone": "6381654441",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 720,
+    "lastOrder": "2026-11-09T16:07:58.342983Z"
+  },
+  {
+    "id": 167,
+    "name": "RAJADURAI",
+    "phone": "9092604821",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 440,
+    "lastOrder": "2026-11-07T16:37:15.634415Z"
+  },
+  {
+    "id": 308,
+    "name": "MOHAN",
+    "phone": "9865612825",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 275,
+    "lastOrder": "2026-09-12T12:07:30.063758Z"
+  },
+  {
+    "id": 341,
+    "name": "Sivasangari",
+    "phone": "8508810499",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 275,
+    "lastOrder": "2026-07-18T16:06:31.503207Z"
+  },
+  {
+    "id": 151,
+    "name": "KARTHIK SANKAR",
+    "phone": "9941141161",
+    "address": "Bodinayakanur",
+    "frequency": 2,
+    "totalSpent": 235,
+    "lastOrder": "2026-09-21T04:52:56.263666Z"
+  },
+  {
+    "id": 139,
+    "name": "B RENUGA DEVI",
+    "phone": "9585872303",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 217,
+    "lastOrder": "2026-04-28T12:56:21.706070Z"
+  },
+  {
+    "id": 294,
+    "name": "AYYAPPAN RAJ",
+    "phone": "7904468821",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 180,
+    "lastOrder": "2026-04-02T14:20:38.401859Z"
+  },
+  {
+    "id": 262,
+    "name": "SHEK",
+    "phone": "9791464641",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 173,
+    "lastOrder": "2026-08-24T14:43:50.354589Z"
+  },
+  {
+    "id": 300,
+    "name": "SENTHIL",
+    "phone": "9790612686",
+    "address": "Bodinayakanur",
+    "frequency": 1,
+    "totalSpent": 93,
+    "lastOrder": "2026-04-28T15:46:40.073975Z"
+  },
+  {
     "id": 4,
     "name": "Selvam",
     "phone": "7200762890",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -14,7 +302,7 @@
     "phone": "9345639008",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -23,7 +311,7 @@
     "phone": "9944497910",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -32,7 +320,7 @@
     "phone": "9677788963",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -41,7 +329,7 @@
     "phone": "8778737716",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -50,7 +338,7 @@
     "phone": "6383165926",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -59,7 +347,7 @@
     "phone": "9443021841",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -68,7 +356,7 @@
     "phone": "6384535248",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -77,7 +365,7 @@
     "phone": "9677363922",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -86,7 +374,7 @@
     "phone": "9080967929",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -95,7 +383,7 @@
     "phone": "9487431268",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -104,7 +392,7 @@
     "phone": "9790008617",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -113,7 +401,7 @@
     "phone": "8807987832",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -122,7 +410,7 @@
     "phone": "9943039246",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -131,7 +419,7 @@
     "phone": "6381401050",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -140,7 +428,7 @@
     "phone": "7305158479",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -149,7 +437,7 @@
     "phone": "9488228889",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -158,7 +446,7 @@
     "phone": "6382207684",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -167,17 +455,8 @@
     "phone": "9965757573",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 23,
-    "name": "N.Chellapandi",
-    "phone": "9876181931",
-    "address": "Bodinayakanur",
-    "frequency": 7,
-    "totalSpent": 6939.0,
-    "lastOrder": "2026-11-12T08:39:44.492884Z"
   },
   {
     "id": 24,
@@ -185,7 +464,7 @@
     "phone": "9791836850",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -194,7 +473,7 @@
     "phone": "9787292854",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -203,7 +482,7 @@
     "phone": "9626212282",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -212,7 +491,7 @@
     "phone": "9362603197",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -221,7 +500,7 @@
     "phone": "9865061365",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -230,7 +509,7 @@
     "phone": "9443698724",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -239,7 +518,7 @@
     "phone": "9952486797",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -248,7 +527,7 @@
     "phone": "9944231065",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -257,7 +536,7 @@
     "phone": "8754262613",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -266,7 +545,7 @@
     "phone": "9443301264",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -275,7 +554,7 @@
     "phone": "7502024859",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -284,7 +563,7 @@
     "phone": "9894158878",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -293,7 +572,7 @@
     "phone": "9952529017",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -302,7 +581,7 @@
     "phone": "9751902390",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -311,17 +590,8 @@
     "phone": "9944428428",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 40,
-    "name": "Rabik",
-    "phone": "9976575436",
-    "address": "Bodinayakanur",
-    "frequency": 10,
-    "totalSpent": 3217.0,
-    "lastOrder": "2026-10-14T14:38:22.816976Z"
   },
   {
     "id": 41,
@@ -329,7 +599,7 @@
     "phone": "7303575701",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -338,7 +608,7 @@
     "phone": "9865576901",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -347,7 +617,7 @@
     "phone": "9840306918",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -356,7 +626,7 @@
     "phone": "9994490586",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -365,7 +635,7 @@
     "phone": "7708677059",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -374,7 +644,7 @@
     "phone": "9865368074",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -383,7 +653,7 @@
     "phone": "7010988436",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -392,7 +662,7 @@
     "phone": "9944497910",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -401,7 +671,7 @@
     "phone": "9176062620",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -410,7 +680,7 @@
     "phone": "9790506473",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -419,7 +689,7 @@
     "phone": "9994955650",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -428,7 +698,7 @@
     "phone": "9066360024",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -437,7 +707,7 @@
     "phone": "9344920559",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -446,7 +716,7 @@
     "phone": "9159491150",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -455,7 +725,7 @@
     "phone": "6381846595",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -464,7 +734,7 @@
     "phone": "9585796068",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -473,7 +743,7 @@
     "phone": "9585319230",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -482,7 +752,7 @@
     "phone": "8124876757",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -491,7 +761,7 @@
     "phone": "9345270901",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -500,7 +770,7 @@
     "phone": "9789080632",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -509,17 +779,8 @@
     "phone": "9976068309",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 63,
-    "name": "Aadil",
-    "phone": "8012934284",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 1123.0,
-    "lastOrder": "2026-09-02T15:29:41.872735Z"
   },
   {
     "id": 64,
@@ -527,7 +788,7 @@
     "phone": "6384535248",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -536,7 +797,7 @@
     "phone": "7418857253",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -545,7 +806,7 @@
     "phone": "6379434964",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -554,7 +815,7 @@
     "phone": "9655154865",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -563,7 +824,7 @@
     "phone": "6381234750",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -572,7 +833,7 @@
     "phone": "9003427137",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -581,7 +842,7 @@
     "phone": "9342567956",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -590,7 +851,7 @@
     "phone": "7418508990",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -599,7 +860,7 @@
     "phone": "9095040334",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -608,7 +869,7 @@
     "phone": "7395995545",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -617,7 +878,7 @@
     "phone": "9566933348",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -626,7 +887,7 @@
     "phone": "9942690699",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -635,7 +896,7 @@
     "phone": "9942690695",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -644,7 +905,7 @@
     "phone": "7010281485",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -653,7 +914,7 @@
     "phone": "9942690695",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -662,7 +923,7 @@
     "phone": "7558101180",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -671,7 +932,7 @@
     "phone": "8526675598",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -680,17 +941,8 @@
     "phone": "9087928535",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 82,
-    "name": "GEETHA",
-    "phone": "8344724426",
-    "address": "Bodinayakanur",
-    "frequency": 8,
-    "totalSpent": 3208.0,
-    "lastOrder": "2026-10-01T12:20:47.610731Z"
   },
   {
     "id": 83,
@@ -698,7 +950,7 @@
     "phone": "7401179707",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -707,7 +959,7 @@
     "phone": "9095028170",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -716,7 +968,7 @@
     "phone": "9944256662",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -725,7 +977,7 @@
     "phone": "9994905832",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -734,7 +986,7 @@
     "phone": "9894749345",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -743,7 +995,7 @@
     "phone": "9600679282",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -752,7 +1004,7 @@
     "phone": "9751779004",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -761,7 +1013,7 @@
     "phone": "9087495144",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -770,7 +1022,7 @@
     "phone": "9908507623",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -779,7 +1031,7 @@
     "phone": "9994222289",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -788,7 +1040,7 @@
     "phone": "9715802934",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -797,7 +1049,7 @@
     "phone": "7200744603",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -806,7 +1058,7 @@
     "phone": "8248205494",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -815,7 +1067,7 @@
     "phone": "9788355112",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -824,7 +1076,7 @@
     "phone": "9994734291",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -833,17 +1085,8 @@
     "phone": "9994856216",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 99,
-    "name": "SARASWATHI BAI",
-    "phone": "6381654441",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 720.0,
-    "lastOrder": "2026-11-09T16:07:58.342983Z"
   },
   {
     "id": 100,
@@ -851,7 +1094,7 @@
     "phone": "7339002756",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -860,7 +1103,7 @@
     "phone": "8300796533",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -869,7 +1112,7 @@
     "phone": "9715239406",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -878,7 +1121,7 @@
     "phone": "9003413931",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -887,7 +1130,7 @@
     "phone": "9865445484",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -896,7 +1139,7 @@
     "phone": "9043828534",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -905,7 +1148,7 @@
     "phone": "7639039666",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -914,7 +1157,7 @@
     "phone": "9842737548",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -923,7 +1166,7 @@
     "phone": "6381017552",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -932,7 +1175,7 @@
     "phone": "7826094844",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -941,7 +1184,7 @@
     "phone": "9865321909",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -950,7 +1193,7 @@
     "phone": "9360331721",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -959,7 +1202,7 @@
     "phone": "6379479027",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -968,7 +1211,7 @@
     "phone": "9787556070",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -977,7 +1220,7 @@
     "phone": "8220883012",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -986,7 +1229,7 @@
     "phone": "9578927614",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -995,7 +1238,7 @@
     "phone": "8825439943",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1004,7 +1247,7 @@
     "phone": "7418470008",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1013,17 +1256,8 @@
     "phone": "9486149099",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 120,
-    "name": "Saratha",
-    "phone": "8608449610",
-    "address": "Bodinayakanur",
-    "frequency": 13,
-    "totalSpent": 7327.0,
-    "lastOrder": "2026-11-18T14:26:14.080095Z"
   },
   {
     "id": 121,
@@ -1031,7 +1265,7 @@
     "phone": "9940183898",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1040,17 +1274,8 @@
     "phone": "9360919835",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 123,
-    "name": "SAMAD AATHIQ (AUTO)",
-    "phone": "9500295945",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 1621.0,
-    "lastOrder": "2026-07-03T07:39:53.429059Z"
   },
   {
     "id": 124,
@@ -1058,7 +1283,7 @@
     "phone": "9677783202",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1067,7 +1292,7 @@
     "phone": "8217028102",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1076,7 +1301,7 @@
     "phone": "6382975556",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1085,7 +1310,7 @@
     "phone": "9894232328",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1094,7 +1319,7 @@
     "phone": "9940750477",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1103,7 +1328,7 @@
     "phone": "9444367191",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1112,7 +1337,7 @@
     "phone": "9600350572",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1121,7 +1346,7 @@
     "phone": "9952870858",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1130,7 +1355,7 @@
     "phone": "6383487532",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1139,7 +1364,7 @@
     "phone": "9994913508",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1148,7 +1373,7 @@
     "phone": "8939320171",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1157,7 +1382,7 @@
     "phone": "8870186476",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1166,7 +1391,7 @@
     "phone": "9043985899",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1175,7 +1400,7 @@
     "phone": "9342575343",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1184,17 +1409,8 @@
     "phone": "9123548095",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 139,
-    "name": "B RENUGA DEVI",
-    "phone": "9585872303",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 217.0,
-    "lastOrder": "2026-04-28T12:56:21.706070Z"
   },
   {
     "id": 140,
@@ -1202,17 +1418,8 @@
     "phone": "9994352051",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 141,
-    "name": "AS DHAKSHANA",
-    "phone": "8925204400",
-    "address": "Bodinayakanur",
-    "frequency": 2,
-    "totalSpent": 1590.0,
-    "lastOrder": "2026-05-01T13:24:14.271487Z"
   },
   {
     "id": 142,
@@ -1220,7 +1427,7 @@
     "phone": "9344121031",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1229,7 +1436,7 @@
     "phone": "7010134425",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1238,7 +1445,7 @@
     "phone": "9080656935",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1247,7 +1454,7 @@
     "phone": "9245158864",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1256,7 +1463,7 @@
     "phone": "9047373421",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1265,7 +1472,7 @@
     "phone": "9950604160",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1274,7 +1481,7 @@
     "phone": "8883866412",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1283,7 +1490,7 @@
     "phone": "9487143254",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1292,17 +1499,8 @@
     "phone": "6384534806",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 151,
-    "name": "KARTHIK SANKAR",
-    "phone": "9941141161",
-    "address": "Bodinayakanur",
-    "frequency": 2,
-    "totalSpent": 235.0,
-    "lastOrder": "2026-09-21T04:52:56.263666Z"
   },
   {
     "id": 153,
@@ -1310,17 +1508,8 @@
     "phone": "8220191991",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 154,
-    "name": "GEETHA KUMARE",
-    "phone": "9965007900",
-    "address": "Bodinayakanur",
-    "frequency": 13,
-    "totalSpent": 4143.0,
-    "lastOrder": "2026-11-18T11:28:56.021775Z"
   },
   {
     "id": 155,
@@ -1328,7 +1517,7 @@
     "phone": "8438905997",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1337,7 +1526,7 @@
     "phone": "9443804208",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1346,7 +1535,7 @@
     "phone": "8610132209",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1355,7 +1544,7 @@
     "phone": "9042314718",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1364,7 +1553,7 @@
     "phone": "9047341723",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1373,7 +1562,7 @@
     "phone": "9943691284",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1382,17 +1571,8 @@
     "phone": "9894215315",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 167,
-    "name": "RAJADURAI",
-    "phone": "9092604821",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 440.0,
-    "lastOrder": "2026-11-07T16:37:15.634415Z"
   },
   {
     "id": 168,
@@ -1400,7 +1580,7 @@
     "phone": "8248323942",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1409,7 +1589,7 @@
     "phone": "8778025087",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1418,7 +1598,7 @@
     "phone": "9942225872",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1427,7 +1607,7 @@
     "phone": "7305804741",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1436,7 +1616,7 @@
     "phone": "8012345720",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1445,7 +1625,7 @@
     "phone": "9715228901",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1454,7 +1634,7 @@
     "phone": "6382580015",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1463,7 +1643,7 @@
     "phone": "9994572738",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1472,7 +1652,7 @@
     "phone": "9944666900",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1481,7 +1661,7 @@
     "phone": "9994204023",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1490,7 +1670,7 @@
     "phone": "9043220430",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1499,7 +1679,7 @@
     "phone": "7604889733",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1508,7 +1688,7 @@
     "phone": "6374908388",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1517,7 +1697,7 @@
     "phone": "9943039246",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1526,7 +1706,7 @@
     "phone": "9843505727",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1535,7 +1715,7 @@
     "phone": "8754256165",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1544,7 +1724,7 @@
     "phone": "9442882526",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1553,7 +1733,7 @@
     "phone": "9790399691",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1562,7 +1742,7 @@
     "phone": "9159147724",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1571,7 +1751,7 @@
     "phone": "8608154828",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1580,7 +1760,7 @@
     "phone": "7639975018",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1589,7 +1769,7 @@
     "phone": "9715795067",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1598,7 +1778,7 @@
     "phone": "9976624875",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1607,7 +1787,7 @@
     "phone": "8940312042",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1616,7 +1796,7 @@
     "phone": "9790482405",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1625,7 +1805,7 @@
     "phone": "9487930615",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1634,7 +1814,7 @@
     "phone": "8667499928",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1643,7 +1823,7 @@
     "phone": "9245158864",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1652,7 +1832,7 @@
     "phone": "6374990671",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1661,7 +1841,7 @@
     "phone": "6379020859",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1670,7 +1850,7 @@
     "phone": "8344865768",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1679,7 +1859,7 @@
     "phone": "7708131142",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1688,7 +1868,7 @@
     "phone": "9566646018",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1697,7 +1877,7 @@
     "phone": "9442021771",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1706,7 +1886,7 @@
     "phone": "9842519705",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1715,7 +1895,7 @@
     "phone": "6385213445",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1724,7 +1904,7 @@
     "phone": "9965857703",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1733,7 +1913,7 @@
     "phone": "9865576901",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1742,7 +1922,7 @@
     "phone": "9894948024",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1751,7 +1931,7 @@
     "phone": "8825759366",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1760,17 +1940,8 @@
     "phone": "6381540870",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 211,
-    "name": "Dhanush",
-    "phone": "7708531628",
-    "address": "Bodinayakanur",
-    "frequency": 13,
-    "totalSpent": 5679.0,
-    "lastOrder": "2026-08-30T15:27:26.110822Z"
   },
   {
     "id": 212,
@@ -1778,7 +1949,7 @@
     "phone": "8825455758",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1787,7 +1958,7 @@
     "phone": "9865732286",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1796,17 +1967,8 @@
     "phone": "7092062231",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 215,
-    "name": "Harun",
-    "phone": "9597982010",
-    "address": "Bodinayakanur",
-    "frequency": 4,
-    "totalSpent": 3282.0,
-    "lastOrder": "2026-11-14T12:38:25.114673Z"
   },
   {
     "id": 216,
@@ -1814,7 +1976,7 @@
     "phone": "8438905997",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1823,7 +1985,7 @@
     "phone": "7598671826",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1832,7 +1994,7 @@
     "phone": "9087928535",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1841,7 +2003,7 @@
     "phone": "8056964046",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1850,7 +2012,7 @@
     "phone": "9245863634",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1859,7 +2021,7 @@
     "phone": "7092177049",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1868,7 +2030,7 @@
     "phone": "7502024727",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1877,7 +2039,7 @@
     "phone": "9087710624",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1886,7 +2048,7 @@
     "phone": "9600596884",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1895,7 +2057,7 @@
     "phone": "9080002188",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1904,17 +2066,8 @@
     "phone": "9947024516",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 227,
-    "name": "THE HEAD MASTER PLPS POOPPARA",
-    "phone": "9976637319",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 5041.0,
-    "lastOrder": "2026-08-02T15:54:47.257287Z"
   },
   {
     "id": 231,
@@ -1922,7 +2075,7 @@
     "phone": "7401179707",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1931,7 +2084,7 @@
     "phone": "9495517019",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1940,7 +2093,7 @@
     "phone": "9865813029",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1949,7 +2102,7 @@
     "phone": "8098352879",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1958,7 +2111,7 @@
     "phone": "8883910334",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1967,7 +2120,7 @@
     "phone": "8883910334",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1976,7 +2129,7 @@
     "phone": "8807582510",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1985,7 +2138,7 @@
     "phone": "8754993157",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -1994,7 +2147,7 @@
     "phone": "6382023150",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2003,7 +2156,7 @@
     "phone": "7598139502",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2012,7 +2165,7 @@
     "phone": "9442751390",
     "address": "Tvkk nagar",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2021,17 +2174,8 @@
     "phone": "9791458728",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 262,
-    "name": "SHEK",
-    "phone": "9791464641",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 173.0,
-    "lastOrder": "2026-08-24T14:43:50.354589Z"
   },
   {
     "id": 263,
@@ -2039,7 +2183,7 @@
     "phone": "9994711518",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2048,7 +2192,7 @@
     "phone": "9786621441",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2057,7 +2201,7 @@
     "phone": "7639975018",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2066,7 +2210,7 @@
     "phone": "7094566443",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2075,7 +2219,7 @@
     "phone": "9361288463",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2084,7 +2228,7 @@
     "phone": "8940925535",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2093,7 +2237,7 @@
     "phone": "9944204417",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2102,7 +2246,7 @@
     "phone": "9524675035",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2111,7 +2255,7 @@
     "phone": "9626454863",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2120,7 +2264,7 @@
     "phone": "9047908342",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2129,7 +2273,7 @@
     "phone": "9092576823",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2138,7 +2282,7 @@
     "phone": "6383458853",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2147,7 +2291,7 @@
     "phone": "9788857420",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2156,7 +2300,7 @@
     "phone": "9790689288",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2165,7 +2309,7 @@
     "phone": "8838423153",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2174,7 +2318,7 @@
     "phone": "8608865332",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2183,7 +2327,7 @@
     "phone": "9944959670",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2192,7 +2336,7 @@
     "phone": "9655627678",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2201,7 +2345,7 @@
     "phone": "9788941066",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2210,7 +2354,7 @@
     "phone": "8778580277",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2219,7 +2363,7 @@
     "phone": "9865778052",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2228,7 +2372,7 @@
     "phone": "9487431268",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2237,7 +2381,7 @@
     "phone": "8122779424",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2246,7 +2390,7 @@
     "phone": "7538858939",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2255,26 +2399,8 @@
     "phone": "9944477983",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 293,
-    "name": "NANDHA KUMAR",
-    "phone": "9042523140",
-    "address": "Bodinayakanur",
-    "frequency": 2,
-    "totalSpent": 6154.0,
-    "lastOrder": "2026-05-21T13:33:25.493458Z"
-  },
-  {
-    "id": 294,
-    "name": "AYYAPPAN RAJ",
-    "phone": "7904468821",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 180.0,
-    "lastOrder": "2026-04-02T14:20:38.401859Z"
   },
   {
     "id": 295,
@@ -2282,7 +2408,7 @@
     "phone": "8124530886",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2291,7 +2417,7 @@
     "phone": "9566613386",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2300,7 +2426,7 @@
     "phone": "8807174999",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2309,7 +2435,7 @@
     "phone": "9884435055",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2318,26 +2444,8 @@
     "phone": "9994459155",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 300,
-    "name": "SENTHIL",
-    "phone": "9790612686",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 93.0,
-    "lastOrder": "2026-04-28T15:46:40.073975Z"
-  },
-  {
-    "id": 301,
-    "name": "ARULPAVAI",
-    "phone": "9566902146",
-    "address": "Bodinayakanur",
-    "frequency": 2,
-    "totalSpent": 1441.0,
-    "lastOrder": "2026-10-13T12:01:23.420224Z"
   },
   {
     "id": 302,
@@ -2345,7 +2453,7 @@
     "phone": "9600653461",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2354,7 +2462,7 @@
     "phone": "6383857510",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2363,7 +2471,7 @@
     "phone": "9952765781",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2372,7 +2480,7 @@
     "phone": "9944544694",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2381,7 +2489,7 @@
     "phone": "9994411343",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2390,17 +2498,8 @@
     "phone": "9626640316",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 308,
-    "name": "MOHAN",
-    "phone": "9865612825",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 275.0,
-    "lastOrder": "2026-09-12T12:07:30.063758Z"
   },
   {
     "id": 309,
@@ -2408,7 +2507,7 @@
     "phone": "8637658704",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2417,7 +2516,7 @@
     "phone": "8097390000",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2426,7 +2525,7 @@
     "phone": "9345984547",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2435,7 +2534,7 @@
     "phone": "9486124302",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2444,7 +2543,7 @@
     "phone": "9043607100",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2453,7 +2552,7 @@
     "phone": "9791431122",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2462,7 +2561,7 @@
     "phone": "8248501731",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2471,7 +2570,7 @@
     "phone": "9443855995",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2480,7 +2579,7 @@
     "phone": "8072785215",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2489,7 +2588,7 @@
     "phone": "7810006902",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2498,7 +2597,7 @@
     "phone": "9345643301",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2507,7 +2606,7 @@
     "phone": "7538882984",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2516,7 +2615,7 @@
     "phone": "7708000347",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2525,7 +2624,7 @@
     "phone": "9659398685",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2534,7 +2633,7 @@
     "phone": "8072730443",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2543,17 +2642,8 @@
     "phone": "74020653",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 326,
-    "name": "SURESH",
-    "phone": "7904859468",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 820.0,
-    "lastOrder": "2026-05-02T16:44:57.092281Z"
   },
   {
     "id": 327,
@@ -2561,7 +2651,7 @@
     "phone": "9363247696",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2570,7 +2660,7 @@
     "phone": "7904622332",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2579,7 +2669,7 @@
     "phone": "9655185150",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2588,7 +2678,7 @@
     "phone": "9342729383",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2597,7 +2687,7 @@
     "phone": "8870200803",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2606,17 +2696,8 @@
     "phone": "8807274150",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 334,
-    "name": "Muthu Selvam",
-    "phone": "9344066388",
-    "address": "Bodinayakanur",
-    "frequency": 27,
-    "totalSpent": 4767.0,
-    "lastOrder": "2026-11-09T13:18:35.565579Z"
   },
   {
     "id": 335,
@@ -2624,7 +2705,7 @@
     "phone": "9842968716",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2633,7 +2714,7 @@
     "phone": "8870334411",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2642,7 +2723,7 @@
     "phone": "7010764804",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2651,7 +2732,7 @@
     "phone": "9715228901",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2660,7 +2741,7 @@
     "phone": "9626979219",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2669,17 +2750,8 @@
     "phone": "7904031299",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 341,
-    "name": "Sivasangari",
-    "phone": "8508810499",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 275.0,
-    "lastOrder": "2026-07-18T16:06:31.503207Z"
   },
   {
     "id": 342,
@@ -2687,7 +2759,7 @@
     "phone": "7092279554",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2696,7 +2768,7 @@
     "phone": "9344567134",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2705,7 +2777,7 @@
     "phone": "6382518622",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2714,17 +2786,8 @@
     "phone": "9043220430",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 346,
-    "name": "T Vijaya",
-    "phone": "9626274697",
-    "address": "Bodinayakanur",
-    "frequency": 9,
-    "totalSpent": 9506.0,
-    "lastOrder": "2026-11-01T13:02:43.726944Z"
   },
   {
     "id": 347,
@@ -2732,7 +2795,7 @@
     "phone": "8148399508",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2741,7 +2804,7 @@
     "phone": "8148147001",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2750,7 +2813,7 @@
     "phone": "8248927793",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2759,7 +2822,7 @@
     "phone": "9486615694",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2768,7 +2831,7 @@
     "phone": "9344995018",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2777,7 +2840,7 @@
     "phone": "9245197109",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2786,7 +2849,7 @@
     "phone": "8072430949",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2795,7 +2858,7 @@
     "phone": "9842968716",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2804,26 +2867,8 @@
     "phone": "9597551551",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 360,
-    "name": "CHITHRA",
-    "phone": "8608650938",
-    "address": "Bodinayakanur",
-    "frequency": 6,
-    "totalSpent": 1667.0,
-    "lastOrder": "2026-06-28T15:58:08.446353Z"
-  },
-  {
-    "id": 361,
-    "name": "JEGATHEESWARI",
-    "phone": "9344104574",
-    "address": "Bodinayakanur",
-    "frequency": 8,
-    "totalSpent": 1364.0,
-    "lastOrder": "2026-10-29T15:29:58.274445Z"
   },
   {
     "id": 362,
@@ -2831,7 +2876,7 @@
     "phone": "9025467040",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2840,7 +2885,7 @@
     "phone": "8072429799",
     "address": "BODINAYAKANUT, 625513",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2849,7 +2894,7 @@
     "phone": "6382778782",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2858,17 +2903,8 @@
     "phone": "6379281825",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 366,
-    "name": "SINGH WATER",
-    "phone": "7598776764",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 3723.0,
-    "lastOrder": "2026-09-20T07:38:47.803443Z"
   },
   {
     "id": 367,
@@ -2876,7 +2912,7 @@
     "phone": "8610628631",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2885,7 +2921,7 @@
     "phone": "7092273447",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
   },
   {
@@ -2894,17 +2930,8 @@
     "phone": "9790091226",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 370,
-    "name": "KAVIN SAALI FRIEND",
-    "phone": "9361351996",
-    "address": "Bodinayakanur",
-    "frequency": 6,
-    "totalSpent": 8475.0,
-    "lastOrder": "2026-09-06T12:29:28.890546Z"
   },
   {
     "id": 371,
@@ -2912,34 +2939,7 @@
     "phone": "9865562100",
     "address": "Bodinayakanur",
     "frequency": 0,
-    "totalSpent": 0.0,
+    "totalSpent": 0,
     "lastOrder": null
-  },
-  {
-    "id": 373,
-    "name": "Veeramani",
-    "phone": "8015870949",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 2230.0,
-    "lastOrder": "2026-11-04T14:45:18.955831Z"
-  },
-  {
-    "id": 374,
-    "name": "SARASVATHI",
-    "phone": "8015141495",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 2887.0,
-    "lastOrder": "2026-11-06T08:03:10.371449Z"
-  },
-  {
-    "id": 375,
-    "name": "UMA MAHESWARI",
-    "phone": "9600600872",
-    "address": "Bodinayakanur",
-    "frequency": 1,
-    "totalSpent": 3325.0,
-    "lastOrder": "2026-11-06T08:48:25.806594Z"
   }
 ]

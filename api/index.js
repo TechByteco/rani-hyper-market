@@ -988,6 +988,25 @@ if (reqPath === '/api/pos/status') {
 
 
 
+    // 7c. Analytics: Customers CRM endpoint
+    if (reqPath === '/api/analytics/customers' && req.method === 'GET') {
+      const customers = readLocalJson('rani_customers.json', []);
+      const withSpend = customers.filter(c => (parseFloat(c.totalSpent) || 0) > 0);
+      const sorted = [...withSpend].sort((a, b) => (parseFloat(b.totalSpent) || 0) - (parseFloat(a.totalSpent) || 0));
+      return sendJson(200, { total: customers.length, withSpend: withSpend.length, customers: sorted, top10: sorted.slice(0, 10) });
+    }
+
+    // 7d. Top customers shortcut
+    if (reqPath === '/api/analytics/top-customers' && req.method === 'GET') {
+      const customers = readLocalJson('rani_customers.json', []);
+      const withSpend = customers.filter(c => {
+        const n = (c.name || '').toLowerCase();
+        return !n.includes('walk-in') && !n.includes('cash') && (parseFloat(c.totalSpent) || 0) > 0;
+      });
+      const sorted = [...withSpend].sort((a, b) => (parseFloat(b.totalSpent) || 0) - (parseFloat(a.totalSpent) || 0));
+      return sendJson(200, { customers: sorted.slice(0, 10), total: withSpend.length });
+    }
+
     // 8. AI Chatbot (Gemini Cloud & Real-Time POS Analytics)
     if (reqPath === '/api/ai-analytics/chat' && req.method === 'POST') {
       const body = await getBody();

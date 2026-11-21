@@ -421,7 +421,7 @@
         </div>
 
         <!-- Festival Summary KPI Bar -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3 bg-gray-950/60 border border-gray-800/80 rounded-2xl p-4" id="fest-stock-kpi-bar">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-3 bg-gray-950/60 border border-gray-800/80 rounded-2xl p-4" id="fest-stock-kpi-bar">
           <div>
             <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Festival Event</p>
             <h5 class="text-sm font-black text-white mt-0.5" id="fest-stock-name">Deepavali Mega Week</h5>
@@ -435,7 +435,7 @@
             <h5 class="text-sm font-black text-emerald-400 mt-0.5" id="fest-stock-revenue">₹41,890</h5>
           </div>
           <div>
-            <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Procure Cutoff</p>
+            <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">⚠️ Order Deadline</p>
             <h5 class="text-sm font-black text-rose-400 mt-0.5" id="fest-stock-cutoff">2026-10-28</h5>
           </div>
         </div>
@@ -1183,6 +1183,11 @@ Loading live briefing...
         document.getElementById('fest-stock-budget').innerText = '₹' + (data.totalRecommendedBudget || 0).toLocaleString('en-IN');
         document.getElementById('fest-stock-revenue').innerText = '₹' + (data.totalProjectedRevenue || 0).toLocaleString('en-IN');
         document.getElementById('fest-stock-cutoff').innerText = data.cutoff2026 || 'Order 7 days ahead';
+        const festDateEl = document.getElementById('fest-stock-festdate');
+        if (festDateEl) {
+          const fd = data.datesByYear && data.datesByYear['2026'] ? data.datesByYear['2026'].date : (data.festivalDate || data.date || '');
+          festDateEl.innerText = fd || data.cutoff2026 || 'See calendar';
+        }
 
         // Update Shifting Dates Timeline
         const ruleDesc = document.getElementById('fest-calendar-rule-desc');

@@ -3290,7 +3290,7 @@ let allProducts = [];
           fetch('/rani_analytics.json').then(r => r.json()).catch(() => null),
           fetch('/rani_orders.json').then(r => r.json()).catch(() => null),
           fetch('/products_catalog.json?v=' + Date.now()).then(r => r.json()).catch(() => fetch('/rani_products.json?v=' + Date.now()).then(r => r.json())).catch(() => null),
-          fetch('/rani_customers.json').then(r => r.json()).catch(() => null)
+          fetch('/api/analytics/customers').then(r=>r.ok?r.json():null).then(d=>d&&d.customers?d.customers:null).catch(()=>null).then(async d=>{if(d&&d.length>0)return d;const r2=await fetch('/rani_customers.json').catch(()=>({ok:false}));return r2.ok?r2.json():null;})
         ]);
 
         // Update Desktop POS Connection Header Badge
@@ -5999,7 +5999,7 @@ let allProducts = [];
     }
 
     /* ALL CUSTOMERS DIRECTORY MODAL CONTROLS */
-    function openAllCustomersModal() {
+    async function openAllCustomersModal() {
       document.getElementById('all-customers-modal')?.classList.remove('hidden');
       renderCustomerCrmTable();
     }
@@ -7800,7 +7800,7 @@ ${itemsText}
         'Provide actionable retail intelligence, marketing copy, and sales analysis formatted in rich markdown with bold highlights:\n' +
         'Question: ' + question;
 
-      const modelsToTry = [cleanModel, 'gemini-1.5-flash', 'gemini-2.0-flash'].filter((v, i, a) => a.indexOf(v) === i);
+      const modelsToTry = [cleanModel, 'gemini-2.0-flash-lite', 'gemini-2.0-flash', 'gemini-1.5-flash'].filter((v, i, a) => a.indexOf(v) === i);
 
       for (const m of modelsToTry) {
         const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(m) + ':generateContent?key=' + encodeURIComponent(cleanKey);

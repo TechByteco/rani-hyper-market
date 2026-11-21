@@ -692,7 +692,7 @@ if (reqPath === '/api/pos/status') {
     }
 
     if (reqPath === '/api/ai-analytics/indian-retail-companies' || reqPath === '/api/ai/indian-retail-companies') {
-      const force = reqUrl.searchParams.get('force') === 'true';
+      const force = queryParams.get('force') === 'true';
       if (analyticsService && typeof analyticsService.getIndianRetailCompanies === 'function') {
         try { return sendJson(200, analyticsService.getIndianRetailCompanies(force)); } catch {}
       }

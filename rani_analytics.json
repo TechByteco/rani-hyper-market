@@ -1,87 +1,334 @@
 {
   "storeName": "RANI HYPER MARKET",
   "fiscalYear": "2026-2027",
-  "totalOrders": 21651,
-  "totalBills": 21651,
-  "totalSales": 3702626.0,
-  "totalCost": 3241544.35,
-  "totalProfit": 461081.65,
-  "avgBasket": 171.01,
-  "marginPct": 12.45,
+  "totalOrders": 24901,
+  "totalBills": 24901,
+  "totalSales": 4316098.0,
+  "totalCost": 3768445.87,
+  "totalProfit": 547652.13,
+  "avgBasket": 173.33,
+  "marginPct": 12.69,
   "firstDate": "2026-04-01",
-  "lastDate": "2026-10-21",
-  "todaySales": 7674.0,
-  "todayBills": 45,
-  "totalProducts": 7522,
+  "lastDate": "2026-11-21",
+  "todaySales": 6322.0,
+  "todayBills": 57,
+  "totalProducts": 7682,
   "topProducts": [
     {
       "Name": "10RS R SNACKS",
-      "total_qty": 8063,
-      "total_revenue": 81081.8,
-      "total_profit": 8589.48
+      "total_qty": 8811.0,
+      "total_revenue": 88559.8,
+      "total_profit": 9232.76
     },
     {
       "Name": "R Egg ",
-      "total_qty": 10115,
-      "total_revenue": 72807.5,
-      "total_profit": 6910.95
+      "total_qty": 11915.0,
+      "total_revenue": 86706.2,
+      "total_profit": 8046.13
     },
     {
       "Name": "900G R INSTAND IDLI&DOSA BATTER ",
-      "total_qty": 1691.5,
-      "total_revenue": 69587.5,
-      "total_profit": 8477.97
+      "total_qty": 2047.5,
+      "total_revenue": 85547.5,
+      "total_profit": 10143.26
     },
     {
       "Name": "500Ml R AROKYA MILK  FULL CREAM",
-      "total_qty": 1465,
-      "total_revenue": 58709,
-      "total_profit": 1476.43
+      "total_qty": 1672.0,
+      "total_revenue": 67602.0,
+      "total_profit": 1665.55
     },
     {
       "Name": "500ML R AROKYAFULL CREAM MILK",
-      "total_qty": 956,
-      "total_revenue": 38081,
-      "total_profit": 1263.22
+      "total_qty": 1119.0,
+      "total_revenue": 45086.0,
+      "total_profit": 1329.95
     },
     {
       "Name": "R Sb Idly Mavu",
-      "total_qty": 808,
-      "total_revenue": 33370,
-      "total_profit": 4040.32
+      "total_qty": 929.0,
+      "total_revenue": 38815.0,
+      "total_profit": 4647.2
     },
     {
       "Name": "500Ml R Hatsun Curd",
-      "total_qty": 775,
-      "total_revenue": 33284,
-      "total_profit": 1634.34
-    },
-    {
-      "Name": "1Ltr R Gold Winner Pouch",
-      "total_qty": 160,
-      "total_revenue": 29643,
-      "total_profit": 1775
+      "total_qty": 877.0,
+      "total_revenue": 37874.0,
+      "total_profit": 1941.58
     },
     {
       "Name": "10KG R BLUE ROSE PONNI RICE",
-      "total_qty": 32,
-      "total_revenue": 25370,
-      "total_profit": 1370
+      "total_qty": 40.0,
+      "total_revenue": 32690.0,
+      "total_profit": 1810.33
+    },
+    {
+      "Name": "1Ltr R Gold Winner Pouch",
+      "total_qty": 175.0,
+      "total_revenue": 32488.0,
+      "total_profit": 1942.92
+    },
+    {
+      "Name": "1KG R SNJ 10000 SUGAR",
+      "total_qty": 508.0,
+      "total_revenue": 31529.0,
+      "total_profit": 6511.43
     },
     {
       "Name": "1Ltr R Gem's Gold SUN FLOWER Oil",
-      "total_qty": 128,
-      "total_revenue": 23490,
-      "total_profit": 1132.44
+      "total_qty": 156.0,
+      "total_revenue": 28810.0,
+      "total_profit": 1469.3
+    },
+    {
+      "Name": "500Ml R Gem'gold Sunflower Oil",
+      "total_qty": 288.0,
+      "total_revenue": 27235.0,
+      "total_profit": 1587.54
+    },
+    {
+      "Name": "1KG R NALA ORID DHALL ULUTHU ",
+      "total_qty": 176.0,
+      "total_revenue": 25490.0,
+      "total_profit": 2738.31
+    },
+    {
+      "Name": "500ML R GOLD WINNER ",
+      "total_qty": 237.0,
+      "total_revenue": 22680.0,
+      "total_profit": 1733.75
+    },
+    {
+      "Name": "500Ml R Mr.Gold",
+      "total_qty": 240.0,
+      "total_revenue": 22442.0,
+      "total_profit": 1832.45
     }
   ],
   "dayWise": {
+    "2026-11-21": {
+      "date": "2026-11-21",
+      "count": 57,
+      "sales": 6322.0,
+      "cost": 5438.94,
+      "profit": 883.06
+    },
+    "2026-11-20": {
+      "date": "2026-11-20",
+      "count": 105,
+      "sales": 15024.0,
+      "cost": 12855.77,
+      "profit": 2168.23
+    },
+    "2026-11-19": {
+      "date": "2026-11-19",
+      "count": 96,
+      "sales": 20293.0,
+      "cost": 17707.48,
+      "profit": 2585.52
+    },
+    "2026-11-18": {
+      "date": "2026-11-18",
+      "count": 101,
+      "sales": 14399.0,
+      "cost": 12751.11,
+      "profit": 1647.89
+    },
+    "2026-11-17": {
+      "date": "2026-11-17",
+      "count": 112,
+      "sales": 21146.0,
+      "cost": 18423.51,
+      "profit": 2722.49
+    },
+    "2026-11-16": {
+      "date": "2026-11-16",
+      "count": 92,
+      "sales": 18391.0,
+      "cost": 16203.31,
+      "profit": 2187.69
+    },
+    "2026-11-15": {
+      "date": "2026-11-15",
+      "count": 132,
+      "sales": 22916.0,
+      "cost": 19807.47,
+      "profit": 3108.53
+    },
+    "2026-11-14": {
+      "date": "2026-11-14",
+      "count": 120,
+      "sales": 26032.0,
+      "cost": 21932.73,
+      "profit": 4099.27
+    },
+    "2026-11-13": {
+      "date": "2026-11-13",
+      "count": 85,
+      "sales": 9261.0,
+      "cost": 8062.9,
+      "profit": 1198.1
+    },
+    "2026-11-12": {
+      "date": "2026-11-12",
+      "count": 99,
+      "sales": 13128.0,
+      "cost": 11244.3,
+      "profit": 1883.7
+    },
+    "2026-11-11": {
+      "date": "2026-11-11",
+      "count": 102,
+      "sales": 18754.0,
+      "cost": 16241.77,
+      "profit": 2512.23
+    },
+    "2026-11-10": {
+      "date": "2026-11-10",
+      "count": 100,
+      "sales": 27216.0,
+      "cost": 22689.44,
+      "profit": 4526.56
+    },
+    "2026-11-09": {
+      "date": "2026-11-09",
+      "count": 128,
+      "sales": 24112.0,
+      "cost": 20444.83,
+      "profit": 3667.17
+    },
+    "2026-11-08": {
+      "date": "2026-11-08",
+      "count": 187,
+      "sales": 31362.0,
+      "cost": 27060.05,
+      "profit": 4301.95
+    },
+    "2026-11-07": {
+      "date": "2026-11-07",
+      "count": 148,
+      "sales": 41186.0,
+      "cost": 35638.72,
+      "profit": 5547.28
+    },
+    "2026-11-06": {
+      "date": "2026-11-06",
+      "count": 101,
+      "sales": 32055.0,
+      "cost": 27737.84,
+      "profit": 4317.16
+    },
+    "2026-11-05": {
+      "date": "2026-11-05",
+      "count": 84,
+      "sales": 14670.0,
+      "cost": 12775.65,
+      "profit": 1894.35
+    },
+    "2026-11-04": {
+      "date": "2026-11-04",
+      "count": 85,
+      "sales": 24425.0,
+      "cost": 21139.52,
+      "profit": 3285.48
+    },
+    "2026-11-03": {
+      "date": "2026-11-03",
+      "count": 70,
+      "sales": 11412.0,
+      "cost": 10034.17,
+      "profit": 1377.83
+    },
+    "2026-11-02": {
+      "date": "2026-11-02",
+      "count": 73,
+      "sales": 23318.0,
+      "cost": 19424.68,
+      "profit": 3893.32
+    },
+    "2026-11-01": {
+      "date": "2026-11-01",
+      "count": 111,
+      "sales": 21373.0,
+      "cost": 18101.44,
+      "profit": 3271.56
+    },
+    "2026-10-31": {
+      "date": "2026-10-31",
+      "count": 84,
+      "sales": 16795.0,
+      "cost": 14142.49,
+      "profit": 2652.51
+    },
+    "2026-10-30": {
+      "date": "2026-10-30",
+      "count": 94,
+      "sales": 10317.0,
+      "cost": 8656.8,
+      "profit": 1660.2
+    },
+    "2026-10-29": {
+      "date": "2026-10-29",
+      "count": 88,
+      "sales": 14541.0,
+      "cost": 12647.93,
+      "profit": 1893.07
+    },
+    "2026-10-28": {
+      "date": "2026-10-28",
+      "count": 98,
+      "sales": 23198.0,
+      "cost": 18982.8,
+      "profit": 4215.2
+    },
+    "2026-10-27": {
+      "date": "2026-10-27",
+      "count": 103,
+      "sales": 12615.0,
+      "cost": 11107.9,
+      "profit": 1507.1
+    },
+    "2026-10-26": {
+      "date": "2026-10-26",
+      "count": 122,
+      "sales": 25836.0,
+      "cost": 22259.62,
+      "profit": 3576.38
+    },
+    "2026-10-25": {
+      "date": "2026-10-25",
+      "count": 104,
+      "sales": 18118.0,
+      "cost": 15562.92,
+      "profit": 2555.08
+    },
+    "2026-10-24": {
+      "date": "2026-10-24",
+      "count": 122,
+      "sales": 17179.0,
+      "cost": 14866.36,
+      "profit": 2312.64
+    },
+    "2026-10-23": {
+      "date": "2026-10-23",
+      "count": 102,
+      "sales": 17749.0,
+      "cost": 15401.42,
+      "profit": 2347.58
+    },
+    "2026-10-22": {
+      "date": "2026-10-22",
+      "count": 85,
+      "sales": 12261.0,
+      "cost": 10287.39,
+      "profit": 1973.61
+    },
     "2026-10-21": {
       "date": "2026-10-21",
-      "count": 45,
-      "sales": 7674.0,
-      "cost": 6651.13,
-      "profit": 1022.87
+      "count": 105,
+      "sales": 15742.0,
+      "cost": 13921.39,
+      "profit": 1820.61
     },
     "2026-10-20": {
       "date": "2026-10-20",
@@ -1506,12 +1753,19 @@
     }
   },
   "monthWise": {
+    "2026-11": {
+      "month": "2026-11",
+      "count": 2188,
+      "sales": 436795.0,
+      "cost": 375715.63,
+      "profit": 61079.37
+    },
     "2026-10": {
       "month": "2026-10",
-      "count": 2130,
-      "sales": 376197.0,
-      "cost": 325746.84,
-      "profit": 50450.16
+      "count": 3192,
+      "sales": 552874.0,
+      "cost": 476932.73,
+      "profit": 75941.27
     },
     "2026-09": {
       "month": "2026-09",
@@ -1556,10 +1810,10 @@
       "profit": 71522.64
     }
   },
-  "backupFile": "Full Backup RANI HYPER MARKET on 21-Oct-2026.zip",
-  "backupDate": "2026-10-21T13:57:06Z",
+  "backupFile": "Backup RANI HYPER MARKET_21-Nov-2026.zip",
+  "backupDate": "2026-11-21T16:29:00Z",
   "dateRange": {
     "start": "2026-04-01",
-    "end": "2026-10-21"
+    "end": "2026-11-21"
   }
 }

@@ -306,10 +306,10 @@
                 <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:5px">Enter 6-Digit OTP</label>
                 <div style="position:relative">
                   <i class="fa-solid fa-shield-halved icoL"></i>
-                  <input type="text" id="motp" class="glass-input tracking-widest text-center font-black text-base" placeholder="123456" maxlength="6">
+                  <input type="text" id="motp" class="glass-input tracking-widest text-center font-black text-base" placeholder="••••••" maxlength="6">
                 </div>
                 <div class="flex items-center justify-between mt-1 text-[10px]">
-                  <span class="text-emerald-700 font-bold">⚡ Demo Code: 123456</span>
+                  <span class="text-emerald-700 font-bold">🔑 Staff Passcode Protected</span>
                   <button type="button" onclick="resendPhoneOtp('master')" class="text-amber-700 font-bold hover:underline">Resend OTP</button>
                 </div>
               </div>
@@ -432,10 +432,10 @@
                 <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:5px">Enter 6-Digit Verification Code</label>
                 <div style="position:relative">
                   <i class="fa-solid fa-shield-halved icoL"></i>
-                  <input type="text" id="aotp" class="glass-input tracking-widest text-center font-black text-base" placeholder="123456" maxlength="6">
+                  <input type="text" id="aotp" class="glass-input tracking-widest text-center font-black text-base" placeholder="••••••" maxlength="6">
                 </div>
                 <div class="flex items-center justify-between mt-1 text-[10px]">
-                  <span class="text-emerald-700 font-bold">⚡ Demo Code: 123456</span>
+                  <span class="text-emerald-700 font-bold">🔑 Staff Passcode Protected</span>
                   <button type="button" onclick="resendPhoneOtp('admin')" class="text-emerald-700 font-bold hover:underline">Resend OTP</button>
                 </div>
               </div>
@@ -594,8 +594,8 @@
 
   // State for phone authentication
   const phoneAuthStates = {
-    master: { step: 'phone', phone: '', generatedOtp: '123456' },
-    admin: { step: 'phone', phone: '', generatedOtp: '123456' }
+    master: { step: 'phone', phone: '', generatedOtp: '' },
+    admin: { step: 'phone', phone: '', generatedOtp: '' }
   };
 
   /* ─── INITIALIZATION & GOOGLE AUTH LISTENER ─── */
@@ -742,8 +742,8 @@
 
   function resendPhoneOtp(role) {
     const prefix = role === 'master' ? 'm' : 'a';
-    toast('New verification code sent! Use 123456 to verify.', 'info');
-    document.getElementById(`${prefix}otp`).value = '123456';
+    toast('New verification code sent! Enter authorized staff passcode.', 'info');
+    
   }
 
   /* ─── GMAIL & GOOGLE AUTH ─── */

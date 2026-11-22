@@ -585,6 +585,27 @@ if (reqPath === '/api/pos/status') {
   }
 
     // 7c. Analytics: Customers CRM endpoint
+  
+  if (reqPath === '/api/analytics/stock-velocity' && req.method === 'GET') {
+    try {
+      const p1 = path.join(__dirname, 'data', 'predicted_5yr_inventory_movement.json');
+      const p2 = path.join(process.cwd(), 'data', 'predicted_5yr_inventory_movement.json');
+      const target = fs.existsSync(p1) ? p1 : (fs.existsSync(p2) ? p2 : null);
+      if (target) {
+        const data = JSON.parse(fs.readFileSync(target, 'utf8') || '{}');
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, ...data }));
+      } else {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, meta: {}, products: {} }));
+      }
+    } catch(err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: err.message }));
+    }
+    return;
+  }
+
   if (reqPath === '/api/analytics/customers' && req.method === 'GET') {
     let customers = [];
     const custPath = path.join(__dirname, 'rani_customers.json');

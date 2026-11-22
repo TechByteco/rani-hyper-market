@@ -1,0 +1,23 @@
+import filecmp
+
+pairs = [
+    ('admin.html', 'public/admin.html'),
+    ('store.html', 'public/store.html'),
+    ('online-orders.html', 'public/online-orders.html'),
+    ('orders.html', 'public/orders.html'),
+    ('ai-analytics.html', 'public/ai-analytics.html'),
+    ('products_catalog.json', 'public/products_catalog.json'),
+    ('rani_products.json', 'public/rani_products.json'),
+    ('initial_products.json', 'public/initial_products.json'),
+    ('posEnhancementService.js', 'api/posEnhancementService.js'),
+    ('analyticsService.js', 'api/analyticsService.js')
+]
+
+all_ok = True
+for f1, f2 in pairs:
+    match = filecmp.cmp(f1, f2, shallow=False)
+    print(f"[{'PASS' if match else 'FAIL'}] {f1} <==> {f2} (identical: {match})")
+    if not match:
+        all_ok = False
+
+print("\nDUAL-COPY PARITY:", "100% PERFECT" if all_ok else "MISMATCH FOUND")

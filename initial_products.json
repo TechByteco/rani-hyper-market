@@ -5,7 +5,11 @@
     "price": 60,
     "mrp": 80,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 3.0,
+    "monthly_run_rate": 0.3,
+    "stock_status": "low_stock"
   },
   {
     "id": 2248,
@@ -13,7 +17,11 @@
     "price": 320,
     "mrp": 400,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 10.0,
+    "monthly_run_rate": 0.2,
+    "stock_status": "in_stock"
   },
   {
     "id": 16222,
@@ -21,7 +29,11 @@
     "price": 40,
     "mrp": 45,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 234.2,
+    "monthly_run_rate": 2.4,
+    "stock_status": "in_stock"
   },
   {
     "id": 17260,
@@ -29,7 +41,11 @@
     "price": 73,
     "mrp": 75,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 32.0,
+    "monthly_run_rate": 0.1,
+    "stock_status": "low_stock"
   },
   {
     "id": 909,
@@ -37,7 +53,11 @@
     "price": 32,
     "mrp": 37,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/602/112/2450/front_en.5.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/602/112/2450/front_en.5.400.jpg",
+    "stock": 12,
+    "velocity_5yr_sold": 78.0,
+    "monthly_run_rate": 2.2,
+    "stock_status": "in_stock"
   },
   {
     "id": 910,
@@ -45,7 +65,11 @@
     "price": 20,
     "mrp": 23,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/602/112/1972/front_fr.3.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/602/112/1972/front_fr.3.400.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 46.0,
+    "monthly_run_rate": 0.8,
+    "stock_status": "low_stock"
   },
   {
     "id": 911,
@@ -53,7 +77,11 @@
     "price": 15,
     "mrp": 18,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/602/112/1972/front_fr.3.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/602/112/1972/front_fr.3.400.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 4.0,
+    "monthly_run_rate": 0.1,
+    "stock_status": "low_stock"
   },
   {
     "id": 912,
@@ -61,7 +89,11 @@
     "price": 24,
     "mrp": 30,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/602/112/2290/front_en.3.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/602/112/2290/front_en.3.400.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 50.0,
+    "monthly_run_rate": 0.8,
+    "stock_status": "low_stock"
   },
   {
     "id": 237,
@@ -69,7 +101,11 @@
     "price": 17,
     "mrp": 25,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/208/0014/front_en.3.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/600/208/0014/front_en.3.400.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 9.0,
+    "monthly_run_rate": 0.1,
+    "stock_status": "in_stock"
   },
   {
     "id": 287,
@@ -77,7 +113,11 @@
     "price": 35,
     "mrp": 42,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/208/2445/front_en.4.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/600/208/2445/front_en.4.400.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 93.0,
+    "monthly_run_rate": 0.1,
+    "stock_status": "low_stock"
   },
   {
     "id": 682,
@@ -85,7 +125,11 @@
     "price": 35,
     "mrp": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/208/0014/front_en.3.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/600/208/0014/front_en.3.400.jpg",
+    "stock": 12,
+    "velocity_5yr_sold": 200.0,
+    "monthly_run_rate": 3.1,
+    "stock_status": "in_stock"
   },
   {
     "id": 711,
@@ -93,7 +137,11 @@
     "price": 75,
     "mrp": 92,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/208/0137/front_en.3.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/600/208/0137/front_en.3.400.jpg",
+    "stock": 12,
+    "velocity_5yr_sold": 135.0,
+    "monthly_run_rate": 2.4,
+    "stock_status": "in_stock"
   },
   {
     "id": 1369,
@@ -101,7 +149,11 @@
     "price": 36,
     "mrp": 37,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg",
+    "stock": 12,
+    "velocity_5yr_sold": 90.0,
+    "monthly_run_rate": 0.4,
+    "stock_status": "in_stock"
   },
   {
     "id": 3601,
@@ -109,7 +161,11 @@
     "price": 35,
     "mrp": 36,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 35.0,
+    "monthly_run_rate": 0.6,
+    "stock_status": "in_stock"
   },
   {
     "id": 19714,
@@ -117,7 +173,11 @@
     "price": 40,
     "mrp": 41,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 20.0,
+    "monthly_run_rate": 0.3,
+    "stock_status": "low_stock"
   },
   {
     "id": 20167,
@@ -125,7 +185,11 @@
     "price": 20,
     "mrp": 20,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2020/10/YA/MF/WG/114682825/udhayam-urad-dal-500x500.jpeg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2020/10/YA/MF/WG/114682825/udhayam-urad-dal-500x500.jpeg",
+    "stock": 6,
+    "velocity_5yr_sold": 346.5,
+    "monthly_run_rate": 6.7,
+    "stock_status": "low_stock"
   },
   {
     "id": 63,
@@ -133,7 +197,11 @@
     "price": 100,
     "mrp": 111,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/EG/RF/LH/GLADMIN-81955/mangaldeep-incense-sticks-250x250.jpg"
+    "image_url": "https://5.imimg.com/data5/EG/RF/LH/GLADMIN-81955/mangaldeep-incense-sticks-250x250.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 14.0,
+    "monthly_run_rate": 1.8,
+    "stock_status": "in_stock"
   },
   {
     "id": 228,
@@ -141,7 +209,11 @@
     "price": 195,
     "mrp": 215,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/EG/RF/LH/GLADMIN-81955/mangaldeep-incense-sticks-250x250.jpg"
+    "image_url": "https://5.imimg.com/data5/EG/RF/LH/GLADMIN-81955/mangaldeep-incense-sticks-250x250.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 9.0,
+    "monthly_run_rate": 0.1,
+    "stock_status": "in_stock"
   },
   {
     "id": 323,
@@ -149,7 +221,11 @@
     "price": 38,
     "mrp": 40,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/629/512/005/2334/front_en.3.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/629/512/005/2334/front_en.3.400.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 34.0,
+    "monthly_run_rate": 0.6,
+    "stock_status": "in_stock"
   },
   {
     "id": 413,
@@ -157,7 +233,11 @@
     "price": 38,
     "mrp": 40,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/000/008/900/2940/front_en.7.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/000/008/900/2940/front_en.7.400.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 15.0,
+    "monthly_run_rate": 0.2,
+    "stock_status": "in_stock"
   },
   {
     "id": 347,
@@ -165,7 +245,11 @@
     "price": 195,
     "mrp": 200,
     "unit": "1 unit",
-    "image_url": "https://avtbeverages.com/wp-content/uploads/2022/11/01-29.jpg"
+    "image_url": "https://avtbeverages.com/wp-content/uploads/2022/11/01-29.jpg",
+    "stock": 12,
+    "velocity_5yr_sold": 10.0,
+    "monthly_run_rate": 0.5,
+    "stock_status": "in_stock"
   },
   {
     "id": 351,
@@ -173,7 +257,11 @@
     "price": 43,
     "mrp": 45,
     "unit": "1 unit",
-    "image_url": "https://avtbeverages.com/wp-content/uploads/2022/11/01-29.jpg"
+    "image_url": "https://avtbeverages.com/wp-content/uploads/2022/11/01-29.jpg",
+    "stock": 12,
+    "velocity_5yr_sold": 275.0,
+    "monthly_run_rate": 4.8,
+    "stock_status": "in_stock"
   },
   {
     "id": 354,
@@ -181,7 +269,11 @@
     "price": 10,
     "mrp": 10,
     "unit": "1 unit",
-    "image_url": "https://avtbeverages.com/wp-content/uploads/2022/11/01-29.jpg"
+    "image_url": "https://avtbeverages.com/wp-content/uploads/2022/11/01-29.jpg",
+    "stock": 12,
+    "velocity_5yr_sold": 128.0,
+    "monthly_run_rate": 0.8,
+    "stock_status": "in_stock"
   },
   {
     "id": 944,
@@ -189,7 +281,11 @@
     "price": 320,
     "mrp": 325,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2021/11/BC/MI/GQ/43854801/chakra-gold-tata-tea-500x500.jpeg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2021/11/BC/MI/GQ/43854801/chakra-gold-tata-tea-500x500.jpeg",
+    "stock": 6,
+    "velocity_5yr_sold": 46.0,
+    "monthly_run_rate": 0.8,
+    "stock_status": "low_stock"
   },
   {
     "id": 14464,
@@ -197,7 +293,11 @@
     "price": 45,
     "mrp": 53,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/106/309/3409/front_en.4.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/106/309/3409/front_en.4.400.jpg",
+    "stock": 12,
+    "velocity_5yr_sold": 85.0,
+    "monthly_run_rate": 2.5,
+    "stock_status": "in_stock"
   },
   {
     "id": 15561,
@@ -205,7 +305,11 @@
     "price": 10,
     "mrp": 10,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/106/309/3409/front_en.4.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/106/309/3409/front_en.4.400.jpg",
+    "stock": 12,
+    "velocity_5yr_sold": 436.0,
+    "monthly_run_rate": 16.3,
+    "stock_status": "in_stock"
   },
   {
     "id": 15752,
@@ -213,7 +317,11 @@
     "price": 19.5,
     "mrp": 20,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/106/309/3409/front_en.4.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/106/309/3409/front_en.4.400.jpg",
+    "stock": 12,
+    "velocity_5yr_sold": 373.0,
+    "monthly_run_rate": 11.7,
+    "stock_status": "in_stock"
   },
   {
     "id": 17320,
@@ -221,7 +329,11 @@
     "price": 2.9,
     "mrp": 3,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/106/309/3409/front_en.4.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/106/309/3409/front_en.4.400.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 50.0,
+    "monthly_run_rate": 2.0,
+    "stock_status": "low_stock"
   },
   {
     "id": 582,
@@ -229,7 +341,11 @@
     "price": 100,
     "mrp": 115,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/417140327/QR/DA/QI/128348662/61pcvibnvgl-250x250.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/417140327/QR/DA/QI/128348662/61pcvibnvgl-250x250.jpg",
+    "stock": 12,
+    "velocity_5yr_sold": 10.0,
+    "monthly_run_rate": 0.2,
+    "stock_status": "in_stock"
   },
   {
     "id": 591,
@@ -237,7 +353,11 @@
     "price": 28,
     "mrp": 30,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg",
+    "stock": 12,
+    "velocity_5yr_sold": 7.0,
+    "monthly_run_rate": 0.5,
+    "stock_status": "in_stock"
   },
   {
     "id": 591,
@@ -245,7 +365,11 @@
     "price": 37,
     "mrp": 38,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg",
+    "stock": 12,
+    "velocity_5yr_sold": 7.0,
+    "monthly_run_rate": 0.5,
+    "stock_status": "in_stock"
   },
   {
     "id": 737,
@@ -253,7 +377,11 @@
     "price": 238,
     "mrp": 243,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/5/419913297/KS/ZV/EN/3091301/mysore-sandalwood-soap-500x500.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 37.0,
+    "monthly_run_rate": 0.6,
+    "stock_status": "in_stock"
   },
   {
     "id": 368,
@@ -261,7 +389,11 @@
     "price": 480,
     "mrp": 500,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/DD/WD/DB/GLADMIN-60238/arokya-milk-250x250.jpg"
+    "image_url": "https://5.imimg.com/data5/DD/WD/DB/GLADMIN-60238/arokya-milk-250x250.jpg",
+    "stock": 12,
+    "velocity_5yr_sold": 275.0,
+    "monthly_run_rate": 4.8,
+    "stock_status": "in_stock"
   },
   {
     "id": 1479,
@@ -269,7 +401,11 @@
     "price": 105,
     "mrp": 113,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/601/036/0382/front_fr.3.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/601/036/0382/front_fr.3.400.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 347.0,
+    "monthly_run_rate": 8.6,
+    "stock_status": "in_stock"
   },
   {
     "id": 2624,
@@ -277,7 +413,11 @@
     "price": 45,
     "mrp": 49,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2020/10/YA/MF/WG/114682825/udhayam-urad-dal-500x500.jpeg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2020/10/YA/MF/WG/114682825/udhayam-urad-dal-500x500.jpeg",
+    "stock": 25,
+    "velocity_5yr_sold": 43.0,
+    "monthly_run_rate": 0.7,
+    "stock_status": "in_stock"
   },
   {
     "id": 4440,
@@ -285,7 +425,11 @@
     "price": 48,
     "mrp": 50,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 14.0,
+    "monthly_run_rate": 0.2,
+    "stock_status": "in_stock"
   },
   {
     "id": 17475,
@@ -293,7 +437,11 @@
     "price": 15,
     "mrp": 18,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/EG/RF/LH/GLADMIN-81955/mangaldeep-incense-sticks-250x250.jpg"
+    "image_url": "https://5.imimg.com/data5/EG/RF/LH/GLADMIN-81955/mangaldeep-incense-sticks-250x250.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 18.0,
+    "monthly_run_rate": 0.1,
+    "stock_status": "low_stock"
   },
   {
     "id": 18177,
@@ -301,7 +449,11 @@
     "price": 35,
     "mrp": 38,
     "unit": "1 unit",
-    "image_url": "https://www.gopuramproducts.com/wp-content/uploads/2022/12/kumkum-powder-red-darkred-15gm-600x600.jpg"
+    "image_url": "https://www.gopuramproducts.com/wp-content/uploads/2022/12/kumkum-powder-red-darkred-15gm-600x600.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 6.0,
+    "monthly_run_rate": 0.1,
+    "stock_status": "low_stock"
   },
   {
     "id": 18601,
@@ -309,7 +461,11 @@
     "price": 20,
     "mrp": 20,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 1078.0,
+    "monthly_run_rate": 8.9,
+    "stock_status": "in_stock"
   },
   {
     "id": 18602,
@@ -317,7 +473,11 @@
     "price": 10,
     "mrp": 12,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 85.0,
+    "monthly_run_rate": 1.9,
+    "stock_status": "low_stock"
   },
   {
     "id": 1413,
@@ -325,7 +485,11 @@
     "price": 245,
     "mrp": 246,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/672/0039/front_en.4.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/600/672/0039/front_en.4.400.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 48.0,
+    "monthly_run_rate": 1.1,
+    "stock_status": "low_stock"
   },
   {
     "id": 1502,
@@ -333,7 +497,11 @@
     "price": 62,
     "mrp": 64,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/672/0039/front_en.4.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/600/672/0039/front_en.4.400.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 137.0,
+    "monthly_run_rate": 1.8,
+    "stock_status": "low_stock"
   },
   {
     "id": 1607,
@@ -341,7 +509,11 @@
     "price": 155,
     "mrp": 160,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/672/0039/front_en.4.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/600/672/0039/front_en.4.400.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 566.0,
+    "monthly_run_rate": 2.0,
+    "stock_status": "low_stock"
   },
   {
     "id": 1935,
@@ -349,7 +521,11 @@
     "price": 144,
     "mrp": 144,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/672/0039/front_en.4.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/600/672/0039/front_en.4.400.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 44.5,
+    "monthly_run_rate": 0.7,
+    "stock_status": "low_stock"
   },
   {
     "id": 41,
@@ -357,7 +533,11 @@
     "price": 20,
     "mrp": 23,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/604/215/0029/front_en.16.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/604/215/0029/front_en.16.400.jpg",
+    "stock": 12,
+    "velocity_5yr_sold": 48.0,
+    "monthly_run_rate": 0.1,
+    "stock_status": "in_stock"
   },
   {
     "id": 42,
@@ -365,7 +545,11 @@
     "price": 25,
     "mrp": 28,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/604/215/0074/front_en.18.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/604/215/0074/front_en.18.400.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 904.0,
+    "monthly_run_rate": 9.5,
+    "stock_status": "low_stock"
   },
   {
     "id": 45,
@@ -373,7 +557,11 @@
     "price": 42,
     "mrp": 46,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/601/183/1713/front_en.6.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/601/183/1713/front_en.6.400.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 2231.0,
+    "monthly_run_rate": 9.3,
+    "stock_status": "low_stock"
   },
   {
     "id": 46,
@@ -381,7 +569,11 @@
     "price": 80,
     "mrp": 90,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/601/183/1713/front_en.6.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/601/183/1713/front_en.6.400.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 904.0,
+    "monthly_run_rate": 9.5,
+    "stock_status": "low_stock"
   },
   {
     "id": 1695,
@@ -389,7 +581,11 @@
     "price": 76,
     "mrp": 85,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/601/183/0068/front_en.17.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/601/183/0068/front_en.17.400.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 121.0,
+    "monthly_run_rate": 2.0,
+    "stock_status": "low_stock"
   },
   {
     "id": 7008,
@@ -397,7 +593,11 @@
     "price": 43,
     "mrp": 50,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/601/183/0068/front_en.17.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/601/183/0068/front_en.17.400.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 639.0,
+    "monthly_run_rate": 14.4,
+    "stock_status": "low_stock"
   },
   {
     "id": 7367,
@@ -405,7 +605,11 @@
     "price": 35,
     "mrp": 37,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/172/501/6838/front_en.7.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/172/501/6838/front_en.7.400.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 63.0,
+    "monthly_run_rate": 1.4,
+    "stock_status": "in_stock"
   },
   {
     "id": 10814,
@@ -413,7 +617,11 @@
     "price": 18,
     "mrp": 21,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/601/183/1713/front_en.6.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/601/183/1713/front_en.6.400.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 103.0,
+    "monthly_run_rate": 4.1,
+    "stock_status": "in_stock"
   },
   {
     "id": 750,
@@ -421,7 +629,11 @@
     "price": 18,
     "mrp": 23,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/208/0014/front_en.3.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/600/208/0014/front_en.3.400.jpg",
+    "stock": 12,
+    "velocity_5yr_sold": 106.0,
+    "monthly_run_rate": 0.8,
+    "stock_status": "in_stock"
   },
   {
     "id": 759,
@@ -429,7 +641,11 @@
     "price": 35,
     "mrp": 45,
     "unit": "1 unit",
-    "image_url": "https://images.openfoodfacts.org/images/products/890/600/208/0014/front_en.3.400.jpg"
+    "image_url": "https://images.openfoodfacts.org/images/products/890/600/208/0014/front_en.3.400.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 1.0,
+    "monthly_run_rate": 0.1,
+    "stock_status": "in_stock"
   },
   {
     "id": 1422,
@@ -437,7 +653,11 @@
     "price": 100,
     "mrp": 180,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 52.4,
+    "monthly_run_rate": 0.1,
+    "stock_status": "in_stock"
   },
   {
     "id": 1504,
@@ -445,7 +665,11 @@
     "price": 200,
     "mrp": 230,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2024/6/430824538/CU/YQ/EH/52481281/ponni-boiled-rice-500x500.jpg",
+    "stock": 25,
+    "velocity_5yr_sold": 54.0,
+    "monthly_run_rate": 2.3,
+    "stock_status": "in_stock"
   },
   {
     "id": 15678,
@@ -453,7 +677,11 @@
     "price": 68,
     "mrp": 90,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2023/6/319938240/PX/AO/OO/175405/bopp-toor-dal-bag-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2023/6/319938240/PX/AO/OO/175405/bopp-toor-dal-bag-500x500.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 311.0,
+    "monthly_run_rate": 7.1,
+    "stock_status": "low_stock"
   },
   {
     "id": 15739,
@@ -461,7 +689,11 @@
     "price": 135,
     "mrp": 180,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2023/6/319938240/PX/AO/OO/175405/bopp-toor-dal-bag-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2023/6/319938240/PX/AO/OO/175405/bopp-toor-dal-bag-500x500.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 161.0,
+    "monthly_run_rate": 2.7,
+    "stock_status": "low_stock"
   },
   {
     "id": 18402,
@@ -469,7 +701,11 @@
     "price": 150,
     "mrp": 200,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2023/6/319938240/PX/AO/OO/175405/bopp-toor-dal-bag-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2023/6/319938240/PX/AO/OO/175405/bopp-toor-dal-bag-500x500.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 77.0,
+    "monthly_run_rate": 2.0,
+    "stock_status": "low_stock"
   },
   {
     "id": 18463,
@@ -477,6 +713,10 @@
     "price": 78,
     "mrp": 200,
     "unit": "1 unit",
-    "image_url": "https://5.imimg.com/data5/SELLER/Default/2023/6/319938240/PX/AO/OO/175405/bopp-toor-dal-bag-500x500.jpg"
+    "image_url": "https://5.imimg.com/data5/SELLER/Default/2023/6/319938240/PX/AO/OO/175405/bopp-toor-dal-bag-500x500.jpg",
+    "stock": 6,
+    "velocity_5yr_sold": 8.0,
+    "monthly_run_rate": 0.1,
+    "stock_status": "low_stock"
   }
 ]

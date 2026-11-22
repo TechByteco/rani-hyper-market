@@ -1368,6 +1368,23 @@ if (reqPath === '/api/pos/status') {
     }
 
     // 4. Perishable Dynamic Markdown Engine
+    
+    if (reqPath === '/api/analytics/stock-velocity' && req.method === 'GET') {
+      try {
+        const p1 = path.join(__dirname, '..', 'data', 'predicted_5yr_inventory_movement.json');
+        const p2 = path.join(process.cwd(), 'data', 'predicted_5yr_inventory_movement.json');
+        const p3 = path.join(__dirname, 'predicted_5yr_inventory_movement.json');
+        const target = [p1, p2, p3].find(p => fs.existsSync(p));
+        if (target) {
+          const data = JSON.parse(fs.readFileSync(target, 'utf8') || '{}');
+          return sendJson(200, { success: true, ...data });
+        }
+        return sendJson(200, { success: true, meta: {}, products: {} });
+      } catch(err) {
+        return sendJson(500, { success: false, error: err.message });
+      }
+    }
+
     if (reqPath === '/api/inventory/fresh-markdowns' && req.method === 'GET') {
       try {
         if (posEnhancement && typeof posEnhancement.getPerishableDynamicMarkdowns === 'function') {

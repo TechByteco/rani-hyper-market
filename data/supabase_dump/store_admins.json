@@ -1,0 +1,23 @@
+[
+  {
+    "id": "c04f13f2-5fa9-4e12-ad75-9b4edb19c2d3",
+    "tenant_id": "11111111-1111-1111-1111-111111111111",
+    "username": "admin",
+    "password_hash": "admin@123",
+    "created_at": "2026-08-31T13:33:48.254164+00:00"
+  },
+  {
+    "id": "22d5c9b6-2307-4d03-9fd5-12b211ecd261",
+    "tenant_id": "34a6c265-aba8-4e96-935d-5180fe1a0b41",
+    "username": "saali",
+    "password_hash": "saali@2008",
+    "created_at": "2026-08-31T13:35:02.721508+00:00"
+  },
+  {
+    "id": "dc03695a-961f-4ead-b317-4d7a6b7bc006",
+    "tenant_id": "37a64e83-514d-4b00-b90a-9af172dacdd6",
+    "username": "rani",
+    "password_hash": "anwar",
+    "created_at": "2026-09-05T16:27:17.128679+00:00"
+  }
+]

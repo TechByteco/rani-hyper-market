@@ -1,0 +1,18 @@
+[
+  {
+    "orderId": "TEST-DELTA-1500",
+    "invId": "RHM-INV-1014",
+    "productId": 1,
+    "productName": "Fresh Milk & Provisions",
+    "qtyDeducted": 2,
+    "deductedAt": "2026-11-22T19:37:01.769Z"
+  },
+  {
+    "orderId": "OFF-TEST-1",
+    "invId": "RHM-INV-1001",
+    "productId": null,
+    "productName": "Sugar 1kg",
+    "qtyDeducted": 1,
+    "deductedAt": "2026-11-22T17:36:49.298Z"
+  }
+]

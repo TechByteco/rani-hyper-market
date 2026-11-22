@@ -19,7 +19,8 @@ pairs = [
     ('services/reconciliationService.js', 'api/services/reconciliationService.js'),
     ('reconciliation.html', 'public/reconciliation.html'),
     ('services/procurementService.js', 'api/services/procurementService.js'),
-    ('procurement.html', 'public/procurement.html')
+    ('procurement.html', 'public/procurement.html'),
+    ('catalog-search.worker.js', 'public/catalog-search.worker.js')
 ]
 
 all_ok = True

@@ -1,0 +1,43 @@
+{
+  "2026-04-01": {
+    "date": "2026-04-01",
+    "timestamp": "2026-11-22T23:09:00.193Z",
+    "cashierId": "CASHIER-101",
+    "denominations": {
+      "10": {
+        "count": 0,
+        "value": 0
+      },
+      "20": {
+        "count": 0,
+        "value": 0
+      },
+      "50": {
+        "count": 0,
+        "value": 0
+      },
+      "100": {
+        "count": 0,
+        "value": 0
+      },
+      "200": {
+        "count": 0,
+        "value": 0
+      },
+      "500": {
+        "count": 52,
+        "value": 26000
+      },
+      "coins": {
+        "value": 40
+      }
+    },
+    "grossPhysicalCash": 26040,
+    "openingFloat": 2000,
+    "netPhysicalCash": 24040,
+    "systemRecordedCash": 24025,
+    "cashVariance": 15,
+    "varianceStatus": "SURPLUS",
+    "notes": "Evening cashier counter closing count"
+  }
+}

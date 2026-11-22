@@ -80,6 +80,17 @@ try {
   }
 }
 
+let reconciliation = null;
+try {
+  reconciliation = require('./services/reconciliationService').reconciliationService;
+} catch (e) {
+  try {
+    reconciliation = require('../services/reconciliationService').reconciliationService;
+  } catch (e2) {
+    console.warn('reconciliationService load notice:', e2.message);
+  }
+}
+
 // Cached JSON fallbacks for cloud environment
 function readLocalJson(filename, defaultValue = null) {
   const possiblePaths = [
@@ -455,6 +466,110 @@ module.exports = async (req, res) => {
           historicalSlabShares: GST_CONFIG.historicalSlabShares,
           hsnMasterCount: Object.keys(HSN_MASTER).length,
           hsnMaster: HSN_MASTER
+        });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // End-of-Day (EOD) 3-Way Reconciliation & Financial Audit Suite
+    if (reqPath === '/api/reconciliation/eod/summary') {
+      try {
+        const date = queryParams.get('date') || '2026-04-01';
+        const result = reconciliation ? reconciliation.getSummary(date) : { success: false, error: 'Reconciliation service unavailable' };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/reconciliation/cash-drawer/count' && req.method === 'POST') {
+      try {
+        const parsed = await getBody();
+        const date = parsed.date || queryParams.get('date') || '2026-04-01';
+        const result = reconciliation ? reconciliation.recordCashCount(date, parsed) : { success: false };
+        return sendJson(200, { success: true, cashDrawer: result });
+      } catch (e) {
+        return sendJson(400, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/reconciliation/upi/webhook' && req.method === 'POST') {
+      try {
+        const parsed = await getBody();
+        const result = reconciliation ? reconciliation.ingestWebhook(parsed) : { success: false };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(400, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/reconciliation/upi/unreconciled') {
+      try {
+        const date = queryParams.get('date') || '2026-04-01';
+        const result = reconciliation ? reconciliation.matchUpi(date) : { matched: [], unreconciledPosBills: [], unreconciledBankCredits: [] };
+        return sendJson(200, {
+          success: true,
+          date: result.date,
+          totalPosUpiBills: result.totalPosUpiBills,
+          totalPosUpiAmount: result.totalPosUpiAmount,
+          matchedCount: result.matchedCount,
+          matchedAmount: result.matchedAmount,
+          reconciliationRatePct: result.reconciliationRatePct,
+          unreconciledPosBillsCount: result.unreconciledPosBillsCount,
+          unreconciledBankCreditsCount: result.unreconciledBankCreditsCount,
+          amountMismatchesCount: result.amountMismatchesCount,
+          unreconciledPosBills: result.unreconciledPosBills,
+          unreconciledBankCredits: result.unreconciledBankCredits,
+          amountMismatches: result.amountMismatches
+        });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/reconciliation/eod/sign-off' && req.method === 'POST') {
+      try {
+        const parsed = await getBody();
+        const date = parsed.date || queryParams.get('date') || '2026-04-01';
+        const result = reconciliation ? reconciliation.signEod(date, parsed) : { success: false };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(400, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/reconciliation/eod/report') {
+      try {
+        const date = queryParams.get('date') || '2026-04-01';
+        const summary = reconciliation ? reconciliation.getSummary(date) : null;
+        if (!summary) throw new Error('Reconciliation service unavailable');
+        return sendJson(200, {
+          success: true,
+          date: summary.date,
+          isFinalized: summary.isFinalized,
+          signedAudit: summary.signedAudit,
+          summary: summary
+        });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/reconciliation/bills') {
+      try {
+        const date = queryParams.get('date') || '2026-04-01';
+        const channel = queryParams.get('channel') || 'ALL';
+        const data = reconciliation ? reconciliation.getBills(date) : { bills: [] };
+        let filtered = data.bills || [];
+        if (channel !== 'ALL') {
+          filtered = filtered.filter(b => b.channel === channel.toUpperCase());
+        }
+        return sendJson(200, {
+          success: true,
+          date,
+          totalCount: filtered.length,
+          bills: filtered.slice(0, 100)
         });
       } catch (e) {
         return sendJson(500, { success: false, error: e.message });

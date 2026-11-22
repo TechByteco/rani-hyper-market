@@ -15,7 +15,9 @@ pairs = [
     ('google-merchant-feed.xml', 'public/google-merchant-feed.xml'),
     ('services/digitalSignageService.js', 'api/services/digitalSignageService.js'),
     ('display/overhead-promos.html', 'public/display/overhead-promos.html'),
-    ('services/gstComplianceService.js', 'api/services/gstComplianceService.js')
+    ('services/gstComplianceService.js', 'api/services/gstComplianceService.js'),
+    ('services/reconciliationService.js', 'api/services/reconciliationService.js'),
+    ('reconciliation.html', 'public/reconciliation.html')
 ]
 
 all_ok = True

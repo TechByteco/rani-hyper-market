@@ -37,6 +37,13 @@ try {
   console.warn('gstComplianceService load notice:', e.message);
 }
 
+let reconciliationService = null;
+try {
+  reconciliationService = require('./services/reconciliationService').reconciliationService;
+} catch (e) {
+  console.warn('reconciliationService load notice:', e.message);
+}
+
 const server = http.createServer((req, res) => {
   // CORS & Universal Web Security Headers (OWASP Top 10 Standards)
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -378,6 +385,143 @@ const server = http.createServer((req, res) => {
         historicalSlabShares: GST_CONFIG.historicalSlabShares,
         hsnMasterCount: Object.keys(HSN_MASTER).length,
         hsnMaster: HSN_MASTER
+      }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  // End-of-Day (EOD) 3-Way Reconciliation & Financial Audit Suite
+  if (reqPath === '/api/reconciliation/eod/summary') {
+    try {
+      const date = queryParams.get('date') || '2026-04-01';
+      const result = reconciliationService ? reconciliationService.getSummary(date) : { success: false, error: 'Reconciliation service unavailable' };
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(result));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  if (reqPath === '/api/reconciliation/cash-drawer/count' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const date = parsed.date || queryParams.get('date') || '2026-04-01';
+        const result = reconciliationService ? reconciliationService.recordCashCount(date, parsed) : { success: false };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, cashDrawer: result }));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  if (reqPath === '/api/reconciliation/upi/webhook' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const result = reconciliationService ? reconciliationService.ingestWebhook(parsed) : { success: false };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  if (reqPath === '/api/reconciliation/upi/unreconciled') {
+    try {
+      const date = queryParams.get('date') || '2026-04-01';
+      const result = reconciliationService ? reconciliationService.matchUpi(date) : { matched: [], unreconciledPosBills: [], unreconciledBankCredits: [] };
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        success: true,
+        date: result.date,
+        totalPosUpiBills: result.totalPosUpiBills,
+        totalPosUpiAmount: result.totalPosUpiAmount,
+        matchedCount: result.matchedCount,
+        matchedAmount: result.matchedAmount,
+        reconciliationRatePct: result.reconciliationRatePct,
+        unreconciledPosBillsCount: result.unreconciledPosBillsCount,
+        unreconciledBankCreditsCount: result.unreconciledBankCreditsCount,
+        amountMismatchesCount: result.amountMismatchesCount,
+        unreconciledPosBills: result.unreconciledPosBills,
+        unreconciledBankCredits: result.unreconciledBankCredits,
+        amountMismatches: result.amountMismatches
+      }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  if (reqPath === '/api/reconciliation/eod/sign-off' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const date = parsed.date || queryParams.get('date') || '2026-04-01';
+        const result = reconciliationService ? reconciliationService.signEod(date, parsed) : { success: false };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  if (reqPath === '/api/reconciliation/eod/report') {
+    try {
+      const date = queryParams.get('date') || '2026-04-01';
+      const summary = reconciliationService ? reconciliationService.getSummary(date) : null;
+      if (!summary) throw new Error('Reconciliation service unavailable');
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        success: true,
+        date: summary.date,
+        isFinalized: summary.isFinalized,
+        signedAudit: summary.signedAudit,
+        summary: summary
+      }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  if (reqPath === '/api/reconciliation/bills') {
+    try {
+      const date = queryParams.get('date') || '2026-04-01';
+      const channel = queryParams.get('channel') || 'ALL';
+      const data = reconciliationService ? reconciliationService.getBills(date) : { bills: [] };
+      let filtered = data.bills || [];
+      if (channel !== 'ALL') {
+        filtered = filtered.filter(b => b.channel === channel.toUpperCase());
+      }
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        success: true,
+        date,
+        totalCount: filtered.length,
+        bills: filtered.slice(0, 100) // return top 100 for responsive display
       }));
     } catch (e) {
       res.writeHead(500, { 'Content-Type': 'application/json' });

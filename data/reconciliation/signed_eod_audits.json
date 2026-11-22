@@ -1,0 +1,60 @@
+{
+  "2026-04-01": {
+    "certificateId": "EOD-RHM-20260401-3B52D1",
+    "date": "2026-04-01",
+    "timestamp": "2026-11-22T23:09:06.320Z",
+    "storeName": "Rani Hyper Market (SNS Market)",
+    "storeGstin": "33BAGPN1341C1ZC",
+    "storeBranch": "Main Road, Bodinayakanur, Theni District, Tamil Nadu - 625513",
+    "manager": {
+      "id": "MGR-BODI-001",
+      "name": "S. Murugan (Store Head)",
+      "signedAt": "2026-11-22T23:09:06.320Z",
+      "notes": "Verified cash drawer notes count, Pine Labs batch settlement, and bank UPI UTRs."
+    },
+    "financialMetrics": {
+      "totalSales": 35484,
+      "totalCogs": 29984.34,
+      "grossMargin": 5499.66,
+      "grossMarginPct": 15.5
+    },
+    "channelBreakdown": {
+      "cash": {
+        "billCount": 154,
+        "volumePct": 73.3,
+        "targetVolumePct": 74.5,
+        "totalAmount": 24025,
+        "sharePct": 67.71
+      },
+      "upi": {
+        "billCount": 43,
+        "volumePct": 20.5,
+        "targetVolumePct": 21.5,
+        "totalAmount": 10234,
+        "sharePct": 28.84
+      },
+      "card": {
+        "billCount": 13,
+        "volumePct": 6.2,
+        "targetVolumePct": 4,
+        "totalAmount": 1225,
+        "sharePct": 3.45
+      }
+    },
+    "reconciliationHighlights": {
+      "systemRecordedCash": 24025,
+      "netPhysicalCash": 24040,
+      "cashVariance": 15,
+      "cashStatus": "SURPLUS",
+      "totalUpiBills": 43,
+      "matchedUpiBills": 43,
+      "upiReconciliationRatePct": 100,
+      "unreconciledPosBillsCount": 0,
+      "unreconciledBankCreditsCount": 34,
+      "cardSettlementStatus": "BATCH_SETTLED_BALANCED"
+    },
+    "auditStatus": "VERIFIED_AND_SIGNED_CLEAN",
+    "signatureHash": "F719C1085BDCFEC3AC0C52883F404BC4729EA38C85506CF949D69DFA1A55FF1D",
+    "verificationUrl": "https://rani-hyper-market.vercel.app/api/reconciliation/eod/report?date=2026-04-01"
+  }
+}

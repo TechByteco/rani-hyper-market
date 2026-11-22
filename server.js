@@ -989,7 +989,7 @@ if (reqPath === '/api/pos/status') {
   }
 
   if (reqPath === '/api/webhooks/recent' && req.method === 'GET') {
-    const limit = parseInt(query?.limit || '20', 10);
+    const limit = parseInt(queryParams.get('limit') || '20', 10);
     const events = posEnhancement.getRecentWebhookEvents(limit);
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ success: true, events }));
@@ -1039,7 +1039,7 @@ if (reqPath === '/api/pos/status') {
   }
 
   if (reqPath === '/api/pos/shift/history' && req.method === 'GET') {
-    const limit = parseInt(query?.limit || '20', 10);
+    const limit = parseInt(queryParams.get('limit') || '20', 10);
     const history = posEnhancement.getShiftHistory(limit);
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ success: true, history }));
@@ -1065,7 +1065,7 @@ if (reqPath === '/api/pos/status') {
   }
 
   if (reqPath === '/api/notifications/whatsapp-log' && req.method === 'GET') {
-    const limit = parseInt(query?.limit || '20', 10);
+    const limit = parseInt(queryParams.get('limit') || '20', 10);
     const log = posEnhancement.getWhatsAppDispatchLog(limit);
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ success: true, log }));

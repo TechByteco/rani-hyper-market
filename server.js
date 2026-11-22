@@ -1383,6 +1383,166 @@ if (reqPath === '/api/pos/status') {
 
     
   // =====================================================================
+  // META WHATSAPP CLOUD API & CONVERSATIONAL COMMERCE WEBHOOKS
+  // =====================================================================
+
+  // Meta Webhook Verification (GET)
+  if ((reqPath === '/api/webhook/whatsapp' || reqPath === '/api/webhooks/whatsapp') && req.method === 'GET') {
+    const mode = queryParams.get('hub.mode');
+    const token = queryParams.get('hub.verify_token');
+    const challenge = queryParams.get('hub.challenge');
+    const expectedToken = process.env.WHATSAPP_VERIFY_TOKEN || 'rani_hypermarket_wa_verify_2026';
+
+    if (mode === 'subscribe' && token === expectedToken) {
+      res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end(challenge);
+      return;
+    } else {
+      res.writeHead(403, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: 'Webhook verification token mismatch' }));
+      return;
+    }
+  }
+
+  // Meta Webhook Event Ingestion (POST)
+  if ((reqPath === '/api/webhook/whatsapp' || reqPath === '/api/webhooks/whatsapp') && req.method === 'POST') {
+    const waService = require('./services/whatsappCloudApiService');
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', async () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const result = await waService.handleInboundWebhook(payload);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, ...result }));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  // Inbound Simulation Endpoint (Text, Button Clicks, GPS Location)
+  if (reqPath === '/api/whatsapp/simulate-inbound' && req.method === 'POST') {
+    const waService = require('./services/whatsappCloudApiService');
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', async () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const result = await waService.simulateInboundMessage(payload);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, ...result }));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  // GPS Radius Verification (8km Zone)
+  if ((reqPath === '/api/whatsapp/verify-location' || reqPath === '/api/whatsapp/check-radius') && (req.method === 'POST' || req.method === 'GET')) {
+    const waService = require('./services/whatsappCloudApiService');
+    let lat = queryParams.get('lat') || queryParams.get('latitude');
+    let lng = queryParams.get('lng') || queryParams.get('longitude');
+
+    const handleRadius = (latitude, longitude) => {
+      const result = waService.verifyDeliveryRadius(latitude, longitude);
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ success: true, ...result }));
+    };
+
+    if (req.method === 'POST') {
+      let body = '';
+      req.on('data', c => body += c);
+      req.on('end', () => {
+        try {
+          const parsed = JSON.parse(body || '{}');
+          handleRadius(parsed.latitude || parsed.lat || lat, parsed.longitude || parsed.lng || lng);
+        } catch(e) {
+          handleRadius(lat, lng);
+        }
+      });
+      return;
+    }
+    handleRadius(lat, lng);
+    return;
+  }
+
+  // Interactive Message Builder / Dispatcher
+  if (reqPath === '/api/whatsapp/send-interactive' && (req.method === 'POST' || req.method === 'GET')) {
+    const waService = require('./services/whatsappCloudApiService');
+    const handleInteractive = (params) => {
+      const recipient = params.to || params.phone || '917708834547';
+      const type = params.type || 'button';
+      let payload = null;
+      if (type === 'list' || type === 'product_list') {
+        payload = waService.buildInteractiveProductList(recipient, params);
+      } else {
+        payload = waService.buildInteractiveButtonMessage(recipient, params);
+      }
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ success: true, payload }));
+    };
+
+    if (req.method === 'POST') {
+      let body = '';
+      req.on('data', c => body += c);
+      req.on('end', () => {
+        try {
+          const parsed = JSON.parse(body || '{}');
+          handleInteractive(parsed);
+        } catch(e) {
+          handleInteractive(Object.fromEntries(queryParams.entries()));
+        }
+      });
+      return;
+    }
+    handleInteractive(Object.fromEntries(queryParams.entries()));
+    return;
+  }
+
+  // HSM Templates Registry
+  if (reqPath === '/api/whatsapp/templates' && req.method === 'GET') {
+    const waService = require('./services/whatsappCloudApiService');
+    const templates = waService.getHsmTemplates();
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    res.end(JSON.stringify({ success: true, count: templates.length, templates }));
+    return;
+  }
+
+  // HSM Template Compiler
+  if (reqPath === '/api/whatsapp/templates/render' && req.method === 'POST') {
+    const waService = require('./services/whatsappCloudApiService');
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const compiled = waService.renderHsmTemplate(parsed.templateName || 'order_confirmation_v1', parsed.variables || []);
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify({ success: true, ...compiled }));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  // WhatsApp Conversations / Audit Trail Feed
+  if (reqPath === '/api/whatsapp/conversations' && req.method === 'GET') {
+    const waService = require('./services/whatsappCloudApiService');
+    const limit = parseInt(queryParams.get('limit') || '20', 10);
+    const conversations = waService.getRecentConversations(limit);
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    res.end(JSON.stringify({ success: true, count: conversations.length, conversations }));
+    return;
+  }
+
+  // =====================================================================
   // 5 MAJOR ENTERPRISE UPGRADES (Rani Hyper Market OS)
   // =====================================================================
 

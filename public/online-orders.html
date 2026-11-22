@@ -197,6 +197,49 @@
   <!-- MAIN CONTENT CONTAINER -->
   <main class="max-w-7xl mx-auto px-4 lg:px-8 py-6 flex-1 w-full space-y-6">
 
+    <!-- META WHATSAPP CONVERSATIONAL COMMERCE CONTROL STRIP -->
+    <div class="bg-gradient-to-r from-emerald-950 via-teal-950 to-slate-900 border border-emerald-500/40 rounded-2xl p-4 sm:p-5 shadow-lg text-white flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div class="space-y-1.5">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5 shadow-xs">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Meta WhatsApp Cloud API v19.0 Active
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">
+            📍 8km Delivery Radius (Bodinayakanur Core)
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+            ⚡ 1-Tap Interactive Orders
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+            📜 6 Approved HSM Templates
+          </span>
+        </div>
+        <h2 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
+          <i class="fa-brands fa-whatsapp text-emerald-400 text-xl"></i>
+          <span>Meta WhatsApp Cloud API &amp; Conversational Commerce Hub</span>
+        </h2>
+        <p class="text-xs text-emerald-200/80 max-w-2xl leading-relaxed">
+          Inbound webhook actively captures customer responses, verifies Haversine GPS distances against the 8km store radius, and auto-generates <b>Cashier POS Order Tickets (<code>#WA-XXXX</code>)</b> with 1-Tap catalog ordering.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2.5 flex-wrap shrink-0">
+        <button type="button" onclick="openWhatsAppHubModal('simulator')" class="px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs flex items-center gap-2 shadow-md shadow-emerald-900/30 transition active:scale-95 cursor-pointer">
+          <i class="fa-solid fa-flask"></i>
+          <span>Test Inbound Webhook</span>
+        </button>
+        <button type="button" onclick="openWhatsAppHubModal('templates')" class="px-3 py-2.5 rounded-xl bg-gray-800/90 hover:bg-gray-700 text-gray-200 border border-gray-700 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+          <i class="fa-solid fa-file-invoice"></i>
+          <span>HSM Templates</span>
+        </button>
+        <button type="button" onclick="openWhatsAppHubModal('interactive')" class="px-3 py-2.5 rounded-xl bg-gray-800/90 hover:bg-gray-700 text-gray-200 border border-gray-700 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+          <i class="fa-solid fa-list-check"></i>
+          <span>Catalog Menu</span>
+        </button>
+      </div>
+    </div>
+
     <!-- KPI STATS SUMMARY CARDS -->
     <div id="kpi-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       
@@ -1464,6 +1507,16 @@
       const itemsCount = order.items.reduce((s, i) => s + (i.quantity || 1), 0);
       const itemsBrief = order.items.map(i => `${i.quantity}x ${i.title}`).slice(0, 3).join(', ') + (order.items.length > 3 ? ` + ${order.items.length - 3} more` : '');
 
+      const isWaOrder = (order.id && order.id.startsWith('WA-')) ||
+                        (order.invId && order.invId.includes('WA-')) ||
+                        (order.instructions && order.instructions.includes('WhatsApp Order')) ||
+                        (order.delivery_notes && order.delivery_notes.includes('WhatsApp Order')) ||
+                        (order.source && order.source.toLowerCase().includes('whatsapp'));
+
+      const isGpsVerified = (order.shippingAddress && order.shippingAddress.includes('8km Zone')) ||
+                            (order.fullAddress && order.fullAddress.includes('8km Zone')) ||
+                            (order.delivery_notes && order.delivery_notes.includes('8km express zone'));
+
       return `
         <div class="order-card p-4 sm:p-5" id="order-card-${order.id}">
           
@@ -1483,6 +1536,17 @@
               <span class="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
                 ${order.timeslot}
               </span>
+              ${isWaOrder ? `
+                <span class="text-gray-300">&bull;</span>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-black bg-emerald-600 text-white flex items-center gap-1 shadow-2xs" title="Order received automatically via Meta WhatsApp Cloud API">
+                  <i class="fa-brands fa-whatsapp"></i> WhatsApp Order
+                </span>
+              ` : ''}
+              ${isGpsVerified ? `
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-300 flex items-center gap-1" title="Customer shared GPS within 8km Bodinayakanur delivery zone">
+                  <i class="fa-solid fa-location-crosshairs text-teal-600"></i> Bodi 8km Zone Verified
+                </span>
+              ` : ''}
             </div>
 
             <!-- Fulfillment Status Dropdown Selector & Quick Actions -->
@@ -1498,6 +1562,10 @@
               <button type="button" onclick="sendStatusNotificationWhatsApp('${order.id}', '${order.status}')" title="Send WhatsApp Status Alert to Customer" class="px-2 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold border border-emerald-200 flex items-center gap-1 transition active:scale-95">
                 <i class="fa-brands fa-whatsapp text-emerald-600"></i>
                 <span class="hidden sm:inline">Alert</span>
+              </button>
+              <button type="button" onclick="openHsmDispatchModal('${order.id}')" title="Dispatch Meta Pre-approved HSM Template" class="px-2 py-1 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-700 text-xs font-bold border border-teal-200 flex items-center gap-1 transition active:scale-95 cursor-pointer">
+                <i class="fa-solid fa-paper-plane text-teal-600"></i>
+                <span class="hidden sm:inline">HSM</span>
               </button>
               <button type="button" onclick="sendWhatsAppEbill('${order.id}')" title="Send Official WhatsApp Tax Invoice E-Bill" class="px-2 py-1 rounded-lg bg-green-600 hover:bg-green-500 text-white text-xs font-bold border border-green-700 flex items-center gap-1 transition active:scale-95 cursor-pointer">
                 <i class="fa-solid fa-receipt text-yellow-300"></i>
@@ -1903,6 +1971,255 @@
       }
     }
 
+    // =========================================================================
+    // META WHATSAPP CONVERSATIONAL COMMERCE & INBOUND WEBHOOK CLIENT CONTROLLER
+    // =========================================================================
+    let activeHubTab = 'simulator';
+    let loadedHsmTemplates = [];
+    let selectedOrderForHsm = null;
+
+    const COMMODITY_PREVIEWS = {
+      ponni_rice_25kg: {
+        title: 'முதல் தர போடி டீலக்ஸ் பொன்னி புழுங்கல் அரிசி (25 கிலோ)',
+        englishTitle: 'Bodi Special First Quality Deluxe Ponni Boiled Rice (25kg)',
+        mrp: 1450,
+        offerPrice: 1299,
+        savingsText: '₹151 நேரடி சேமிப்பு! (10% தள்ளுபடி)'
+      },
+      sunflower_oil_5l: {
+        title: 'கோல்ட் வின்னர் சுத்திகரிக்கப்பட்ட சூரியகாந்தி எண்ணெய் (5 லிட்டர்)',
+        englishTitle: 'Gold Winner Refined Pure Sunflower Oil (5 Litre Can)',
+        mrp: 780,
+        offerPrice: 669,
+        savingsText: '₹111 தள்ளுபடி!'
+      },
+      grb_ghee_500ml: {
+        title: 'ஜி.ஆர்.பி மணமணக்கும் சுத்தமான பசும்பால் நெய் (500மி.லி)',
+        englishTitle: 'GRB Pure Cow Ghee Traditional Aroma Jar (500ml)',
+        mrp: 395,
+        offerPrice: 339,
+        savingsText: '₹56 சேமிப்பு!'
+      },
+      bovonto_combo: {
+        title: 'தென் மாவட்டங்களின் ஃபேவரிட் போவோண்டோ காம்போ (2L x 2)',
+        englishTitle: 'Bovonto Grape Soft Drink (2L x 2)',
+        mrp: 190,
+        offerPrice: 159,
+        savingsText: '₹31 காம்போ சேமிப்பு!'
+      },
+      cardamom_tea: {
+        title: 'போடி ஏலக்காய் நகரம் மணமணக்கும் ஸ்பெஷல் டீத்தூள் பேக்',
+        englishTitle: 'Bodinayakanur Green Cardamom & CTC Tea Premium Pack',
+        mrp: 320,
+        offerPrice: 249,
+        savingsText: '₹71 தள்ளுபடி!'
+      }
+    };
+
+    function openWhatsAppHubModal(tab) {
+      const modal = document.getElementById('whatsapp-commerce-hub-modal');
+      if (modal) modal.classList.remove('hidden');
+      switchHubTab(tab || 'simulator');
+      updateInteractiveCardPreview(document.getElementById('hub-interactive-sku')?.value || 'ponni_rice_25kg');
+      fetchHsmTemplates();
+    }
+
+    function closeWhatsAppHubModal() {
+      const modal = document.getElementById('whatsapp-commerce-hub-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function switchHubTab(tabName) {
+      activeHubTab = tabName;
+      ['simulator', 'interactive', 'templates'].forEach(t => {
+        const content = document.getElementById('hub-tab-' + t);
+        const btn = document.getElementById('hub-tab-btn-' + t);
+        if (content) content.classList.toggle('hidden', t !== tabName);
+        if (btn) {
+          if (t === tabName) {
+            btn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-black bg-emerald-600 text-white shadow-xs transition';
+          } else {
+            btn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gray-100 text-gray-600 hover:bg-gray-200 transition';
+          }
+        }
+      });
+    }
+
+    function handleSimTypeChange(val) {
+      // Custom presets if needed
+    }
+
+    async function executeInboundSimulation() {
+      const btn = document.getElementById('btn-run-sim');
+      const phone = document.getElementById('sim-wa-phone')?.value || '919842100000';
+      const name = document.getElementById('sim-wa-name')?.value || 'Murugan (Bodi)';
+      const simType = document.getElementById('sim-wa-type')?.value || 'button_ponni';
+
+      let payload = { phone, contactName: name };
+
+      if (simType === 'button_ponni') {
+        payload.type = 'button_reply';
+        payload.buttonId = 'quick_order_ponni_rice_25kg';
+        payload.buttonTitle = 'Order with 1-Tap';
+      } else if (simType === 'button_oil') {
+        payload.type = 'button_reply';
+        payload.buttonId = 'quick_order_sunflower_oil_5l';
+        payload.buttonTitle = 'Order with 1-Tap';
+      } else if (simType === 'location_bodi') {
+        payload.type = 'location';
+        payload.latitude = 10.0125;
+        payload.longitude = 77.3485;
+        payload.locationName = 'Bodi Town Core (0.26 km)';
+      } else if (simType === 'location_dombuchery') {
+        payload.type = 'location';
+        payload.latitude = 10.0450;
+        payload.longitude = 77.3750;
+        payload.locationName = 'Dombuchery (5.2 km)';
+      } else if (simType === 'location_theni') {
+        payload.type = 'location';
+        payload.latitude = 10.0100;
+        payload.longitude = 77.4900;
+        payload.locationName = 'Theni City Center (15.4 km)';
+      } else {
+        payload.type = 'text';
+        payload.text = 'Order Ponni Rice 25kg';
+      }
+
+      if (btn) {
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing Webhook...';
+        btn.disabled = true;
+      }
+
+      try {
+        const res = await fetch('/api/whatsapp/simulate-inbound', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(r => r.json());
+
+        const outBox = document.getElementById('sim-output-box');
+        const outDetails = document.getElementById('sim-result-details');
+        const badge = document.getElementById('sim-result-badge');
+
+        if (outBox) outBox.classList.remove('hidden');
+        if (res && res.success && res.results && res.results[0]) {
+          const item = res.results[0];
+          if (badge) badge.innerText = 'PROCESSED 200 OK';
+          let detailHtml = '<div>• <b>Event Type:</b> ' + item.type + '</div>';
+          detailHtml += '<div>• <b>Sender Phone:</b> ' + item.from + '</div>';
+          if (item.radiusCheck) {
+            detailHtml += '<div>• <b>GPS Distance:</b> ' + item.radiusCheck.distanceKm + ' km (' + (item.radiusCheck.isWithinRadius ? '✅ WITHIN 8KM DELIVERY ZONE' : '⚠️ OUTSIDE 8KM ZONE') + ')</div>';
+            detailHtml += '<div>• <b>Delivery Zone:</b> ' + item.radiusCheck.deliveryZone + ' (' + item.radiusCheck.deliveryEta + ')</div>';
+          }
+          if (item.orderId || item.orderTicket) {
+            detailHtml += '<div class="text-amber-300 font-bold">• <b>Cashier POS Ticket:</b> ' + (item.ticketText || item.orderTicket) + '</div>';
+          }
+          if (item.replyMessage) {
+            detailHtml += '<div class="pt-2 text-emerald-300 whitespace-pre-wrap">• <b>Auto WhatsApp Response:</b>\n' + item.replyMessage + '</div>';
+          }
+          if (outDetails) outDetails.innerHTML = detailHtml;
+          showToast('✓ Inbound WhatsApp webhook processed! Order ticket logged.');
+          fetchLiveOrdersFromBackend();
+        } else {
+          if (outDetails) outDetails.innerHTML = '<div>Error: ' + JSON.stringify(res) + '</div>';
+        }
+      } catch (err) {
+        alert('Simulation error: ' + err.message);
+      } finally {
+        if (btn) {
+          btn.innerHTML = '<i class="fa-solid fa-play"></i> Execute Inbound Webhook Event &amp; Generate POS Ticket';
+          btn.disabled = false;
+        }
+      }
+    }
+
+    function updateInteractiveCardPreview(skuId) {
+      const sku = COMMODITY_PREVIEWS[skuId] || COMMODITY_PREVIEWS.ponni_rice_25kg;
+      const img = document.getElementById('hub-card-banner-img');
+      const body = document.getElementById('hub-card-body-text');
+
+      if (img) {
+        img.src = '/api/banner/render?layout=square&format=webp&englishTitle=' + encodeURIComponent(sku.englishTitle) + '&mrp=' + sku.mrp + '&offerPrice=' + sku.offerPrice + '&badgeText=' + encodeURIComponent('👑 இல்லத்தரசிகளின் முதன்மை தேர்வு');
+      }
+      if (body) {
+        body.innerHTML = '🌾 *👑 இல்லத்தரசிகளின் முதன்மை தேர்வு*\n\n*' + sku.title + '*\n\n• வழக்கமான MRP: ~₹' + sku.mrp + '~\n• இன்றைய சிறப்பு விலை: *₹' + sku.offerPrice + '*\n• நேரடி சேமிப்பு: *' + sku.savingsText + '*\n\nநம்ம போடி ராணி மார்க்கெட் வழங்கும் சிறப்பு சலுகை! போடி மற்றும் 8 கி.மீ சுற்றளவில் 30-45 நிமிடங்களில் டோர் டெலிவரி.';
+      }
+    }
+
+    async function fetchHsmTemplates() {
+      try {
+        const res = await fetch('/api/whatsapp/templates').then(r => r.json());
+        if (res && res.success && res.templates) {
+          loadedHsmTemplates = res.templates;
+          loadHsmTemplateFields(document.getElementById('hub-hsm-select')?.value || 'order_confirmation_v1');
+        }
+      } catch (e) {
+        console.warn('Failed to fetch templates:', e.message);
+      }
+    }
+
+    function loadHsmTemplateFields(tplName) {
+      const tpl = loadedHsmTemplates.find(t => t.name === tplName);
+      const container = document.getElementById('hub-hsm-params-container');
+      if (!tpl || !container) return;
+
+      let html = '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">';
+      (tpl.parameterDescriptions || []).forEach((desc, idx) => {
+        let defaultVal = '';
+        if (selectedOrderForHsm) {
+          if (idx === 0) defaultVal = selectedOrderForHsm.id;
+          else if (idx === 1) defaultVal = selectedOrderForHsm.totalAmount.toFixed(2);
+          else if (idx === 2) defaultVal = '30-45 Mins';
+          else if (idx === 3) defaultVal = 'https://rani-hyper-market.vercel.app/orders';
+        } else {
+          if (idx === 0) defaultVal = 'WA-4821';
+          else if (idx === 1) defaultVal = '1299';
+          else if (idx === 2) defaultVal = '30-45 Mins';
+          else if (idx === 3) defaultVal = 'https://rani-hyper-market.vercel.app/orders';
+        }
+        html += '<div><label class="block font-bold text-gray-700 text-[11px] mb-0.5">{{' + (idx + 1) + '}} ' + desc + '</label><input type="text" id="hsm-var-' + idx + '" value="' + defaultVal + '" oninput="compileHsmPreview()" class="w-full px-2.5 py-1.5 border border-gray-300 rounded-lg text-xs"></div>';
+      });
+      html += '</div>';
+      container.innerHTML = html;
+      compileHsmPreview();
+    }
+
+    function compileHsmPreview() {
+      const tplName = document.getElementById('hub-hsm-select')?.value || 'order_confirmation_v1';
+      const tpl = loadedHsmTemplates.find(t => t.name === tplName);
+      if (!tpl) return;
+
+      let text = tpl.templateText;
+      (tpl.parameterDescriptions || []).forEach((desc, idx) => {
+        const val = document.getElementById('hsm-var-' + idx)?.value || ('{{' + (idx + 1) + '}}');
+        const placeholder = new RegExp('\\{\\{' + (idx + 1) + '\\}\\}', 'g');
+        text = text.replace(placeholder, val);
+      });
+
+      const out = document.getElementById('hub-hsm-compiled-text');
+      if (out) out.innerText = text;
+    }
+
+    function dispatchHsmToCustomer() {
+      const text = document.getElementById('hub-hsm-compiled-text')?.innerText || '';
+      let phone = selectedOrderForHsm ? selectedOrderForHsm.customerPhone : '917708834547';
+      const cleanPhone = phone.replace(/[^0-9]/g, '');
+      const target = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+      const url = 'https://wa.me/' + target + '?text=' + encodeURIComponent(text);
+      window.open(url, '_blank');
+      showToast('✓ Dispatched Meta WhatsApp HSM Template to ' + target);
+    }
+
+    function openHsmDispatchModal(orderId) {
+      const order = allOrders.find(o => o.id === orderId);
+      selectedOrderForHsm = order;
+      openWhatsAppHubModal('templates');
+      if (order && document.getElementById('hub-hsm-select')) {
+        document.getElementById('hub-hsm-select').value = 'order_confirmation_v1';
+        loadHsmTemplateFields('order_confirmation_v1');
+      }
+    }
+
 </script>
 
   <!-- ⚡ BANK UPI / GPAY WEBHOOK SIMULATOR MODAL -->
@@ -1962,6 +2279,184 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- WHATSAPP CONVERSATIONAL COMMERCE HUB MODAL -->
+  <div id="whatsapp-commerce-hub-modal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[92vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-gray-100 pb-3 shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-xl border border-emerald-500/20">
+            <i class="fa-brands fa-whatsapp"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-extrabold text-gray-900 flex items-center gap-2">
+              <span>Meta WhatsApp Cloud API Commerce Hub</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">v19.0 Active</span>
+            </h3>
+            <p class="text-xs text-gray-500">Interactive 1-Tap Ordering, 8km GPS Radius Verification &amp; HSM Templates</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeWhatsAppHubModal()" class="text-gray-400 hover:text-gray-700 text-xl font-bold">&times;</button>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="flex items-center gap-2 border-b border-gray-100 pb-2 shrink-0">
+        <button type="button" onclick="switchHubTab('simulator')" id="hub-tab-btn-simulator" class="px-3.5 py-1.5 rounded-xl text-xs font-black bg-emerald-600 text-white shadow-xs transition">
+          <i class="fa-solid fa-flask mr-1"></i> Inbound Simulator
+        </button>
+        <button type="button" onclick="switchHubTab('interactive')" id="hub-tab-btn-interactive" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
+          <i class="fa-solid fa-list-check mr-1"></i> 1-Tap Catalog
+        </button>
+        <button type="button" onclick="switchHubTab('templates')" id="hub-tab-btn-templates" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
+          <i class="fa-solid fa-file-invoice mr-1"></i> HSM Templates
+        </button>
+      </div>
+
+      <!-- Tab Contents (Scrollable Body) -->
+      <div class="overflow-y-auto space-y-4 flex-1 text-xs pr-1">
+
+        <!-- TAB 1: INBOUND WEBHOOK SIMULATOR -->
+        <div id="hub-tab-simulator" class="space-y-4">
+          <div class="p-3 bg-emerald-50/70 border border-emerald-200 rounded-2xl text-emerald-900 space-y-1">
+            <div class="font-black flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-info text-emerald-600"></i>
+              <span>Simulates Official Meta Cloud API Inbound Webhooks:</span>
+            </div>
+            <p class="text-[11px] text-emerald-800 leading-relaxed">
+              When a customer clicks <b>"Order with 1-Tap"</b> or shares their <b>GPS location</b> via WhatsApp, this webhook verifies whether they are within the <b>8km Bodinayakanur delivery radius</b> and automatically creates a <b>Cashier POS Order Ticket (<code>#WA-XXXX</code>)</b> in real time!
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Customer Mobile Number</label>
+              <input type="text" id="sim-wa-phone" value="919842100000" class="w-full px-3 py-2 border border-gray-300 rounded-xl font-mono text-xs">
+            </div>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Customer Name</label>
+              <input type="text" id="sim-wa-name" value="Murugan (Bodi)" class="w-full px-3 py-2 border border-gray-300 rounded-xl font-medium text-xs">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Simulated Incoming Event Type</label>
+            <select id="sim-wa-type" onchange="handleSimTypeChange(this.value)" class="w-full px-3 py-2 border border-gray-300 rounded-xl font-bold text-xs bg-white">
+              <option value="button_ponni">🔘 Button Click: 1-Tap Order Ponni Rice 25kg (₹1,299)</option>
+              <option value="button_oil">🔘 Button Click: 1-Tap Order Gold Winner 5L (₹669)</option>
+              <option value="location_bodi">📍 Shared GPS: Bodi Town Core (0.26 km • Inside 8km Zone)</option>
+              <option value="location_dombuchery">📍 Shared GPS: Dombuchery (5.2 km • Inside 8km Zone)</option>
+              <option value="location_theni">📍 Shared GPS: Theni City Center (15.4 km • Outside 8km Zone)</option>
+              <option value="text_order">💬 Text Message: "Order Ponni Rice 25kg"</option>
+            </select>
+          </div>
+
+          <button type="button" onclick="executeInboundSimulation()" id="btn-run-sim" class="w-full py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs rounded-xl shadow-md transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-play"></i>
+            <span>Execute Inbound Webhook Event &amp; Generate POS Ticket</span>
+          </button>
+
+          <!-- Simulation Output Box -->
+          <div id="sim-output-box" class="hidden p-3.5 bg-slate-900 rounded-2xl text-slate-200 font-mono text-[11px] space-y-2 border border-slate-800">
+            <div class="flex items-center justify-between text-xs text-emerald-400 font-bold border-b border-slate-800 pb-1.5">
+              <span>Webhook Processing Outcome</span>
+              <span id="sim-result-badge" class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px]">200 OK</span>
+            </div>
+            <div id="sim-result-details" class="space-y-1"></div>
+          </div>
+        </div>
+
+        <!-- TAB 2: INTERACTIVE 1-TAP CATALOG -->
+        <div id="hub-tab-interactive" class="hidden space-y-4">
+          <div class="p-3 bg-purple-50/70 border border-purple-200 rounded-2xl text-purple-900 space-y-1">
+            <div class="font-black flex items-center gap-1.5">
+              <i class="fa-solid fa-wand-magic-sparkles text-purple-600"></i>
+              <span>WhatsApp Interactive Message Template (Type: <code>interactive</code>)</span>
+            </div>
+            <p class="text-[11px] text-purple-800 leading-relaxed">
+              Meta WhatsApp Cloud API payload sent to shoppers. Features our serverless WebP banner image header, strikethrough MRP, bold deal pricing, and the native <b>"Order with 1-Tap"</b> action button.
+            </p>
+          </div>
+
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Select Staple Commodity / Combo</label>
+            <select id="hub-interactive-sku" onchange="updateInteractiveCardPreview(this.value)" class="w-full px-3 py-2 border border-gray-300 rounded-xl font-bold text-xs bg-white">
+              <option value="ponni_rice_25kg">🌾 Bodi Deluxe Ponni Rice (25kg) — MRP ₹1,450 ➔ ₹1,299</option>
+              <option value="sunflower_oil_5l">🌻 Gold Winner Sunflower Oil (5L Can) — MRP ₹780 ➔ ₹669</option>
+              <option value="grb_ghee_500ml">🪔 GRB Pure Cow Ghee (500ml) — MRP ₹395 ➔ ₹339</option>
+              <option value="bovonto_combo">🍇 Bovonto Grape Soft Drink (2L x 2) — MRP ₹190 ➔ ₹159</option>
+              <option value="cardamom_tea">🌿 Bodi Cardamom &amp; Tea Pack — MRP ₹320 ➔ ₹249</option>
+            </select>
+          </div>
+
+          <!-- Live Card Mockup -->
+          <div class="bg-[#0b141a] p-4 rounded-2xl border border-[#202c33] text-gray-200 font-sans shadow-lg max-w-md mx-auto space-y-3">
+            <div class="rounded-xl overflow-hidden border border-[#202c33] bg-black">
+              <img id="hub-card-banner-img" src="/api/banner/render?layout=square&format=webp&englishTitle=Bodi%20Special%20First%20Quality%20Deluxe%20Ponni%20Boiled%20Rice%20(25kg)&mrp=1450&offerPrice=1299" alt="Banner" class="w-full h-auto max-h-[220px] object-cover">
+            </div>
+            <div class="bg-[#005c4b] p-3 rounded-2xl rounded-tl-none text-[#e9edef] space-y-2 text-xs shadow">
+              <p id="hub-card-body-text" class="whitespace-pre-wrap font-sans leading-relaxed"></p>
+              <div class="text-[10px] text-emerald-200 pt-1 border-t border-emerald-600/40">
+                Rani Hypermarket • Bodinayakanur • 77088 34547
+              </div>
+            </div>
+            <div class="space-y-1.5 pt-1">
+              <div class="bg-[#202c33] text-emerald-400 font-bold text-center py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-cart-shopping"></i> Order with 1-Tap (உடனே ஆர்டர் செய்க)
+              </div>
+              <div class="grid grid-cols-2 gap-1.5">
+                <div class="bg-[#202c33] text-gray-300 font-bold text-center py-1.5 rounded-lg text-[11px]">
+                  📍 இருப்பிடம் அனுப்பு
+                </div>
+                <div class="bg-[#202c33] text-gray-300 font-bold text-center py-1.5 rounded-lg text-[11px]">
+                  🛒 முழு பட்டியல்
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: PRE-APPROVED HSM TEMPLATES -->
+        <div id="hub-tab-templates" class="space-y-4">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Select Pre-Approved HSM Template</label>
+            <select id="hub-hsm-select" onchange="loadHsmTemplateFields(this.value)" class="w-full px-3 py-2 border border-gray-300 rounded-xl font-bold text-xs bg-white">
+              <option value="order_confirmation_v1">✅ order_confirmation_v1 (Order Receipt with Live ETA &amp; Amount)</option>
+              <option value="delivery_dispatch_v1">🚚 delivery_dispatch_v1 (Out for Delivery Alert with Driver Ph)</option>
+              <option value="ebill_receipt_v1">🧾 ebill_receipt_v1 (Official GST Tax Invoice E-Bill Link)</option>
+              <option value="festival_surge_blast_v1">🌾 festival_surge_blast_v1 (Festival Surge Blast with 1-Tap CTA)</option>
+              <option value="payday_ration_saver_v1">💰 payday_ration_saver_v1 (Monthly 1st-5th Grocery Ration Saver)</option>
+              <option value="dead_stock_clearance_v1">🔥 dead_stock_clearance_v1 (Mega Clearance Combo Offer)</option>
+            </select>
+          </div>
+
+          <div id="hub-hsm-params-container" class="space-y-2"></div>
+
+          <!-- Compiled Output Preview -->
+          <div class="bg-gray-50 border border-gray-200 rounded-2xl p-3 space-y-1">
+            <span class="text-[10px] font-bold uppercase text-gray-400">Compiled Meta WhatsApp Text (Tamil Dialect)</span>
+            <p id="hub-hsm-compiled-text" class="text-xs text-gray-900 whitespace-pre-wrap font-medium leading-relaxed"></p>
+          </div>
+
+          <div class="flex items-center justify-end gap-2 pt-2 border-t border-gray-100">
+            <button type="button" onclick="dispatchHsmToCustomer()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs shadow-xs transition active:scale-95 flex items-center gap-1.5 cursor-pointer">
+              <i class="fa-brands fa-whatsapp"></i>
+              <span>Send via WhatsApp Web / API</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pt-3 border-t border-gray-100 flex items-center justify-between shrink-0 text-xs text-gray-400">
+        <span>Bodinayakanur Store Location: <b>10.0104° N, 77.3496° E</b></span>
+        <button type="button" onclick="closeWhatsAppHubModal()" class="px-4 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl">Close</button>
+      </div>
+
     </div>
   </div>
 

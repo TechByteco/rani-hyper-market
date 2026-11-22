@@ -1639,6 +1639,137 @@ if (reqPath === '/api/pos/status') {
     // 5 MAJOR ENTERPRISE UPGRADES (Rani Hyper Market OS)
     // =====================================================================
 
+    let waService = null;
+    try { waService = require('./services/whatsappCloudApiService'); } catch(e) {
+      try { waService = require('../services/whatsappCloudApiService'); } catch(e2) {}
+    }
+
+    // =====================================================================
+    // META WHATSAPP CLOUD API & CONVERSATIONAL COMMERCE WEBHOOKS
+    // =====================================================================
+
+    // Meta Webhook Verification (GET)
+    if ((reqPath === '/api/webhook/whatsapp' || reqPath === '/api/webhooks/whatsapp') && req.method === 'GET') {
+      const mode = queryParams.get('hub.mode');
+      const token = queryParams.get('hub.verify_token');
+      const challenge = queryParams.get('hub.challenge');
+      const expectedToken = process.env.WHATSAPP_VERIFY_TOKEN || 'rani_hypermarket_wa_verify_2026';
+
+      if (mode === 'subscribe' && token === expectedToken) {
+        if (res.setHeader) res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+        if (res.writeHead) res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+        return res.send ? res.send(challenge) : res.end(challenge);
+      } else {
+        return sendJson(403, { success: false, error: 'Webhook verification token mismatch' });
+      }
+    }
+
+    // Meta Webhook Event Ingestion (POST)
+    if ((reqPath === '/api/webhook/whatsapp' || reqPath === '/api/webhooks/whatsapp') && req.method === 'POST') {
+      try {
+        const payload = req.method === 'POST' ? await getBody() : {};
+        if (waService && typeof waService.handleInboundWebhook === 'function') {
+          const result = await waService.handleInboundWebhook(payload);
+          return sendJson(200, { success: true, ...result });
+        }
+        return sendJson(200, { success: true, message: 'Webhook received (mock mode)' });
+      } catch (err) {
+        return sendJson(500, { success: false, error: err.message });
+      }
+    }
+
+    // Inbound Simulation Endpoint (Text, Button Clicks, GPS Location)
+    if (reqPath === '/api/whatsapp/simulate-inbound' && req.method === 'POST') {
+      try {
+        const payload = req.method === 'POST' ? await getBody() : {};
+        if (waService && typeof waService.simulateInboundMessage === 'function') {
+          const result = await waService.simulateInboundMessage(payload);
+          return sendJson(200, { success: true, ...result });
+        }
+        return sendJson(500, { success: false, error: 'WhatsApp service not loaded' });
+      } catch (err) {
+        return sendJson(500, { success: false, error: err.message });
+      }
+    }
+
+    // GPS Radius Verification (8km Zone)
+    if ((reqPath === '/api/whatsapp/verify-location' || reqPath === '/api/whatsapp/check-radius') && (req.method === 'POST' || req.method === 'GET')) {
+      try {
+        const body = req.method === 'POST' ? await getBody() : {};
+        const lat = body.latitude || body.lat || queryParams.get('lat') || queryParams.get('latitude');
+        const lng = body.longitude || body.lng || queryParams.get('lng') || queryParams.get('longitude');
+        if (waService && typeof waService.verifyDeliveryRadius === 'function') {
+          const result = waService.verifyDeliveryRadius(lat, lng);
+          return sendJson(200, { success: true, ...result });
+        }
+        return sendJson(500, { success: false, error: 'Radius verification service unavailable' });
+      } catch (err) {
+        return sendJson(500, { success: false, error: err.message });
+      }
+    }
+
+    // Interactive Message Builder / Dispatcher
+    if (reqPath === '/api/whatsapp/send-interactive' && (req.method === 'POST' || req.method === 'GET')) {
+      try {
+        const body = req.method === 'POST' ? await getBody() : Object.fromEntries(queryParams.entries());
+        const recipient = body.to || body.phone || '917708834547';
+        const type = body.type || 'button';
+        let payload = null;
+        if (waService) {
+          if (type === 'list' || type === 'product_list') {
+            payload = waService.buildInteractiveProductList(recipient, body);
+          } else {
+            payload = waService.buildInteractiveButtonMessage(recipient, body);
+          }
+          return sendJson(200, { success: true, payload });
+        }
+        return sendJson(500, { success: false, error: 'WhatsApp service unavailable' });
+      } catch (err) {
+        return sendJson(500, { success: false, error: err.message });
+      }
+    }
+
+    // HSM Templates Registry
+    if (reqPath === '/api/whatsapp/templates' && req.method === 'GET') {
+      try {
+        if (waService && typeof waService.getHsmTemplates === 'function') {
+          const templates = waService.getHsmTemplates();
+          return sendJson(200, { success: true, count: templates.length, templates });
+        }
+        return sendJson(500, { success: false, error: 'HSM template service unavailable' });
+      } catch (err) {
+        return sendJson(500, { success: false, error: err.message });
+      }
+    }
+
+    // HSM Template Compiler
+    if (reqPath === '/api/whatsapp/templates/render' && req.method === 'POST') {
+      try {
+        const body = req.method === 'POST' ? await getBody() : {};
+        if (waService && typeof waService.renderHsmTemplate === 'function') {
+          const compiled = waService.renderHsmTemplate(body.templateName || 'order_confirmation_v1', body.variables || []);
+          return sendJson(200, { success: true, ...compiled });
+        }
+        return sendJson(500, { success: false, error: 'HSM template compiler unavailable' });
+      } catch (err) {
+        return sendJson(400, { success: false, error: err.message });
+      }
+    }
+
+    // WhatsApp Conversations / Audit Trail Feed
+    if (reqPath === '/api/whatsapp/conversations' && req.method === 'GET') {
+      try {
+        const limit = parseInt(queryParams.get('limit') || '20', 10);
+        if (waService && typeof waService.getRecentConversations === 'function') {
+          const conversations = waService.getRecentConversations(limit);
+          return sendJson(200, { success: true, count: conversations.length, conversations });
+        }
+        return sendJson(200, { success: true, count: 0, conversations: [] });
+      } catch (err) {
+        return sendJson(500, { success: false, error: err.message });
+      }
+    }
+
     // 1. Automated UPI & GPay Bank Webhooks
     if ((reqPath === '/api/webhooks/gpay' || reqPath === '/api/webhooks/upi') && req.method === 'POST') {
       try {

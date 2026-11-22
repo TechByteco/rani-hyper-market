@@ -1,5 +1,32 @@
 [
   {
+    "syncId": "SYNC-1795384990036",
+    "timestamp": "2026-11-22T22:03:10.036Z",
+    "counterId": "POS-Counter-1",
+    "batchSize": 1,
+    "addedCount": 0,
+    "decrementedCount": 0,
+    "status": "SUCCESS"
+  },
+  {
+    "syncId": "SYNC-1795384819856",
+    "timestamp": "2026-11-22T22:00:19.856Z",
+    "counterId": "POS-Counter-1",
+    "batchSize": 1,
+    "addedCount": 0,
+    "decrementedCount": 0,
+    "status": "SUCCESS"
+  },
+  {
+    "syncId": "SYNC-1795384819351",
+    "timestamp": "2026-11-22T22:00:19.351Z",
+    "counterId": "POS-Counter-1",
+    "batchSize": 1,
+    "addedCount": 0,
+    "decrementedCount": 0,
+    "status": "SUCCESS"
+  },
+  {
     "syncId": "SYNC-1795376221952",
     "timestamp": "2026-11-22T19:37:01.952Z",
     "counterId": "POS-Counter-1",

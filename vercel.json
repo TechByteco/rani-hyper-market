@@ -113,7 +113,7 @@
   ],
   "functions": {
     "api/**/*.js": {
-      "includeFiles": "{public/**,*.json,analyticsService.js,generativeAiAdvisor.js,aiProductImageEngine.js,festivalMasterData.js,hypermarketBackend.js}"
+      "includeFiles": "{public/**,data/**,*.json,posEnhancementService.js,analyticsService.js,generativeAiAdvisor.js,aiProductImageEngine.js,festivalMasterData.js,hypermarketBackend.js}"
     }
   },
   "crons": [

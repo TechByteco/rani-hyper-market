@@ -44,6 +44,13 @@ try {
   console.warn('reconciliationService load notice:', e.message);
 }
 
+let procurementService = null;
+try {
+  procurementService = require('./services/procurementService').procurementService;
+} catch (e) {
+  console.warn('procurementService load notice:', e.message);
+}
+
 const server = http.createServer((req, res) => {
   // CORS & Universal Web Security Headers (OWASP Top 10 Standards)
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -523,6 +530,162 @@ const server = http.createServer((req, res) => {
         totalCount: filtered.length,
         bills: filtered.slice(0, 100) // return top 100 for responsive display
       }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  // Wholesale Supplier Procurement Optimization & Mandi Monitoring Suite
+  if (reqPath === '/api/procurement/mandis') {
+    try {
+      const date = queryParams.get('date') || '2026-04-02';
+      const result = procurementService ? procurementService.getMandiBoard(date) : { error: 'Procurement service unavailable' };
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(result));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  if (reqPath === '/api/procurement/staples') {
+    try {
+      const TOP_10_STAPLES = require('./services/procurementService').TOP_10_STAPLES || [];
+      const STORE_PROFILE = require('./services/procurementService').STORE_PROFILE;
+      const enriched = TOP_10_STAPLES.map(s => ({
+        ...s,
+        eoq: procurementService ? procurementService.calculateEOQ(s.code) : null
+      }));
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, totalCount: enriched.length, store: STORE_PROFILE, staples: enriched }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  if (reqPath === '/api/procurement/eoq') {
+    try {
+      const code = queryParams.get('code') || 'RICE-PONNI-25KG';
+      const result = procurementService ? procurementService.calculateEOQ(code) : null;
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, code, eoq: result }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  if (reqPath === '/api/procurement/history') {
+    try {
+      const date = queryParams.get('date') || '2026-04-02';
+      const code = queryParams.get('code');
+      const fullHistory = procurementService ? procurementService.getMandiHistory(date) : {};
+      const resultData = code && fullHistory[code] ? fullHistory[code] : fullHistory;
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, asOfDate: date, history: resultData }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  if (reqPath === '/api/procurement/po/list') {
+    try {
+      const status = queryParams.get('status') || 'ALL';
+      const stapleCode = queryParams.get('stapleCode');
+      const date = queryParams.get('date') || '2026-04-02';
+      const pos = procurementService ? procurementService.getPurchaseOrders({ status, stapleCode, date }) : [];
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, totalCount: pos.length, purchaseOrders: pos }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  if (reqPath === '/api/procurement/po/auto-draft' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const date = parsed.date || queryParams.get('date') || '2026-04-02';
+        const result = procurementService ? procurementService.autoDraftDipPOs(date) : { success: false };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  if (reqPath === '/api/procurement/po/create' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const result = procurementService ? procurementService.createPurchaseOrder(parsed) : { success: false };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  if (reqPath === '/api/procurement/po/approve' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const poNumber = parsed.poNumber;
+        const approverName = parsed.approverName || 'S. Murugan';
+        const result = procurementService ? procurementService.approvePurchaseOrder(poNumber, approverName) : { success: false };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  if (reqPath === '/api/procurement/po/view') {
+    try {
+      const poNumber = queryParams.get('poNumber');
+      if (!poNumber) throw new Error('Missing poNumber query parameter');
+      const html = procurementService ? procurementService.renderPoHtml(poNumber) : '<h3>Procurement service unavailable</h3>';
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(html);
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'text/plain' });
+      res.end(e.message);
+    }
+    return;
+  }
+
+  if (reqPath === '/api/procurement/po/whatsapp') {
+    try {
+      const poNumber = queryParams.get('poNumber');
+      if (!poNumber) throw new Error('Missing poNumber query parameter');
+      const result = procurementService ? procurementService.generateWhatsAppShare(poNumber) : { success: false };
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(result));
     } catch (e) {
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ success: false, error: e.message }));

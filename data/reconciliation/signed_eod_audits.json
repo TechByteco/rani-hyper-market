@@ -1,15 +1,15 @@
 {
   "2026-04-01": {
-    "certificateId": "EOD-RHM-20260401-3B52D1",
+    "certificateId": "EOD-RHM-20260401-2A7817",
     "date": "2026-04-01",
-    "timestamp": "2026-11-22T23:09:06.320Z",
+    "timestamp": "2026-11-22T23:11:53.945Z",
     "storeName": "Rani Hyper Market (SNS Market)",
     "storeGstin": "33BAGPN1341C1ZC",
     "storeBranch": "Main Road, Bodinayakanur, Theni District, Tamil Nadu - 625513",
     "manager": {
       "id": "MGR-BODI-001",
       "name": "S. Murugan (Store Head)",
-      "signedAt": "2026-11-22T23:09:06.320Z",
+      "signedAt": "2026-11-22T23:11:53.945Z",
       "notes": "Verified cash drawer notes count, Pine Labs batch settlement, and bank UPI UTRs."
     },
     "financialMetrics": {
@@ -54,7 +54,7 @@
       "cardSettlementStatus": "BATCH_SETTLED_BALANCED"
     },
     "auditStatus": "VERIFIED_AND_SIGNED_CLEAN",
-    "signatureHash": "F719C1085BDCFEC3AC0C52883F404BC4729EA38C85506CF949D69DFA1A55FF1D",
+    "signatureHash": "B9E69E02DDDC721E6103867D6EE2741050391DDA7BC3130FF208427943B5E234",
     "verificationUrl": "https://rani-hyper-market.vercel.app/api/reconciliation/eod/report?date=2026-04-01"
   }
 }

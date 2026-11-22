@@ -17,7 +17,9 @@ pairs = [
     ('display/overhead-promos.html', 'public/display/overhead-promos.html'),
     ('services/gstComplianceService.js', 'api/services/gstComplianceService.js'),
     ('services/reconciliationService.js', 'api/services/reconciliationService.js'),
-    ('reconciliation.html', 'public/reconciliation.html')
+    ('reconciliation.html', 'public/reconciliation.html'),
+    ('services/procurementService.js', 'api/services/procurementService.js'),
+    ('procurement.html', 'public/procurement.html')
 ]
 
 all_ok = True

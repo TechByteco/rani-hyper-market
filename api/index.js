@@ -91,6 +91,20 @@ try {
   }
 }
 
+let procurement = null;
+let procurementModule = null;
+try {
+  procurementModule = require('./services/procurementService');
+  procurement = procurementModule.procurementService;
+} catch (e) {
+  try {
+    procurementModule = require('../services/procurementService');
+    procurement = procurementModule.procurementService;
+  } catch (e2) {
+    console.warn('procurementService load notice:', e2.message);
+  }
+}
+
 // Cached JSON fallbacks for cloud environment
 function readLocalJson(filename, defaultValue = null) {
   const possiblePaths = [
@@ -571,6 +585,120 @@ module.exports = async (req, res) => {
           totalCount: filtered.length,
           bills: filtered.slice(0, 100)
         });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // Wholesale Supplier Procurement Optimization & Mandi Monitoring Suite
+    if (reqPath === '/api/procurement/mandis') {
+      try {
+        const date = queryParams.get('date') || '2026-04-02';
+        const result = procurement ? procurement.getMandiBoard(date) : { error: 'Procurement service unavailable' };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/procurement/staples') {
+      try {
+        const staples = procurementModule?.TOP_10_STAPLES || [];
+        const store = procurementModule?.STORE_PROFILE;
+        const enriched = staples.map(s => ({
+          ...s,
+          eoq: procurement ? procurement.calculateEOQ(s.code) : null
+        }));
+        return sendJson(200, { success: true, totalCount: enriched.length, store, staples: enriched });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/procurement/eoq') {
+      try {
+        const code = queryParams.get('code') || 'RICE-PONNI-25KG';
+        const result = procurement ? procurement.calculateEOQ(code) : null;
+        return sendJson(200, { success: true, code, eoq: result });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/procurement/history') {
+      try {
+        const date = queryParams.get('date') || '2026-04-02';
+        const code = queryParams.get('code');
+        const fullHistory = procurement ? procurement.getMandiHistory(date) : {};
+        const resultData = code && fullHistory[code] ? fullHistory[code] : fullHistory;
+        return sendJson(200, { success: true, asOfDate: date, history: resultData });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/procurement/po/list') {
+      try {
+        const status = queryParams.get('status') || 'ALL';
+        const stapleCode = queryParams.get('stapleCode');
+        const date = queryParams.get('date') || '2026-04-02';
+        const pos = procurement ? procurement.getPurchaseOrders({ status, stapleCode, date }) : [];
+        return sendJson(200, { success: true, totalCount: pos.length, purchaseOrders: pos });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/procurement/po/auto-draft' && req.method === 'POST') {
+      try {
+        const body = await getBody();
+        const date = body.date || queryParams.get('date') || '2026-04-02';
+        const result = procurement ? procurement.autoDraftDipPOs(date) : { success: false };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/procurement/po/create' && req.method === 'POST') {
+      try {
+        const body = await getBody();
+        const result = procurement ? procurement.createPurchaseOrder(body) : { success: false };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/procurement/po/approve' && req.method === 'POST') {
+      try {
+        const body = await getBody();
+        const poNumber = body.poNumber;
+        const approverName = body.approverName || 'S. Murugan';
+        const result = procurement ? procurement.approvePurchaseOrder(poNumber, approverName) : { success: false };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/procurement/po/view') {
+      try {
+        const poNumber = queryParams.get('poNumber');
+        if (!poNumber) throw new Error('Missing poNumber query parameter');
+        const html = procurement ? procurement.renderPoHtml(poNumber) : '<h3>Procurement service unavailable</h3>';
+        return sendHtml(200, html);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/procurement/po/whatsapp') {
+      try {
+        const poNumber = queryParams.get('poNumber');
+        if (!poNumber) throw new Error('Missing poNumber query parameter');
+        const result = procurement ? procurement.generateWhatsAppShare(poNumber) : { success: false };
+        return sendJson(200, result);
       } catch (e) {
         return sendJson(500, { success: false, error: e.message });
       }

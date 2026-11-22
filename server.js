@@ -671,6 +671,26 @@ if (reqPath === '/api/pos/status') {
   }
 
   // Agent 2: Generative Vernacular Copywriter (Bodinayakanur & Theni Consumers)
+  if ((reqPath === '/api/copywriter/voice-config' || reqPath === '/api/ai/voice-config') && req.method === 'GET') {
+    const copywriterService = require('./services/vernacularCopywriterService');
+    const cfg = copywriterService.loadRegionalVoiceConfig();
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    res.end(JSON.stringify({ success: true, voice_config: cfg }));
+    return;
+  }
+
+  if ((reqPath === '/api/copywriter/templates' || reqPath === '/api/ai/templates') && req.method === 'GET') {
+    const copywriterService = require('./services/vernacularCopywriterService');
+    const cfg = copywriterService.loadRegionalVoiceConfig();
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    res.end(JSON.stringify({ 
+      success: true, 
+      templates: cfg.dynamic_daypart_and_calendar_templates || {},
+      cultural_dictionary: cfg.bodinayakanur_and_theni_cultural_dictionary || {}
+    }));
+    return;
+  }
+
   if ((reqPath === '/api/copywriter/generate' || reqPath === '/api/ai/vernacular-copywriter') && (req.method === 'POST' || req.method === 'GET')) {
     const copywriterService = require('./services/vernacularCopywriterService');
     let body = '';

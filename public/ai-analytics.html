@@ -947,24 +947,56 @@
       </div>
 
       <!-- Quick Preset Selector Pills -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-        <span class="text-gray-400 font-bold shrink-0">Quick SKU Presets:</span>
-        <button onclick="loadCopywriterPreset('முதல் தர கர்நாடகா பொன்னி புழுங்கல் அரிசி (25 கிலோ பை)', 1450, 1299, 14.5, 85, 'கார்த்திகை தீபம் 2026 சிறப்பு ஆஃபர்')" class="px-3 py-1.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 shrink-0 font-medium transition">
-          🍚 Ponni Boiled Rice 25kg (₹1,299)
-        </button>
-        <button onclick="loadCopywriterPreset('1 Ltr Udhaya Krishna Ghee + 1KG Cardamom Big Combo', 4450, 4227, 16.0, 18, 'கார்த்திகை தீபத்திருநாள் நெய் தீபம் & பலகார ஆஃபர்')" class="px-3 py-1.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-amber-300 border border-amber-500/30 shrink-0 font-medium transition">
-          🪔 Ghee + Cardamom Deepam Combo (₹4,227)
-        </button>
-        <button onclick="loadCopywriterPreset('Gold Winner Sunflower Oil (1 Litre Pouch)', 145, 128, 11.2, 140, 'வாராந்திர சமையல் பட்ஜெட் அதிரடி ஆஃபர்')" class="px-3 py-1.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 shrink-0 font-medium transition">
-          🌻 Sunflower Oil 1L (₹128)
-        </button>
-        <button onclick="loadCopywriterPreset('1KG Kuthuraivali Rice + 1KG Red Rice Organic Combo', 210, 199, 15.0, 35, 'பாரம்பரிய நவதானிய உணவுத் திருவிழா')" class="px-3 py-1.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 shrink-0 font-medium transition">
-          🌾 Millet & Red Rice (₹199)
-        </button>
+      <div class="space-y-2">
+        <!-- Row 1: Bodinayakanur & Theni District Dynamic Daypart & Tone Cadence Presets -->
+        <div class="space-y-1.5 bg-purple-950/30 border border-purple-500/20 p-3 rounded-xl">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-black uppercase text-purple-300 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
+              Bodinayakanur &amp; Theni Regional Tone Cadence (1-Click Switch):
+            </span>
+            <span class="text-[10px] text-gray-400">Cardamom City &amp; Cumbum Terroir Tuning</span>
+          </div>
+          <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+            <button type="button" onclick="loadCopywriterTemplate('saturday_morning')" class="px-3 py-1.5 rounded-xl bg-purple-900/50 hover:bg-purple-800/70 text-purple-200 border border-purple-500/40 shrink-0 font-bold transition flex items-center gap-1.5 shadow-sm">
+              <span>🍗 ஞாயிறு அசைவ விருந்து</span>
+              <span class="text-[10px] text-purple-300 font-normal">(Sat Morning Non-Veg Prep)</span>
+            </button>
+            <button type="button" onclick="loadCopywriterTemplate('monthly_salary_days')" class="px-3 py-1.5 rounded-xl bg-emerald-900/50 hover:bg-emerald-800/70 text-emerald-200 border border-emerald-500/40 shrink-0 font-bold transition flex items-center gap-1.5 shadow-sm">
+              <span>🌾 மாதாந்திர பட்ஜெட் சேமிப்பு</span>
+              <span class="text-[10px] text-emerald-300 font-normal">(1st–5th Salary Provisions)</span>
+            </button>
+            <button type="button" onclick="loadCopywriterTemplate('thursday_evening')" class="px-3 py-1.5 rounded-xl bg-blue-900/50 hover:bg-blue-800/70 text-blue-200 border border-blue-500/40 shrink-0 font-bold transition flex items-center gap-1.5 shadow-sm">
+              <span>🛒 வார இறுதி மளிகை புக்கிங்</span>
+              <span class="text-[10px] text-blue-300 font-normal">(Thu Evening Pre-Order)</span>
+            </button>
+            <button type="button" onclick="loadCopywriterTemplate('daily_morning_dairy')" class="px-3 py-1.5 rounded-xl bg-amber-900/50 hover:bg-amber-800/70 text-amber-200 border border-amber-500/40 shrink-0 font-bold transition flex items-center gap-1.5 shadow-sm">
+              <span>☕ டிகிரி பில்டர் காபி &amp; பால்</span>
+              <span class="text-[10px] text-amber-300 font-normal">(Daily Morning Essentials)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Row 2: Standard SKU Presets -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+          <span class="text-gray-400 font-bold shrink-0">Standard SKU Presets:</span>
+          <button onclick="loadCopywriterPreset('முதல் தர கர்நாடகா பொன்னி புழுங்கல் அரிசி (25 கிலோ பை)', 1450, 1299, 14.5, 85, 'கார்த்திகை தீபம் 2026 சிறப்பு ஆஃபர்', 'monthly_salary_days')" class="px-3 py-1.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 shrink-0 font-medium transition">
+            🍚 Ponni Boiled Rice 25kg (₹1,299)
+          </button>
+          <button onclick="loadCopywriterPreset('1 Ltr Udhaya Krishna Ghee + 1KG Cardamom Big Combo', 4450, 4227, 16.0, 18, 'கார்த்திகை தீபத்திருநாள் நெய் தீபம் & பலகார ஆஃபர்', 'saturday_morning')" class="px-3 py-1.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-amber-300 border border-amber-500/30 shrink-0 font-medium transition">
+            🪔 Ghee + Cardamom Deepam Combo (₹4,227)
+          </button>
+          <button onclick="loadCopywriterPreset('Gold Winner Sunflower Oil (1 Litre Pouch)', 145, 128, 11.2, 140, 'வாராந்திர சமையல் பட்ஜெட் அதிரடி ஆஃபர்', 'saturday_morning')" class="px-3 py-1.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 shrink-0 font-medium transition">
+            🌻 Sunflower Oil 1L (₹128)
+          </button>
+          <button onclick="loadCopywriterPreset('1KG Kuthuraivali Rice + 1KG Red Rice Organic Combo', 210, 199, 15.0, 35, 'பாரம்பரிய நவதானிய உணவுத் திருவிழா', 'thursday_evening')" class="px-3 py-1.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 shrink-0 font-medium transition">
+            🌾 Millet & Red Rice (₹199)
+          </button>
+        </div>
       </div>
 
       <!-- Campaign Generator Form Controls -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 bg-gray-950/70 p-4 rounded-xl border border-gray-800">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-3 bg-gray-950/70 p-4 rounded-xl border border-gray-800">
         <!-- Input 1: Product Name -->
         <div class="lg:col-span-2 space-y-1">
           <label class="text-[11px] font-bold uppercase text-gray-400">Product Name / Combo (Tamil / English)</label>
@@ -992,16 +1024,28 @@
           </div>
         </div>
 
-        <!-- Input 5: Festival / Context & Action Button -->
-        <div class="space-y-1 flex flex-col justify-between">
-          <label class="text-[11px] font-bold uppercase text-amber-400">Festival / Campaign Context</label>
+        <!-- Input 5: Regional Tone Template -->
+        <div class="space-y-1">
+          <label class="text-[11px] font-bold uppercase text-purple-400">Cadence Template</label>
+          <select id="c-template" class="w-full bg-gray-900 border border-purple-500/40 rounded-lg px-2.5 py-2 text-xs text-purple-300 font-semibold focus:border-purple-500 focus:outline-none">
+            <option value="auto">✨ Auto Detect</option>
+            <option value="saturday_morning">🍗 Saturday Non-Veg</option>
+            <option value="monthly_salary_days" selected>🌾 Monthly 1st–5th</option>
+            <option value="thursday_evening">🛒 Thursday Weekend</option>
+            <option value="daily_morning_dairy">☕ Morning Dairy/Coffee</option>
+          </select>
+        </div>
+
+        <!-- Input 6: Festival / Context -->
+        <div class="space-y-1">
+          <label class="text-[11px] font-bold uppercase text-amber-400">Festival Context</label>
           <input type="text" id="c-festival" value="கார்த்திகை தீபம் 2026 சிறப்பு ஆஃபர்" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-xs text-white focus:border-purple-500 focus:outline-none">
         </div>
 
-        <div class="lg:col-span-6 flex items-center justify-between pt-2 border-t border-gray-800">
+        <div class="lg:col-span-7 flex items-center justify-between pt-2 border-t border-gray-800">
           <div class="text-[11px] text-gray-400 flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-            <span>Target Locale: <b>Bodinayakanur, Theni District</b> • Delivery: <b>30-Min Door Delivery</b></span>
+            <span>Target Locale: <b>Bodinayakanur &amp; Theni District</b> • Terroir: <b>Cardamom City &amp; Cumbum Valley</b> • Delivery: <b>30-Min Door Delivery</b></span>
           </div>
           <button onclick="generateAgent2Copy()" id="btn-generate-copy" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-black text-white shadow-lg shadow-purple-600/30 transition flex items-center gap-2">
             <i data-lucide="sparkles" class="w-4 h-4"></i>
@@ -4698,13 +4742,17 @@ Loading live briefing...
         if (window.lucide) lucide.createIcons();
       }
 
+      const templateSelect = document.getElementById('c-template');
+      const selectedTpl = templateSelect && templateSelect.value !== 'auto' ? templateSelect.value : undefined;
+
       const payload = {
         productName: document.getElementById('c-product-name')?.value || 'முதல் தர பொன்னி புழுங்கல் அரிசி (25 கிலோ)',
         mrp: Number(document.getElementById('c-mrp')?.value || 1450),
         promoPrice: Number(document.getElementById('c-promo-price')?.value || 1299),
         marginPct: Number(document.getElementById('c-margin')?.value || 14.5),
         stockUnits: Number(document.getElementById('c-stock')?.value || 85),
-        festivalContext: document.getElementById('c-festival')?.value || 'கார்த்திகை தீபம் 2026 சிறப்பு ஆஃபர்'
+        festivalContext: document.getElementById('c-festival')?.value || 'கார்த்திகை தீபம் 2026 சிறப்பு ஆஃபர்',
+        template: selectedTpl
       };
 
       try {
@@ -4731,13 +4779,29 @@ Loading live briefing...
       }
     }
 
-    function loadCopywriterPreset(name, mrp, promo, margin, stock, fest) {
+    function loadCopywriterTemplate(tplKey) {
+      const tplSelect = document.getElementById('c-template');
+      if (tplSelect) tplSelect.value = tplKey;
+
+      if (tplKey === 'saturday_morning') {
+        loadCopywriterPreset('1 Litre Gold Winner Sunflower Oil + 250g Chettinad Mutton Masala Combo', 290, 249, 13.5, 120, 'ஞாயிறு அசைவ விருந்து மளிகை திருவிழா', 'saturday_morning');
+      } else if (tplKey === 'monthly_salary_days') {
+        loadCopywriterPreset('முதல் தர கர்நாடகா பொன்னி புழுங்கல் அரிசி (25 கிலோ பை) + 5L சன்ஃபிளவர் ஆயில்', 2150, 1899, 14.8, 65, 'மாதாந்திர மளிகை பட்ஜெட் சேமிப்பு திருவிழா', 'monthly_salary_days');
+      } else if (tplKey === 'thursday_evening') {
+        loadCopywriterPreset('ஆச்சி சாம்பார் பொடி 200g + 1kg உதயம் துவரம் பருப்பு + சீரக சம்பா அரிசி 5kg', 620, 549, 12.0, 90, 'வார இறுதி சமையல் மளிகை முன்கூட்டியே புக்கிங்', 'thursday_evening');
+      } else if (tplKey === 'daily_morning_dairy') {
+        loadCopywriterPreset('ஆவின் பசும்பால் 1L + நரசுஸ் உத்ரா டிகிரி பில்டர் காபி தூள் 500g + இட்லி மாவு 1kg', 240, 215, 15.0, 45, 'சுடச்சுட மணக்கும் டிகிரி பில்டர் காபி & பிரெஷ் பால் ஆஃபர்', 'daily_morning_dairy');
+      }
+    }
+
+    function loadCopywriterPreset(name, mrp, promo, margin, stock, fest, tpl) {
       if (document.getElementById('c-product-name')) document.getElementById('c-product-name').value = name;
       if (document.getElementById('c-mrp')) document.getElementById('c-mrp').value = mrp;
       if (document.getElementById('c-promo-price')) document.getElementById('c-promo-price').value = promo;
       if (document.getElementById('c-margin')) document.getElementById('c-margin').value = margin;
       if (document.getElementById('c-stock')) document.getElementById('c-stock').value = stock;
       if (document.getElementById('c-festival')) document.getElementById('c-festival').value = fest;
+      if (tpl && document.getElementById('c-template')) document.getElementById('c-template').value = tpl;
 
       generateAgent2Copy();
       const sec = document.getElementById('agent2-copywriter-section');

@@ -1150,6 +1150,44 @@ if (reqPath === '/api/pos/status') {
     }
 
     // Agent 2: Generative Vernacular Copywriter (Bodinayakanur & Theni Consumers)
+    if ((reqPath === '/api/copywriter/voice-config' || reqPath === '/api/ai/voice-config') && req.method === 'GET') {
+      try {
+        let copywriterService = null;
+        try { copywriterService = require('./services/vernacularCopywriterService'); } catch(e) {}
+        if (!copywriterService) {
+          try { copywriterService = require('../services/vernacularCopywriterService'); } catch(e) {}
+        }
+        if (copywriterService && typeof copywriterService.loadRegionalVoiceConfig === 'function') {
+          const cfg = copywriterService.loadRegionalVoiceConfig();
+          return sendJson(200, { success: true, voice_config: cfg });
+        }
+        return sendJson(500, { success: false, error: 'Voice config service not available' });
+      } catch (err) {
+        return sendJson(500, { success: false, error: err.message });
+      }
+    }
+
+    if ((reqPath === '/api/copywriter/templates' || reqPath === '/api/ai/templates') && req.method === 'GET') {
+      try {
+        let copywriterService = null;
+        try { copywriterService = require('./services/vernacularCopywriterService'); } catch(e) {}
+        if (!copywriterService) {
+          try { copywriterService = require('../services/vernacularCopywriterService'); } catch(e) {}
+        }
+        if (copywriterService && typeof copywriterService.loadRegionalVoiceConfig === 'function') {
+          const cfg = copywriterService.loadRegionalVoiceConfig();
+          return sendJson(200, { 
+            success: true, 
+            templates: cfg.dynamic_daypart_and_calendar_templates || {},
+            cultural_dictionary: cfg.bodinayakanur_and_theni_cultural_dictionary || {}
+          });
+        }
+        return sendJson(500, { success: false, error: 'Templates service not available' });
+      } catch (err) {
+        return sendJson(500, { success: false, error: err.message });
+      }
+    }
+
     if ((reqPath === '/api/copywriter/generate' || reqPath === '/api/ai/vernacular-copywriter') && (req.method === 'POST' || req.method === 'GET')) {
       const body = req.method === 'POST' ? await getBody() : Object.fromEntries(queryParams.entries());
       try {

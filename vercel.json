@@ -3,30 +3,6 @@
   "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/api/sync/:path*",
-      "destination": "/api/index.js"
-    },
-    {
-      "source": "/api/webhooks/:path*",
-      "destination": "/api/index.js"
-    },
-    {
-      "source": "/api/inventory/:path*",
-      "destination": "/api/index.js"
-    },
-    {
-      "source": "/api/pos/:path*",
-      "destination": "/api/index.js"
-    },
-    {
-      "source": "/api/notifications/:path*",
-      "destination": "/api/index.js"
-    },
-    {
-      "source": "/api/orders/:path*",
-      "destination": "/api/index.js"
-    },
-    {
       "source": "/",
       "destination": "/store.html"
     },

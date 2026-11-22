@@ -1007,6 +1007,39 @@ if (reqPath === '/api/pos/status') {
       });
     }
 
+    // Dead-Stock Capital Recovery & Dynamic Bundling
+    if ((reqPath === '/api/inventory/dead-stock-recovery' || reqPath === '/api/inventory/dead-stock-bundles') && req.method === 'GET') {
+      let deadStockService = null;
+      try { deadStockService = require('./services/deadStockRecoveryService'); } catch(e) {}
+      if (!deadStockService) { try { deadStockService = require('../services/deadStockRecoveryService'); } catch(e) {} }
+      if (deadStockService) {
+        return sendJson(200, deadStockService.getDeadStockPortfolio());
+      }
+      return sendJson(500, { success: false, error: 'Dead-Stock Recovery service not loaded' });
+    }
+
+    if (reqPath === '/api/inventory/bundles' && req.method === 'GET') {
+      let deadStockService = null;
+      try { deadStockService = require('./services/deadStockRecoveryService'); } catch(e) {}
+      if (!deadStockService) { try { deadStockService = require('../services/deadStockRecoveryService'); } catch(e) {} }
+      if (deadStockService) {
+        const opts = Object.fromEntries(queryParams.entries());
+        return sendJson(200, deadStockService.getBundles(opts));
+      }
+      return sendJson(500, { success: false, error: 'Dead-Stock Recovery service not loaded' });
+    }
+
+    if ((reqPath === '/api/inventory/scan-dead-stock' || reqPath === '/api/inventory/rescan-dead-stock') && (req.method === 'POST' || req.method === 'GET')) {
+      let deadStockService = null;
+      try { deadStockService = require('./services/deadStockRecoveryService'); } catch(e) {}
+      if (!deadStockService) { try { deadStockService = require('../services/deadStockRecoveryService'); } catch(e) {} }
+      if (deadStockService) {
+        const result = await deadStockService.triggerInventoryScan();
+        return sendJson(200, result);
+      }
+      return sendJson(500, { success: false, error: 'Dead-Stock Recovery service not loaded' });
+    }
+
     // RFM Customer Segmentation & Automated Refresh
     if (reqPath === '/api/analytics/rfm-cohorts' && req.method === 'GET') {
       let rfmService = null;

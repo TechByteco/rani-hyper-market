@@ -519,6 +519,34 @@ if (reqPath === '/api/pos/status') {
     return;
   }
 
+  // Dead-Stock Capital Recovery & Dynamic Bundling
+  if ((reqPath === '/api/inventory/dead-stock-recovery' || reqPath === '/api/inventory/dead-stock-bundles') && req.method === 'GET') {
+    const deadStockService = require('./services/deadStockRecoveryService');
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(deadStockService.getDeadStockPortfolio()));
+    return;
+  }
+
+  if (reqPath === '/api/inventory/bundles' && req.method === 'GET') {
+    const deadStockService = require('./services/deadStockRecoveryService');
+    const opts = Object.fromEntries(queryParams.entries());
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(deadStockService.getBundles(opts)));
+    return;
+  }
+
+  if ((reqPath === '/api/inventory/scan-dead-stock' || reqPath === '/api/inventory/rescan-dead-stock') && (req.method === 'POST' || req.method === 'GET')) {
+    const deadStockService = require('./services/deadStockRecoveryService');
+    deadStockService.triggerInventoryScan().then(result => {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(result));
+    }).catch(err => {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: err.message }));
+    });
+    return;
+  }
+
   // RFM Customer Segmentation & Automated Refresh
   if (reqPath === '/api/analytics/rfm-cohorts' && req.method === 'GET') {
     const rfmService = require('./services/rfmSegmentationService');

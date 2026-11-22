@@ -586,6 +586,63 @@ if (reqPath === '/api/pos/status') {
 
     // 7c. Analytics: Customers CRM endpoint
   
+    // 7d. Agent 1: Basket & SKU Velocity Miner (High-Affinity Cross-Sells & DOI Alerts)
+  if (reqPath === '/api/analytics/basket-affinity' && req.method === 'GET') {
+    try {
+      const candidates = [
+        path.join(__dirname, 'data', 'high_affinity_cross_sells.json'),
+        path.join(__dirname, 'public', 'high_affinity_cross_sells.json'),
+        path.join(__dirname, 'high_affinity_cross_sells.json'),
+        path.join(process.cwd(), 'data', 'high_affinity_cross_sells.json'),
+        path.join(process.cwd(), 'high_affinity_cross_sells.json')
+      ];
+      const target = candidates.find(p => fs.existsSync(p));
+      if (target) {
+        const data = JSON.parse(fs.readFileSync(target, 'utf8') || '{}');
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, ...data }));
+      } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: 'Basket affinity data not found' }));
+      }
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: err.message }));
+    }
+    return;
+  }
+
+  if (reqPath === '/api/analytics/doi-alerts' && req.method === 'GET') {
+    try {
+      const candidates = [
+        path.join(__dirname, 'data', 'high_affinity_cross_sells.json'),
+        path.join(__dirname, 'public', 'high_affinity_cross_sells.json'),
+        path.join(__dirname, 'high_affinity_cross_sells.json'),
+        path.join(process.cwd(), 'data', 'high_affinity_cross_sells.json')
+      ];
+      const target = candidates.find(p => fs.existsSync(p));
+      if (target) {
+        const data = JSON.parse(fs.readFileSync(target, 'utf8') || '{}');
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          success: true,
+          overstocked_inventory_alerts: data.overstocked_inventory_alerts || [],
+          overstocked_alerts_doi_gt_60: data.overstocked_inventory_alerts || [],
+          critical_stockout_reorder_alerts: data.critical_stockout_reorder_alerts || [],
+          critical_stockout_alerts_doi_lt_15: data.critical_stockout_reorder_alerts || [],
+          executive_kpis: data.executive_kpis || {}
+        }));
+      } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: 'DOI alerts not found' }));
+      }
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: err.message }));
+    }
+    return;
+  }
+
   if (reqPath === '/api/analytics/stock-velocity' && req.method === 'GET') {
     try {
       const p1 = path.join(__dirname, 'data', 'predicted_5yr_inventory_movement.json');

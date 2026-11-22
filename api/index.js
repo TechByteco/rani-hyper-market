@@ -1007,7 +1007,82 @@ if (reqPath === '/api/pos/status') {
       });
     }
     // 8.1 AI Marketing Campaign & Formula Synthesizer
-        // Agent 2: Generative Vernacular Copywriter (Bodinayakanur & Theni Consumers)
+            // Agent 3 & Agent 4: Omni-Channel Dispatcher & Continuous RL Optimizer Loop
+    if (reqPath === '/api/rl/bandit-status' && req.method === 'GET') {
+      let orchestrator = null;
+      try { orchestrator = require('./services/omniChannelOrchestratorService'); } catch(e) {}
+      if (!orchestrator) { try { orchestrator = require('../services/omniChannelOrchestratorService'); } catch(e) {} }
+      if (orchestrator) {
+        return sendJson(200, orchestrator.rlOptimizer.getStatus());
+      }
+      return sendJson(500, { success: false, error: 'RL Optimizer service not loaded' });
+    }
+
+    if (reqPath === '/api/rl/optimize-step' && (req.method === 'POST' || req.method === 'GET')) {
+      let orchestrator = null;
+      try { orchestrator = require('./services/omniChannelOrchestratorService'); } catch(e) {}
+      if (!orchestrator) { try { orchestrator = require('../services/omniChannelOrchestratorService'); } catch(e) {} }
+      if (orchestrator) {
+        return sendJson(200, { success: true, ...orchestrator.rlOptimizer.sampleArm() });
+      }
+      return sendJson(500, { success: false, error: 'RL Optimizer service not loaded' });
+    }
+
+    if (reqPath === '/api/rl/orchestrate-loop' && (req.method === 'POST' || req.method === 'GET')) {
+      const body = req.method === 'POST' ? await getBody() : Object.fromEntries(queryParams.entries());
+      let orchestrator = null;
+      try { orchestrator = require('./services/omniChannelOrchestratorService'); } catch(e) {}
+      if (!orchestrator) { try { orchestrator = require('../services/omniChannelOrchestratorService'); } catch(e) {} }
+      if (orchestrator) {
+        const result = await orchestrator.runAutonomousOrchestrationLoop(body);
+        return sendJson(200, result);
+      }
+      return sendJson(500, { success: false, error: 'Orchestrator service not loaded' });
+    }
+
+    if (reqPath === '/api/dispatcher/dispatch' && req.method === 'POST') {
+      const body = await getBody();
+      let orchestrator = null;
+      try { orchestrator = require('./services/omniChannelOrchestratorService'); } catch(e) {}
+      if (!orchestrator) { try { orchestrator = require('../services/omniChannelOrchestratorService'); } catch(e) {} }
+      if (orchestrator) {
+        const [wa, merchant, mqtt] = await Promise.all([
+          orchestrator.omniDispatcher.dispatchWhatsAppCloud(body),
+          orchestrator.omniDispatcher.updateGoogleMerchantFeed(body),
+          orchestrator.omniDispatcher.publishMqttCounterSignage(body)
+        ]);
+        return sendJson(200, { success: true, channels: { whatsapp: wa, google_merchant: merchant, mqtt_counter_signage: mqtt } });
+      }
+      return sendJson(500, { success: false, error: 'Dispatcher service not loaded' });
+    }
+
+    if (reqPath === '/api/telemetry/record' && req.method === 'POST') {
+      const body = await getBody();
+      let orchestrator = null;
+      try { orchestrator = require('./services/omniChannelOrchestratorService'); } catch(e) {}
+      if (!orchestrator) { try { orchestrator = require('../services/omniChannelOrchestratorService'); } catch(e) {} }
+      if (orchestrator) {
+        return sendJson(200, orchestrator.rlOptimizer.recordTelemetryEvent(body));
+      }
+      return sendJson(500, { success: false, error: 'Telemetry service not loaded' });
+    }
+
+    if ((reqPath === '/google-merchant-feed.xml' || reqPath === '/api/feeds/google-merchant.xml') && req.method === 'GET') {
+      const feedCandidates = [
+        path.join(__dirname, 'google-merchant-feed.xml'),
+        path.join(__dirname, '..', 'google-merchant-feed.xml'),
+        path.join(process.cwd(), 'google-merchant-feed.xml'),
+        path.join(process.cwd(), 'public', 'google-merchant-feed.xml')
+      ];
+      const target = feedCandidates.find(p => fs.existsSync(p));
+      if (target) {
+        res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+        res.statusCode = 200;
+        return res.end(fs.readFileSync(target, 'utf8'));
+      }
+    }
+
+    // Agent 2: Generative Vernacular Copywriter (Bodinayakanur & Theni Consumers)
     if ((reqPath === '/api/copywriter/generate' || reqPath === '/api/ai/vernacular-copywriter') && (req.method === 'POST' || req.method === 'GET')) {
       const body = req.method === 'POST' ? await getBody() : Object.fromEntries(queryParams.entries());
       try {

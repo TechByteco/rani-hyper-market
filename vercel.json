@@ -121,11 +121,23 @@
     {
       "source": "/signage",
       "destination": "/display/overhead-promos.html"
+    },
+    {
+      "source": "/reconciliation",
+      "destination": "/reconciliation.html"
+    },
+    {
+      "source": "/procurement",
+      "destination": "/procurement.html"
+    },
+    {
+      "source": "/mandi",
+      "destination": "/procurement.html"
     }
   ],
   "functions": {
     "api/**/*.js": {
-      "includeFiles": "{public/**,data/**,*.json,posEnhancementService.js,analyticsService.js,generativeAiAdvisor.js,aiProductImageEngine.js,festivalMasterData.js,hypermarketBackend.js}"
+      "includeFiles": "{public/**,data/**,services/**,api/services/**,*.json,posEnhancementService.js,analyticsService.js,generativeAiAdvisor.js,aiProductImageEngine.js,festivalMasterData.js,hypermarketBackend.js}"
     }
   },
   "crons": [

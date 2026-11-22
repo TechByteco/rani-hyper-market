@@ -103,7 +103,7 @@ def test_live_whatsapp_share_link(po_number):
 
 def test_live_procurement_ui():
     print("\n--- Testing Live Production: 7. Store Manager Procurement UI HTML ---")
-    url = f"{LIVE_BASE_URL}/procurement.html"
+    url = f"{LIVE_BASE_URL}/procurement"
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     with urllib.request.urlopen(req) as resp:
         assert resp.status == 200

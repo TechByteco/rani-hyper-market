@@ -724,7 +724,24 @@ function predictSingleDay(dStr, baseTurnover = 16800, avgBasket = 150) {
   let surgePercent = '0%';
 
   if (activeFest) {
-    eventName = activeFest.name + (isPeakDay ? ' (Peak Festival Day)' : ' (Preparation Surge)');
+    if (activeFest.id === 'karthigai_deepam') {
+      if (isPeakDay || dStr === '2026-11-24') {
+        eventName = '🪔 ' + activeFest.name + ' (Peak Celebration Day - Tuesday, Nov 24, 2026)';
+      } else {
+        const pYear = targetDate.getFullYear();
+        const celebrationTarget = new Date(pYear, 10, 24);
+        const daysToFest = Math.round((celebrationTarget - targetDate) / (1000 * 60 * 60 * 24));
+        if (daysToFest > 0) {
+          eventName = `🪔 ${activeFest.name} (Preparation Surge - ${daysToFest} Day${daysToFest > 1 ? 's' : ''} to Tuesday Celebration)`;
+        } else if (daysToFest === 0) {
+          eventName = '🪔 ' + activeFest.name + ' (Peak Celebration Day - Tuesday, Nov 24, 2026)';
+        } else {
+          eventName = `🪔 ${activeFest.name} (Post-Deepam Evening Settlement)`;
+        }
+      }
+    } else {
+      eventName = activeFest.name + (isPeakDay ? ' (Peak Festival Day)' : ' (Preparation Surge)');
+    }
     surgePercent = activeFest.surgePercent || '+40%';
     const empTurnover = emp && emp.empiricalDailyTurnover 
       ? (isPeakDay ? emp.empiricalDailyTurnover : Math.round((emp.lastYearWindowDailyAvg || 16500) * 1.065))
@@ -752,6 +769,34 @@ function predictSingleDay(dStr, baseTurnover = 16800, avgBasket = 150) {
     avgBasketValue: avgBasket,
     eventName: eventName || 'Regular Trading Day',
     surgePercent,
+    checklist: (function() {
+      const minedFest = MINED_FESTIVAL_EMPIRICAL_DATA && activeFest && MINED_FESTIVAL_EMPIRICAL_DATA[activeFest.id];
+      if (minedFest && minedFest.recommended_stock_needs && minedFest.recommended_stock_needs.length > 0) {
+        return minedFest.recommended_stock_needs.slice(0, 10).map(item => ({
+          name: item.name,
+          recOrder: item.recommended_order_qty,
+          price: item.price,
+          cost: item.cost,
+          budget: item.est_purchase_budget,
+          projectedRev: item.est_projected_revenue,
+          estProfit: item.est_profit,
+          priority: item.priority || 'CRITICAL',
+          salesHistory: item.sales_history
+        }));
+      }
+      if (activeFest && activeFest.sampleSkus) {
+        return activeFest.sampleSkus.map(s => ({
+          name: s.name,
+          recOrder: s.recOrder,
+          price: s.rate,
+          cost: s.cost,
+          budget: s.budget,
+          projectedRev: Math.round(s.rate * s.recOrder),
+          priority: s.priority || 'HIGH'
+        }));
+      }
+      return [];
+    })(),
     activeFest: activeFest ? {
       id: activeFest.id,
       name: activeFest.name,

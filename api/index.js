@@ -58,6 +58,17 @@ try {
   }
 }
 
+let digitalSignage = null;
+try {
+  digitalSignage = require('./services/digitalSignageService').digitalSignageService;
+} catch (e) {
+  try {
+    digitalSignage = require('../services/digitalSignageService').digitalSignageService;
+  } catch (e2) {
+    console.warn('digitalSignageService load notice:', e2.message);
+  }
+}
+
 // Cached JSON fallbacks for cloud environment
 function readLocalJson(filename, defaultValue = null) {
   const possiblePaths = [
@@ -225,6 +236,87 @@ module.exports = async (req, res) => {
       } catch (e) {
         return sendJson(500, { success: false, error: e.message });
       }
+    }
+
+    // Digital Signage Current State (Flash Deal & Playlist)
+    if (reqPath === '/api/signage/current') {
+      const aisle = queryParams.get('aisle') || 'ALL';
+      const state = digitalSignage ? digitalSignage.getActiveState(aisle) : {};
+      return sendJson(200, state);
+    }
+
+    // Digital Signage Server-Sent Events (SSE) Stream
+    if (reqPath === '/api/signage/stream') {
+      if (digitalSignage) {
+        return digitalSignage.addSseClient(req, res);
+      }
+      return sendJson(503, { error: 'Digital Signage service unavailable' });
+    }
+
+    // Digital Signage Publish Flash Deal
+    if (reqPath === '/api/signage/publish-deal' && req.method === 'POST') {
+      try {
+        const body = await getBody();
+        const parsed = typeof body === 'string' ? JSON.parse(body || '{}') : (body || {});
+        const result = digitalSignage ? digitalSignage.publishFlashDeal(parsed, { origin: 'VERCEL_REST_ENDPOINT' }) : { success: false };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(400, { success: false, error: e.message });
+      }
+    }
+
+    // Digital Signage Trigger Sample 30-min Sugar @ ₹19 Flash Deal
+    if (reqPath === '/api/signage/trigger-sample-flash') {
+      const sampleDeal = {
+        product_name: '1kg Premium Sugar (தூய வெள்ளை சர்க்கரை)',
+        tamil_title: '1 கிலோ சர்க்கரை வெறும் ₹19 மட்டுமே!',
+        mrp: 48,
+        promo_price: 19,
+        savings: 29,
+        discount_pct: 60,
+        validity_minutes: 30,
+        conditions: 'ரூ.500க்கு மேல் மளிகை வாங்கும் போது (On purchases above ₹500)',
+        badge_text: '⚡ அடுத்த 30 நிமிடங்களுக்கு மட்டும் - அதிரடி ஃப்ளாஷ் ஆஃபர்! ⚡',
+        audio_tamil: 'கவனத்திற்கு! அடுத்த 30 நிமிடங்களுக்கு மட்டும்: ரூ.500க்கு மேல் மளிகை வாங்கும் போது, 1 கிலோ சர்க்கரை வெறும் 19 ரூபாய் மட்டுமே! போடி ராணி ஹைப்பர் மார்க்கெட்டில் உடனே வாங்கி மகிழுங்கள்!',
+        audio_english: 'Attention shoppers! Next 30 minutes flash deal: 1kg Sugar at just 19 Rupees on bills above 500 Rupees!'
+      };
+      const result = digitalSignage ? digitalSignage.publishFlashDeal(sampleDeal, { origin: 'SAMPLE_TRIGGER_ENDPOINT' }) : { success: false };
+      return sendJson(200, result);
+    }
+
+    // Digital Signage Display Heartbeat
+    if (reqPath === '/api/signage/heartbeat' && req.method === 'POST') {
+      try {
+        const body = await getBody();
+        const parsed = typeof body === 'string' ? JSON.parse(body || '{}') : (body || {});
+        const result = digitalSignage ? digitalSignage.recordHeartbeat(parsed) : { success: false };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(400, { success: false, error: e.message });
+      }
+    }
+
+    // Digital Signage Displays List
+    if (reqPath === '/api/signage/displays') {
+      const displays = digitalSignage ? digitalSignage.getConnectedDisplays() : [];
+      return sendJson(200, { success: true, count: displays.length, displays });
+    }
+
+    // Digital Signage Playlist
+    if (reqPath === '/api/signage/playlist') {
+      const state = digitalSignage ? digitalSignage.getActiveState() : { playlist: [] };
+      return sendJson(200, { success: true, count: state.playlist.length, playlist: state.playlist });
+    }
+
+    // Digital Signage Status
+    if (reqPath === '/api/signage/status') {
+      const state = digitalSignage ? digitalSignage.getActiveState() : {};
+      return sendJson(200, {
+        success: true,
+        service: 'In-Store Overhead Digital Signage Broadcaster',
+        supermarket: 'Rani Hyper Market (Bodinayakanur & Theni)',
+        ...state
+      });
     }
 
     // National Hypermarket Backend API v1

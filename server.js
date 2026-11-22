@@ -23,6 +23,13 @@ try {
   console.warn('googleMerchantSyncService load notice:', e.message);
 }
 
+let digitalSignageService = null;
+try {
+  digitalSignageService = require('./services/digitalSignageService').digitalSignageService;
+} catch (e) {
+  console.warn('digitalSignageService load notice:', e.message);
+}
+
 const server = http.createServer((req, res) => {
   // CORS & Universal Web Security Headers (OWASP Top 10 Standards)
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -139,6 +146,111 @@ const server = http.createServer((req, res) => {
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ success: false, error: e.message }));
     }
+    return;
+  }
+
+  // Digital Signage Current State (Flash Deal & Playlist)
+  if (reqPath === '/api/signage/current') {
+    const aisle = queryParams.get('aisle') || 'ALL';
+    const state = digitalSignageService ? digitalSignageService.getActiveState(aisle) : {};
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(state));
+    return;
+  }
+
+  // Digital Signage Server-Sent Events (SSE) Real-Time Push Stream
+  if (reqPath === '/api/signage/stream') {
+    if (digitalSignageService) {
+      return digitalSignageService.addSseClient(req, res);
+    }
+    res.writeHead(503, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Digital Signage service unavailable' }));
+    return;
+  }
+
+  // Digital Signage Publish Flash Deal (Agent 2/3 or Cashier Admin)
+  if (reqPath === '/api/signage/publish-deal' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const result = digitalSignageService ? digitalSignageService.publishFlashDeal(parsed, { origin: 'REST_ENDPOINT' }) : { success: false };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // Digital Signage Trigger Sample 30-min Sugar @ ₹19 Flash Deal
+  if (reqPath === '/api/signage/trigger-sample-flash') {
+    const sampleDeal = {
+      product_name: '1kg Premium Sugar (தூய வெள்ளை சர்க்கரை)',
+      tamil_title: '1 கிலோ சர்க்கரை வெறும் ₹19 மட்டுமே!',
+      mrp: 48,
+      promo_price: 19,
+      savings: 29,
+      discount_pct: 60,
+      validity_minutes: 30,
+      conditions: 'ரூ.500க்கு மேல் மளிகை வாங்கும் போது (On purchases above ₹500)',
+      badge_text: '⚡ அடுத்த 30 நிமிடங்களுக்கு மட்டும் - அதிரடி ஃப்ளாஷ் ஆஃபர்! ⚡',
+      audio_tamil: 'கவனத்திற்கு! அடுத்த 30 நிமிடங்களுக்கு மட்டும்: ரூ.500க்கு மேல் மளிகை வாங்கும் போது, 1 கிலோ சர்க்கரை வெறும் 19 ரூபாய் மட்டுமே! போடி ராணி ஹைப்பர் மார்க்கெட்டில் உடனே வாங்கி மகிழுங்கள்!',
+      audio_english: 'Attention shoppers! Next 30 minutes flash deal: 1kg Sugar at just 19 Rupees on bills above 500 Rupees!'
+    };
+    const result = digitalSignageService ? digitalSignageService.publishFlashDeal(sampleDeal, { origin: 'SAMPLE_TRIGGER_ENDPOINT' }) : { success: false };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(result));
+    return;
+  }
+
+  // Digital Signage Display Heartbeat
+  if (reqPath === '/api/signage/heartbeat' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const result = digitalSignageService ? digitalSignageService.recordHeartbeat(parsed) : { success: false };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // Digital Signage Displays List
+  if (reqPath === '/api/signage/displays') {
+    const displays = digitalSignageService ? digitalSignageService.getConnectedDisplays() : [];
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ success: true, count: displays.length, displays }));
+    return;
+  }
+
+  // Digital Signage Playlist
+  if (reqPath === '/api/signage/playlist') {
+    const state = digitalSignageService ? digitalSignageService.getActiveState() : { playlist: [] };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ success: true, count: state.playlist.length, playlist: state.playlist }));
+    return;
+  }
+
+  // Digital Signage Status
+  if (reqPath === '/api/signage/status') {
+    const state = digitalSignageService ? digitalSignageService.getActiveState() : {};
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      success: true,
+      service: 'In-Store Overhead Digital Signage Broadcaster',
+      supermarket: 'Rani Hyper Market (Bodinayakanur & Theni)',
+      ...state
+    }));
     return;
   }
 
@@ -1973,7 +2085,10 @@ if (reqPath === '/api/pos/status') {
     '/diagnostics': '/diagnostics.html',
     '/login': '/login.html',
     '/orders': '/orders.html',
-    '/online-orders': '/orders.html'
+    '/online-orders': '/orders.html',
+    '/display/overhead-promos': '/display/overhead-promos.html',
+    '/overhead-promos': '/display/overhead-promos.html',
+    '/signage': '/display/overhead-promos.html'
   };
 
   if (ROUTE_ALIASES[reqPath]) {

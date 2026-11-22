@@ -12,7 +12,9 @@ pairs = [
     ('posEnhancementService.js', 'api/posEnhancementService.js'),
     ('analyticsService.js', 'api/analyticsService.js'),
     ('services/googleMerchantSyncService.js', 'api/services/googleMerchantSyncService.js'),
-    ('google-merchant-feed.xml', 'public/google-merchant-feed.xml')
+    ('google-merchant-feed.xml', 'public/google-merchant-feed.xml'),
+    ('services/digitalSignageService.js', 'api/services/digitalSignageService.js'),
+    ('display/overhead-promos.html', 'public/display/overhead-promos.html')
 ]
 
 all_ok = True

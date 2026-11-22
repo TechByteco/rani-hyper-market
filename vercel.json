@@ -109,6 +109,18 @@
     {
       "source": "/deck",
       "destination": "/presentation.html"
+    },
+    {
+      "source": "/display/overhead-promos",
+      "destination": "/display/overhead-promos.html"
+    },
+    {
+      "source": "/overhead-promos",
+      "destination": "/display/overhead-promos.html"
+    },
+    {
+      "source": "/signage",
+      "destination": "/display/overhead-promos.html"
     }
   ],
   "functions": {

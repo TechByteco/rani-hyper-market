@@ -1,0 +1,14 @@
+{
+  "status": "SYNCHRONIZED",
+  "totalProducts": 7686,
+  "gtinCoverageCount": 6367,
+  "gtinCoveragePercent": "82.8%",
+  "byteSize": 19376723,
+  "sizeFormatted": "18.48 MB",
+  "hash": "77c877c06add0b199ac8b7469b40f1f7",
+  "generatedAt": "2026-11-22T22:24:00.284Z",
+  "schedule": "30 20 * * * (02:00 AM IST Daily)",
+  "targetMerchantId": "534892019",
+  "feedUrl": "https://rani-hyper-market.vercel.app/google-merchant-feed.xml",
+  "voiceSearchOptimization": "Active (Bilingual English + Bodinayakanur/Theni Tamil)"
+}

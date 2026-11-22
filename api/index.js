@@ -47,6 +47,17 @@ try {
   } catch (e2) {}
 }
 
+let googleMerchantSync = null;
+try {
+  googleMerchantSync = require('./services/googleMerchantSyncService').googleMerchantSyncService;
+} catch (e) {
+  try {
+    googleMerchantSync = require('../services/googleMerchantSyncService').googleMerchantSyncService;
+  } catch (e2) {
+    console.warn('googleMerchantSyncService load notice:', e2.message);
+  }
+}
+
 // Cached JSON fallbacks for cloud environment
 function readLocalJson(filename, defaultValue = null) {
   const possiblePaths = [
@@ -125,8 +136,11 @@ module.exports = async (req, res) => {
   };
 
   try {
-    // Google Merchant Center RSS / XML Feed
+    // Google Merchant Center RSS / XML Feed Streamer & Synchronizer
     if (reqPath === '/api/feed/google-merchant.xml' || reqPath === '/api/feed/google-merchant' || reqPath === '/google-merchant-feed.xml') {
+      if (googleMerchantSync) {
+        return googleMerchantSync.streamMerchantFeed(req, res);
+      }
       const feedPaths = [
         path.join(process.cwd(), 'public', 'google-merchant-feed.xml'),
         path.join(process.cwd(), 'google-merchant-feed.xml'),
@@ -146,6 +160,70 @@ module.exports = async (req, res) => {
           }
           return res.send ? res.send(xml) : res.end(xml);
         }
+      }
+    }
+
+    // Google Merchant Cron Daily Feed Regeneration (02:00 AM IST)
+    if (reqPath === '/api/cron/merchant-feed') {
+      try {
+        const t0 = Date.now();
+        const result = googleMerchantSync ? googleMerchantSync.generateXmlFeed() : { meta: {} };
+        return sendJson(200, {
+          success: true,
+          trigger: 'SCHEDULED_VERCEL_CRON_0200_AM_IST',
+          executionTimeMs: Date.now() - t0,
+          feed: result.meta
+        });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // Google Merchant Instant Delta Update (Cash Counter POS / Manager)
+    if (reqPath === '/api/merchant/delta-update' && req.method === 'POST') {
+      try {
+        const body = await getBody();
+        const parsed = typeof body === 'string' ? JSON.parse(body || '{}') : (body || {});
+        const result = googleMerchantSync ? googleMerchantSync.recordPriceOrStockChange(parsed) : { success: false };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(400, { success: false, error: e.message });
+      }
+    }
+
+    // Google Merchant Delta Queue History
+    if (reqPath === '/api/merchant/delta-queue') {
+      const limit = parseInt(queryParams.get('limit') || '50', 10);
+      const queue = googleMerchantSync ? googleMerchantSync.getDeltaJournal(limit) : [];
+      return sendJson(200, { success: true, count: queue.length, queue });
+    }
+
+    // Google Merchant Content API Sync
+    if (reqPath === '/api/merchant/sync-content-api' && (req.method === 'POST' || req.method === 'GET')) {
+      try {
+        const result = googleMerchantSync ? await googleMerchantSync.syncPendingContentApiDeltas() : { success: false };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // Google Merchant Sync Status
+    if (reqPath === '/api/merchant/status') {
+      try {
+        const meta = googleMerchantSync ? googleMerchantSync.getFeedMetadata() : {};
+        const journal = googleMerchantSync ? googleMerchantSync.getDeltaJournal(10) : [];
+        return sendJson(200, {
+          success: true,
+          store: 'Rani Hyper Market',
+          location: 'Main Road, Bodinayakanur, Theni District, Tamil Nadu - 625513',
+          merchantId: '534892019',
+          feed: meta,
+          deltaQueueCount: journal.length,
+          recentDeltas: journal.slice(0, 5)
+        });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
       }
     }
 

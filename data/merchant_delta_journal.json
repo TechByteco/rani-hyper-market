@@ -1,0 +1,49 @@
+[
+  {
+    "deltaId": "DELTA-1795386234143-36",
+    "timestamp": "2026-11-22T22:23:54.143Z",
+    "source": "CASHIER_POS_BILLING_DESK",
+    "cashierId": "COUNTER_02_THENI",
+    "skuId": "RANI-SKU-1001",
+    "catalogId": 1001,
+    "barcode": "8901030383847",
+    "title": "Ponni Boiled Rice 25kg",
+    "changes": {
+      "price": {
+        "from": 1250,
+        "to": 1199
+      },
+      "mrp": {
+        "from": 1350,
+        "to": 1350
+      },
+      "stock": {
+        "to": 42,
+        "availability": "in stock"
+      }
+    },
+    "contentApi": {
+      "status": "SYNCED_CONFIRMED",
+      "targetMerchantId": "534892019",
+      "batchEntry": {
+        "batchId": "BATCH-1795386234143",
+        "merchantId": "534892019",
+        "method": "update",
+        "productId": "online:en:IN:RANI-SKU-1001",
+        "product": {
+          "price": {
+            "value": "1350.00",
+            "currency": "INR"
+          },
+          "salePrice": {
+            "value": "1199.00",
+            "currency": "INR"
+          },
+          "availability": "in stock"
+        },
+        "updateMask": "price,salePrice,availability"
+      },
+      "syncedAt": "2026-11-22T22:23:58.232Z"
+    }
+  }
+]

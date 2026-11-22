@@ -16,6 +16,13 @@ const MIME = {
 const analytics = require('./analyticsService');
 const hypermarketBackend = require('./hypermarketBackend');
 
+let googleMerchantSyncService = null;
+try {
+  googleMerchantSyncService = require('./services/googleMerchantSyncService').googleMerchantSyncService;
+} catch (e) {
+  console.warn('googleMerchantSyncService load notice:', e.message);
+}
+
 const server = http.createServer((req, res) => {
   // CORS & Universal Web Security Headers (OWASP Top 10 Standards)
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -40,13 +47,99 @@ const server = http.createServer((req, res) => {
 
   // API Endpoints: Live Desktop POS Bridge
     // API Endpoints: System Diagnostics & Health Suite
-  // Google Merchant Center Feed
+  // Google Merchant Center RSS / XML Feed Streamer & Synchronizer
   if (reqPath === '/api/feed/google-merchant.xml' || reqPath === '/api/feed/google-merchant' || reqPath === '/google-merchant-feed.xml') {
+    if (googleMerchantSyncService) {
+      return googleMerchantSyncService.streamMerchantFeed(req, res);
+    }
     const feedFile = path.join(__dirname, 'google-merchant-feed.xml');
     if (fs.existsSync(feedFile)) {
       res.writeHead(200, { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=86400' });
       return res.end(fs.readFileSync(feedFile, 'utf8'));
     }
+  }
+
+  // Google Merchant Cron Daily Feed Regeneration (02:00 AM IST)
+  if (reqPath === '/api/cron/merchant-feed') {
+    try {
+      const t0 = Date.now();
+      const result = googleMerchantSyncService ? googleMerchantSyncService.generateXmlFeed() : { meta: {} };
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        success: true,
+        trigger: 'SCHEDULED_VERCEL_CRON_0200_AM_IST',
+        executionTimeMs: Date.now() - t0,
+        feed: result.meta
+      }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  // Google Merchant Instant Delta Update (Cash Counter POS / Manager)
+  if (reqPath === '/api/merchant/delta-update' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const result = googleMerchantSyncService ? googleMerchantSyncService.recordPriceOrStockChange(parsed) : { success: false };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // Google Merchant Delta Queue History
+  if (reqPath === '/api/merchant/delta-queue') {
+    const limit = parseInt(queryParams.get('limit') || '50', 10);
+    const queue = googleMerchantSyncService ? googleMerchantSyncService.getDeltaJournal(limit) : [];
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ success: true, count: queue.length, queue }));
+    return;
+  }
+
+  // Google Merchant Content API Sync
+  if (reqPath === '/api/merchant/sync-content-api' && (req.method === 'POST' || req.method === 'GET')) {
+    (async () => {
+      try {
+        const result = googleMerchantSyncService ? await googleMerchantSyncService.syncPendingContentApiDeltas() : { success: false };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    })();
+    return;
+  }
+
+  // Google Merchant Sync Status
+  if (reqPath === '/api/merchant/status') {
+    try {
+      const meta = googleMerchantSyncService ? googleMerchantSyncService.getFeedMetadata() : {};
+      const journal = googleMerchantSyncService ? googleMerchantSyncService.getDeltaJournal(10) : [];
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        success: true,
+        store: 'Rani Hyper Market',
+        location: 'Main Road, Bodinayakanur, Theni District, Tamil Nadu - 625513',
+        merchantId: '534892019',
+        feed: meta,
+        deltaQueueCount: journal.length,
+        recentDeltas: journal.slice(0, 5)
+      }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
   }
 
   // National Hypermarket Backend API v1

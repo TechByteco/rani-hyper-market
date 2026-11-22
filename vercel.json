@@ -120,6 +120,10 @@
     {
       "path": "/api/supabase/keepalive",
       "schedule": "0 5 * * *"
+    },
+    {
+      "path": "/api/cron/merchant-feed",
+      "schedule": "30 20 * * *"
     }
   ],
   "headers": [

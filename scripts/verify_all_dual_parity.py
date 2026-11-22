@@ -10,7 +10,9 @@ pairs = [
     ('rani_products.json', 'public/rani_products.json'),
     ('initial_products.json', 'public/initial_products.json'),
     ('posEnhancementService.js', 'api/posEnhancementService.js'),
-    ('analyticsService.js', 'api/analyticsService.js')
+    ('analyticsService.js', 'api/analyticsService.js'),
+    ('services/googleMerchantSyncService.js', 'api/services/googleMerchantSyncService.js'),
+    ('google-merchant-feed.xml', 'public/google-merchant-feed.xml')
 ]
 
 all_ok = True

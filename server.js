@@ -670,6 +670,67 @@ if (reqPath === '/api/pos/status') {
     }
   }
 
+  // Serverless Promotional Banner Generator Microservice
+  if (reqPath === '/api/banner/presets' && req.method === 'GET') {
+    const bannerService = require('./services/bannerGeneratorService');
+    const presets = bannerService.getBannerPresets();
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    res.end(JSON.stringify({ success: true, count: presets.length, presets }));
+    return;
+  }
+
+  if ((reqPath === '/api/banner/render' || reqPath === '/api/banner/generate') && (req.method === 'POST' || req.method === 'GET')) {
+    const bannerService = require('./services/bannerGeneratorService');
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        let parsed = {};
+        if (req.method === 'POST' && body) {
+          try { parsed = JSON.parse(body); } catch(e) { parsed = {}; }
+        } else {
+          parsed = Object.fromEntries(queryParams.entries());
+        }
+
+        const asJson = parsed.asJson === 'true' || parsed.asJson === true || (req.headers && req.headers.accept && req.headers.accept.includes('application/json') && req.method === 'POST');
+
+        const rendered = await bannerService.renderBanner(parsed, {
+          layout: parsed.layout,
+          format: parsed.format,
+          quality: parsed.quality ? parseInt(parsed.quality, 10) : 85
+        });
+
+        if (asJson) {
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+          res.end(JSON.stringify({
+            success: true,
+            width: rendered.width,
+            height: rendered.height,
+            layout: rendered.layout,
+            mimeType: rendered.mimeType,
+            sizeBytes: rendered.sizeBytes,
+            sizeKb: rendered.sizeKb,
+            renderTimeMs: rendered.renderTimeMs,
+            dataUri: rendered.dataUri
+          }));
+          return;
+        }
+
+        res.writeHead(200, {
+          'Content-Type': rendered.mimeType,
+          'Content-Length': rendered.buffer.length,
+          'X-Render-Time-Ms': String(rendered.renderTimeMs),
+          'Cache-Control': 'public, max-age=86400'
+        });
+        res.end(rendered.buffer);
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
   // Agent 2: Generative Vernacular Copywriter (Bodinayakanur & Theni Consumers)
   if ((reqPath === '/api/copywriter/voice-config' || reqPath === '/api/ai/voice-config') && req.method === 'GET') {
     const copywriterService = require('./services/vernacularCopywriterService');

@@ -1248,6 +1248,81 @@ if (reqPath === '/api/pos/status') {
       }
     }
 
+    // Agent Creative Automation: Serverless Promotional Banner Microservice
+    if (reqPath === '/api/banner/presets' && req.method === 'GET') {
+      try {
+        let bannerService = null;
+        try { bannerService = require('./services/bannerGeneratorService'); } catch(e) {}
+        if (!bannerService) {
+          try { bannerService = require('../services/bannerGeneratorService'); } catch(e) {}
+        }
+        if (bannerService && typeof bannerService.getBannerPresets === 'function') {
+          const presets = bannerService.getBannerPresets();
+          return sendJson(200, { success: true, count: presets.length, presets });
+        }
+        return sendJson(500, { success: false, error: 'Banner service presets not available' });
+      } catch (err) {
+        return sendJson(500, { success: false, error: err.message });
+      }
+    }
+
+    if ((reqPath === '/api/banner/render' || reqPath === '/api/banner/generate') && (req.method === 'GET' || req.method === 'POST')) {
+      try {
+        let bannerService = null;
+        try { bannerService = require('./services/bannerGeneratorService'); } catch(e) {}
+        if (!bannerService) {
+          try { bannerService = require('../services/bannerGeneratorService'); } catch(e) {}
+        }
+        if (!bannerService) {
+          return sendJson(500, { success: false, error: 'Banner generator service not found' });
+        }
+
+        const body = req.method === 'POST' ? await getBody() : Object.fromEntries(queryParams.entries());
+        const asJson = body.asJson === 'true' || body.asJson === true || (req.headers && req.headers.accept && req.headers.accept.includes('application/json') && req.method === 'POST');
+
+        const rendered = await bannerService.renderBanner(body, {
+          layout: body.layout,
+          format: body.format,
+          quality: body.quality ? parseInt(body.quality, 10) : 85
+        });
+
+        if (asJson) {
+          return sendJson(200, {
+            success: true,
+            width: rendered.width,
+            height: rendered.height,
+            layout: rendered.layout,
+            mimeType: rendered.mimeType,
+            sizeBytes: rendered.sizeBytes,
+            sizeKb: rendered.sizeKb,
+            renderTimeMs: rendered.renderTimeMs,
+            dataUri: rendered.dataUri
+          });
+        }
+
+        // Return raw binary image buffer
+        if (res.setHeader) {
+          res.setHeader('Content-Type', rendered.mimeType);
+          res.setHeader('Content-Length', rendered.buffer.length);
+          res.setHeader('X-Render-Time-Ms', String(rendered.renderTimeMs));
+          res.setHeader('Cache-Control', 'public, max-age=86400');
+        }
+        if (res.writeHead) {
+          res.writeHead(200, {
+            'Content-Type': rendered.mimeType,
+            'Content-Length': rendered.buffer.length,
+            'X-Render-Time-Ms': String(rendered.renderTimeMs),
+            'Cache-Control': 'public, max-age=86400'
+          });
+          return res.end(rendered.buffer);
+        }
+        return res.send ? res.send(rendered.buffer) : res.end(rendered.buffer);
+      } catch (err) {
+        console.error('Error in /api/banner/render:', err.message);
+        return sendJson(500, { success: false, error: err.message });
+      }
+    }
+
     // Agent 2: Generative Vernacular Copywriter (Bodinayakanur & Theni Consumers)
     if ((reqPath === '/api/copywriter/voice-config' || reqPath === '/api/ai/voice-config') && req.method === 'GET') {
       try {

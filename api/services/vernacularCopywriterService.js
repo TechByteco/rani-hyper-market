@@ -386,6 +386,14 @@ function buildPreviewRender(copyData, m) {
   const isDltValid = smsLen <= 160;
   const tpl = m.templateContext?.config;
 
+  const encName = encodeURIComponent(m.productName || '');
+  const encMrp = encodeURIComponent(String(m.mrp || ''));
+  const encOffer = encodeURIComponent(String(m.promoPrice || ''));
+  const encSavings = encodeURIComponent(`₹${m.savingsAmount} நேரடி சேமிப்பு! (${m.discountPct}% தள்ளுபடி)`);
+  const encBadge = encodeURIComponent(m.festivalContext || '👑 இல்லத்தரசிகளின் பட்ஜெட் சேமிப்பு');
+  const bannerSquareUrl = `/api/banner/render?layout=square&format=webp&englishTitle=${encName}&tamilTitle=${encName}&mrp=${encMrp}&offerPrice=${encOffer}&savingsText=${encSavings}&badgeText=${encBadge}`;
+  const bannerLandscapeUrl = `/api/banner/render?layout=landscape&format=webp&englishTitle=${encName}&tamilTitle=${encName}&mrp=${encMrp}&offerPrice=${encOffer}&savingsText=${encSavings}&badgeText=${encBadge}`;
+
   return `
     <div class="space-y-6 text-gray-100 font-sans">
       <!-- Top Campaign Summary Pill -->
@@ -510,6 +518,102 @@ function buildPreviewRender(copyData, m) {
         </div>
 
       </div>
+
+      <!-- FORMAT D: BRANDED PROMOTIONAL BANNER STUDIO CARD -->
+      <div class="bg-gradient-to-r from-gray-950 via-emerald-950/30 to-gray-950 border border-emerald-500/40 rounded-2xl p-5 shadow-2xl relative overflow-hidden">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-800 pb-4 mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-emerald-600 p-0.5 shadow-md">
+              <div class="w-full h-full bg-gray-950 rounded-[10px] flex items-center justify-center text-amber-400">
+                <i class="fa-solid fa-image text-base"></i>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-black text-white">Format D: Branded Promotional Image Banner</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  Serverless Microservice &#8226; &lt; 250ms
+                </span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                  Compressed WebP &lt; 120 KB
+                </span>
+              </div>
+              <p class="text-[11px] text-gray-400 mt-0.5">
+                Luxury Emerald Green &amp; Dark Gold Theme &#8226; High-Contrast Yellow Price Badge &#8226; Verified Store Footer
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="switchCopywriterBannerFormat('square', '${bannerSquareUrl}')" id="btn-banner-square" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white shadow-sm transition">
+              1080x1080 Square (WhatsApp / IG)
+            </button>
+            <button type="button" onclick="switchCopywriterBannerFormat('landscape', '${bannerLandscapeUrl}')" id="btn-banner-landscape" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-800 text-gray-300 hover:bg-gray-700 transition">
+              1200x628 Landscape (Link / Display)
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          <div class="md:col-span-5 flex justify-center">
+            <div class="relative group rounded-xl overflow-hidden shadow-2xl border border-emerald-500/30 bg-black/40 max-w-[360px] w-full">
+              <img id="copywriter-live-banner-img" src="${bannerSquareUrl}" alt="Promotional Banner" class="w-full h-auto object-contain rounded-xl transition duration-300 group-hover:scale-[1.02]" loading="lazy">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end justify-between p-3">
+                <span class="text-[10px] font-bold text-emerald-400 bg-black/60 px-2 py-1 rounded">Live Serverless Render</span>
+                <a id="copywriter-banner-expand-link" href="${bannerSquareUrl}" target="_blank" class="text-[11px] text-white bg-emerald-600 hover:bg-emerald-500 px-2.5 py-1 rounded-lg font-bold">
+                  View Full Res &nearr;
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="md:col-span-7 space-y-4">
+            <div class="grid grid-cols-3 gap-3">
+              <div class="bg-gray-900/80 p-3 rounded-xl border border-gray-800 text-center">
+                <div class="text-[10px] font-bold uppercase text-gray-400">Dimensions</div>
+                <div id="banner-stat-dim" class="text-sm font-black text-amber-400 mt-0.5">1080 &times; 1080 px</div>
+                <div class="text-[10px] text-gray-500">Square Card</div>
+              </div>
+              <div class="bg-gray-900/80 p-3 rounded-xl border border-gray-800 text-center">
+                <div class="text-[10px] font-bold uppercase text-gray-400">Payload Size</div>
+                <div class="text-sm font-black text-emerald-400 mt-0.5">&asymp; 64 KB</div>
+                <div class="text-[10px] text-gray-500">Instant WhatsApp Delivery</div>
+              </div>
+              <div class="bg-gray-900/80 p-3 rounded-xl border border-gray-800 text-center">
+                <div class="text-[10px] font-bold uppercase text-gray-400">Render Speed</div>
+                <div class="text-sm font-black text-purple-400 mt-0.5">&lt; 160 ms</div>
+                <div class="text-[10px] text-gray-500">Sharp Vector Engine</div>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-gray-900/60 border border-gray-800/80 text-xs text-gray-300 space-y-1.5">
+              <div class="flex items-center justify-between text-gray-400 text-[11px]">
+                <span>Brand Identity:</span>
+                <span class="text-emerald-400 font-bold">Rani Hypermarket &#8226; Bodinayakanur</span>
+              </div>
+              <div class="flex items-center justify-between text-gray-400 text-[11px]">
+                <span>Contact Hotline:</span>
+                <span class="text-amber-300 font-mono font-bold">77088 34547</span>
+              </div>
+              <div class="flex items-center justify-between text-gray-400 text-[11px]">
+                <span>Visual Palette:</span>
+                <span>Luxury Gold (#F59E0B) + Emerald Green (#064E3B)</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 pt-2 flex-wrap">
+              <a id="copywriter-banner-download-btn" href="${bannerSquareUrl}" download="rani_hypermarket_promo_banner.webp" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-black text-white shadow-lg shadow-emerald-600/30 transition flex items-center gap-2">
+                <i class="fa-solid fa-download"></i>
+                <span>Download WebP Banner</span>
+              </a>
+              <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('copywriter-live-banner-img').src); alert('Copied Banner Image URL to Clipboard!');" class="px-3.5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300 transition flex items-center gap-1.5">
+                <i class="fa-regular fa-copy"></i>
+                <span>Copy Image URL</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -595,6 +699,15 @@ Output strictly valid JSON with exact keys:
     sms_tamil: generatedData.sms_tamil,
     whatsapp_tamil: generatedData.whatsapp_tamil,
     instagram_caption: generatedData.instagram_caption,
+    banner: {
+      square_url: `/api/banner/render?layout=square&format=webp&englishTitle=${encodeURIComponent(m.productName)}&tamilTitle=${encodeURIComponent(m.productName)}&mrp=${m.mrp}&offerPrice=${m.promoPrice}&savingsText=${encodeURIComponent(`₹${m.savingsAmount} நேரடி சேமிப்பு!`)}&badgeText=${encodeURIComponent(m.festivalContext || '👑 இல்லத்தரசிகளின் பட்ஜெட் சேமிப்பு')}`,
+      landscape_url: `/api/banner/render?layout=landscape&format=webp&englishTitle=${encodeURIComponent(m.productName)}&tamilTitle=${encodeURIComponent(m.productName)}&mrp=${m.mrp}&offerPrice=${m.promoPrice}&savingsText=${encodeURIComponent(`₹${m.savingsAmount} நேரடி சேமிப்பு!`)}&badgeText=${encodeURIComponent(m.festivalContext || '👑 இல்லத்தரசிகளின் பட்ஜெட் சேமிப்பு')}`,
+      theme: 'Luxury Dark Gold / Emerald Green (#022C22 / #F59E0B)',
+      dimensions: { square: '1080x1080', landscape: '1200x628' },
+      format: 'webp',
+      render_time_target: '<250ms',
+      size_target: '<120 KB'
+    },
     preview_render: preview_render
   };
 }

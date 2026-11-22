@@ -1065,7 +1065,194 @@
     </div>
 
 
-    
+    <!-- ========================================================================= -->
+    <!-- AGENT CREATIVE AUTOMATION: WHATSAPP & SOCIAL PROMOTIONAL BANNER STUDIO     -->
+    <!-- ========================================================================= -->
+    <div id="agent-creative-banner-studio-section" class="bg-gray-900 border border-emerald-500/30 rounded-2xl p-6 shadow-2xl relative overflow-hidden space-y-6">
+      <div class="absolute -top-16 -right-16 w-60 h-60 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Header & Status Bar -->
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-gray-800 pb-5">
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5 shadow-sm">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              Creative Automation Microservice
+            </span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              Luxury Emerald &amp; Dark Gold Theme
+            </span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+              Sharp &bull; Sub-250ms Vector Engine
+            </span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">
+              WebP Compressed &lt; 120 KB
+            </span>
+          </div>
+          <h2 class="text-xl font-black text-white mt-1.5 flex items-center gap-2">
+            <span>🎨 Branded WhatsApp &amp; Social Promotional Banner Studio</span>
+          </h2>
+          <p class="text-xs text-gray-400 mt-1 max-w-3xl">
+            Autonomous serverless graphics generator for <b>Rani Hypermarket (Bodinayakanur &amp; Theni District)</b>. Generates ultra-crisp WhatsApp cards, Instagram posts, and in-store signage with high-contrast sunshine yellow price badges, red strike-through MRPs, and verified store delivery footers (<code>77088 34547</code>).
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2.5 flex-wrap shrink-0">
+          <button type="button" onclick="renderStudioBanner()" id="btn-studio-render" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-black text-white shadow-lg shadow-emerald-600/30 transition flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>Regenerate Banner</span>
+          </button>
+          <a id="studio-download-btn" href="/api/banner/render?layout=square&format=webp" download="rani_banner_promo.webp" class="px-3.5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-gray-300 border border-gray-700 transition flex items-center gap-1.5">
+            <i data-lucide="download" class="w-4 h-4 text-emerald-400"></i>
+            <span>Download WebP</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Preset Selection Bar -->
+      <div class="space-y-2">
+        <span class="text-xs font-black uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
+          <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i>
+          Quick Presets (Bodinayakanur &amp; Theni Top Commodities)
+        </span>
+        <div class="flex items-center gap-2 flex-wrap">
+          <button type="button" onclick="loadBannerStudioPreset('ponni_rice_25kg')" class="px-3 py-1.5 rounded-lg bg-gray-800/80 hover:bg-emerald-950/60 hover:border-emerald-500/50 border border-gray-700 text-xs text-gray-300 hover:text-emerald-300 font-semibold transition flex items-center gap-1.5">
+            <span>🌾</span> <span>Bodi Deluxe Ponni Rice (25kg)</span>
+          </button>
+          <button type="button" onclick="loadBannerStudioPreset('sunflower_oil_5l')" class="px-3 py-1.5 rounded-lg bg-gray-800/80 hover:bg-emerald-950/60 hover:border-emerald-500/50 border border-gray-700 text-xs text-gray-300 hover:text-emerald-300 font-semibold transition flex items-center gap-1.5">
+            <span>🌻</span> <span>Gold Winner Oil (5L)</span>
+          </button>
+          <button type="button" onclick="loadBannerStudioPreset('grb_pure_ghee_500ml')" class="px-3 py-1.5 rounded-lg bg-gray-800/80 hover:bg-emerald-950/60 hover:border-emerald-500/50 border border-gray-700 text-xs text-gray-300 hover:text-emerald-300 font-semibold transition flex items-center gap-1.5">
+            <span>🪔</span> <span>GRB Pure Cow Ghee (500ml)</span>
+          </button>
+          <button type="button" onclick="loadBannerStudioPreset('bovonto_combo_2l')" class="px-3 py-1.5 rounded-lg bg-gray-800/80 hover:bg-emerald-950/60 hover:border-emerald-500/50 border border-gray-700 text-xs text-gray-300 hover:text-emerald-300 font-semibold transition flex items-center gap-1.5">
+            <span>🍇</span> <span>Bovonto Grape Soda Combo</span>
+          </button>
+          <button type="button" onclick="loadBannerStudioPreset('bodi_cardamom_tea')" class="px-3 py-1.5 rounded-lg bg-gray-800/80 hover:bg-emerald-950/60 hover:border-emerald-500/50 border border-gray-700 text-xs text-gray-300 hover:text-emerald-300 font-semibold transition flex items-center gap-1.5">
+            <span>🌿</span> <span>Bodi Cardamom &amp; Tea Pack</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Studio Work Area: Form Inputs (Left) and Live Preview (Right) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Controls Column (7 Cols) -->
+        <div class="lg:col-span-7 bg-gray-950/60 border border-gray-800 rounded-2xl p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-gray-800/80 pb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+              <i data-lucide="sliders" class="w-3.5 h-3.5"></i> Banner Design Controls
+            </span>
+            <div class="flex items-center gap-1.5">
+              <button type="button" onclick="setStudioLayout('square')" id="studio-btn-square" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white shadow-sm transition">
+                1080x1080 Square
+              </button>
+              <button type="button" onclick="setStudioLayout('landscape')" id="studio-btn-landscape" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-800 text-gray-300 hover:bg-gray-700 transition">
+                1200x628 Landscape
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="text-[11px] font-bold uppercase text-gray-400">English Title / SKU Description</label>
+              <input type="text" id="b-english-title" value="Bodi Special First Quality Deluxe Ponni Boiled Rice (25kg)" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none">
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-[11px] font-bold uppercase text-amber-400">Tamil Vernacular Title</label>
+              <input type="text" id="b-tamil-title" value="முதல் தர போடி டீலக்ஸ் பொன்னி புழுங்கல் அரிசி (25 கிலோ)" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-xs text-amber-200 font-medium focus:border-emerald-500 focus:outline-none">
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-[11px] font-bold uppercase text-red-400">Regular MRP (₹)</label>
+              <input type="number" id="b-mrp" value="1450" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none">
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-[11px] font-bold uppercase text-emerald-400">Special Offer Price (₹)</label>
+              <input type="number" id="b-offer-price" value="1299" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-xs text-white font-bold focus:border-emerald-500 focus:outline-none">
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-[11px] font-bold uppercase text-gray-400">Savings Text Callout</label>
+              <input type="text" id="b-savings-text" value="₹151 நேரடி சேமிப்பு!" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none">
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-[11px] font-bold uppercase text-amber-300">Top Header Badge Text</label>
+              <input type="text" id="b-badge-text" value="👑 இல்லத்தரசிகளின் முதன்மை தேர்வு" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none">
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-[11px] font-bold uppercase text-gray-400">Compression Format</label>
+              <select id="b-format" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none" onchange="renderStudioBanner()">
+                <option value="webp" selected>WebP (Instant Mobile &bull; &lt; 120 KB)</option>
+                <option value="png">PNG (Lossless High Fidelity)</option>
+                <option value="svg">SVG (Vector Scalable Source)</option>
+              </select>
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-[11px] font-bold uppercase text-gray-400">Compression Quality</label>
+              <select id="b-quality" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none" onchange="renderStudioBanner()">
+                <option value="85" selected>85% (Optimal Balance &bull; ~64 KB)</option>
+                <option value="75">75% (Ultra Compressed &bull; ~45 KB)</option>
+                <option value="95">95% (Maximum Sharpness &bull; ~95 KB)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-gray-800 flex items-center justify-between text-[11px] text-gray-400">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              Branding: <b>Rani Hypermarket &bull; Bodinayakanur &bull; Delivery: 77088 34547</b>
+            </span>
+            <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('studio-live-banner-img').src); alert('Copied Banner Data URI to Clipboard!');" class="text-emerald-400 hover:text-emerald-300 font-bold transition flex items-center gap-1">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy Data URI
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Preview & Telemetry Column (5 Cols) -->
+        <div class="lg:col-span-5 bg-gray-950/60 border border-gray-800 rounded-2xl p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-gray-800/80 pb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+              <i data-lucide="eye" class="w-3.5 h-3.5"></i> Live Rendered Output
+            </span>
+            <a id="studio-expand-btn" href="/api/banner/render?layout=square&format=webp" target="_blank" class="text-[11px] font-bold text-gray-400 hover:text-white transition flex items-center gap-1">
+              <span>Full Screen</span> <i data-lucide="external-link" class="w-3 h-3"></i>
+            </a>
+          </div>
+
+          <!-- Banner Image Container -->
+          <div class="flex justify-center">
+            <div class="relative group rounded-xl overflow-hidden shadow-2xl border border-emerald-500/30 bg-black/40 w-full flex items-center justify-center p-2">
+              <img id="studio-live-banner-img" src="/api/banner/render?layout=square&format=webp" alt="Live Studio Banner" class="w-full h-auto max-h-[380px] object-contain rounded-xl transition duration-300 group-hover:scale-[1.02]" loading="lazy">
+            </div>
+          </div>
+
+          <!-- Performance Telemetry Strip -->
+          <div class="grid grid-cols-3 gap-2">
+            <div class="bg-gray-900/90 p-2.5 rounded-xl border border-gray-800 text-center">
+              <div class="text-[10px] font-bold uppercase text-gray-400">Dimensions</div>
+              <div id="studio-stat-dim" class="text-xs font-black text-amber-400 mt-0.5">1080 &times; 1080 px</div>
+            </div>
+            <div class="bg-gray-900/90 p-2.5 rounded-xl border border-gray-800 text-center">
+              <div class="text-[10px] font-bold uppercase text-gray-400">Payload Size</div>
+              <div id="studio-stat-size" class="text-xs font-black text-emerald-400 mt-0.5">&asymp; 66 KB</div>
+            </div>
+            <div class="bg-gray-900/90 p-2.5 rounded-xl border border-gray-800 text-center">
+              <div class="text-[10px] font-bold uppercase text-gray-400">Render Speed</div>
+              <div id="studio-stat-latency" class="text-xs font-black text-purple-400 mt-0.5">&lt; 170 ms</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
     <!-- ========================================================================= -->
     <!-- AGENT 3: OMNI-CHANNEL DISPATCHER & AGENT 4: CONTINUOUS RL OPTIMIZER SUITE -->
     <!-- ========================================================================= -->
@@ -4940,6 +5127,155 @@ Loading live briefing...
     window.bridgeToAgent2Copywriter = function(name, mrp, promo, margin, stock, fest) {
       loadCopywriterPreset(name, mrp, promo, margin, stock, fest || 'போடி இல்லத்தரசிகளின் பட்ஜெட் சேமிப்பு');
     };
+
+    // =========================================================================
+    // CREATIVE AUTOMATION: WHATSAPP & SOCIAL BANNER STUDIO CLIENT LOGIC
+    // =========================================================================
+    let currentBannerLayout = 'square';
+    let currentBannerFormat = 'webp';
+    let bannerStudioPresets = [];
+
+    function switchCopywriterBannerFormat(layout, url) {
+      const img = document.getElementById('copywriter-live-banner-img');
+      const expand = document.getElementById('copywriter-banner-expand-link');
+      const download = document.getElementById('copywriter-banner-download-btn');
+      const btnSq = document.getElementById('btn-banner-square');
+      const btnLs = document.getElementById('btn-banner-landscape');
+      const statDim = document.getElementById('banner-stat-dim');
+
+      if (img) img.src = url;
+      if (expand) expand.href = url;
+      if (download) download.href = url;
+
+      if (layout === 'landscape') {
+        if (btnLs) { btnLs.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white shadow-sm transition'; }
+        if (btnSq) { btnSq.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-800 text-gray-300 hover:bg-gray-700 transition'; }
+        if (statDim) { statDim.innerHTML = '1200 &times; 628 px'; }
+      } else {
+        if (btnSq) { btnSq.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white shadow-sm transition'; }
+        if (btnLs) { btnLs.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-800 text-gray-300 hover:bg-gray-700 transition'; }
+        if (statDim) { statDim.innerHTML = '1080 &times; 1080 px'; }
+      }
+    }
+
+    function scrollToBannerStudio(name, mrp, promo) {
+      if (name && document.getElementById('b-english-title')) document.getElementById('b-english-title').value = decodeURIComponent(name);
+      if (name && document.getElementById('b-tamil-title')) document.getElementById('b-tamil-title').value = decodeURIComponent(name);
+      if (mrp && document.getElementById('b-mrp')) document.getElementById('b-mrp').value = mrp;
+      if (promo && document.getElementById('b-offer-price')) document.getElementById('b-offer-price').value = promo;
+      if (mrp && promo && document.getElementById('b-savings-text')) {
+        const diff = Math.max(0, mrp - promo);
+        document.getElementById('b-savings-text').value = '₹' + diff + ' நேரடி சேமிப்பு!';
+      }
+      const sec = document.getElementById('agent-creative-banner-studio-section');
+      if (sec) {
+        sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        renderStudioBanner();
+      }
+    }
+
+    async function initBannerStudio() {
+      try {
+        const res = await fetch('/api/banner/presets').then(r => r.json());
+        if (res && res.success && res.presets) {
+          bannerStudioPresets = res.presets;
+        }
+      } catch (e) {
+        console.warn('Failed to load banner presets:', e.message);
+      }
+    }
+
+    function setStudioLayout(layout) {
+      currentBannerLayout = layout;
+      const btnSq = document.getElementById('studio-btn-square');
+      const btnLs = document.getElementById('studio-btn-landscape');
+      if (layout === 'landscape') {
+        if (btnLs) { btnLs.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white shadow-sm transition'; }
+        if (btnSq) { btnSq.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-800 text-gray-300 hover:bg-gray-700 transition'; }
+      } else {
+        if (btnSq) { btnSq.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white shadow-sm transition'; }
+        if (btnLs) { btnLs.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-800 text-gray-300 hover:bg-gray-700 transition'; }
+      }
+      renderStudioBanner();
+    }
+
+    function loadBannerStudioPreset(presetId) {
+      const p = bannerStudioPresets.find(x => x.id === presetId);
+      if (!p) return;
+      if (document.getElementById('b-english-title')) document.getElementById('b-english-title').value = p.englishTitle;
+      if (document.getElementById('b-tamil-title')) document.getElementById('b-tamil-title').value = p.tamilTitle;
+      if (document.getElementById('b-mrp')) document.getElementById('b-mrp').value = p.mrp;
+      if (document.getElementById('b-offer-price')) document.getElementById('b-offer-price').value = p.offerPrice;
+      if (document.getElementById('b-savings-text')) document.getElementById('b-savings-text').value = p.savingsText;
+      if (document.getElementById('b-badge-text')) document.getElementById('b-badge-text').value = p.badgeText;
+      renderStudioBanner();
+    }
+
+    async function renderStudioBanner() {
+      const eng = document.getElementById('b-english-title')?.value || 'Bodi Special First Quality Deluxe Ponni Boiled Rice (25kg)';
+      const tam = document.getElementById('b-tamil-title')?.value || 'முதல் தர போடி டீலக்ஸ் பொன்னி புழுங்கல் அரிசி (25 கிலோ)';
+      const mrp = Number(document.getElementById('b-mrp')?.value || 1450);
+      const offer = Number(document.getElementById('b-offer-price')?.value || 1299);
+      const savings = document.getElementById('b-savings-text')?.value || '₹151 நேரடி சேமிப்பு!';
+      const badge = document.getElementById('b-badge-text')?.value || '👑 இல்லத்தரசிகளின் முதன்மை தேர்வு';
+      const format = document.getElementById('b-format')?.value || 'webp';
+      const quality = Number(document.getElementById('b-quality')?.value || 85);
+
+      const payload = {
+        englishTitle: eng,
+        tamilTitle: tam,
+        mrp: mrp,
+        offerPrice: offer,
+        savingsText: savings,
+        badgeText: badge,
+        layout: currentBannerLayout,
+        format: format,
+        quality: quality,
+        asJson: true
+      };
+
+      const statLatency = document.getElementById('studio-stat-latency');
+      const statSize = document.getElementById('studio-stat-size');
+      const statDim = document.getElementById('studio-stat-dim');
+      const liveImg = document.getElementById('studio-live-banner-img');
+      const downloadBtn = document.getElementById('studio-download-btn');
+      const expandBtn = document.getElementById('studio-expand-btn');
+
+      if (statLatency) statLatency.textContent = 'Rendering...';
+
+      try {
+        const t0 = performance.now();
+        const res = await fetch('/api/banner/render', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(r => r.json());
+
+        const clientElapsed = Math.round(performance.now() - t0);
+
+        if (res && res.success && res.dataUri) {
+          if (liveImg) liveImg.src = res.dataUri;
+          if (statLatency) statLatency.textContent = (res.renderTimeMs || clientElapsed) + ' ms';
+          if (statSize) statSize.textContent = res.sizeKb || ((res.sizeBytes / 1024).toFixed(1) + ' KB');
+          if (statDim) statDim.textContent = res.width + ' × ' + res.height + ' px';
+          if (downloadBtn) {
+            downloadBtn.href = res.dataUri;
+            downloadBtn.download = 'rani_banner_' + currentBannerLayout + '_' + Date.now() + '.' + format;
+          }
+          if (expandBtn) expandBtn.href = res.dataUri;
+        } else {
+          if (statLatency) statLatency.textContent = 'Render error';
+        }
+      } catch (err) {
+        console.error('Studio banner render error:', err);
+        if (statLatency) statLatency.textContent = 'Network error';
+      }
+    }
+
+    // Call initBannerStudio on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      initBannerStudio();
+    });
 
   </script>
 

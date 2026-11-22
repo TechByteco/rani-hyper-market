@@ -520,6 +520,30 @@ if (reqPath === '/api/pos/status') {
   }
 
   // AI Marketing Campaign & Formula Synthesizer
+    // Agent 2: Generative Vernacular Copywriter (Bodinayakanur & Theni Consumers)
+  if ((reqPath === '/api/copywriter/generate' || reqPath === '/api/ai/vernacular-copywriter') && (req.method === 'POST' || req.method === 'GET')) {
+    const copywriterService = require('./services/vernacularCopywriterService');
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        let parsed = {};
+        if (req.method === 'POST' && body) {
+          try { parsed = JSON.parse(body); } catch(e) { parsed = {}; }
+        } else {
+          parsed = Object.fromEntries(queryParams.entries());
+        }
+        const result = await copywriterService.generateVernacularCampaign(parsed);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
   if ((reqPath === '/api/ai-marketing/generate' || reqPath === '/api/marketing/generate') && (req.method === 'POST' || req.method === 'GET')) {
     const generativeAi = require('./generativeAiAdvisor');
     let body = '';

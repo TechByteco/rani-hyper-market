@@ -1,3 +1,4 @@
+const vernacularCopywriterService = require('./services/vernacularCopywriterService');
 /**
  * SNS MARKET - Generative AI Business Advisor Engine
  * Supports:
@@ -1323,6 +1324,7 @@ Generate a JSON object (strictly valid JSON only, without markdown fences or bac
 
 module.exports = {
   generateMarketingCampaign,
+  generateVernacularCampaign: vernacularCopywriterService.generateVernacularCampaign,
   generateAnswer,
   buildStoreContext,
   loadConfig,

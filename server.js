@@ -30,6 +30,13 @@ try {
   console.warn('digitalSignageService load notice:', e.message);
 }
 
+let gstComplianceService = null;
+try {
+  gstComplianceService = require('./services/gstComplianceService').gstComplianceService;
+} catch (e) {
+  console.warn('gstComplianceService load notice:', e.message);
+}
+
 const server = http.createServer((req, res) => {
   // CORS & Universal Web Security Headers (OWASP Top 10 Standards)
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -251,6 +258,131 @@ const server = http.createServer((req, res) => {
       supermarket: 'Rani Hyper Market (Bodinayakanur & Theni)',
       ...state
     }));
+    return;
+  }
+
+  // Indian FinTech & GST Compliance Suite: GSTR-1 Outward Supplies Ledger
+  if (reqPath === '/api/gst/gstr1/summary') {
+    try {
+      const month = queryParams.get('month') || '2026-04';
+      const result = gstComplianceService ? gstComplianceService.getSummary(month) : { success: false, error: 'GST service unavailable' };
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(result));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  if (reqPath === '/api/gst/gstr1/b2cs') {
+    try {
+      const month = queryParams.get('month') || '2026-04';
+      const result = gstComplianceService ? gstComplianceService.getSummary(month) : { b2cs: [] };
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        success: true,
+        period: result.metadata?.period,
+        periodLabel: result.metadata?.periodLabel,
+        gstin: result.metadata?.gstin,
+        table: 'Table 7: B2C (Small) Invoices',
+        count: result.b2cs?.length || 0,
+        b2cs: result.b2cs || []
+      }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  if (reqPath === '/api/gst/gstr1/hsn') {
+    try {
+      const month = queryParams.get('month') || '2026-04';
+      const result = gstComplianceService ? gstComplianceService.getSummary(month) : { hsn: { data: [] } };
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        success: true,
+        period: result.metadata?.period,
+        periodLabel: result.metadata?.periodLabel,
+        gstin: result.metadata?.gstin,
+        table: 'Table 12: HSN-wise Summary of Outward Supplies',
+        count: result.hsn?.data?.length || 0,
+        hsn: result.hsn?.data || []
+      }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  if (reqPath === '/api/gst/gstr1/export/json') {
+    try {
+      const month = queryParams.get('month') || '2026-04';
+      const exp = gstComplianceService ? gstComplianceService.exportJson(month) : null;
+      if (!exp) throw new Error('GST service unavailable');
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+        'Content-Disposition': `attachment; filename="${exp.filename}"`
+      });
+      res.end(JSON.stringify(exp.data, null, 2));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  if (reqPath === '/api/gst/gstr1/export/excel') {
+    try {
+      const month = queryParams.get('month') || '2026-04';
+      const exp = gstComplianceService ? gstComplianceService.exportExcel(month) : null;
+      if (!exp) throw new Error('GST service unavailable');
+      res.writeHead(200, {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition': `attachment; filename="${exp.filename}"`,
+        'Content-Length': exp.buffer.length
+      });
+      res.end(exp.buffer);
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  if (reqPath === '/api/gst/classify') {
+    try {
+      const title = queryParams.get('title') || 'Item';
+      const barcode = queryParams.get('barcode') || '';
+      const cls = gstComplianceService ? gstComplianceService.classifyItem(title, barcode) : {};
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, title, barcode, classification: cls }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  if (reqPath === '/api/gst/slabs') {
+    try {
+      const { GST_CONFIG, HSN_MASTER } = require('./services/gstComplianceService');
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        success: true,
+        store: GST_CONFIG.tradeName,
+        gstin: GST_CONFIG.gstin,
+        state: `${GST_CONFIG.stateCode}-${GST_CONFIG.stateName}`,
+        historicalSlabShares: GST_CONFIG.historicalSlabShares,
+        hsnMasterCount: Object.keys(HSN_MASTER).length,
+        hsnMaster: HSN_MASTER
+      }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
     return;
   }
 

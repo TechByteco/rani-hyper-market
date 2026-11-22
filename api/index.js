@@ -69,6 +69,17 @@ try {
   }
 }
 
+let gstCompliance = null;
+try {
+  gstCompliance = require('./services/gstComplianceService').gstComplianceService;
+} catch (e) {
+  try {
+    gstCompliance = require('../services/gstComplianceService').gstComplianceService;
+  } catch (e2) {
+    console.warn('gstComplianceService load notice:', e2.message);
+  }
+}
+
 // Cached JSON fallbacks for cloud environment
 function readLocalJson(filename, defaultValue = null) {
   const possiblePaths = [
@@ -317,6 +328,137 @@ module.exports = async (req, res) => {
         supermarket: 'Rani Hyper Market (Bodinayakanur & Theni)',
         ...state
       });
+    }
+
+    // Indian FinTech & GST Compliance Suite: GSTR-1 Outward Supplies Ledger
+    if (reqPath === '/api/gst/gstr1/summary') {
+      try {
+        const month = queryParams.get('month') || '2026-04';
+        const result = gstCompliance ? gstCompliance.getSummary(month) : { success: false, error: 'GST service unavailable' };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/gst/gstr1/b2cs') {
+      try {
+        const month = queryParams.get('month') || '2026-04';
+        const result = gstCompliance ? gstCompliance.getSummary(month) : { b2cs: [] };
+        return sendJson(200, {
+          success: true,
+          period: result.metadata?.period,
+          periodLabel: result.metadata?.periodLabel,
+          gstin: result.metadata?.gstin,
+          table: 'Table 7: B2C (Small) Invoices',
+          count: result.b2cs?.length || 0,
+          b2cs: result.b2cs || []
+        });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/gst/gstr1/hsn') {
+      try {
+        const month = queryParams.get('month') || '2026-04';
+        const result = gstCompliance ? gstCompliance.getSummary(month) : { hsn: { data: [] } };
+        return sendJson(200, {
+          success: true,
+          period: result.metadata?.period,
+          periodLabel: result.metadata?.periodLabel,
+          gstin: result.metadata?.gstin,
+          table: 'Table 12: HSN-wise Summary of Outward Supplies',
+          count: result.hsn?.data?.length || 0,
+          hsn: result.hsn?.data || []
+        });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/gst/gstr1/export/json') {
+      try {
+        const month = queryParams.get('month') || '2026-04';
+        const exp = gstCompliance ? gstCompliance.exportJson(month) : null;
+        if (!exp) throw new Error('GST service unavailable');
+        const jsonStr = JSON.stringify(exp.data, null, 2);
+        if (res.setHeader) {
+          res.setHeader('Content-Type', 'application/json');
+          res.setHeader('Content-Disposition', `attachment; filename="${exp.filename}"`);
+        }
+        if (res.writeHead) {
+          res.writeHead(200, {
+            'Content-Type': 'application/json',
+            'Content-Disposition': `attachment; filename="${exp.filename}"`
+          });
+          return res.end(jsonStr);
+        }
+        return res.send ? res.send(jsonStr) : res.end(jsonStr);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/gst/gstr1/export/excel') {
+      try {
+        const month = queryParams.get('month') || '2026-04';
+        const exp = gstCompliance ? gstCompliance.exportExcel(month) : null;
+        if (!exp) throw new Error('GST service unavailable');
+        if (res.setHeader) {
+          res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+          res.setHeader('Content-Disposition', `attachment; filename="${exp.filename}"`);
+          res.setHeader('Content-Length', exp.buffer.length);
+        }
+        if (res.writeHead) {
+          res.writeHead(200, {
+            'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition': `attachment; filename="${exp.filename}"`,
+            'Content-Length': exp.buffer.length
+          });
+          return res.end(exp.buffer);
+        }
+        return res.send ? res.send(exp.buffer) : res.end(exp.buffer);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/gst/classify') {
+      try {
+        const title = queryParams.get('title') || 'Item';
+        const barcode = queryParams.get('barcode') || '';
+        const cls = gstCompliance ? gstCompliance.classifyItem(title, barcode) : {};
+        return sendJson(200, { success: true, title, barcode, classification: cls });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    if (reqPath === '/api/gst/slabs') {
+      try {
+        let GST_CONFIG, HSN_MASTER;
+        try {
+          const mod = require('./services/gstComplianceService');
+          GST_CONFIG = mod.GST_CONFIG;
+          HSN_MASTER = mod.HSN_MASTER;
+        } catch {
+          const mod = require('../services/gstComplianceService');
+          GST_CONFIG = mod.GST_CONFIG;
+          HSN_MASTER = mod.HSN_MASTER;
+        }
+        return sendJson(200, {
+          success: true,
+          store: GST_CONFIG.tradeName,
+          gstin: GST_CONFIG.gstin,
+          state: `${GST_CONFIG.stateCode}-${GST_CONFIG.stateName}`,
+          historicalSlabShares: GST_CONFIG.historicalSlabShares,
+          hsnMasterCount: Object.keys(HSN_MASTER).length,
+          hsnMaster: HSN_MASTER
+        });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
     }
 
     // National Hypermarket Backend API v1

@@ -519,6 +519,34 @@ if (reqPath === '/api/pos/status') {
     return;
   }
 
+  // RFM Customer Segmentation & Automated Refresh
+  if (reqPath === '/api/analytics/rfm-cohorts' && req.method === 'GET') {
+    const rfmService = require('./services/rfmSegmentationService');
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(rfmService.getRfmCohortsSummary()));
+    return;
+  }
+
+  if (reqPath === '/api/analytics/rfm-customers' && req.method === 'GET') {
+    const rfmService = require('./services/rfmSegmentationService');
+    const opts = Object.fromEntries(queryParams.entries());
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(rfmService.getCustomersByCohort(opts)));
+    return;
+  }
+
+  if ((reqPath === '/api/rfm/refresh' || reqPath === '/api/analytics/rfm-refresh') && (req.method === 'POST' || req.method === 'GET')) {
+    const rfmService = require('./services/rfmSegmentationService');
+    rfmService.triggerWeeklyScoreRefresh().then(result => {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(result));
+    }).catch(err => {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: err.message }));
+    });
+    return;
+  }
+
   // AI Marketing Campaign & Formula Synthesizer
       // Agent 3 & Agent 4: Omni-Channel Dispatcher & Continuous RL Optimizer Loop
   if (reqPath === '/api/rl/bandit-status' && req.method === 'GET') {

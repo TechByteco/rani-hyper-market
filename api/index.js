@@ -1006,6 +1006,40 @@ if (reqPath === '/api/pos/status') {
         }
       });
     }
+
+    // RFM Customer Segmentation & Automated Refresh
+    if (reqPath === '/api/analytics/rfm-cohorts' && req.method === 'GET') {
+      let rfmService = null;
+      try { rfmService = require('./services/rfmSegmentationService'); } catch(e) {}
+      if (!rfmService) { try { rfmService = require('../services/rfmSegmentationService'); } catch(e) {} }
+      if (rfmService) {
+        return sendJson(200, rfmService.getRfmCohortsSummary());
+      }
+      return sendJson(500, { success: false, error: 'RFM Segmentation service not loaded' });
+    }
+
+    if (reqPath === '/api/analytics/rfm-customers' && req.method === 'GET') {
+      let rfmService = null;
+      try { rfmService = require('./services/rfmSegmentationService'); } catch(e) {}
+      if (!rfmService) { try { rfmService = require('../services/rfmSegmentationService'); } catch(e) {} }
+      if (rfmService) {
+        const opts = Object.fromEntries(queryParams.entries());
+        return sendJson(200, rfmService.getCustomersByCohort(opts));
+      }
+      return sendJson(500, { success: false, error: 'RFM Segmentation service not loaded' });
+    }
+
+    if ((reqPath === '/api/rfm/refresh' || reqPath === '/api/analytics/rfm-refresh') && (req.method === 'POST' || req.method === 'GET')) {
+      let rfmService = null;
+      try { rfmService = require('./services/rfmSegmentationService'); } catch(e) {}
+      if (!rfmService) { try { rfmService = require('../services/rfmSegmentationService'); } catch(e) {} }
+      if (rfmService) {
+        const result = await rfmService.triggerWeeklyScoreRefresh();
+        return sendJson(200, result);
+      }
+      return sendJson(500, { success: false, error: 'RFM Segmentation service not loaded' });
+    }
+
     // 8.1 AI Marketing Campaign & Formula Synthesizer
             // Agent 3 & Agent 4: Omni-Channel Dispatcher & Continuous RL Optimizer Loop
     if (reqPath === '/api/rl/bandit-status' && req.method === 'GET') {

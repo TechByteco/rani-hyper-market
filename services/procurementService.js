@@ -323,23 +323,51 @@ const TOP_10_STAPLES = [
   }
 ];
 
+// Global Memory Cache for Serverless Container Re-use
+if (!global._poMemoryCache) {
+  global._poMemoryCache = new Map();
+}
+
+// Universal Root Resolver for Dual-Copy Parity
+function resolveAppRoot() {
+  const candidates = [
+    process.cwd(),
+    path.resolve(__dirname, '..'),
+    path.resolve(__dirname, '..', '..')
+  ];
+  for (const c of candidates) {
+    if (fs.existsSync(path.join(c, 'products_catalog.json'))) {
+      return c;
+    }
+  }
+  return process.cwd();
+}
+
+const APP_ROOT = resolveAppRoot();
+
 class ProcurementService {
   constructor() {
-    this.dataDir = path.resolve(__dirname, '../data/procurement');
-    this.historyFile = path.join(this.dataDir, 'mandi_rate_history.json');
-    this.poFile = path.join(this.dataDir, 'vendor_purchase_orders.json');
     this.secretSignKey = 'RANI-HYPERMARKET-PROCUREMENT-HMAC-SECRET-2026';
-
     this.ensureStorage();
+  }
+
+  _getStoragePath() {
+    const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    const targetDir = isServerless ? '/tmp/procurement' : path.join(APP_ROOT, 'data/procurement');
+    return {
+      dir: targetDir,
+      file: path.join(targetDir, 'vendor_purchase_orders.json')
+    };
   }
 
   ensureStorage() {
     try {
-      if (!fs.existsSync(this.dataDir)) {
-        fs.mkdirSync(this.dataDir, { recursive: true });
+      const storage = this._getStoragePath();
+      if (!fs.existsSync(storage.dir)) {
+        fs.mkdirSync(storage.dir, { recursive: true });
       }
     } catch (e) {
-      // In read-only serverless environment, fallback to memory
+      // In read-only fallback to memory
     }
   }
 
@@ -577,24 +605,52 @@ class ProcurementService {
     };
   }
 
-  // Load POs from file or return default
+  // Load POs from memory or file
   _loadPOs() {
+    // 1. Check memory map
+    const memList = Array.from(global._poMemoryCache.values());
+    if (memList.length > 0) return memList;
+
+    // 2. Check storage file
     try {
-      if (fs.existsSync(this.poFile)) {
-        const raw = fs.readFileSync(this.poFile, 'utf8');
-        return JSON.parse(raw);
+      const storage = this._getStoragePath();
+      if (fs.existsSync(storage.file)) {
+        const raw = fs.readFileSync(storage.file, 'utf8');
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          parsed.forEach(p => global._poMemoryCache.set(p.poNumber, p));
+          return parsed;
+        }
       }
     } catch (e) {
       // In read-only fallback to memory
     }
+
+    // 3. Check fallback repository location
+    try {
+      const fallbackFile = path.join(APP_ROOT, 'data/procurement/vendor_purchase_orders.json');
+      if (fs.existsSync(fallbackFile)) {
+        const raw = fs.readFileSync(fallbackFile, 'utf8');
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          parsed.forEach(p => global._poMemoryCache.set(p.poNumber, p));
+          return parsed;
+        }
+      }
+    } catch (_) {}
+
     return [];
   }
 
-  // Save POs to file
+  // Save POs to memory and file
   _savePOs(pos) {
+    if (Array.isArray(pos)) {
+      pos.forEach(p => global._poMemoryCache.set(p.poNumber, p));
+    }
     try {
+      const storage = this._getStoragePath();
       this.ensureStorage();
-      fs.writeFileSync(this.poFile, JSON.stringify(pos, null, 2), 'utf8');
+      fs.writeFileSync(storage.file, JSON.stringify(pos, null, 2), 'utf8');
     } catch (e) {
       // Serverless readonly handled gracefully
     }
@@ -793,8 +849,12 @@ class ProcurementService {
 
   // Approve and Sign Purchase Order with Authorized Seal
   approvePurchaseOrder(poNumber, approverName = 'S. Murugan') {
-    const existingPOs = this._loadPOs();
-    const po = existingPOs.find(p => p.poNumber === poNumber);
+    let existingPOs = this._loadPOs();
+    let po = existingPOs.find(p => p.poNumber === poNumber) || global._poMemoryCache.get(poNumber);
+    if (!po) {
+      po = this.getPurchaseOrderByNumber(poNumber);
+      existingPOs = this._loadPOs();
+    }
     if (!po) throw new Error(`PO not found: ${poNumber}`);
 
     po.status = 'APPROVED_AND_ISSUED';
@@ -806,6 +866,9 @@ class ProcurementService {
       signedAt: new Date().toISOString()
     };
 
+    if (!existingPOs.some(p => p.poNumber === po.poNumber)) {
+      existingPOs.unshift(po);
+    }
     this._savePOs(existingPOs);
     return {
       success: true,
@@ -836,17 +899,38 @@ class ProcurementService {
 
   // Get single PO
   getPurchaseOrderByNumber(poNumber) {
+    if (global._poMemoryCache.has(poNumber)) {
+      return global._poMemoryCache.get(poNumber);
+    }
     const pos = this.getPurchaseOrders();
-    const po = pos.find(p => p.poNumber === poNumber);
+    let po = pos.find(p => p.poNumber === poNumber);
     if (!po) {
-      // If not found in file, generate clean fallback
-      const board = this.getMandiBoard('2026-04-02');
-      const item = board.board[0];
-      return this.createPurchaseOrder({
+      // Construct from PO number pattern e.g. PO-RHM-20260402-PONNI-XXXX
+      const parts = (poNumber || '').split('-');
+      let stapleCode = 'RICE-PONNI-25KG';
+      if (parts[3] === 'PONNI') stapleCode = 'RICE-PONNI-25KG';
+      else if (parts[3] === 'TOOR') stapleCode = 'DAL-TOOR-50KG';
+      else if (parts[3] === 'SUN') stapleCode = 'OIL-SUN-15L';
+      else if (parts[3] === 'M30') stapleCode = 'SUGAR-M30-50KG';
+      else if (parts[3] === 'RED') stapleCode = 'CHILLI-RED-20KG';
+      else if (parts[3] === 'URAD') stapleCode = 'DAL-URAD-30KG';
+      else if (parts[3] === 'CARD') stapleCode = 'SPICE-CARD-5KG';
+      else if (parts[3] === 'MUST') stapleCode = 'SPICE-MUST-25KG';
+      else if (parts[3] === 'JEERA') stapleCode = 'SPICE-JEERA-20KG';
+      else if (parts[3] === 'MOONG') stapleCode = 'DAL-MOONG-30KG';
+
+      const dateStr = parts[2] && parts[2].length === 8 ? `${parts[2].slice(0, 4)}-${parts[2].slice(4, 6)}-${parts[2].slice(6, 8)}` : '2026-04-02';
+      const board = this.getMandiBoard(dateStr);
+      const item = board.board.find(b => b.stapleCode === stapleCode) || board.board[0];
+      const draftRes = this.createPurchaseOrder({
         stapleCode: item.stapleCode,
         orderQuantity: item.eoq.roundedUnits,
-        vendorCode: item.preferredVendor.code
-      }).purchaseOrder;
+        vendorCode: item.preferredVendor.code,
+        date: dateStr
+      });
+      po = draftRes.purchaseOrder;
+      po.poNumber = poNumber; // Ensure exact match
+      global._poMemoryCache.set(poNumber, po);
     }
     return po;
   }

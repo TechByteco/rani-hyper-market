@@ -1,3 +1,103 @@
+
+/**
+ * ══════════════════════════════════════════════════════════════════
+ * CATEGORY-SPECIFIC RETAIL MARGINS & PERISHABLE SPOILAGE CALCULATOR
+ * Closes System Flaws 3 & 4: Perishable Spoilage & Flat Margin Distortion
+ * ══════════════════════════════════════════════════════════════════
+ */
+function getProductCategoryMarginAndPerishability(name) {
+  const n = (name || '').toLowerCase();
+  
+  // 1. Dairy, Milk & Batter (Perishable: 2-4 days shelf life, 4-5% spoilage risk)
+  if (n.includes('batter') || n.includes('idli') || n.includes('dosa') || n.includes('milk') || n.includes('curd') || n.includes('paneer')) {
+    return {
+      category: 'Perishable Dairy & Batter',
+      marginPct: 12.0,
+      costMultiplier: 0.88,
+      spoilageRisk: 'HIGH (48h-96h Expiry)',
+      shelfLifeDays: n.includes('milk') ? 2 : 4,
+      spoilageFactor: 0.04,
+      handlingAdvice: 'Daily morning delivery; split wholesale orders into 2 batches to avoid over-fermentation.'
+    };
+  }
+
+  // 2. Eggs (Fragile: 3% transit breakage allowance)
+  if (n.includes('egg')) {
+    return {
+      category: 'Poultry Staples',
+      marginPct: 8.5,
+      costMultiplier: 0.915,
+      spoilageRisk: 'MODERATE (3% Breakage)',
+      shelfLifeDays: 14,
+      spoilageFactor: 0.03,
+      handlingAdvice: 'Factor 3% transit breakage reserve into crate procurement.'
+    };
+  }
+
+  // 3. Rice, Sugar & Staples (Thin Margins: 3.5% - 5%)
+  if (n.includes('rice') || n.includes('sugar') || n.includes('dhal') || n.includes('dhall') || n.includes('paruppu') || n.includes('atta') || n.includes('flour') || n.includes('maida') || n.includes('rava')) {
+    return {
+      category: 'Food Staples & Grains',
+      marginPct: 4.5,
+      costMultiplier: 0.955,
+      spoilageRisk: 'LOW (Moisture Sealed)',
+      shelfLifeDays: 180,
+      spoilageFactor: 0.005,
+      handlingAdvice: 'Procure in bulk; low margin (4.5%), high volume cashflow.'
+    };
+  }
+
+  // 4. Edible Oils, Gingelly Oil & Ghee (Medium Margin: 8% - 10%)
+  if (n.includes('oil') || n.includes('ghee') || n.includes('gingelly') || n.includes('sesame') || n.includes('sunflower')) {
+    return {
+      category: 'Cooking Oils & Ghee',
+      marginPct: 9.0,
+      costMultiplier: 0.91,
+      spoilageRisk: 'LOW (Sealed Pack)',
+      shelfLifeDays: 270,
+      spoilageFactor: 0.002,
+      handlingAdvice: 'Lock in distributor bulk case discounts 5 days prior to peak.'
+    };
+  }
+
+  // 5. Traditional Pooja, Diyas, Agal, Camphor, Wicks (High Margin: 30% - 40%)
+  if (n.includes('agal') || n.includes('vilakku') || n.includes('thiri') || n.includes('wicks') || n.includes('camphor') || n.includes('karpooram') || n.includes('agarbatti') || n.includes('dheepam')) {
+    return {
+      category: 'Pooja & Festival Essentials',
+      marginPct: 35.0,
+      costMultiplier: 0.65,
+      spoilageRisk: 'MINIMAL (Non-Perishable)',
+      shelfLifeDays: 720,
+      spoilageFactor: 0.01,
+      handlingAdvice: 'High margin (35%); display prominently at counter checkout.'
+    };
+  }
+
+  // 6. FMCG Snacks & Confectionery (20% - 25% Margin)
+  if (n.includes('snack') || n.includes('biscuit') || n.includes('chocolate') || n.includes('sweet') || n.includes('pori')) {
+    return {
+      category: 'Packaged Snacks & Pori',
+      marginPct: 22.0,
+      costMultiplier: 0.78,
+      spoilageRisk: 'LOW (60-90 Days)',
+      shelfLifeDays: 90,
+      spoilageFactor: 0.01,
+      handlingAdvice: 'Cross-sell next to pooja counter.'
+    };
+  }
+
+  // Default FMCG
+  return {
+    category: 'General FMCG & Provisions',
+    marginPct: 15.0,
+    costMultiplier: 0.85,
+    spoilageRisk: 'LOW',
+    shelfLifeDays: 180,
+    spoilageFactor: 0.01,
+    handlingAdvice: 'Standard inventory buffer.'
+  };
+}
+
 function findLocalDataFile(filename) {
   const possible = [
     path.join(__dirname, filename),
@@ -772,17 +872,30 @@ function predictSingleDay(dStr, baseTurnover = 16800, avgBasket = 150) {
     checklist: (function() {
       const minedFest = MINED_FESTIVAL_EMPIRICAL_DATA && activeFest && MINED_FESTIVAL_EMPIRICAL_DATA[activeFest.id];
       if (minedFest && minedFest.recommended_stock_needs && minedFest.recommended_stock_needs.length > 0) {
-        return minedFest.recommended_stock_needs.slice(0, 10).map(item => ({
-          name: item.name,
-          recOrder: item.recommended_order_qty,
-          price: item.price,
-          cost: item.cost,
-          budget: item.est_purchase_budget,
-          projectedRev: item.est_projected_revenue,
-          estProfit: item.est_profit,
-          priority: item.priority || 'CRITICAL',
-          salesHistory: item.sales_history
-        }));
+        return minedFest.recommended_stock_needs.slice(0, 10).map(item => {
+          const catInfo = getProductCategoryMarginAndPerishability(item.name);
+          const realisticCost = Math.round(item.price * catInfo.costMultiplier * 100) / 100;
+          const realisticBudget = Math.round(realisticCost * item.recommended_order_qty * 100) / 100;
+          const realisticRev = Math.round(item.price * item.recommended_order_qty * 100) / 100;
+          const realisticProfit = Math.round((realisticRev - realisticBudget) * 100) / 100;
+
+          return {
+            name: item.name,
+            recOrder: item.recommended_order_qty,
+            price: item.price,
+            cost: realisticCost,
+            budget: realisticBudget,
+            projectedRev: realisticRev,
+            estProfit: realisticProfit,
+            priority: item.priority || 'CRITICAL',
+            salesHistory: item.sales_history,
+            category: catInfo.category,
+            marginPct: catInfo.marginPct,
+            spoilageRisk: catInfo.spoilageRisk,
+            shelfLifeDays: catInfo.shelfLifeDays,
+            handlingAdvice: catInfo.handlingAdvice
+          };
+        });
       }
       if (activeFest && activeFest.sampleSkus) {
         return activeFest.sampleSkus.map(s => ({

@@ -5175,7 +5175,9 @@
         const txnId = upiRef || ('GPAY-' + Date.now().toString(36).toUpperCase());
 
         orderDraft.paymentMethod = upiRef ? ('Google Pay UPI (UTR: ' + upiRef + ')') : 'Google Pay & Fast UPI';
-        orderDraft.paymentStatus = 'PAID (Google Pay)';
+        orderDraft.paymentStatus = 'Awaiting Bank Verification';
+        orderDraft.verifiedByCashier = false;
+        orderDraft.verificationNote = 'Customer provided UTR ' + (upiRef || 'Pending') + '. Awaiting store cash desk verification in Google Pay.';
         orderDraft.gpayVpa = vpa;
         orderDraft.transactionId = txnId;
         orderDraft.upiReference = upiRef || txnId;

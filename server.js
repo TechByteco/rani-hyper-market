@@ -965,6 +965,23 @@ if (reqPath === '/api/pos/status') {
     return;
   }
 
+    if (reqPath === '/api/orders/verify-payment' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const { orderId, cashierNotes } = JSON.parse(body || '{}');
+        const result = posEnhancement.verifyOnlineOrderPayment(orderId, cashierNotes);
+        res.writeHead(result.success ? 200 : 400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
   if (reqPath === '/api/orders/update-status' && req.method === 'POST') {
     let body = '';
     req.on('data', c => body += c);

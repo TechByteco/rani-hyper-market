@@ -5502,7 +5502,20 @@ let allProducts = [];
             <td class="py-2.5 px-3 max-w-[280px]">
               <p class="font-bold text-gray-900 truncate">${o.shipping_address || o.customer_name || 'Counter Customer'}</p>
             </td>
-            <td class="py-2.5 px-3 font-semibold text-gray-700 whitespace-nowrap">${o.payment_method || 'Cash POS'}</td>
+            <td class="py-2.5 px-3 font-semibold text-gray-700 whitespace-nowrap">
+              ${(function() {
+                const pm = o.payment_method || 'Cash POS';
+                if (pm.toLowerCase().includes('gpay') || pm.toLowerCase().includes('google pay') || pm.toLowerCase().includes('upi')) {
+                  const isVer = o.verified_by_cashier || (o.payment_status && o.payment_status.includes('Verified'));
+                  if (isVer) {
+                    return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">✅ GPay Verified</span>`;
+                  } else {
+                    return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">⏳ Awaiting GPay Check</span>`;
+                  }
+                }
+                return pm;
+              })()}
+            </td>
             <td class="py-2.5 px-3 text-right font-black text-gray-900 text-sm whitespace-nowrap">₹${parseFloat(o.total_amount).toFixed(2)}</td>
             <td class="py-2.5 px-3 text-center whitespace-nowrap">
               <select onchange="updateOrderStatus('${o.id}', this.value)" class="glass-input text-xs font-bold py-1 px-2 text-center ${statusBadgeStyles[o.status] || 'bg-emerald-100 text-emerald-800'}">

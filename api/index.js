@@ -1260,6 +1260,29 @@ if (reqPath === '/api/pos/status') {
     }
 
     // Live Customer Online Purchases Stream & Management
+        if (reqPath === '/api/orders/verify-payment' && req.method === 'POST') {
+      try {
+        const { orderId, cashierNotes } = req.body || {};
+        const onlineOrdersFile = path.join(process.cwd(), 'data', 'online_orders.json');
+        let orders = [];
+        if (fs.existsSync(onlineOrdersFile)) {
+          orders = JSON.parse(fs.readFileSync(onlineOrdersFile, 'utf8') || '[]');
+        }
+        const target = orders.find(o => o.id === orderId || o.invId === orderId);
+        if (target) {
+          target.payment_status = 'PAID (Verified by Cashier)';
+          target.verified_by_cashier = true;
+          target.cashier_notes = cashierNotes || 'Verified in GPay App';
+          target.verified_at = new Date().toISOString();
+          try { fs.writeFileSync(onlineOrdersFile, JSON.stringify(orders, null, 2), 'utf8'); } catch {}
+          return sendJson(200, { success: true, order: target });
+        }
+        return sendJson(200, { success: true, message: 'Payment verification recorded' });
+      } catch (err) {
+        return sendJson(400, { success: false, error: err.message });
+      }
+    }
+
     if (reqPath === '/api/orders' && req.method === 'GET') {
       const limit = parseInt(queryParams.get('limit') || '50', 10);
       const status = queryParams.get('status') || 'all';

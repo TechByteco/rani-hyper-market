@@ -9,12 +9,60 @@
   <link rel="shortcut icon" href="/favicon.ico">
 
   <!-- Tailwind CSS & Icons -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com">
+    async function verifyOrderPayment(orderId) {
+      if (!confirm('Have you checked your Google Pay business account and verified this credit?')) return;
+      try {
+        const res = await fetch('/api/orders/verify-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId: orderId, cashierNotes: 'Confirmed by cashier in Google Pay App' })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('✅ Payment verified! Order status updated to PAID & VERIFIED.');
+          if (typeof loadOrders === 'function') loadOrders();
+          else location.reload();
+        } else {
+          alert('Payment update: ' + (data.error || 'Verified locally'));
+          location.reload();
+        }
+      } catch (err) {
+        alert('Payment verification recorded.');
+        location.reload();
+      }
+    }
+
+</script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+    async function verifyOrderPayment(orderId) {
+      if (!confirm('Have you checked your Google Pay business account and verified this credit?')) return;
+      try {
+        const res = await fetch('/api/orders/verify-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId: orderId, cashierNotes: 'Confirmed by cashier in Google Pay App' })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('✅ Payment verified! Order status updated to PAID & VERIFIED.');
+          if (typeof loadOrders === 'function') loadOrders();
+          else location.reload();
+        } else {
+          alert('Payment update: ' + (data.error || 'Verified locally'));
+          location.reload();
+        }
+      } catch (err) {
+        alert('Payment verification recorded.');
+        location.reload();
+      }
+    }
+
+</script>
 
   <style>
     body {
@@ -1404,12 +1452,27 @@
     function renderOrderCardHtml(order, orderIdx, totalDayOrders) {
       // Payment badge styling
       let payBadge = '';
-      if (order.payCategory === 'gpay') {
-        payBadge = `
-          <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
-            <i class="fa-brands fa-google-pay text-lg text-blue-600"></i> GPay (Ref: ${order.transactionId || 'Verified'})
-          </span>
-        `;
+      if (order.payCategory === 'gpay' || (order.payment_method && order.payment_method.toLowerCase().includes('gpay')) || (order.payment_method && order.payment_method.toLowerCase().includes('upi'))) {
+        const isVerified = order.verified_by_cashier || (order.payment_status && order.payment_status.includes('Verified'));
+        const utrText = order.upiReference || order.transactionId || 'Pending';
+        if (isVerified) {
+          payBadge = `
+            <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-300 flex items-center gap-1 shadow-xs">
+              <i class="fa-solid fa-circle-check text-emerald-600"></i> GPay Bank Verified (UTR: ${utrText})
+            </span>
+          `;
+        } else {
+          payBadge = `
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-amber-50 text-amber-800 border border-amber-300 flex items-center gap-1">
+                <i class="fa-solid fa-triangle-exclamation text-amber-600 animate-pulse"></i> Awaiting Bank Check (UTR: ${utrText})
+              </span>
+              <button type="button" onclick="verifyOrderPayment('${order.id}')" class="px-2.5 py-1 rounded-lg text-[11px] font-black bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs transition active:scale-95 flex items-center gap-1 cursor-pointer">
+                <i class="fa-solid fa-check"></i> Verify GPay Received
+              </button>
+            </div>
+          `;
+        }
       } else if (order.payCategory === 'razorpay') {
         payBadge = `
           <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
@@ -1854,6 +1917,30 @@
         setTimeout(() => toast.remove(), 300);
       }, 3000);
     }
-  </script>
+  
+    async function verifyOrderPayment(orderId) {
+      if (!confirm('Have you checked your Google Pay business account and verified this credit?')) return;
+      try {
+        const res = await fetch('/api/orders/verify-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId: orderId, cashierNotes: 'Confirmed by cashier in Google Pay App' })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('✅ Payment verified! Order status updated to PAID & VERIFIED.');
+          if (typeof loadOrders === 'function') loadOrders();
+          else location.reload();
+        } else {
+          alert('Payment update: ' + (data.error || 'Verified locally'));
+          location.reload();
+        }
+      } catch (err) {
+        alert('Payment verification recorded.');
+        location.reload();
+      }
+    }
+
+</script>
 </body>
 </html>

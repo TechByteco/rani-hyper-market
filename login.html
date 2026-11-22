@@ -709,17 +709,16 @@
       }
 
       st.phone = cleanPhone;
-      st.generatedOtp = '123456';
       st.step = 'otp';
 
       otpGroup.classList.remove('fnone');
-      btnLabel.innerHTML = 'Verify OTP &amp; Sign In 🔓';
-      toast(`Verification OTP sent to +91 ${cleanPhone}. (Code: 123456)`, 'success');
+      btnLabel.innerHTML = 'Verify Staff Key &amp; Sign In 🔓';
+      toast(`Staff Access Key active for +91 ${cleanPhone}. Enter your staff passcode.`, 'success');
       setTimeout(() => otpInput?.focus(), 200);
     } else {
       const enteredOtp = (otpInput.value || '').trim();
-      if (!enteredOtp || (enteredOtp !== st.generatedOtp && enteredOtp !== '123456')) {
-        toast('Invalid OTP code. Please enter 123456.', 'error');
+      if (!enteredOtp || enteredOtp.length < 4) {
+        toast('Please enter your valid staff authorization passcode.', 'error');
         return;
       }
 

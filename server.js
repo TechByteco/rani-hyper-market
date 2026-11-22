@@ -965,7 +965,147 @@ if (reqPath === '/api/pos/status') {
     return;
   }
 
-    if (reqPath === '/api/orders/verify-payment' && req.method === 'POST') {
+    
+  // =====================================================================
+  // 5 MAJOR ENTERPRISE UPGRADES (Rani Hyper Market OS)
+  // =====================================================================
+
+  // 1. Automated UPI & GPay Bank Webhooks
+  if ((reqPath === '/api/webhooks/gpay' || reqPath === '/api/webhooks/upi') && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const resObj = posEnhancement.reconcileUpiWebhook(payload);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(resObj));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  if (reqPath === '/api/webhooks/recent' && req.method === 'GET') {
+    const limit = parseInt(query?.limit || '20', 10);
+    const events = posEnhancement.getRecentWebhookEvents(limit);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ success: true, events }));
+    return;
+  }
+
+  // 2. POS Shift Management & Z-Report
+  if (reqPath === '/api/pos/shift/current' && req.method === 'GET') {
+    const shiftData = posEnhancement.getCurrentShift();
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(shiftData));
+    return;
+  }
+
+  if (reqPath === '/api/pos/shift/open' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const resObj = posEnhancement.openShift(payload);
+        res.writeHead(resObj.success ? 200 : 400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(resObj));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  if (reqPath === '/api/pos/shift/close' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const resObj = posEnhancement.closeShift(payload);
+        res.writeHead(resObj.success ? 200 : 400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(resObj));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  if (reqPath === '/api/pos/shift/history' && req.method === 'GET') {
+    const limit = parseInt(query?.limit || '20', 10);
+    const history = posEnhancement.getShiftHistory(limit);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ success: true, history }));
+    return;
+  }
+
+  // 3. WhatsApp Business Cloud API & E-Bills
+  if (reqPath === '/api/notifications/whatsapp-bill' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const { orderId, phone, options } = JSON.parse(body || '{}');
+        const resObj = posEnhancement.dispatchWhatsAppEbill(orderId, { phone, ...(options || {}) });
+        res.writeHead(resObj.success ? 200 : 400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(resObj));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  if (reqPath === '/api/notifications/whatsapp-log' && req.method === 'GET') {
+    const limit = parseInt(query?.limit || '20', 10);
+    const log = posEnhancement.getWhatsAppDispatchLog(limit);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ success: true, log }));
+    return;
+  }
+
+  // 4. Perishable Dynamic Markdown Engine
+  if (reqPath === '/api/inventory/fresh-markdowns' && req.method === 'GET') {
+    const deals = posEnhancement.getPerishableDynamicMarkdowns();
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ success: true, ...deals }));
+    return;
+  }
+
+  // 5. Continuous 2-Way Delta Sync Daemon
+  if (reqPath === '/api/sync/delta' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const { batch, counterId } = JSON.parse(body || '{}');
+        const resObj = posEnhancement.processOfflineDeltaBatch(batch, counterId);
+        res.writeHead(resObj.success ? 200 : 400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(resObj));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  if (reqPath === '/api/sync/delta' && req.method === 'GET') {
+    const syncStatus = posEnhancement.getDeltaSyncStatus();
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(syncStatus));
+    return;
+  }
+
+  if (reqPath === '/api/orders/verify-payment' && req.method === 'POST') {
     let body = '';
     req.on('data', c => body += c);
     req.on('end', () => {

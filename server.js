@@ -679,6 +679,89 @@ if (reqPath === '/api/pos/status') {
     return;
   }
 
+  // Hindu Lunisolar & Regional Tamil Festival Surge Planner
+  if (reqPath === '/api/festivals/calendar' && req.method === 'GET') {
+    const planner = require('./services/festivalSurgePlannerService');
+    const yr = parseInt(queryParams.get('year') || '2026', 10);
+    const data = planner.getFestivalCalendar(yr);
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    res.end(JSON.stringify({ success: true, ...data }));
+    return;
+  }
+
+  if (reqPath === '/api/festivals/upcoming' && req.method === 'GET') {
+    const planner = require('./services/festivalSurgePlannerService');
+    const data = planner.getUpcomingFestival();
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    res.end(JSON.stringify({ success: true, ...data }));
+    return;
+  }
+
+  if (reqPath === '/api/festivals/purchase-orders' && req.method === 'GET') {
+    const planner = require('./services/festivalSurgePlannerService');
+    const yr = parseInt(queryParams.get('year') || '2026', 10);
+    const cal = planner.getFestivalCalendar(yr);
+    const pos = cal.festivals.map(f => f.purchase_order);
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    res.end(JSON.stringify({ success: true, year: yr, count: pos.length, purchase_orders: pos }));
+    return;
+  }
+
+  if (reqPath === '/api/festivals/generate-po' && (req.method === 'POST' || req.method === 'GET')) {
+    const planner = require('./services/festivalSurgePlannerService');
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      try {
+        let parsed = {};
+        if (req.method === 'POST' && body) {
+          try { parsed = JSON.parse(body); } catch(e) {}
+        } else {
+          parsed = Object.fromEntries(queryParams.entries());
+        }
+        const fid = parsed.festivalId || 'pongal_harvest';
+        const yr = parseInt(parsed.year || '2026', 10);
+        const fcfg = planner.FESTIVAL_ASTRONOMICAL_MASTER[fid];
+        if (!fcfg) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({ success: false, error: 'Festival ID not found' }));
+        }
+        const po = planner.generatePurchaseOrder(fcfg, yr);
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify({ success: true, purchase_order: po }));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  if (reqPath === '/api/festivals/stage-campaigns' && (req.method === 'POST' || req.method === 'GET')) {
+    const planner = require('./services/festivalSurgePlannerService');
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        let parsed = {};
+        if (req.method === 'POST' && body) {
+          try { parsed = JSON.parse(body); } catch(e) {}
+        } else {
+          parsed = Object.fromEntries(queryParams.entries());
+        }
+        const fid = parsed.festivalId || 'pongal_harvest';
+        const yr = parseInt(parsed.year || '2026', 10);
+        const staged = await planner.stageFestivalBundleCampaign(fid, yr);
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify({ success: true, staged_campaign: staged }));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
   if ((reqPath === '/api/copywriter/templates' || reqPath === '/api/ai/templates') && req.method === 'GET') {
     const copywriterService = require('./services/vernacularCopywriterService');
     const cfg = copywriterService.loadRegionalVoiceConfig();

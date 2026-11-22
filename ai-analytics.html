@@ -1280,6 +1280,135 @@
     </div>
 
 
+    <!-- ========================================================================= -->
+    <!-- HINDU LUNISOLAR & REGIONAL TAMIL FESTIVAL SURGE PLANNER (2026–2035) -->
+    <!-- ========================================================================= -->
+    <div id="festival-surge-planner-section" class="bg-gray-900 border border-amber-500/30 rounded-2xl p-6 shadow-2xl relative overflow-hidden space-y-6">
+      <div class="absolute -top-16 -right-16 w-60 h-60 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Header & Control Bar -->
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-gray-800 pb-5">
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1.5 shadow-sm">
+              <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+              Supply Chain Data Science Suite
+            </span>
+            <span class="text-xs text-gray-400 font-medium">Automated Lunisolar &amp; Tamil Festival Surge Planner</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+              T-14 Mandi Lock-In Rule Active
+            </span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              Theni &amp; Madurai Mandi Yard
+            </span>
+          </div>
+          <h2 class="text-xl font-black text-white mt-1.5 flex items-center gap-2">
+            <span>🌾 Hindu Lunisolar &amp; Regional Tamil Festival Surge Planner (2026–2035)</span>
+          </h2>
+          <p class="text-xs text-gray-400 mt-1 max-w-3xl">
+            Forecasts multi-fold grocery surges across <b>Thai Pongal (3.20x)</b>, <b>Deepavali (2.35x)</b>, <b>Ayudha Pooja (2.10x)</b>, and <b>Chithirai Thiruvizha (1.85x)</b>. Automatically issues vendor Purchase Orders at <b>T-14 days</b> to lock wholesale mandi rates before spot prices spike (+15% to +32%), and stages synchronized marketing bundle campaigns.
+          </p>
+        </div>
+
+        <!-- Year Selector and Bulk Action Buttons -->
+        <div class="flex items-center gap-2.5 flex-wrap shrink-0">
+          <div class="flex items-center gap-1.5 bg-gray-950 px-3 py-1.5 rounded-xl border border-gray-800 text-xs">
+            <span class="text-gray-400 font-bold">Lunisolar Year:</span>
+            <select id="surge-planner-year-select" onchange="loadFestivalPlanner(this.value)" class="bg-gray-900 border border-amber-500/40 rounded-lg px-2 py-1 text-xs text-amber-300 font-bold focus:outline-none">
+              <option value="2026" selected>2026</option>
+              <option value="2027">2027</option>
+              <option value="2028">2028</option>
+              <option value="2029">2029</option>
+              <option value="2030">2030</option>
+              <option value="2031">2031</option>
+              <option value="2032">2032</option>
+              <option value="2033">2033</option>
+              <option value="2034">2034</option>
+              <option value="2035">2035</option>
+            </select>
+          </div>
+
+          <button onclick="stageAllSurgeCampaigns()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white shadow-md shadow-purple-600/20 transition flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            <span>Stage All 4 Campaigns</span>
+          </button>
+
+          <a href="/api/festivals/calendar?year=2026" target="_blank" class="px-3.5 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-gray-300 border border-gray-700 transition flex items-center gap-1.5">
+            <i data-lucide="code" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>REST API</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Annual KPI Summary Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- KPI 1: Next Surge Festival -->
+        <div class="bg-gray-950/70 p-4 rounded-xl border border-gray-800 relative overflow-hidden space-y-1">
+          <div class="flex items-center justify-between text-xs text-gray-400">
+            <span class="font-bold uppercase tracking-wider">Next Major Surge</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300" id="kpi-next-fest-badge">Surge Alert</span>
+          </div>
+          <div class="text-base font-black text-white truncate" id="kpi-next-fest-name">Thai Pongal (Harvest Week)</div>
+          <div class="text-xs text-amber-400 font-semibold" id="kpi-next-fest-date">Jan 14, 2026</div>
+          <div class="text-[11px] text-gray-400 font-mono pt-1 border-t border-gray-800/80 flex items-center justify-between">
+            <span>Countdown:</span>
+            <span class="text-emerald-400 font-bold" id="kpi-next-fest-days">Calculating...</span>
+          </div>
+        </div>
+
+        <!-- KPI 2: T-14 Mandi Lock-In Deadline -->
+        <div class="bg-gray-950/70 p-4 rounded-xl border border-gray-800 relative overflow-hidden space-y-1">
+          <div class="flex items-center justify-between text-xs text-gray-400">
+            <span class="font-bold uppercase tracking-wider">T-14 Lock-In Cutoff</span>
+            <span class="text-[10px] font-mono text-purple-400">Procurement SLA</span>
+          </div>
+          <div class="text-base font-black text-amber-300 font-mono" id="kpi-t14-deadline">Dec 31, 2025</div>
+          <div class="text-xs text-gray-300">Lock rates before +25% spot surge</div>
+          <div class="text-[11px] text-gray-400 font-mono pt-1 border-t border-gray-800/80 flex items-center justify-between">
+            <span>T-7 Delivery Cutoff:</span>
+            <span class="text-purple-300 font-bold" id="kpi-t7-cutoff">Jan 07, 2026</span>
+          </div>
+        </div>
+
+        <!-- KPI 3: Total Mandi Procurement Budget -->
+        <div class="bg-gray-950/70 p-4 rounded-xl border border-gray-800 relative overflow-hidden space-y-1">
+          <div class="flex items-center justify-between text-xs text-gray-400">
+            <span class="font-bold uppercase tracking-wider">Mandi Wholesale Budget</span>
+            <span class="text-[10px] font-mono text-emerald-400">4 Fest Baskets</span>
+          </div>
+          <div class="text-xl font-black text-emerald-400 font-mono" id="kpi-total-procurement">₹25,74,588</div>
+          <div class="text-xs text-gray-400">Contracted wholesale landed cost</div>
+          <div class="text-[11px] text-gray-400 font-mono pt-1 border-t border-gray-800/80 flex items-center justify-between">
+            <span>Total Units Procured:</span>
+            <span class="text-gray-200 font-bold" id="kpi-total-units">12,480 units</span>
+          </div>
+        </div>
+
+        <!-- KPI 4: Mandi Arbitrage Cost Savings -->
+        <div class="bg-gray-950/70 p-4 rounded-xl border border-gray-800 relative overflow-hidden space-y-1">
+          <div class="flex items-center justify-between text-xs text-gray-400">
+            <span class="font-bold uppercase tracking-wider">Mandi Arbitrage Savings</span>
+            <span class="text-[10px] font-mono text-cyan-400">T-14 Arbitrage</span>
+          </div>
+          <div class="text-xl font-black text-cyan-300 font-mono" id="kpi-lockin-savings">₹8,32,233</div>
+          <div class="text-xs text-cyan-400 font-medium" id="kpi-savings-rate">24.4% cost savings vs spot</div>
+          <div class="text-[11px] text-gray-400 font-mono pt-1 border-t border-gray-800/80 flex items-center justify-between">
+            <span>Spot Cost If Delayed:</span>
+            <span class="text-red-400 font-bold font-mono" id="kpi-spot-delayed">₹34,06,821</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Core Festival Surge Cards Container -->
+      <div id="surge-festival-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="col-span-full py-10 text-center text-gray-500 text-xs">
+          <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2 text-amber-400"></i>
+          Loading Lunisolar Festival Surge Planner...
+        </div>
+      </div>
+    </div>
+
+
     <!-- LOCAL FESTIVAL DEMAND FORECASTER & EVENT PULSE -->
     <div class="bg-gray-900 border border-purple-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden">
       <div class="absolute -top-12 -right-12 w-48 h-48 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -4933,6 +5062,212 @@ Loading live briefing...
     </div>
   </div>
 
+  <!-- VENDOR PURCHASE ORDER (T-14) INSPECTION MODAL -->
+  <div id="po-detail-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-amber-500/40 rounded-3xl w-full max-w-4xl max-h-[92vh] flex flex-col p-6 shadow-2xl relative overflow-hidden">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-4 border-b border-gray-800 shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-black">
+            <i data-lucide="file-text" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-lg font-black text-white" id="po-modal-title">Vendor Purchase Order</h3>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono" id="po-modal-number">PO-2026-PONGAL</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" id="po-modal-status">Mandi Lock-In Active</span>
+            </div>
+            <p class="text-xs text-gray-400 mt-0.5" id="po-modal-subtitle">Rani Hyper Market &bull; Main Road, Bodinayakanur &bull; Theni District</p>
+          </div>
+        </div>
+        <button onclick="closePoModal()" class="p-1.5 rounded-xl hover:bg-gray-800 text-gray-400 hover:text-white transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- PO Vendor & Timeline Metadata Box -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 my-4 p-4 rounded-2xl bg-gray-950/80 border border-gray-800 text-xs shrink-0">
+        <div>
+          <span class="text-[10px] uppercase font-bold text-gray-400 block">Vendor &amp; Mandi Yard:</span>
+          <b class="text-white text-sm block" id="po-vendor-name">Sri Meenakshi Agro Mandi</b>
+          <span class="text-gray-400 text-[11px]" id="po-vendor-location">Madurai APMC Yard</span>
+          <div class="text-gray-400 text-[11px] mt-1 font-mono">Code: <span class="text-amber-300" id="po-vendor-code">VND-MDU-01</span> &bull; Tel: <span class="text-gray-200" id="po-vendor-phone">+91 94431 82740</span></div>
+        </div>
+
+        <div>
+          <span class="text-[10px] uppercase font-bold text-gray-400 block">Surge &amp; Timeline SLAs:</span>
+          <div class="text-amber-400 font-bold">Surge Multiplier: <span class="text-white text-sm" id="po-surge-mult">3.20x</span></div>
+          <div class="text-gray-300 text-[11px]">T-14 Lock-In PO Date: <b class="text-emerald-400 font-mono" id="po-t14-date">2025-12-31</b></div>
+          <div class="text-gray-300 text-[11px]">T-7 Mandate Delivery: <b class="text-purple-300 font-mono" id="po-t7-date">2026-01-07</b></div>
+          <div class="text-gray-400 text-[11px]">Festival Onset: <b class="text-amber-300 font-mono" id="po-fest-date">2026-01-14</b></div>
+        </div>
+
+        <div class="bg-gradient-to-br from-amber-950/40 to-emerald-950/40 p-3 rounded-xl border border-amber-500/20 flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] uppercase font-bold text-emerald-300 block">Mandi Arbitrage Savings</span>
+            <div class="text-lg font-black text-emerald-300 font-mono" id="po-total-savings">₹2,02,896.50</div>
+            <span class="text-[10px] text-gray-300" id="po-savings-pct">22.2% savings vs spot surge</span>
+          </div>
+          <div class="text-[11px] text-gray-400 font-mono pt-1 border-t border-gray-800 flex justify-between">
+            <span>Payment:</span>
+            <span class="text-gray-200 font-semibold" id="po-payment-terms">15 Days RTGS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Itemized Table -->
+      <div class="flex-1 overflow-y-auto custom-scrollbar border border-gray-800 rounded-xl bg-gray-950/40">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-gray-950 text-gray-400 font-bold border-b border-gray-800 text-[11px]">
+              <th class="py-3 px-3">SKU &amp; Commodity</th>
+              <th class="py-3 px-2 text-center">Unit</th>
+              <th class="py-3 px-2 text-right">Daily Sales</th>
+              <th class="py-3 px-2 text-right text-amber-300">Surge Need</th>
+              <th class="py-3 px-2 text-right">Stock</th>
+              <th class="py-3 px-2 text-right text-emerald-400 font-black">PO Order</th>
+              <th class="py-3 px-2 text-right">Mandi Rate</th>
+              <th class="py-3 px-2 text-right text-red-400">Spot Rate</th>
+              <th class="py-3 px-2 text-right font-black text-white">Line Total</th>
+              <th class="py-3 px-3 text-right text-emerald-400 font-black">Savings</th>
+            </tr>
+          </thead>
+          <tbody id="po-line-items-tbody" class="divide-y divide-gray-800/60 text-gray-200">
+            <tr>
+              <td colspan="10" class="py-8 text-center text-gray-500">Loading purchase order line items...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-gray-800 text-xs shrink-0">
+        <div class="text-gray-400 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>Authorized by <b>Rani Hypermarket Supply Chain System</b></span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-gray-200 border border-gray-700 transition flex items-center gap-1.5">
+            <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+            <span>Print / PDF</span>
+          </button>
+          <button onclick="closePoModal()" class="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-xs font-bold text-white transition">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FESTIVAL BUNDLE CAMPAIGN STAGING MODAL -->
+  <div id="campaign-staging-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-purple-500/40 rounded-3xl w-full max-w-3xl max-h-[92vh] flex flex-col p-6 shadow-2xl relative overflow-hidden">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-4 border-b border-gray-800 shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center font-black">
+            <i data-lucide="megaphone" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-lg font-black text-white" id="cmp-modal-title">Festival Promotional Campaign</h3>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono" id="cmp-modal-id">CMP-2026-PONGAL</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">STAGED IN QUEUE</span>
+            </div>
+            <p class="text-xs text-gray-400 mt-0.5" id="cmp-modal-subtitle">Auto-linked with Agent 2 Vernacular Copywriter &amp; Agent 3 Omni-Channel Dispatcher</p>
+          </div>
+        </div>
+        <button onclick="closeCampaignModal()" class="p-1.5 rounded-xl hover:bg-gray-800 text-gray-400 hover:text-white transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Bundle Details & Dispatch Timetable -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 my-4 p-4 rounded-2xl bg-gray-950/80 border border-gray-800 text-xs shrink-0">
+        <div class="space-y-1">
+          <span class="text-[10px] uppercase font-bold text-gray-400 block">Festival Promotional Combo:</span>
+          <b class="text-white text-sm block" id="cmp-bundle-title">Pongal Harvest Mega Kit</b>
+          <p class="text-gray-300 text-xs" id="cmp-bundle-items">5kg Raw Rice + 1kg Country Jaggery + 500ml Ghee</p>
+          <div class="flex items-center gap-3 pt-2 text-xs font-mono">
+            <span>MRP: <s class="text-gray-500" id="cmp-mrp">₹650</s></span>
+            <span class="text-emerald-400 font-bold" id="cmp-promo">Deal: ₹549</span>
+            <span class="text-amber-300 font-bold" id="cmp-savings">Save: ₹101 (15.5%)</span>
+          </div>
+        </div>
+
+        <div class="space-y-1 border-t md:border-t-0 md:border-l border-gray-800 md:pl-4">
+          <span class="text-[10px] uppercase font-bold text-purple-400 block">Automated Dispatch Timetable:</span>
+          <div class="flex justify-between text-[11px] text-gray-300">
+            <span>T-5 Early Bird WhatsApp:</span>
+            <b class="text-amber-300 font-mono" id="cmp-t5-date">2026-01-09</b>
+          </div>
+          <div class="flex justify-between text-[11px] text-gray-300">
+            <span>T-3 Omni-Channel Blast:</span>
+            <b class="text-purple-300 font-mono" id="cmp-t3-date">2026-01-11</b>
+          </div>
+          <div class="flex justify-between text-[11px] text-gray-300">
+            <span>T-1 Door Delivery Flash:</span>
+            <b class="text-emerald-400 font-mono" id="cmp-t1-date">2026-01-13</b>
+          </div>
+          <div class="text-[10px] text-gray-400 pt-1">Channels: WhatsApp Cloud &bull; TRAI DLT SMS &bull; Google Merchant &bull; MQTT Signage</div>
+        </div>
+      </div>
+
+      <!-- Multi-Channel Copy Showcase -->
+      <div class="flex-1 overflow-y-auto custom-scrollbar space-y-4">
+        <!-- Channel 1: DLT-Compliant SMS -->
+        <div class="p-4 rounded-2xl bg-gray-950 border border-gray-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-purple-300 flex items-center gap-1.5">
+              <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+              Format A: TRAI DLT 160-Char SMS (Tamil)
+            </span>
+            <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20" id="cmp-sms-len">160 / 160 chars</span>
+          </div>
+          <div class="p-3 bg-gray-900 rounded-xl text-xs text-gray-200 font-mono leading-relaxed select-all" id="cmp-sms-text">
+            Loading SMS copy...
+          </div>
+        </div>
+
+        <!-- Channel 2: WhatsApp Broadcast -->
+        <div class="p-4 rounded-2xl bg-gray-950 border border-gray-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+              <i class="fa-brands fa-whatsapp text-sm"></i>
+              Format B: WhatsApp Broadcast (1-Tap Order Link)
+            </span>
+            <span class="text-[10px] font-mono text-gray-400">Bodinayakanur Dialect</span>
+          </div>
+          <div class="p-3 bg-emerald-950/20 border border-emerald-500/20 rounded-xl text-xs text-gray-200 whitespace-pre-wrap leading-relaxed select-all" id="cmp-whatsapp-text">
+            Loading WhatsApp copy...
+          </div>
+        </div>
+
+        <!-- Channel 3: Instagram Caption -->
+        <div class="p-4 rounded-2xl bg-gray-950 border border-gray-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-pink-400 flex items-center gap-1.5">
+              <i class="fa-brands fa-instagram text-sm"></i>
+              Format C: Instagram Reel / Post Caption
+            </span>
+            <span class="text-[10px] font-mono text-pink-400/80">#TheniRetail #Bodi</span>
+          </div>
+          <div class="p-3 bg-pink-950/20 border border-pink-500/20 rounded-xl text-xs text-gray-200 whitespace-pre-wrap leading-relaxed select-all" id="cmp-insta-text">
+            Loading Instagram caption...
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="flex items-center justify-between pt-4 border-t border-gray-800 text-xs shrink-0">
+        <span class="text-gray-400">Queue Status: <b class="text-emerald-400">Active &bull; Ready for Omni-Channel Push</b></span>
+        <button onclick="closeCampaignModal()" class="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white transition">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- UNIFIED REPORTS FINDER & GENERATOR MODAL -->
   <div id="reports-finder-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="max-w-5xl w-full max-h-[94vh] flex flex-col p-6 rounded-3xl bg-gray-900 border border-gray-800 text-gray-100 shadow-2xl">
@@ -5498,8 +5833,306 @@ Loading live briefing...
       setTimeout(() => section.classList.remove('ring-2', 'ring-amber-500'), 2500);
     }
 
+    /* ══════════════════════════════════════════════════════════════════
+       HINDU LUNISOLAR & TAMIL FESTIVAL SURGE PLANNER CONTROLLER
+       ══════════════════════════════════════════════════════════════════ */
+    let currentFestivalPlannerData = null;
+
+    async function loadFestivalPlanner(year = 2026) {
+      const container = document.getElementById('surge-festival-cards-grid');
+      if (container) {
+        container.innerHTML = '<div class="col-span-full py-10 text-center text-gray-500 text-xs"><i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2 text-amber-400"></i> Calculating Lunisolar Surge Forecasts &amp; Mandi Arbitrage for ' + year + '...</div>';
+        if (window.lucide) lucide.createIcons();
+      }
+
+      try {
+        const res = await fetch('/api/festivals/calendar?year=' + year).then(r => r.json());
+        if (res && res.success) {
+          currentFestivalPlannerData = res;
+          renderFestivalPlannerUI(res);
+        } else {
+          if (container) container.innerHTML = '<div class="col-span-full p-4 rounded-xl bg-red-500/20 text-red-300 text-xs">Error loading festival planner: ' + (res?.error || 'Unknown error') + '</div>';
+        }
+      } catch (err) {
+        console.warn('Fallback to local festival surge data:', err.message);
+        try {
+          const staticRes = await fetch('/festival_surge_calendar_2026_2035.json').then(r => r.json());
+          if (staticRes && staticRes[year]) {
+            currentFestivalPlannerData = { success: true, ...staticRes[year] };
+            renderFestivalPlannerUI(currentFestivalPlannerData);
+          }
+        } catch (e) {
+          if (container) container.innerHTML = '<div class="col-span-full p-4 rounded-xl bg-red-500/20 text-red-300 text-xs">Failed to load calendar data: ' + err.message + '</div>';
+        }
+      }
+    }
+
+    function renderFestivalPlannerUI(data) {
+      if (!data || !data.festivals) return;
+
+      const summary = data.annual_summary || {};
+      const nextFest = data.festivals[0] || {};
+      const po = nextFest.purchase_order || {};
+
+      const nextFestNameEl = document.getElementById('kpi-next-fest-name');
+      if (nextFestNameEl) nextFestNameEl.textContent = nextFest.name || 'Thai Pongal';
+
+      const nextFestDateEl = document.getElementById('kpi-next-fest-date');
+      if (nextFestDateEl) nextFestDateEl.textContent = (nextFest.festival_date || '') + ' (' + (nextFest.day_of_week || '') + ')';
+
+      const nextFestDaysEl = document.getElementById('kpi-next-fest-days');
+      if (nextFestDaysEl) {
+        const days = nextFest.days_until_festival;
+        if (days !== undefined) {
+          nextFestDaysEl.textContent = days > 0 ? (days + ' Days Remaining') : (days === 0 ? 'Today (Peak Rush)' : 'Passed');
+        }
+      }
+
+      const t14DeadlineEl = document.getElementById('kpi-t14-deadline');
+      if (t14DeadlineEl && nextFest.timeline) {
+        t14DeadlineEl.textContent = nextFest.timeline.tMinus14_poDeadline;
+      }
+
+      const t7CutoffEl = document.getElementById('kpi-t7-cutoff');
+      if (t7CutoffEl && nextFest.timeline) {
+        t7CutoffEl.textContent = nextFest.timeline.tMinus7_deliveryCutoff;
+      }
+
+      const totalProcurementEl = document.getElementById('kpi-total-procurement');
+      if (totalProcurementEl) {
+        totalProcurementEl.textContent = '₹' + Number(summary.total_mandi_wholesale_procurement || 0).toLocaleString('en-IN');
+      }
+
+      const lockinSavingsEl = document.getElementById('kpi-lockin-savings');
+      if (lockinSavingsEl) {
+        lockinSavingsEl.textContent = '₹' + Number(summary.total_mandi_lock_in_savings || 0).toLocaleString('en-IN');
+      }
+
+      const savingsRateEl = document.getElementById('kpi-savings-rate');
+      if (savingsRateEl) {
+        savingsRateEl.textContent = (summary.average_savings_rate_percent || 24.4) + '% cost savings vs spot rate';
+      }
+
+      const container = document.getElementById('surge-festival-cards-grid');
+      if (!container) return;
+
+      const fIcons = {
+        pongal_harvest: '🌾',
+        chithirai_thiruvizha: '🥤',
+        ayudha_pooja: '🪔',
+        deepavali: '✨'
+      };
+
+      const cardHtml = data.festivals.map(f => {
+        const po = f.purchase_order || {};
+        const icon = fIcons[f.festival_id] || '🎉';
+        const isUrgent = po.status === 'T-14_WINDOW_ACTIVE_LOCK_PRICE_NOW';
+
+        return `
+          <div class="bg-gray-950/80 rounded-2xl p-4 border ${isUrgent ? 'border-amber-500 shadow-lg shadow-amber-500/10' : 'border-gray-800'} flex flex-col justify-between space-y-3 relative overflow-hidden transition hover:border-amber-500/50">
+            ${isUrgent ? '<div class="absolute top-0 right-0 bg-amber-500 text-black text-[9px] font-black px-2 py-0.5 rounded-bl-lg uppercase tracking-wider">Action Required: T-14 Lock-In</div>' : ''}
+            
+            <div class="space-y-2">
+              <div class="flex items-center gap-2">
+                <span class="text-2xl">${icon}</span>
+                <div class="overflow-hidden">
+                  <h3 class="text-sm font-black text-white truncate" title="${f.name}">${f.name}</h3>
+                  <div class="text-[11px] text-amber-400 font-semibold truncate">${f.tamil_name}</div>
+                </div>
+              </div>
+
+              <!-- Surge Badge & Dates -->
+              <div class="flex items-center justify-between text-xs pt-1 border-t border-gray-800/80 font-mono">
+                <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold text-[11px]">${f.surge_multiplier}x Surge</span>
+                <span class="text-gray-300 font-bold">${f.festival_date}</span>
+              </div>
+
+              <!-- Procurement SLA Timetable -->
+              <div class="p-2.5 rounded-xl bg-gray-900 border border-gray-800 text-[11px] space-y-1">
+                <div class="flex justify-between text-gray-400">
+                  <span>T-14 PO Cutoff:</span>
+                  <b class="text-emerald-400 font-mono">${f.timeline?.tMinus14_poDeadline || '-'}</b>
+                </div>
+                <div class="flex justify-between text-gray-400">
+                  <span>T-7 Delivery SLA:</span>
+                  <b class="text-purple-300 font-mono">${f.timeline?.tMinus7_deliveryCutoff || '-'}</b>
+                </div>
+                <div class="flex justify-between text-gray-400">
+                  <span>Days Remaining:</span>
+                  <b class="${f.days_until_festival > 14 ? 'text-gray-300' : 'text-amber-400'} font-bold">${f.days_until_festival} Days</b>
+                </div>
+              </div>
+
+              <!-- Basket summary -->
+              <div class="text-[11px] text-gray-400">
+                <span class="text-gray-500 uppercase font-bold text-[10px] block">Commodity Basket:</span>
+                <p class="text-gray-300 truncate" title="${f.commodity_basket}">${f.commodity_basket}</p>
+              </div>
+
+              <!-- PO Financials -->
+              <div class="p-2.5 rounded-xl bg-gradient-to-r from-emerald-950/30 to-amber-950/30 border border-emerald-500/20 text-[11px] space-y-1">
+                <div class="flex justify-between">
+                  <span class="text-gray-400">PO Wholesale Total:</span>
+                  <b class="text-emerald-400 font-mono">₹${Number(po.total_mandi_po_amount || 0).toLocaleString('en-IN')}</b>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Mandi Lock-in Savings:</span>
+                  <b class="text-cyan-300 font-mono">₹${Number(po.mandi_lock_in_savings || 0).toLocaleString('en-IN')} (${po.arbitrage_savings_percent || 0}%)</b>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="pt-2 border-t border-gray-800 space-y-1.5">
+              <button onclick="inspectPurchaseOrder('${f.festival_id}', ${data.year})" class="w-full py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-gray-200 border border-gray-700 transition flex items-center justify-center gap-1.5">
+                <i data-lucide="file-text" class="w-3.5 h-3.5 text-amber-400"></i>
+                <span>Inspect T-14 PO (${po.line_items?.length || 0} SKUs)</span>
+              </button>
+
+              <button onclick="stageFestivalCampaign('${f.festival_id}', ${data.year})" class="w-full py-2 rounded-xl bg-gradient-to-r from-purple-600/80 to-indigo-600/80 hover:from-purple-600 hover:to-indigo-600 text-xs font-bold text-white shadow-sm transition flex items-center justify-center gap-1.5">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-purple-200"></i>
+                <span>Stage Marketing Campaign</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = cardHtml;
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function inspectPurchaseOrder(festId, year) {
+      if (!currentFestivalPlannerData || !currentFestivalPlannerData.festivals) return;
+      const fest = currentFestivalPlannerData.festivals.find(f => f.festival_id === festId);
+      if (!fest || !fest.purchase_order) return;
+
+      const po = fest.purchase_order;
+      const vendor = po.vendor || {};
+      const timeline = po.timeline || {};
+
+      document.getElementById('po-modal-title').textContent = fest.name + ' - Purchase Order';
+      document.getElementById('po-modal-number').textContent = po.po_number;
+      document.getElementById('po-modal-status').textContent = po.status_badge || 'Active';
+      document.getElementById('po-vendor-name').textContent = vendor.name || 'APMC Mandi';
+      document.getElementById('po-vendor-location').textContent = vendor.location || 'Madurai & Theni APMC';
+      document.getElementById('po-vendor-code').textContent = vendor.code || 'VND-01';
+      document.getElementById('po-vendor-phone').textContent = vendor.contactPhone || '+91 94431 82740';
+      document.getElementById('po-surge-mult').textContent = po.surge_multiplier + 'x Surge';
+      document.getElementById('po-t14-date').textContent = timeline.tMinus14_poDeadline || '-';
+      document.getElementById('po-t7-date').textContent = timeline.tMinus7_deliveryCutoff || '-';
+      document.getElementById('po-fest-date').textContent = timeline.festivalDate || '-';
+      document.getElementById('po-total-savings').textContent = '₹' + Number(po.mandi_lock_in_savings || 0).toLocaleString('en-IN');
+      document.getElementById('po-savings-pct').textContent = (po.arbitrage_savings_percent || 0) + '% savings vs spot surge';
+      document.getElementById('po-payment-terms').textContent = vendor.paymentTerms || '15 Days RTGS';
+
+      const tbody = document.getElementById('po-line-items-tbody');
+      if (tbody && po.line_items) {
+        tbody.innerHTML = po.line_items.map(l => `
+          <tr class="hover:bg-gray-800/40 transition">
+            <td class="py-2.5 px-3 font-medium text-white">${l.sku}</td>
+            <td class="py-2.5 px-2 text-center text-gray-400 font-mono text-[11px]">${l.unit || 'Pack'}</td>
+            <td class="py-2.5 px-2 text-right font-mono text-gray-400">${l.base_daily_sales}</td>
+            <td class="py-2.5 px-2 text-right font-mono text-amber-300 font-bold">${l.surge_forecast_units}</td>
+            <td class="py-2.5 px-2 text-right font-mono text-gray-400">${l.current_stock}</td>
+            <td class="py-2.5 px-2 text-right font-mono text-emerald-400 font-black">${l.net_reorder_units}</td>
+            <td class="py-2.5 px-2 text-right font-mono text-gray-300">₹${l.mandi_wholesale_rate.toFixed(2)}</td>
+            <td class="py-2.5 px-2 text-right font-mono text-red-400">₹${l.spot_surge_rate.toFixed(2)}</td>
+            <td class="py-2.5 px-2 text-right font-mono font-bold text-white">₹${l.po_line_total.toLocaleString('en-IN')}</td>
+            <td class="py-2.5 px-3 text-right font-mono font-bold text-emerald-400">₹${l.lock_in_savings.toLocaleString('en-IN')}</td>
+          </tr>
+        `).join('') + `
+          <tr class="bg-gray-950 font-black border-t-2 border-amber-500/40 text-xs">
+            <td colspan="5" class="py-3 px-3 text-right text-gray-300 uppercase">Total PO Amount &amp; Arbitrage Savings:</td>
+            <td class="py-3 px-2 text-right font-mono text-emerald-400">${po.total_units_procured}</td>
+            <td colspan="2"></td>
+            <td class="py-3 px-2 text-right font-mono text-white text-sm">₹${po.total_mandi_po_amount.toLocaleString('en-IN')}</td>
+            <td class="py-3 px-3 text-right font-mono text-emerald-400 text-sm">₹${po.mandi_lock_in_savings.toLocaleString('en-IN')}</td>
+          </tr>
+        `;
+      }
+
+      const modal = document.getElementById('po-detail-modal');
+      if (modal) modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closePoModal() {
+      const modal = document.getElementById('po-detail-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function stageFestivalCampaign(festId, year) {
+      try {
+        const res = await fetch('/api/festivals/stage-campaigns', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ festivalId: festId, year: year })
+        }).then(r => r.json());
+
+        if (res && res.success && res.staged_campaign) {
+          const cmp = res.staged_campaign;
+          const copy = cmp.campaign_copy || {};
+          const pricing = cmp.pricing || {};
+          const timetable = cmp.dispatch_schedule || {};
+
+          document.getElementById('cmp-modal-title').textContent = cmp.bundle_title;
+          document.getElementById('cmp-modal-id').textContent = cmp.campaign_id;
+          document.getElementById('cmp-bundle-title').textContent = cmp.bundle_title;
+          document.getElementById('cmp-bundle-items').textContent = cmp.items_included;
+          document.getElementById('cmp-mrp').textContent = '₹' + pricing.mrp_standalone;
+          document.getElementById('cmp-promo').textContent = 'Deal: ₹' + pricing.bundle_deal_price;
+          document.getElementById('cmp-savings').textContent = 'Save: ₹' + pricing.savings_amount + ' (' + pricing.discount_percent + '%)';
+          document.getElementById('cmp-t5-date').textContent = timetable.t_minus_5_early_bird || '-';
+          document.getElementById('cmp-t3-date').textContent = timetable.t_minus_3_blast || '-';
+          document.getElementById('cmp-t1-date').textContent = timetable.t_minus_1_flash_hours || '-';
+          document.getElementById('cmp-sms-len').textContent = (copy.sms_tamil ? copy.sms_tamil.length : 0) + ' / 160 chars';
+          document.getElementById('cmp-sms-text').textContent = copy.sms_tamil || 'SMS copy ready.';
+          document.getElementById('cmp-whatsapp-text').textContent = copy.whatsapp_tamil || 'WhatsApp copy ready.';
+          document.getElementById('cmp-insta-text').textContent = copy.instagram_caption || 'Instagram caption ready.';
+
+          const modal = document.getElementById('campaign-staging-modal');
+          if (modal) modal.classList.remove('hidden');
+          if (window.lucide) lucide.createIcons();
+        } else {
+          alert('Failed to stage campaign: ' + (res?.error || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Network error staging campaign: ' + err.message);
+      }
+    }
+
+    function closeCampaignModal() {
+      const modal = document.getElementById('campaign-staging-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function stageAllSurgeCampaigns() {
+      const yr = document.getElementById('surge-planner-year-select')?.value || 2026;
+      const ids = ['pongal_harvest', 'chithirai_thiruvizha', 'ayudha_pooja', 'deepavali'];
+      let count = 0;
+      for (const id of ids) {
+        try {
+          await fetch('/api/festivals/stage-campaigns', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ festivalId: id, year: yr })
+          });
+          count++;
+        } catch (e) {}
+      }
+      alert('✅ Successfully staged all ' + count + ' festival bundle campaigns in marketing queue for year ' + yr + '!');
+    }
+
+    function initFestivalSurgePlanner() {
+      loadFestivalPlanner(2026);
+    }
+
     // Auto-init on load
-    document.addEventListener("DOMContentLoaded", () => { initDeadStockDashboard(); });
+    document.addEventListener("DOMContentLoaded", () => {
+      initDeadStockDashboard();
+      initFestivalSurgePlanner();
+    });
   </script>
 </body>
 </html>

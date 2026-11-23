@@ -30,7 +30,8 @@ pairs = [
     ('store_upgrade_module.js', 'public/store_upgrade_module.js'),
     ('services/competitiveIntelligenceService.js', 'api/services/competitiveIntelligenceService.js'),
     ('services/householdConsumptionService.js', 'api/services/householdConsumptionService.js'),
-    ('services/multiTenantService.js', 'api/services/multiTenantService.js')
+    ('services/multiTenantService.js', 'api/services/multiTenantService.js'),
+    ('services/consortiumProcurementService.js', 'api/services/consortiumProcurementService.js')
 ]
 
 all_ok = True

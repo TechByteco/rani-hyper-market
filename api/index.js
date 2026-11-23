@@ -171,6 +171,17 @@ try {
   }
 }
 
+let consortiumService = null;
+try {
+  consortiumService = require('./services/consortiumProcurementService');
+} catch (e) {
+  try {
+    consortiumService = require('../services/consortiumProcurementService');
+  } catch (e2) {
+    console.warn('consortiumProcurementService load notice:', e2.message);
+  }
+}
+
 // Cached JSON fallbacks for cloud environment
 function readLocalJson(filename, defaultValue = null) {
   const possiblePaths = [
@@ -1323,6 +1334,51 @@ module.exports = async (req, res) => {
       try {
         const report = multiTenantService ? multiTenantService.getMultiTenantSummaryReport() : { error: 'Service unavailable' };
         return sendJson(200, report);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // ============================================================
+    // CENTRALIZED GROUP-BUYING CONSORTIUM PROCUREMENT MODULE (15 SUPERMARKETS)
+    // ============================================================
+
+    // 1. 14-Day Staple Aggregated Demand across 15 Supermarkets
+    if ((reqPath === '/api/consortium/demand' || reqPath === '/api/consortium/aggregate-demand') && req.method === 'GET') {
+      try {
+        const data = consortiumService ? consortiumService.aggregate14DayConsortiumDemand() : { error: 'Service unavailable' };
+        return sendJson(200, data);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // 2. Direct Mandi Bidding Terminal: Unified RFPs to Mills
+    if ((reqPath === '/api/consortium/rfp' || reqPath === '/api/consortium/mandi-bidding') && req.method === 'GET') {
+      try {
+        const data = consortiumService ? consortiumService.getMandiBiddingTerminal() : { error: 'Service unavailable' };
+        return sendJson(200, data);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // 3. Automated Split Bills of Lading & Multi-Drop Direct Truck Logistics
+    if ((reqPath === '/api/consortium/bol-split' || reqPath === '/api/consortium/truck-dispatch') && req.method === 'GET') {
+      try {
+        const commodityId = queryParams.get('commodityId') || 'COMM-TOOR-DAL-A';
+        const data = consortiumService ? consortiumService.generateSplitBillsOfLading(commodityId) : { error: 'Service unavailable' };
+        return sendJson(200, data);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // 4. Net Profit Margin Improvement per Tenant Store
+    if ((reqPath === '/api/consortium/margins' || reqPath === '/api/consortium/profit-improvement') && req.method === 'GET') {
+      try {
+        const data = consortiumService ? consortiumService.getTenantProfitMarginImprovements() : { error: 'Service unavailable' };
+        return sendJson(200, data);
       } catch (e) {
         return sendJson(500, { success: false, error: e.message });
       }

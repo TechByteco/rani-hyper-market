@@ -628,6 +628,9 @@
 
         <!-- Supermarket Tools Quick Launchers -->
         <div class="flex items-center gap-1.5 shrink-0">
+          <button type="button" onclick="openGroupBuyingConsortiumModal()" class="px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer" title="Centralized Group-Buying Consortium: Direct Mill Bidding (Tirunelveli, Thanjavur, AP) & Split BoLs">
+            <i class="fa-solid fa-handshake-angle text-amber-700"></i> 🌾 Group-Buying Consortium
+          </button>
           <button type="button" onclick="openMultiTenantClusterModal()" class="px-2.5 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-200 text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer" title="Phase 2: 15-Store Regional Supermarket Cluster & Inter-Store Transfers">
             <i class="fa-solid fa-network-wired text-indigo-600"></i> 🏬 15 Regional Stores
           </button>
@@ -12305,6 +12308,153 @@ ${notificationTamil}
       }
     }
 
+    /* ===================================================
+       CENTRALIZED GROUP-BUYING CONSORTIUM PROCUREMENT UI
+       ===================================================*/
+    let _consortiumData = null;
+
+    function openGroupBuyingConsortiumModal() {
+      const modal = document.getElementById('group-buying-consortium-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        loadConsortiumDashboard();
+      }
+    }
+
+    function closeGroupBuyingConsortiumModal() {
+      const modal = document.getElementById('group-buying-consortium-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function switchConsortiumTab(tabKey, btn) {
+      document.querySelectorAll('.consortium-subtab-pane').forEach(function(p) { p.classList.add('hidden'); });
+      document.querySelectorAll('.consortium-nav-btn').forEach(function(b) { 
+        b.classList.remove('active', 'bg-amber-600', 'text-white'); 
+        b.classList.add('text-gray-600', 'hover:bg-gray-100'); 
+      });
+
+      const pane = document.getElementById('consortium-pane-' + tabKey);
+      if (pane) pane.classList.remove('hidden');
+      if (btn) {
+        btn.classList.add('active', 'bg-amber-600', 'text-white');
+        btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
+      }
+    }
+
+    async function loadConsortiumDashboard() {
+      try {
+        const [resDemand, resRfp, resMargins] = await Promise.all([
+          fetch('/api/consortium/demand'),
+          fetch('/api/consortium/rfp'),
+          fetch('/api/consortium/margins')
+        ]);
+
+        const demand = await resDemand.json();
+        const rfp = await resRfp.json();
+        const margins = await resMargins.json();
+
+        // Populate Top KPIs
+        const elVol = document.getElementById('kpi-consortium-vol');
+        if (elVol) elVol.textContent = demand.totalConsortiumDemandMt + ' MT';
+        const elDisc = document.getElementById('kpi-consortium-disc');
+        if (elDisc) elDisc.textContent = demand.overallConsortiumDiscountPct + '% Avg';
+        const elSav14 = document.getElementById('kpi-consortium-sav14');
+        if (elSav14) elSav14.textContent = '₹' + Number(demand.total14DayConsortiumSavingsInr || 0).toLocaleString('en-IN');
+        const elSavAnn = document.getElementById('kpi-consortium-savann');
+        if (elSavAnn) elSavAnn.textContent = '₹' + Number(demand.annualizedProjectedSavingsInr || 0).toLocaleString('en-IN');
+
+        // Render Demand Aggregation Table
+        const tbodyDemand = document.getElementById('tbody-consortium-demand');
+        if (tbodyDemand && demand.commodities) {
+          tbodyDemand.innerHTML = demand.commodities.map(function(c) {
+            return '<tr>' +
+              '<td class="p-2.5 font-bold text-gray-900">' + c.commodityName + '<div class="text-[10px] text-gray-500 font-normal">' + c.tamilName + '</div></td>' +
+              '<td class="p-2.5 font-mono font-black text-amber-700">' + c.totalDemandMt + ' MT</td>' +
+              '<td class="p-2.5 text-gray-600 text-xs">₹' + c.distributorRatePerKg + '/kg</td>' +
+              '<td class="p-2.5 font-bold text-emerald-700 text-xs">₹' + c.bestQuotedMillRatePerKg + '/kg</td>' +
+              '<td class="p-2.5"><span class="px-2 py-0.5 text-[10px] font-black bg-emerald-100 text-emerald-800 rounded-full">-' + c.negotiatedDiscountPct + '%</span></td>' +
+              '<td class="p-2.5 font-mono font-black text-emerald-800 text-right">₹' + Number(c.totalSavingsInr).toLocaleString('en-IN') + '</td>' +
+            '</tr>';
+          }).join('');
+        }
+
+        // Render RFP Tenders
+        const tbodyRfp = document.getElementById('tbody-consortium-rfp');
+        if (tbodyRfp && rfp.rfpTenders) {
+          tbodyRfp.innerHTML = rfp.rfpTenders.map(function(t) {
+            return '<tr>' +
+              '<td class="p-2.5 font-mono font-bold text-indigo-700 text-xs">' + t.rfpNumber + '</td>' +
+              '<td class="p-2.5 font-bold text-gray-900">' + t.commodityName + '<div class="text-[10px] text-gray-500 font-normal">' + t.totalVolumeTenderedMt + ' MT Tendered</div></td>' +
+              '<td class="p-2.5 font-medium text-xs">' + t.awardedMillName + '<div class="text-[10px] text-indigo-700 font-bold">' + t.awardedMillOrigin + '</div></td>' +
+              '<td class="p-2.5"><span class="px-2 py-0.5 text-[10px] font-black bg-emerald-100 text-emerald-800 rounded-full">-' + t.negotiatedDiscountPct + '%</span></td>' +
+              '<td class="p-2.5 font-mono font-black text-emerald-800">₹' + Number(t.totalConsortiumSavingsInr).toLocaleString('en-IN') + '</td>' +
+              '<td class="p-2.5 text-right"><span class="px-2 py-0.5 text-[10px] font-bold bg-indigo-100 text-indigo-800 rounded-full">CONTRACTED</span></td>' +
+            '</tr>';
+          }).join('');
+        }
+
+        // Render Store Margins
+        const tbodyMargins = document.getElementById('tbody-consortium-margins');
+        if (tbodyMargins && margins.storeRankings) {
+          tbodyMargins.innerHTML = margins.storeRankings.map(function(s, idx) {
+            return '<tr>' +
+              '<td class="p-2.5 font-bold text-xs text-gray-800">#' + (idx + 1) + ' ' + s.storeName + '<div class="text-[10px] text-gray-500 font-normal">' + s.district + ' District • ' + s.city + '</div></td>' +
+              '<td class="p-2.5 font-mono text-xs text-gray-600">' + Number(s.total14DayDemandKg).toLocaleString('en-IN') + ' kg</td>' +
+              '<td class="p-2.5 font-mono text-xs text-gray-500">' + s.oldGrossMarginPct + '%</td>' +
+              '<td class="p-2.5 font-mono font-bold text-xs text-emerald-700">' + s.consortiumGrossMarginPct + '%</td>' +
+              '<td class="p-2.5 font-mono font-black text-xs text-emerald-800">+' + s.netMarginExpansionPct + '%</td>' +
+              '<td class="p-2.5 font-mono font-bold text-xs text-gray-900 text-right">₹' + Number(s.net14DaySavingsInr).toLocaleString('en-IN') + '</td>' +
+              '<td class="p-2.5 font-mono font-black text-xs text-emerald-800 text-right">₹' + Number(s.annualizedSavingsInr).toLocaleString('en-IN') + '</td>' +
+            '</tr>';
+          }).join('');
+        }
+
+        loadConsortiumBolSplit('COMM-TOOR-DAL-A');
+      } catch (err) {
+        console.warn('Consortium data load error:', err.message);
+      }
+    }
+
+    async function loadConsortiumBolSplit(commodityId) {
+      try {
+        const res = await fetch('/api/consortium/bol-split?commodityId=' + encodeURIComponent(commodityId));
+        const data = await res.json();
+        const container = document.getElementById('consortium-bol-trucks-container');
+        if (!container || !data.truckDispatches) return;
+
+        container.innerHTML = data.truckDispatches.map(function(truck) {
+          return '<div class="p-3.5 bg-gray-50 border border-gray-200 rounded-2xl space-y-2">' +
+            '<div class="flex items-center justify-between border-b border-gray-200 pb-2">' +
+              '<div>' +
+                '<span class="text-xs font-black text-gray-900">' + truck.routeName + '</span>' +
+                '<div class="text-[10px] text-gray-500">' + truck.truckType + ' • Reg: <b class="text-indigo-700 font-mono">' + truck.vehicleRegistrationNumber + '</b> (' + truck.driverName + ')</div>' +
+              '</div>' +
+              '<div class="text-right">' +
+                '<span class="text-xs font-black text-amber-700 font-mono">' + truck.totalTruckLoadMt + ' MT Load</span>' +
+                '<div class="text-[10px] text-emerald-700 font-bold font-mono">₹' + Number(truck.totalConsignmentValueInr).toLocaleString('en-IN') + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">' +
+              truck.multiDropSequence.map(function(drop) {
+                return '<div class="p-2 bg-white rounded-xl border border-gray-100 flex items-center justify-between">' +
+                  '<div>' +
+                    '<span class="font-bold text-gray-800">Drop ' + drop.dropSequence + ': ' + drop.storeName + '</span>' +
+                    '<div class="text-[10px] font-mono text-gray-500">' + drop.subBolNumber + ' • EWB: ' + drop.eWayBillNumber + '</div>' +
+                  '</div>' +
+                  '<div class="text-right font-mono">' +
+                    '<span class="font-black text-gray-900">' + drop.allocatedVolumeKg + ' kg</span>' +
+                    '<div class="text-[10px] text-emerald-700 font-bold">Save ₹' + Number(drop.storeDirectSavingsInr).toLocaleString('en-IN') + '</div>' +
+                  '</div>' +
+                '</div>';
+              }).join('') +
+            '</div>' +
+          '</div>';
+        }).join('');
+      } catch (e) {
+        console.warn('BoL load error:', e.message);
+      }
+    }
+
 </script>
 
   <!-- MOBILE BOTTOM COMMAND BAR (App-like ergonomics for smartphones) -->
@@ -12619,6 +12769,160 @@ ${notificationTamil}
     </div>
   </div>
 
+  <!-- 🌾 CENTRALIZED GROUP-BUYING CONSORTIUM PROCUREMENT MODAL (15 SUPERMARKETS) -->
+  <div id="group-buying-consortium-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-5xl w-full p-6 shadow-2xl border border-gray-100 space-y-5 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-lg font-black">
+            <i class="fa-solid fa-handshake-angle"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-gray-900 text-base">Centralized Group-Buying Procurement Consortium</h3>
+            <p class="text-xs text-gray-500 font-medium">15 Independent Supermarkets • Direct Mill Bidding vs Conglomerates • 6% to 9% Wholesale Discounts</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeGroupBuyingConsortiumModal()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold cursor-pointer">&times;</button>
+      </div>
+
+      <!-- Consortium Executive KPI Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="p-3 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 rounded-2xl">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-amber-600">14-Day Demand Pooled</span>
+          <p class="text-xl font-black text-amber-950 mt-1" id="kpi-consortium-vol">267 MT</p>
+          <span class="text-[11px] text-amber-700 font-medium">Incl. 42 MT Toor Dal</span>
+        </div>
+        <div class="p-3 bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 rounded-2xl">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Direct Mill Discount</span>
+          <p class="text-xl font-black text-emerald-950 mt-1" id="kpi-consortium-disc">7.9% Avg</p>
+          <span class="text-[11px] text-emerald-700 font-medium">6% to 9% Below Distributor</span>
+        </div>
+        <div class="p-3 bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 rounded-2xl">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600">14-Day Network Savings</span>
+          <p class="text-xl font-black text-indigo-950 mt-1" id="kpi-consortium-sav14">₹18.23 Lakhs</p>
+          <span class="text-[11px] text-indigo-700 font-medium">Retained Wholesale Profit</span>
+        </div>
+        <div class="p-3 bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100 rounded-2xl">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600">Annualized Collective Gain</span>
+          <p class="text-xl font-black text-purple-950 mt-1" id="kpi-consortium-savann">₹4.75 Crores</p>
+          <span class="text-[11px] text-purple-700 font-medium">15 Supermarket Total</span>
+        </div>
+      </div>
+
+      <!-- Navigation Sub-Tabs -->
+      <div class="flex items-center gap-1.5 border-b border-gray-100 pb-2 overflow-x-auto text-xs font-bold">
+        <button type="button" onclick="switchConsortiumTab('demand', this)" class="consortium-nav-btn active px-3.5 py-1.5 rounded-xl bg-amber-600 text-white cursor-pointer transition">
+          <i class="fa-solid fa-boxes-stacked"></i> 14-Day Demand Aggregation (42 MT Toor Dal)
+        </button>
+        <button type="button" onclick="switchConsortiumTab('rfp', this)" class="consortium-nav-btn px-3.5 py-1.5 rounded-xl text-gray-600 hover:bg-gray-100 cursor-pointer transition">
+          <i class="fa-solid fa-gavel"></i> Direct Mandi Bidding (Tirunelveli, Thanjavur, AP)
+        </button>
+        <button type="button" onclick="switchConsortiumTab('bol', this)" class="consortium-nav-btn px-3.5 py-1.5 rounded-xl text-gray-600 hover:bg-gray-100 cursor-pointer transition">
+          <i class="fa-solid fa-truck-ramp-box"></i> Split Bills of Lading &amp; Direct Trucks
+        </button>
+        <button type="button" onclick="switchConsortiumTab('margins', this)" class="consortium-nav-btn px-3.5 py-1.5 rounded-xl text-gray-600 hover:bg-gray-100 cursor-pointer transition">
+          <i class="fa-solid fa-chart-line"></i> Store Margin Improvement (+6.7% Net)
+        </button>
+      </div>
+
+      <!-- Tab 1: Demand Aggregation Pane -->
+      <div id="consortium-pane-demand" class="consortium-subtab-pane space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-gray-700">Consolidated Demand across 15 Supermarkets (Theni, Madurai, Dindigul)</span>
+          <span class="text-gray-500">Benchmark: Single-Store Tier-3 Distributor vs Consortium Direct Mill</span>
+        </div>
+        <div class="border border-gray-200 rounded-2xl overflow-hidden">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-50 border-b border-gray-200 font-black text-gray-600">
+              <tr>
+                <th class="p-2.5">Commodity &amp; Package</th>
+                <th class="p-2.5">Total Demand (14-Day)</th>
+                <th class="p-2.5">Distributor Rate</th>
+                <th class="p-2.5">Consortium Mill Bid</th>
+                <th class="p-2.5">Discount</th>
+                <th class="p-2.5 text-right">Consortium Savings</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-consortium-demand" class="divide-y divide-gray-100">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 2: Direct Mandi Bidding Pane -->
+      <div id="consortium-pane-rfp" class="consortium-subtab-pane hidden space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-gray-700">Unified RFPs Issued to Origin Agricultural Mills &amp; Processing Mandis</span>
+          <span class="text-emerald-700 font-bold">All Bids Guaranteed 6% to 9% Below Distributor</span>
+        </div>
+        <div class="border border-gray-200 rounded-2xl overflow-hidden">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-50 border-b border-gray-200 font-black text-gray-600">
+              <tr>
+                <th class="p-2.5">RFP Tender #</th>
+                <th class="p-2.5">Staple Commodity</th>
+                <th class="p-2.5">Awarded Mill &amp; Origin</th>
+                <th class="p-2.5">Negotiated Discount</th>
+                <th class="p-2.5">Consortium Savings</th>
+                <th class="p-2.5 text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-consortium-rfp" class="divide-y divide-gray-100">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 3: Split Bills of Lading Pane -->
+      <div id="consortium-pane-bol" class="consortium-subtab-pane hidden space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-gray-700">Split Consignment Bills of Lading &amp; Multi-Drop Direct Truck Logistics</span>
+          <div class="flex items-center gap-2">
+            <label class="font-bold text-gray-600">Commodity:</label>
+            <select onchange="loadConsortiumBolSplit(this.value)" class="p-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-gray-800">
+              <option value="COMM-TOOR-DAL-A" selected>🌾 Toor Dal Grade-A (42 MT Consignment)</option>
+              <option value="COMM-PONNI-RICE-25KG">🍚 Ponni Boiled Rice (115 MT Consignment)</option>
+              <option value="COMM-OIL-SUNFLOWER-5L">🌻 Refined Sunflower Oil (32 KL Consignment)</option>
+              <option value="COMM-SUGAR-CRYSTAL-1KG">🍬 Crystal White Sugar (36 MT Consignment)</option>
+            </select>
+          </div>
+        </div>
+        <div id="consortium-bol-trucks-container" class="space-y-3">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- Tab 4: Per-Store Margins Pane -->
+      <div id="consortium-pane-margins" class="consortium-subtab-pane hidden space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-gray-700">Profit Margin Expansion per Tenant Store (15 Independent Supermarkets)</span>
+          <span class="text-indigo-700 font-bold">Network Average Margin Expansion: +6.7%</span>
+        </div>
+        <div class="border border-gray-200 rounded-2xl overflow-hidden">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-50 border-b border-gray-200 font-black text-gray-600">
+              <tr>
+                <th class="p-2.5">Supermarket &amp; Location</th>
+                <th class="p-2.5">14-Day Volume</th>
+                <th class="p-2.5">Baseline Margin</th>
+                <th class="p-2.5">Consortium Margin</th>
+                <th class="p-2.5">Margin Gain</th>
+                <th class="p-2.5 text-right">14-Day Savings</th>
+                <th class="p-2.5 text-right">Annual Gain</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-consortium-margins" class="divide-y divide-gray-100">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- 🏬 15-STORE MULTI-TENANT REGIONAL EXPANSION & STOCK TRANSFER MODAL -->
   <div id="multi-tenant-cluster-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-4xl w-full p-6 shadow-2xl border border-gray-100 space-y-5 max-h-[92vh] overflow-y-auto">
@@ -12836,6 +13140,160 @@ ${notificationTamil}
                   </button>
                 </td>
               </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 🌾 CENTRALIZED GROUP-BUYING CONSORTIUM PROCUREMENT MODAL (15 SUPERMARKETS) -->
+  <div id="group-buying-consortium-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-5xl w-full p-6 shadow-2xl border border-gray-100 space-y-5 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-lg font-black">
+            <i class="fa-solid fa-handshake-angle"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-gray-900 text-base">Centralized Group-Buying Procurement Consortium</h3>
+            <p class="text-xs text-gray-500 font-medium">15 Independent Supermarkets • Direct Mill Bidding vs Conglomerates • 6% to 9% Wholesale Discounts</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeGroupBuyingConsortiumModal()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold cursor-pointer">&times;</button>
+      </div>
+
+      <!-- Consortium Executive KPI Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="p-3 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 rounded-2xl">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-amber-600">14-Day Demand Pooled</span>
+          <p class="text-xl font-black text-amber-950 mt-1" id="kpi-consortium-vol">267 MT</p>
+          <span class="text-[11px] text-amber-700 font-medium">Incl. 42 MT Toor Dal</span>
+        </div>
+        <div class="p-3 bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 rounded-2xl">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Direct Mill Discount</span>
+          <p class="text-xl font-black text-emerald-950 mt-1" id="kpi-consortium-disc">7.9% Avg</p>
+          <span class="text-[11px] text-emerald-700 font-medium">6% to 9% Below Distributor</span>
+        </div>
+        <div class="p-3 bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 rounded-2xl">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600">14-Day Network Savings</span>
+          <p class="text-xl font-black text-indigo-950 mt-1" id="kpi-consortium-sav14">₹18.23 Lakhs</p>
+          <span class="text-[11px] text-indigo-700 font-medium">Retained Wholesale Profit</span>
+        </div>
+        <div class="p-3 bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100 rounded-2xl">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600">Annualized Collective Gain</span>
+          <p class="text-xl font-black text-purple-950 mt-1" id="kpi-consortium-savann">₹4.75 Crores</p>
+          <span class="text-[11px] text-purple-700 font-medium">15 Supermarket Total</span>
+        </div>
+      </div>
+
+      <!-- Navigation Sub-Tabs -->
+      <div class="flex items-center gap-1.5 border-b border-gray-100 pb-2 overflow-x-auto text-xs font-bold">
+        <button type="button" onclick="switchConsortiumTab('demand', this)" class="consortium-nav-btn active px-3.5 py-1.5 rounded-xl bg-amber-600 text-white cursor-pointer transition">
+          <i class="fa-solid fa-boxes-stacked"></i> 14-Day Demand Aggregation (42 MT Toor Dal)
+        </button>
+        <button type="button" onclick="switchConsortiumTab('rfp', this)" class="consortium-nav-btn px-3.5 py-1.5 rounded-xl text-gray-600 hover:bg-gray-100 cursor-pointer transition">
+          <i class="fa-solid fa-gavel"></i> Direct Mandi Bidding (Tirunelveli, Thanjavur, AP)
+        </button>
+        <button type="button" onclick="switchConsortiumTab('bol', this)" class="consortium-nav-btn px-3.5 py-1.5 rounded-xl text-gray-600 hover:bg-gray-100 cursor-pointer transition">
+          <i class="fa-solid fa-truck-ramp-box"></i> Split Bills of Lading &amp; Direct Trucks
+        </button>
+        <button type="button" onclick="switchConsortiumTab('margins', this)" class="consortium-nav-btn px-3.5 py-1.5 rounded-xl text-gray-600 hover:bg-gray-100 cursor-pointer transition">
+          <i class="fa-solid fa-chart-line"></i> Store Margin Improvement (+6.7% Net)
+        </button>
+      </div>
+
+      <!-- Tab 1: Demand Aggregation Pane -->
+      <div id="consortium-pane-demand" class="consortium-subtab-pane space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-gray-700">Consolidated Demand across 15 Supermarkets (Theni, Madurai, Dindigul)</span>
+          <span class="text-gray-500">Benchmark: Single-Store Tier-3 Distributor vs Consortium Direct Mill</span>
+        </div>
+        <div class="border border-gray-200 rounded-2xl overflow-hidden">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-50 border-b border-gray-200 font-black text-gray-600">
+              <tr>
+                <th class="p-2.5">Commodity &amp; Package</th>
+                <th class="p-2.5">Total Demand (14-Day)</th>
+                <th class="p-2.5">Distributor Rate</th>
+                <th class="p-2.5">Consortium Mill Bid</th>
+                <th class="p-2.5">Discount</th>
+                <th class="p-2.5 text-right">Consortium Savings</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-consortium-demand" class="divide-y divide-gray-100">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 2: Direct Mandi Bidding Pane -->
+      <div id="consortium-pane-rfp" class="consortium-subtab-pane hidden space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-gray-700">Unified RFPs Issued to Origin Agricultural Mills &amp; Processing Mandis</span>
+          <span class="text-emerald-700 font-bold">All Bids Guaranteed 6% to 9% Below Distributor</span>
+        </div>
+        <div class="border border-gray-200 rounded-2xl overflow-hidden">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-50 border-b border-gray-200 font-black text-gray-600">
+              <tr>
+                <th class="p-2.5">RFP Tender #</th>
+                <th class="p-2.5">Staple Commodity</th>
+                <th class="p-2.5">Awarded Mill &amp; Origin</th>
+                <th class="p-2.5">Negotiated Discount</th>
+                <th class="p-2.5">Consortium Savings</th>
+                <th class="p-2.5 text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-consortium-rfp" class="divide-y divide-gray-100">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 3: Split Bills of Lading Pane -->
+      <div id="consortium-pane-bol" class="consortium-subtab-pane hidden space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-gray-700">Split Consignment Bills of Lading &amp; Multi-Drop Direct Truck Logistics</span>
+          <div class="flex items-center gap-2">
+            <label class="font-bold text-gray-600">Commodity:</label>
+            <select onchange="loadConsortiumBolSplit(this.value)" class="p-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-gray-800">
+              <option value="COMM-TOOR-DAL-A" selected>🌾 Toor Dal Grade-A (42 MT Consignment)</option>
+              <option value="COMM-PONNI-RICE-25KG">🍚 Ponni Boiled Rice (115 MT Consignment)</option>
+              <option value="COMM-OIL-SUNFLOWER-5L">🌻 Refined Sunflower Oil (32 KL Consignment)</option>
+              <option value="COMM-SUGAR-CRYSTAL-1KG">🍬 Crystal White Sugar (36 MT Consignment)</option>
+            </select>
+          </div>
+        </div>
+        <div id="consortium-bol-trucks-container" class="space-y-3">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- Tab 4: Per-Store Margins Pane -->
+      <div id="consortium-pane-margins" class="consortium-subtab-pane hidden space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-gray-700">Profit Margin Expansion per Tenant Store (15 Independent Supermarkets)</span>
+          <span class="text-indigo-700 font-bold">Network Average Margin Expansion: +6.7%</span>
+        </div>
+        <div class="border border-gray-200 rounded-2xl overflow-hidden">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-50 border-b border-gray-200 font-black text-gray-600">
+              <tr>
+                <th class="p-2.5">Supermarket &amp; Location</th>
+                <th class="p-2.5">14-Day Volume</th>
+                <th class="p-2.5">Baseline Margin</th>
+                <th class="p-2.5">Consortium Margin</th>
+                <th class="p-2.5">Margin Gain</th>
+                <th class="p-2.5 text-right">14-Day Savings</th>
+                <th class="p-2.5 text-right">Annual Gain</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-consortium-margins" class="divide-y divide-gray-100">
+              <!-- Populated dynamically via JS -->
             </tbody>
           </table>
         </div>

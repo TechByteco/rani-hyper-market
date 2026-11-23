@@ -93,6 +93,13 @@ try {
   console.warn('multiTenantService load notice:', e.message);
 }
 
+let consortiumService = null;
+try {
+  consortiumService = require('./services/consortiumProcurementService');
+} catch (e) {
+  console.warn('consortiumProcurementService load notice:', e.message);
+}
+
 const server = http.createServer((req, res) => {
   // CORS & Universal Web Security Headers (OWASP Top 10 Standards)
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -1419,6 +1426,43 @@ const server = http.createServer((req, res) => {
     const report = multiTenantService ? multiTenantService.getMultiTenantSummaryReport() : { error: 'Service unavailable' };
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(report));
+    return;
+  }
+
+  // ============================================================
+  // CENTRALIZED GROUP-BUYING CONSORTIUM PROCUREMENT MODULE (15 SUPERMARKETS)
+  // ============================================================
+
+  // 1. 14-Day Staple Aggregated Demand across 15 Supermarkets
+  if ((reqPath === '/api/consortium/demand' || reqPath === '/api/consortium/aggregate-demand') && req.method === 'GET') {
+    const data = consortiumService ? consortiumService.aggregate14DayConsortiumDemand() : { error: 'Service unavailable' };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(data));
+    return;
+  }
+
+  // 2. Direct Mandi Bidding Terminal: Unified RFPs to Mills
+  if ((reqPath === '/api/consortium/rfp' || reqPath === '/api/consortium/mandi-bidding') && req.method === 'GET') {
+    const data = consortiumService ? consortiumService.getMandiBiddingTerminal() : { error: 'Service unavailable' };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(data));
+    return;
+  }
+
+  // 3. Automated Split Bills of Lading & Multi-Drop Direct Truck Logistics
+  if ((reqPath === '/api/consortium/bol-split' || reqPath === '/api/consortium/truck-dispatch') && req.method === 'GET') {
+    const commodityId = queryParams.get('commodityId') || 'COMM-TOOR-DAL-A';
+    const data = consortiumService ? consortiumService.generateSplitBillsOfLading(commodityId) : { error: 'Service unavailable' };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(data));
+    return;
+  }
+
+  // 4. Net Profit Margin Improvement per Tenant Store
+  if ((reqPath === '/api/consortium/margins' || reqPath === '/api/consortium/profit-improvement') && req.method === 'GET') {
+    const data = consortiumService ? consortiumService.getTenantProfitMarginImprovements() : { error: 'Service unavailable' };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(data));
     return;
   }
 

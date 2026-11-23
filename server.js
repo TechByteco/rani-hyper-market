@@ -79,6 +79,13 @@ try {
   console.warn('competitiveIntelligenceService load notice:', e.message);
 }
 
+let householdConsumptionService = null;
+try {
+  householdConsumptionService = require('./services/householdConsumptionService');
+} catch (e) {
+  console.warn('householdConsumptionService load notice:', e.message);
+}
+
 const server = http.createServer((req, res) => {
   // CORS & Universal Web Security Headers (OWASP Top 10 Standards)
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -1236,6 +1243,87 @@ const server = http.createServer((req, res) => {
     const radar = competitiveIntelligenceService ? competitiveIntelligenceService.sampleCompetitorRadar() : { error: 'Competitive service unavailable' };
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ success: true, message: 'Price radar refreshed with latest regional quotes', ...radar }));
+    return;
+  }
+
+  // =========================================================================
+  // 🍚 HOUSEHOLD CONSUMPTION PREDICTION & STAPLE REPLENISHMENT ENGINE
+  // =========================================================================
+
+  // 1. Full Replenishment Tracker Table
+  if (reqPath === '/api/replenishment/tracker' && req.method === 'GET') {
+    const category = queryParams.get('category') || 'all';
+    const status = queryParams.get('status') || 'all';
+    const dueOnly = queryParams.get('dueOnly') === 'true';
+    const data = householdConsumptionService ? householdConsumptionService.getReplenishmentTracker({ category, status, dueOnly }) : { error: 'Service unavailable' };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(data));
+    return;
+  }
+
+  // 2. Due Replenishment Notifications Today (e.g. Day 25 post-purchase of 25kg Rice)
+  if (reqPath === '/api/replenishment/due-notifications' && req.method === 'GET') {
+    const data = householdConsumptionService ? householdConsumptionService.getDueNotifications() : { error: 'Service unavailable' };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(data));
+    return;
+  }
+
+  // 3. Dispatch Notification
+  if (reqPath === '/api/replenishment/dispatch' && req.method === 'POST') {
+    let bodyData = '';
+    req.on('data', chunk => { bodyData += chunk; });
+    req.on('end', () => {
+      try {
+        const body = JSON.parse(bodyData || '{}');
+        if (body.allDue === true || body.allDue === 'true') {
+          const result = householdConsumptionService.dispatchAllDueNotifications();
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(result));
+          return;
+        }
+        const result = householdConsumptionService.dispatchNotification(body.trackerId);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // 4. Record Reorder Conversion
+  if (reqPath === '/api/replenishment/convert' && req.method === 'POST') {
+    let bodyData = '';
+    req.on('data', chunk => { bodyData += chunk; });
+    req.on('end', () => {
+      try {
+        const body = JSON.parse(bodyData || '{}');
+        const result = householdConsumptionService.recordReorderConversion(body.trackerId, { voucherNo: body.voucherNo });
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // 5. Executive Reorder Conversion Report
+  if (reqPath === '/api/replenishment/report' && req.method === 'GET') {
+    const report = householdConsumptionService ? householdConsumptionService.getReorderConversionReport() : { error: 'Service unavailable' };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(report));
+    return;
+  }
+
+  // 6. Sync Tracker from Latest Checkout History
+  if (reqPath === '/api/replenishment/sync' && (req.method === 'POST' || req.method === 'GET')) {
+    const result = householdConsumptionService ? householdConsumptionService.syncHouseholdReplenishmentTracker() : { error: 'Service unavailable' };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(result));
     return;
   }
 
@@ -2985,9 +3073,26 @@ if (reqPath === '/api/pos/status') {
     return;
   }
 
-  // 5. Predictive Customer Reorder Scanner
+  // 5. Predictive Customer Reorder Scanner (Powered by Household Consumption Engine)
   if (reqPath === '/api/reorders/predict') {
     try {
+      if (householdConsumptionService) {
+        const due = householdConsumptionService.getDueNotifications();
+        const candidates = (due.dueItems || []).map(d => ({
+          customer_name: d.customerName,
+          customer_phone: d.customerPhone,
+          last_order_days_ago: d.daysElapsed,
+          last_order_date: d.lastPurchaseDate,
+          staple_items: [d.productName, `${d.category} (${d.packageSize})`],
+          notification_english: d.notification.messageEnglish,
+          notification_tamil: d.notification.messageTamil,
+          trackerId: d.trackerId,
+          status: d.status
+        }));
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, reorder_candidates: candidates, count: candidates.length }));
+        return;
+      }
       const sales = analytics.getSalesAnalytics();
       const recentOrders = (sales && sales.recentTransactions) ? sales.recentTransactions : [];
       const predictions = posEnhancement.predictCustomerReorders(recentOrders, 25);

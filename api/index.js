@@ -149,6 +149,17 @@ try {
   }
 }
 
+let householdConsumptionService = null;
+try {
+  householdConsumptionService = require('./services/householdConsumptionService');
+} catch (e) {
+  try {
+    householdConsumptionService = require('../services/householdConsumptionService');
+  } catch (e2) {
+    console.warn('householdConsumptionService load notice:', e2.message);
+  }
+}
+
 // Cached JSON fallbacks for cloud environment
 function readLocalJson(filename, defaultValue = null) {
   const possiblePaths = [
@@ -1144,6 +1155,79 @@ module.exports = async (req, res) => {
       try {
         const radar = competitiveIntelligenceService ? competitiveIntelligenceService.sampleCompetitorRadar() : { error: 'Competitive service unavailable' };
         return sendJson(200, { success: true, message: 'Price radar refreshed with latest regional quotes', ...radar });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // =========================================================================
+    // 🍚 HOUSEHOLD CONSUMPTION PREDICTION & STAPLE REPLENISHMENT ENDPOINTS
+    // =========================================================================
+
+    // 1. Full Replenishment Tracker Table
+    if (reqPath === '/api/replenishment/tracker' && req.method === 'GET') {
+      try {
+        const category = queryParams.get('category') || 'all';
+        const status = queryParams.get('status') || 'all';
+        const dueOnly = queryParams.get('dueOnly') === 'true';
+        const data = householdConsumptionService ? householdConsumptionService.getReplenishmentTracker({ category, status, dueOnly }) : { error: 'Service unavailable' };
+        return sendJson(200, data);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // 2. Due Replenishment Notifications Today (e.g. Day 25 post-purchase of 25kg Rice)
+    if (reqPath === '/api/replenishment/due-notifications' && req.method === 'GET') {
+      try {
+        const data = householdConsumptionService ? householdConsumptionService.getDueNotifications() : { error: 'Service unavailable' };
+        return sendJson(200, data);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // 3. Dispatch Notification
+    if (reqPath === '/api/replenishment/dispatch' && req.method === 'POST') {
+      try {
+        const body = (typeof req.body === 'object' && req.body !== null) ? req.body : JSON.parse(bodyRaw || '{}');
+        if (body.allDue === true || body.allDue === 'true') {
+          const result = householdConsumptionService.dispatchAllDueNotifications();
+          return sendJson(200, result);
+        }
+        const result = householdConsumptionService.dispatchNotification(body.trackerId);
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(400, { success: false, error: e.message });
+      }
+    }
+
+    // 4. Record Reorder Conversion
+    if (reqPath === '/api/replenishment/convert' && req.method === 'POST') {
+      try {
+        const body = (typeof req.body === 'object' && req.body !== null) ? req.body : JSON.parse(bodyRaw || '{}');
+        const result = householdConsumptionService.recordReorderConversion(body.trackerId, { voucherNo: body.voucherNo });
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(400, { success: false, error: e.message });
+      }
+    }
+
+    // 5. Executive Reorder Conversion Report
+    if (reqPath === '/api/replenishment/report' && req.method === 'GET') {
+      try {
+        const report = householdConsumptionService ? householdConsumptionService.getReorderConversionReport() : { error: 'Service unavailable' };
+        return sendJson(200, report);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // 6. Sync Tracker from Latest Checkout History
+    if (reqPath === '/api/replenishment/sync' && (req.method === 'POST' || req.method === 'GET')) {
+      try {
+        const result = householdConsumptionService ? householdConsumptionService.syncHouseholdReplenishmentTracker() : { error: 'Service unavailable' };
+        return sendJson(200, result);
       } catch (e) {
         return sendJson(500, { success: false, error: e.message });
       }
@@ -3095,9 +3179,24 @@ if (reqPath === '/api/pos/status') {
       }
     }
 
-    // 5. Predictive Customer Reorder Scanner
+    // 5. Predictive Customer Reorder Scanner (Powered by Household Consumption Engine)
     if (reqPath === '/api/reorders/predict') {
       try {
+        if (householdConsumptionService) {
+          const due = householdConsumptionService.getDueNotifications();
+          const candidates = (due.dueItems || []).map(d => ({
+            customer_name: d.customerName,
+            customer_phone: d.customerPhone,
+            last_order_days_ago: d.daysElapsed,
+            last_order_date: d.lastPurchaseDate,
+            staple_items: [d.productName, `${d.category} (${d.packageSize})`],
+            notification_english: d.notification.messageEnglish,
+            notification_tamil: d.notification.messageTamil,
+            trackerId: d.trackerId,
+            status: d.status
+          }));
+          return sendJson(200, { success: true, reorder_candidates: candidates, count: candidates.length });
+        }
         let recentOrders = [];
         if (analyticsService && typeof analyticsService.getSalesAnalytics === 'function') {
           const sales = analyticsService.getSalesAnalytics();

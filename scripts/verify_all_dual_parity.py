@@ -28,7 +28,8 @@ pairs = [
     ('sw.js', 'public/sw.js'),
     ('audio/chime.mp3', 'public/audio/chime.mp3'),
     ('store_upgrade_module.js', 'public/store_upgrade_module.js'),
-    ('services/competitiveIntelligenceService.js', 'api/services/competitiveIntelligenceService.js')
+    ('services/competitiveIntelligenceService.js', 'api/services/competitiveIntelligenceService.js'),
+    ('services/householdConsumptionService.js', 'api/services/householdConsumptionService.js')
 ]
 
 all_ok = True

@@ -1745,6 +1745,221 @@
             </table>
           </div>
         </div>
+
+        <!-- HOUSEHOLD CONSUMPTION PREDICTION & REORDER CONVERSION ENGINE -->
+        <div id="household-replenishment-section" class="glass p-6 sm:p-8 lg:p-9 rounded-3xl border border-teal-300 shadow-xl bg-gradient-to-br from-white/95 via-teal-50/40 to-emerald-50/60 mt-8 space-y-6">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-teal-100 pb-4">
+            <div>
+              <div class="flex items-center gap-2 flex-wrap mb-1">
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-teal-600 text-white flex items-center gap-1 shadow-xs">
+                  <i class="fa-solid fa-brain"></i> Predictive Demand Model
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1">
+                  <i class="fa-solid fa-clock-rotate-left"></i> Real-time Checkout SKU Tracking
+                </span>
+                <span class="text-xs font-semibold text-gray-500">Bodinayakanur Municipal Ward Radar</span>
+              </div>
+              <h2 class="text-xl sm:text-2xl font-black text-gray-900 flex items-center gap-2">
+                <i class="fa-solid fa-arrows-rotate text-teal-600"></i>
+                <span>Household Consumption &amp; Reorder Conversion Engine</span>
+              </h2>
+              <p class="text-xs sm:text-sm text-gray-600 font-medium mt-0.5">
+                Forecasts grocery depletion cycles (25kg Rice Sacks in 28-32 days, 5L Cooking Oil in 22-26 days, 1kg Washing Powder in 14-18 days) to trigger proactive 30-minute delivery reminders and track conversion.
+              </p>
+            </div>
+
+            <div class="flex items-center gap-2 flex-wrap">
+              <button type="button" onclick="syncReplenishmentTrackerData()" class="px-3.5 py-2 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-300 text-xs font-bold transition flex items-center gap-1.5 shadow-2xs cursor-pointer">
+                <i class="fa-solid fa-rotate text-teal-600"></i> Sync Checkout History
+              </button>
+              <button type="button" onclick="batchDispatchAllDueReplenishments()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black transition flex items-center gap-1.5 shadow-md cursor-pointer active:scale-95">
+                <i class="fa-brands fa-whatsapp text-sm"></i> Batch Dispatch Due Alerts
+              </button>
+            </div>
+          </div>
+
+          <!-- EXECUTIVE CONVERSION METRICS STRIP (5 CARDS) -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            <div class="bg-white/90 p-4 rounded-2xl border border-teal-200/80 shadow-2xs">
+              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Tracked Households</span>
+              <div class="flex items-baseline gap-1 mt-1">
+                <span id="rep-stat-households" class="text-2xl font-black text-gray-900">128</span>
+                <span class="text-[10px] text-teal-700 font-bold">Families</span>
+              </div>
+              <span class="text-[10px] text-gray-500 font-medium block mt-1">Bodinayakanur Wards</span>
+            </div>
+
+            <div class="bg-white/90 p-4 rounded-2xl border border-blue-200/80 shadow-2xs">
+              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Active Cycles</span>
+              <div class="flex items-baseline gap-1 mt-1">
+                <span id="rep-stat-cycles" class="text-2xl font-black text-blue-700">184</span>
+                <span class="text-[10px] text-blue-600 font-bold">Cycles</span>
+              </div>
+              <span class="text-[10px] text-gray-500 font-medium block mt-1">Consuming Staples</span>
+            </div>
+
+            <div class="bg-white/90 p-4 rounded-2xl border border-amber-200/80 shadow-2xs">
+              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Reminders Due / Sent</span>
+              <div class="flex items-baseline gap-1 mt-1">
+                <span id="rep-stat-due-sent" class="text-2xl font-black text-amber-600">8 / 112</span>
+              </div>
+              <span class="text-[10px] text-amber-700 font-medium block mt-1">At Trigger Threshold</span>
+            </div>
+
+            <div class="bg-white/90 p-4 rounded-2xl border border-emerald-300 shadow-2xs bg-gradient-to-br from-emerald-50/50 to-teal-50/30">
+              <span class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">Reorder Conversion Rate</span>
+              <div class="flex items-baseline gap-1 mt-1">
+                <span id="rep-stat-conversion-rate" class="text-2xl font-black text-emerald-700">27.7%</span>
+                <span class="px-1.5 py-0.5 rounded text-[9px] font-black bg-emerald-100 text-emerald-800">+18.4% LTV</span>
+              </div>
+              <span class="text-[10px] text-emerald-700 font-bold block mt-1"><span id="rep-stat-converted-count">31</span> of 112 Reminders</span>
+            </div>
+
+            <div class="bg-white/90 p-4 rounded-2xl border border-purple-200/80 shadow-2xs">
+              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Retained GMV (Rupees)</span>
+              <div class="flex items-baseline gap-1 mt-1">
+                <span class="rupee text-xl font-bold text-purple-700">₹</span>
+                <span id="rep-stat-gmv" class="text-2xl font-black text-purple-700">48,250</span>
+              </div>
+              <span class="text-[10px] text-purple-600 font-medium block mt-1">Local Supermarket GMV</span>
+            </div>
+          </div>
+
+          <!-- 3 CORE STAPLE CONSUMPTION MODELS & CONVERSION BARS -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- 25kg Rice Sack Model -->
+            <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-xs space-y-3">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-black text-sm">🍚</span>
+                  <div>
+                    <h4 class="font-black text-gray-900 text-sm">25kg Rice Sack</h4>
+                    <p class="text-[11px] text-gray-500">Family of 4: 28 to 32 Days</p>
+                  </div>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Alert: Day 25</span>
+              </div>
+              <p class="text-xs text-gray-600 bg-gray-50 p-2.5 rounded-xl border border-gray-100 italic">
+                &ldquo;Time to refill your rice container? Get free 30-minute doorstep delivery in Bodinayakanur. Tap here to order.&rdquo;
+              </p>
+              <div class="space-y-1">
+                <div class="flex justify-between text-xs font-bold">
+                  <span class="text-gray-500">Reorder Conversion</span>
+                  <span id="rep-cat-rice-pct" class="text-emerald-700 font-black">33.3% (14 / 42)</span>
+                </div>
+                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div id="rep-cat-rice-bar" class="h-full bg-emerald-500 rounded-full" style="width: 33.3%"></div>
+                </div>
+                <div class="flex justify-between text-[11px] text-gray-500 font-medium pt-0.5">
+                  <span>Unit: ₹1,299 (Bodi Ponni)</span>
+                  <span class="text-gray-700 font-bold">Retained: ₹18,186</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5L Cooking Oil Can Model -->
+            <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-xs space-y-3">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-8 h-8 rounded-xl bg-yellow-100 text-yellow-800 flex items-center justify-center font-black text-sm">🛢️</span>
+                  <div>
+                    <h4 class="font-black text-gray-900 text-sm">5L Cooking Oil Can</h4>
+                    <p class="text-[11px] text-gray-500">Family of 4: 22 to 26 Days</p>
+                  </div>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-100 text-yellow-800">Alert: Day 20</span>
+              </div>
+              <p class="text-xs text-gray-600 bg-gray-50 p-2.5 rounded-xl border border-gray-100 italic">
+                &ldquo;Cooking oil running low? Get your fresh 5L cooking oil can delivered in 30 minutes in Bodinayakanur. Tap here to refill.&rdquo;
+              </p>
+              <div class="space-y-1">
+                <div class="flex justify-between text-xs font-bold">
+                  <span class="text-gray-500">Reorder Conversion</span>
+                  <span id="rep-cat-oil-pct" class="text-emerald-700 font-black">26.3% (10 / 38)</span>
+                </div>
+                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div id="rep-cat-oil-bar" class="h-full bg-emerald-500 rounded-full" style="width: 26.3%"></div>
+                </div>
+                <div class="flex justify-between text-[11px] text-gray-500 font-medium pt-0.5">
+                  <span>Unit: ₹785 (Fortune 5L)</span>
+                  <span class="text-gray-700 font-bold">Retained: ₹7,850</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 1kg Washing Powder Model -->
+            <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-xs space-y-3">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-8 h-8 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-black text-sm">🧺</span>
+                  <div>
+                    <h4 class="font-black text-gray-900 text-sm">1kg Washing Powder</h4>
+                    <p class="text-[11px] text-gray-500">Family of 4: 14 to 18 Days</p>
+                  </div>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">Alert: Day 13</span>
+              </div>
+              <p class="text-xs text-gray-600 bg-gray-50 p-2.5 rounded-xl border border-gray-100 italic">
+                &ldquo;Running low on laundry detergent? Refill your 1kg washing powder with free Bodinayakanur doorstep delivery. Tap here to order.&rdquo;
+              </p>
+              <div class="space-y-1">
+                <div class="flex justify-between text-xs font-bold">
+                  <span class="text-gray-500">Reorder Conversion</span>
+                  <span id="rep-cat-powder-pct" class="text-emerald-700 font-black">21.9% (7 / 32)</span>
+                </div>
+                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div id="rep-cat-powder-bar" class="h-full bg-emerald-500 rounded-full" style="width: 21.9%"></div>
+                </div>
+                <div class="flex justify-between text-[11px] text-gray-500 font-medium pt-0.5">
+                  <span>Unit: ₹145 (Surf 1kg)</span>
+                  <span class="text-gray-700 font-bold">Retained: ₹1,575</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- LIVE HOUSEHOLD TRACKER FILTER & SEARCH BAR -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+            <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+              <button onclick="filterReplenishmentCategory('all')" id="btn-rep-cat-all" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-teal-600 text-white shadow-2xs">All Staples</button>
+              <button onclick="filterReplenishmentCategory('rice')" id="btn-rep-cat-rice" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200">🍚 25kg Rice Sacks</button>
+              <button onclick="filterReplenishmentCategory('oil')" id="btn-rep-cat-oil" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200">🛢️ 5L Cooking Oil</button>
+              <button onclick="filterReplenishmentCategory('powder')" id="btn-rep-cat-powder" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200">🧺 1kg Washing Powder</button>
+              <button onclick="toggleReplenishmentDueOnly()" id="btn-rep-due-only" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-50 text-amber-800 border border-amber-300">⚡ Due for Reorder Only</button>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+                <input type="text" id="rep-search-input" oninput="filterReplenishmentSearch()" placeholder="Search customer, phone, ward..." class="pl-8 pr-3 py-1.5 text-xs bg-white border border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none w-56">
+              </div>
+            </div>
+          </div>
+
+          <!-- HOUSEHOLD REPLENISHMENT TRACKER TABLE -->
+          <div class="overflow-x-auto rounded-2xl border border-gray-200 bg-white shadow-xs">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="border-b border-gray-200 bg-teal-50/80 text-teal-950 font-black">
+                  <th class="py-3 px-3.5">Customer &amp; Location</th>
+                  <th class="py-3 px-3">Staple Product &amp; Size</th>
+                  <th class="py-3 px-3 text-center">Last Purchase</th>
+                  <th class="py-3 px-3">Consumption Progress</th>
+                  <th class="py-3 px-3 text-center">Depletion Forecast</th>
+                  <th class="py-3 px-3 text-center">Status</th>
+                  <th class="py-3 px-3.5 text-right">Proactive Actions</th>
+                </tr>
+              </thead>
+              <tbody id="household-replenishment-tbody" class="divide-y divide-gray-100 font-medium">
+                <tr>
+                  <td colspan="7" class="py-8 text-center text-gray-400 font-medium">
+                    <i class="fa-solid fa-spinner fa-spin text-teal-600 text-lg mb-2 block"></i> Loading Household Consumption Records...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <!-- MODULE 4: AGENCY PURCHASE BILL OCR -->
@@ -10721,7 +10936,7 @@ Please confirm delivery schedule to 77088 34547. Thank you!`;
       window.open(waUrl, '_blank');
     }
 
-    // 5. CUSTOMER REORDERS CRM ENGINE MODAL
+    // 5. CUSTOMER REORDERS CRM ENGINE MODAL & HOUSEHOLD CONSUMPTION PREDICTION
     let currentCustomerReorders = [];
 
     async function openCustomerReordersModal() {
@@ -10761,26 +10976,33 @@ Please confirm delivery schedule to 77088 34547. Thank you!`;
         return;
       }
 
-      container.innerHTML = reorders.map((c, idx) => `
-        <div class="bg-white rounded-2xl border border-gray-200 p-4 shadow-xs hover:shadow-md transition flex items-center justify-between gap-4">
-          <div class="space-y-1">
-            <div class="flex items-center gap-2">
+      container.innerHTML = reorders.map((c, idx) => {
+        const alertMsg = c.notification_english || 'Time to refill your grocery container? Get free 30-minute doorstep delivery in Bodinayakanur. Tap here to order.';
+        return `
+        <div class="bg-white rounded-2xl border border-teal-200 p-4 shadow-xs hover:shadow-md transition flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="space-y-1.5 flex-1">
+            <div class="flex items-center gap-2 flex-wrap">
               <h4 class="font-black text-gray-900 text-sm">${c.customer_name}</h4>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-100 text-teal-800">Bought ${c.last_order_days_ago} days ago</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300 animate-pulse">Day ${c.last_order_days_ago} Post-Purchase (Due)</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200">Refill Alert</span>
             </div>
             <p class="text-xs text-gray-500">Ph: <span class="font-mono font-bold text-gray-800">${c.customer_phone}</span> • Last Bill: ${c.last_order_date}</p>
             <div class="flex items-center gap-1.5 flex-wrap text-[11px] text-gray-700">
-              <span class="font-bold text-gray-500">Frequent Staples:</span>
-              ${c.staple_items.map(st => `<span class="bg-gray-100 px-2 py-0.5 rounded-lg border border-gray-200 font-medium">${st}</span>`).join('')}
+              <span class="font-bold text-gray-500">Staple Product:</span>
+              ${c.staple_items.map(st => `<span class="bg-teal-50 text-teal-800 px-2 py-0.5 rounded-lg border border-teal-200 font-bold">${st}</span>`).join('')}
             </div>
+            <p class="text-xs text-gray-600 bg-gray-50 p-2.5 rounded-xl border border-gray-100 italic">
+              &ldquo;${alertMsg}&rdquo;
+            </p>
           </div>
-          <div>
-            <button onclick="sendCustomerReorderWhatsApp(${idx})" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black flex items-center gap-1.5 transition shadow-xs cursor-pointer">
+          <div class="flex items-center gap-2 shrink-0">
+            <button onclick="sendCustomerReorderWhatsApp(${idx})" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black flex items-center gap-1.5 transition shadow-xs cursor-pointer active:scale-95">
               <i class="fa-brands fa-whatsapp text-sm"></i> Remind on WhatsApp
             </button>
           </div>
         </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function sendCustomerReorderWhatsApp(idx) {
@@ -10791,21 +11013,268 @@ Please confirm delivery schedule to 77088 34547. Thank you!`;
       const cleanPhone = String(c.customer_phone).replace(/[^0-9]/g, '');
       const fullPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
 
+      const notificationCopy = c.notification_english || `Time to refill your rice container? Get free 30-minute doorstep delivery in Bodinayakanur. Tap here to order.`;
+      const notificationTamil = c.notification_tamil || `உங்கள் அரிசி பாத்திரம் காலியாகும் நேரமா? போடிநாயக்கனூரில் இலவச 30 நிமிட டோர்ஸ்டெப் டெலிவரி பெறுங்கள். ஆர்டர் செய்ய இங்கே தட்டுங்கள்.`;
+
       const msg = 
-`வணக்கம் ${c.customer_name}! 🛒
-*ராணி ஹைப்பர் மார்க்கெட்* போடிநாயக்கனூர்.
+`🔔 *RANI HYPER MARKET — HOUSEHOLD REFILL ALERT* 🛒
+வணக்கம் ${c.customer_name}!
 
-உங்களுடைய மாதாந்திர மளிகைப் பொருட்கள் (${itemsList}) வாங்கி சுமார் *${c.last_order_days_ago} நாட்கள்* ஆகிறது.
+${notificationCopy}
 
-மீண்டும் தேவைப்படுகிறதா? 
-இப்போதே வாட்ஸ்அப் மூலமாகவோ அல்லது எங்கள் ஆன்லைன் ஸ்டோர் மூலமாகவோ ஆர்டர் செய்யுங்கள்:
-🔗 https://rani-hyper-market.vercel.app/store.html
+${notificationTamil}
 
-🚚 *இலவச ஹோம் டெலிவரி உண்டு!*
-📞 தொடர்பு: 77088 34547`;
+📦 *Staple Item:* ${itemsList}
+🚚 *Fastest Delivery:* 30-Minute Doorstep Express across Bodinayakanur
+📲 *Order Storefront:* https://rani-hyper-market.vercel.app/store.html
+📞 *Call / Store:* 77088 34547 • Main Road, Bodinayakanur`;
 
       const waUrl = `https://api.whatsapp.com/send?phone=${fullPhone}&text=${encodeURIComponent(msg)}`;
       window.open(waUrl, '_blank');
+
+      if (c.trackerId) {
+        fetch('/api/replenishment/dispatch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ trackerId: c.trackerId })
+        }).then(() => loadReplenishmentDashboard()).catch(() => {});
+      }
+    }
+
+    // =========================================================================
+    // 🍚 HOUSEHOLD CONSUMPTION PREDICTION & REORDER ENGINE CONTROLLERS
+    // =========================================================================
+    let allReplenishmentRecords = [];
+    let filteredReplenishmentRecords = [];
+    let currentReplenishmentCategory = 'all';
+    let filterDueOnlyActive = false;
+
+    async function loadReplenishmentDashboard() {
+      try {
+        const res = await fetch('/api/replenishment/tracker').then(r => r.json());
+        if (res && res.success) {
+          allReplenishmentRecords = res.tracker || [];
+          updateReplenishmentSummaryKpis(res.summaryMetrics);
+          applyReplenishmentFilters();
+        }
+      } catch (err) {
+        console.error('Failed to load replenishment tracker:', err);
+      }
+    }
+
+    function updateReplenishmentSummaryKpis(metrics) {
+      if (!metrics) return;
+      const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+      setEl('rep-stat-households', metrics.totalTrackedHouseholds);
+      setEl('rep-stat-cycles', metrics.activeReplenishmentCycles);
+      setEl('rep-stat-due-sent', `${metrics.totalDueNotifications} / ${metrics.totalDispatchedNotifications}`);
+      setEl('rep-stat-conversion-rate', `${metrics.overallConversionRatePct}%`);
+      setEl('rep-stat-converted-count', metrics.totalConvertedReorders);
+      setEl('rep-stat-gmv', Number(metrics.totalGmvRetainedInr).toLocaleString('en-IN'));
+
+      const cat = metrics.categoryBreakdown || {};
+      if (cat['Rice']) {
+        setEl('rep-cat-rice-pct', `${cat['Rice'].conversionRatePct}% (${cat['Rice'].converted} / ${cat['Rice'].dispatched})`);
+        const bar = document.getElementById('rep-cat-rice-bar');
+        if (bar) bar.style.width = `${Math.min(100, cat['Rice'].conversionRatePct)}%`;
+      }
+      if (cat['Cooking Oil']) {
+        setEl('rep-cat-oil-pct', `${cat['Cooking Oil'].conversionRatePct}% (${cat['Cooking Oil'].converted} / ${cat['Cooking Oil'].dispatched})`);
+        const bar = document.getElementById('rep-cat-oil-bar');
+        if (bar) bar.style.width = `${Math.min(100, cat['Cooking Oil'].conversionRatePct)}%`;
+      }
+      if (cat['Washing Powder']) {
+        setEl('rep-cat-powder-pct', `${cat['Washing Powder'].conversionRatePct}% (${cat['Washing Powder'].converted} / ${cat['Washing Powder'].dispatched})`);
+        const bar = document.getElementById('rep-cat-powder-bar');
+        if (bar) bar.style.width = `${Math.min(100, cat['Washing Powder'].conversionRatePct)}%`;
+      }
+    }
+
+    function filterReplenishmentCategory(cat) {
+      currentReplenishmentCategory = cat;
+      ['all', 'rice', 'oil', 'powder'].forEach(c => {
+        const btn = document.getElementById(`btn-rep-cat-${c}`);
+        if (btn) {
+          if (c === cat) {
+            btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-teal-600 text-white shadow-2xs';
+          } else {
+            btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200';
+          }
+        }
+      });
+      applyReplenishmentFilters();
+    }
+
+    function toggleReplenishmentDueOnly() {
+      filterDueOnlyActive = !filterDueOnlyActive;
+      const btn = document.getElementById('btn-rep-due-only');
+      if (btn) {
+        btn.className = filterDueOnlyActive
+          ? 'px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-600 text-white shadow-2xs'
+          : 'px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-50 text-amber-800 border border-amber-300';
+      }
+      applyReplenishmentFilters();
+    }
+
+    function filterReplenishmentSearch() {
+      applyReplenishmentFilters();
+    }
+
+    function applyReplenishmentFilters() {
+      const query = (document.getElementById('rep-search-input')?.value || '').toLowerCase().trim();
+      filteredReplenishmentRecords = allReplenishmentRecords.filter(r => {
+        if (currentReplenishmentCategory === 'rice' && !r.category.toLowerCase().includes('rice')) return false;
+        if (currentReplenishmentCategory === 'oil' && !r.category.toLowerCase().includes('oil')) return false;
+        if (currentReplenishmentCategory === 'powder' && !r.category.toLowerCase().includes('powder') && !r.category.toLowerCase().includes('wash')) return false;
+        if (filterDueOnlyActive && r.status !== 'DUE_FOR_REORDER' && !r.notification?.isDueNow) return false;
+        if (query) {
+          const matchName = (r.customerName || '').toLowerCase().includes(query);
+          const matchPhone = (r.customerPhone || '').includes(query);
+          const matchWard = (r.ward || '').toLowerCase().includes(query);
+          const matchItem = (r.productName || '').toLowerCase().includes(query);
+          if (!matchName && !matchPhone && !matchWard && !matchItem) return false;
+        }
+        return true;
+      });
+      renderReplenishmentTable();
+    }
+
+    function renderReplenishmentTable() {
+      const tbody = document.getElementById('household-replenishment-tbody');
+      if (!tbody) return;
+
+      if (!filteredReplenishmentRecords.length) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-gray-400 font-medium"><i class="fa-solid fa-circle-info text-teal-600 text-lg mb-2 block"></i> No household consumption records matching filter criteria.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filteredReplenishmentRecords.map((r, idx) => {
+        const cycleTotal = r.meanConsumptionDays || 30;
+        const progressPct = Math.min(100, Math.round((r.daysElapsed / cycleTotal) * 100));
+
+        let statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">Consuming</span>';
+        if (r.status === 'DUE_FOR_REORDER' || r.notification?.isDueNow) {
+          statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300 animate-pulse">⚡ Due Today</span>';
+        } else if (r.status === 'NOTIFICATION_DISPATCHED') {
+          statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800">Alert Sent</span>';
+        } else if (r.status === 'CONVERTED') {
+          statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">✓ Reordered</span>';
+        }
+
+        const isDue = r.status === 'DUE_FOR_REORDER' || r.notification?.isDueNow;
+
+        return `
+          <tr class="hover:bg-teal-50/30 transition">
+            <td class="py-3 px-3.5">
+              <div class="font-black text-gray-900">${r.customerName}</div>
+              <div class="text-[11px] text-gray-500 font-mono">${r.customerPhone} &bull; ${r.ward}</div>
+            </td>
+            <td class="py-3 px-3">
+              <div class="font-bold text-gray-800">${r.productName}</div>
+              <div class="text-[11px] text-teal-700 font-bold">${r.packageSize} &bull; ₹${r.unitPrice}</div>
+            </td>
+            <td class="py-3 px-3 text-center">
+              <div class="font-bold text-gray-700">${r.lastPurchaseDate}</div>
+              <div class="text-[10px] text-gray-400 font-mono">Bill #${r.lastVoucherNo}</div>
+            </td>
+            <td class="py-3 px-3">
+              <div class="flex justify-between text-[11px] font-bold mb-1">
+                <span class="${r.daysElapsed >= r.triggerDay ? 'text-amber-700 font-black' : 'text-gray-600'}">Day ${r.daysElapsed} of ${cycleTotal}</span>
+                <span class="text-gray-400">${r.daysRemaining} days left</span>
+              </div>
+              <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full ${r.daysElapsed >= r.triggerDay ? 'bg-amber-500' : 'bg-teal-500'} rounded-full" style="width: ${progressPct}%"></div>
+              </div>
+            </td>
+            <td class="py-3 px-3 text-center">
+              <div class="font-bold text-gray-800">${r.predictedDepletionDate}</div>
+              <div class="text-[10px] text-gray-400">Trigger: Day ${r.triggerDay}</div>
+            </td>
+            <td class="py-3 px-3 text-center">
+              ${statusBadge}
+            </td>
+            <td class="py-3 px-3.5 text-right space-x-1">
+              <button onclick="dispatchReplenishmentReminder('${r.trackerId}')" class="px-2.5 py-1.5 rounded-lg text-xs font-bold ${isDue ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs' : 'bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-200'} transition cursor-pointer" title="Send WhatsApp Reorder Alert">
+                <i class="fa-brands fa-whatsapp text-xs"></i> Alert
+              </button>
+              ${r.status !== 'CONVERTED' ? `
+                <button onclick="recordReplenishmentConversion('${r.trackerId}')" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-200 transition cursor-pointer" title="Record Reorder Conversion">
+                  <i class="fa-solid fa-check text-xs"></i> Reorder
+                </button>
+              ` : `
+                <span class="text-[10px] text-emerald-700 font-black">₹${r.unitPrice} GMV</span>
+              `}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function dispatchReplenishmentReminder(trackerId) {
+      try {
+        const res = await fetch('/api/replenishment/dispatch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ trackerId })
+        }).then(r => r.json());
+
+        if (res && res.success) {
+          if (res.whatsappUrl) {
+            window.open(res.whatsappUrl, '_blank');
+          }
+          loadReplenishmentDashboard();
+        } else {
+          alert(res.error || 'Failed to dispatch reminder');
+        }
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    }
+
+    async function batchDispatchAllDueReplenishments() {
+      if (!confirm('Batch dispatch automated WhatsApp refill reminders to all households whose staples are at or past the depletion trigger day?')) return;
+      try {
+        const res = await fetch('/api/replenishment/dispatch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ allDue: true })
+        }).then(r => r.json());
+
+        if (res && res.success) {
+          alert(`Successfully dispatched ${res.dispatchedCount} replenishment reminders!`);
+          loadReplenishmentDashboard();
+        }
+      } catch (e) {
+        alert('Batch dispatch failed: ' + e.message);
+      }
+    }
+
+    async function recordReplenishmentConversion(trackerId) {
+      try {
+        const res = await fetch('/api/replenishment/convert', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ trackerId })
+        }).then(r => r.json());
+
+        if (res && res.success) {
+          loadReplenishmentDashboard();
+        }
+      } catch (e) {
+        alert('Error recording conversion: ' + e.message);
+      }
+    }
+
+    async function syncReplenishmentTrackerData() {
+      try {
+        const res = await fetch('/api/replenishment/sync', { method: 'POST' }).then(r => r.json());
+        if (res && res.success) {
+          loadReplenishmentDashboard();
+          alert('Replenishment tracker successfully synchronized with checkout history!');
+        }
+      } catch (e) {
+        alert('Sync error: ' + e.message);
+      }
     }
 
     function handleLogout() {
@@ -11345,6 +11814,7 @@ Please confirm delivery schedule to 77088 34547. Thank you!`;
       const savedRole = localStorage.getItem('rhm_role') || 'owner';
       switchRbacRole(savedRole);
       initOfflineSyncDaemon();
+      loadReplenishmentDashboard();
     });
 
     // =====================================================================

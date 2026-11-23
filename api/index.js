@@ -160,6 +160,17 @@ try {
   }
 }
 
+let multiTenantService = null;
+try {
+  multiTenantService = require('./services/multiTenantService');
+} catch (e) {
+  try {
+    multiTenantService = require('../services/multiTenantService');
+  } catch (e2) {
+    console.warn('multiTenantService load notice:', e2.message);
+  }
+}
+
 // Cached JSON fallbacks for cloud environment
 function readLocalJson(filename, defaultValue = null) {
   const possiblePaths = [
@@ -1228,6 +1239,90 @@ module.exports = async (req, res) => {
       try {
         const result = householdConsumptionService ? householdConsumptionService.syncHouseholdReplenishmentTracker() : { error: 'Service unavailable' };
         return sendJson(200, result);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // =========================================================================
+    // 🏢 MULTI-TENANT ARCHITECTURE & INTER-STORE INVENTORY TRANSFER ENDPOINTS
+    // =========================================================================
+
+    // 1. 15 Regional Supermarket Tenants List
+    if ((reqPath === '/api/tenants' || reqPath === '/api/multi-tenant/tenants') && req.method === 'GET') {
+      try {
+        const district = queryParams.get('district');
+        const data = multiTenantService ? multiTenantService.getTenants(district) : { error: 'Service unavailable' };
+        return sendJson(200, data);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // 2. Global Master SKU Catalog (50,000 Standardized FMCG Items)
+    if ((reqPath === '/api/catalog/global' || reqPath === '/api/multi-tenant/catalog') && req.method === 'GET') {
+      try {
+        const query = queryParams.get('query');
+        const category = queryParams.get('category');
+        const data = multiTenantService ? multiTenantService.getGlobalMasterCatalog({ query, category }) : { error: 'Service unavailable' };
+        return sendJson(200, data);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // 3. Tenant Store Inventory (Isolated Pricing, Cost, Shelf Location, Stock Units)
+    if ((reqPath === '/api/inventory/store' || reqPath === '/api/multi-tenant/inventory') && req.method === 'GET') {
+      try {
+        const tenantId = req.headers['x-tenant-id'] || queryParams.get('tenantId') || (multiTenantService ? multiTenantService.FLAGSHIP_TENANT_ID : null);
+        const lowStockOnly = queryParams.get('lowStockOnly') === 'true';
+        const shelfLocation = queryParams.get('shelfLocation');
+        const data = multiTenantService ? multiTenantService.getTenantStoreInventory(tenantId, { lowStockOnly, shelfLocation }) : { error: 'Service unavailable' };
+        return sendJson(200, data);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // 4. Inter-Store Inventory Transfers (Bilateral Visibility & Transfer Manifests)
+    if ((reqPath === '/api/transfers' || reqPath === '/api/multi-tenant/transfers') && req.method === 'GET') {
+      try {
+        const tenantId = req.headers['x-tenant-id'] || queryParams.get('tenantId') || null;
+        const status = queryParams.get('status') || null;
+        const data = multiTenantService ? multiTenantService.getInventoryTransfers(tenantId, status) : { error: 'Service unavailable' };
+        return sendJson(200, data);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // 5. Create Inventory Transfer Order (Decrements Source Inventory)
+    if ((reqPath === '/api/transfers/create' || reqPath === '/api/multi-tenant/transfers/create') && req.method === 'POST') {
+      try {
+        const payload = (typeof req.body === 'object' && req.body !== null) ? req.body : JSON.parse(bodyRaw || '{}');
+        const result = multiTenantService ? multiTenantService.createInventoryTransfer(payload) : { error: 'Service unavailable' };
+        return sendJson(result.success ? 200 : 400, result);
+      } catch (e) {
+        return sendJson(400, { success: false, error: e.message });
+      }
+    }
+
+    // 6. Receive Inventory Transfer Order (Increments Destination Inventory)
+    if ((reqPath === '/api/transfers/receive' || reqPath === '/api/multi-tenant/transfers/receive') && req.method === 'POST') {
+      try {
+        const payload = (typeof req.body === 'object' && req.body !== null) ? req.body : JSON.parse(bodyRaw || '{}');
+        const result = multiTenantService ? multiTenantService.receiveInventoryTransfer(payload.transferId, payload.notes) : { error: 'Service unavailable' };
+        return sendJson(result.success ? 200 : 400, result);
+      } catch (e) {
+        return sendJson(400, { success: false, error: e.message });
+      }
+    }
+
+    // 7. Executive Multi-Tenant Network Summary Report
+    if ((reqPath === '/api/multi-tenant/report' || reqPath === '/api/multi-tenant/summary') && req.method === 'GET') {
+      try {
+        const report = multiTenantService ? multiTenantService.getMultiTenantSummaryReport() : { error: 'Service unavailable' };
+        return sendJson(200, report);
       } catch (e) {
         return sendJson(500, { success: false, error: e.message });
       }

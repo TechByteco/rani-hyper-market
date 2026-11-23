@@ -133,6 +133,14 @@
     {
       "source": "/mandi",
       "destination": "/procurement.html"
+    },
+    {
+      "source": "/delivery-driver",
+      "destination": "/delivery-driver.html"
+    },
+    {
+      "source": "/driver",
+      "destination": "/delivery-driver.html"
     }
   ],
   "functions": {

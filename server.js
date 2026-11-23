@@ -65,6 +65,13 @@ try {
   console.warn('deliveryDispatchService load notice:', e.message);
 }
 
+let deliveryDriverService = null;
+try {
+  deliveryDriverService = require('./services/deliveryDriverService');
+} catch (e) {
+  console.warn('deliveryDriverService load notice:', e.message);
+}
+
 const server = http.createServer((req, res) => {
   // CORS & Universal Web Security Headers (OWASP Top 10 Standards)
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -1086,6 +1093,98 @@ const server = http.createServer((req, res) => {
         const riderId = parsed.riderId || parsed.id;
         const newStatus = parsed.status || 'AVAILABLE';
         const result = deliveryDispatchService ? deliveryDispatchService.updateRiderStatus(riderId, newStatus) : { success: false };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // =========================================================================
+  // 🛵 DELIVERY DRIVER & REAL-TIME COMMUNICATIONS ENDPOINTS
+  // =========================================================================
+
+  // Driver Fleet & Active Shifts
+  if (reqPath === '/api/driver/fleet' && req.method === 'GET') {
+    const fleet = deliveryDriverService ? deliveryDriverService.getDriverFleet() : [];
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ success: true, count: fleet.length, fleet }));
+    return;
+  }
+
+  // Driver Assigned Orders Queue
+  if (reqPath === '/api/driver/orders' && req.method === 'GET') {
+    const riderId = queryParams.get('riderId') || 'RIDER-02';
+    const result = deliveryDriverService ? deliveryDriverService.getDriverOrders(riderId) : { error: 'Driver service unavailable' };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(result));
+    return;
+  }
+
+  // Driver Order Status Update (Triggers Customer WhatsApp Notification)
+  if ((reqPath === '/api/driver/order/status' || reqPath === '/api/driver/status') && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const { orderId, newStatus, riderId, paymentUpdate } = parsed;
+        const result = deliveryDriverService ? deliveryDriverService.updateOrderStatus(orderId, newStatus, riderId, paymentUpdate) : { error: 'Driver service unavailable' };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // Direct Customer Notification Dispatch
+  if (reqPath === '/api/driver/notify' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const { event, orderId, riderId } = parsed;
+        const result = deliveryDriverService ? deliveryDriverService.updateOrderStatus(orderId, event, riderId) : { error: 'Driver service unavailable' };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // Dynamic PhonePe / GPay UPI Intent & QR Code
+  if (reqPath === '/api/driver/upi-intent' && req.method === 'GET') {
+    const orderId = queryParams.get('orderId') || 'WA-9401';
+    const amount = queryParams.get('amount');
+    const sampleOrder = {
+      orderId,
+      totalAmount: amount ? parseFloat(amount) : 1450.00
+    };
+    const upi = deliveryDriverService ? deliveryDriverService.generateUpiPaymentDetails(sampleOrder) : { error: 'Driver service unavailable' };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ success: true, orderId, ...upi }));
+    return;
+  }
+
+  // Record Cash / UPI Payment Collection
+  if (reqPath === '/api/driver/collect-payment' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const { orderId, paymentMethod, amount } = parsed;
+        const result = deliveryDriverService ? deliveryDriverService.recordPaymentCollection(orderId, paymentMethod, amount) : { error: 'Driver service unavailable' };
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(result));
       } catch (e) {
@@ -2933,7 +3032,9 @@ if (reqPath === '/api/pos/status') {
     '/signage': '/display/overhead-promos.html',
     '/scanner': '/store.html',
     '/procurement': '/procurement.html',
-    '/reconciliation': '/reconciliation.html'
+    '/reconciliation': '/reconciliation.html',
+    '/delivery-driver': '/delivery-driver.html',
+    '/driver': '/delivery-driver.html'
   };
 
   if (ROUTE_ALIASES[reqPath]) {

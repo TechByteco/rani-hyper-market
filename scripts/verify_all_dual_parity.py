@@ -22,6 +22,8 @@ pairs = [
     ('procurement.html', 'public/procurement.html'),
     ('services/rbacAuthService.js', 'api/services/rbacAuthService.js'),
     ('services/deliveryDispatchService.js', 'api/services/deliveryDispatchService.js'),
+    ('services/deliveryDriverService.js', 'api/services/deliveryDriverService.js'),
+    ('delivery-driver.html', 'public/delivery-driver.html'),
     ('catalog-search.worker.js', 'public/catalog-search.worker.js'),
     ('sw.js', 'public/sw.js'),
     ('audio/chime.mp3', 'public/audio/chime.mp3'),

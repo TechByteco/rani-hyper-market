@@ -127,6 +127,17 @@ try {
   }
 }
 
+let deliveryDriverService = null;
+try {
+  deliveryDriverService = require('./services/deliveryDriverService');
+} catch (e) {
+  try {
+    deliveryDriverService = require('../services/deliveryDriverService');
+  } catch (e2) {
+    console.warn('deliveryDriverService load notice:', e2.message);
+  }
+}
+
 // Cached JSON fallbacks for cloud environment
 function readLocalJson(filename, defaultValue = null) {
   const possiblePaths = [
@@ -999,6 +1010,83 @@ module.exports = async (req, res) => {
         const riderId = body.riderId || body.id;
         const newStatus = body.status || 'AVAILABLE';
         const result = deliveryDispatch ? deliveryDispatch.updateRiderStatus(riderId, newStatus) : { success: false };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(400, { success: false, error: e.message });
+      }
+    }
+
+    // =========================================================================
+    // 🛵 DELIVERY DRIVER & REAL-TIME COMMUNICATIONS ENDPOINTS
+    // =========================================================================
+
+    // Driver Fleet & Active Shifts
+    if (reqPath === '/api/driver/fleet' && req.method === 'GET') {
+      try {
+        const fleet = deliveryDriverService ? deliveryDriverService.getDriverFleet() : [];
+        return sendJson(200, { success: true, count: fleet.length, fleet });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // Driver Assigned Orders Queue
+    if (reqPath === '/api/driver/orders' && req.method === 'GET') {
+      try {
+        const riderId = queryParams.get('riderId') || 'RIDER-02';
+        const result = deliveryDriverService ? deliveryDriverService.getDriverOrders(riderId) : { error: 'Driver service unavailable' };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // Driver Order Status Update (Triggers Customer WhatsApp Notification)
+    if ((reqPath === '/api/driver/order/status' || reqPath === '/api/driver/status') && req.method === 'POST') {
+      try {
+        const body = await getBody();
+        const { orderId, newStatus, riderId, paymentUpdate } = body;
+        const result = deliveryDriverService ? deliveryDriverService.updateOrderStatus(orderId, newStatus, riderId, paymentUpdate) : { error: 'Driver service unavailable' };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(400, { success: false, error: e.message });
+      }
+    }
+
+    // Direct Customer Notification Dispatch
+    if (reqPath === '/api/driver/notify' && req.method === 'POST') {
+      try {
+        const body = await getBody();
+        const { event, orderId, riderId } = body;
+        const result = deliveryDriverService ? deliveryDriverService.updateOrderStatus(orderId, event, riderId) : { error: 'Driver service unavailable' };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(400, { success: false, error: e.message });
+      }
+    }
+
+    // Dynamic PhonePe / GPay UPI Intent & QR Code
+    if (reqPath === '/api/driver/upi-intent' && req.method === 'GET') {
+      try {
+        const orderId = queryParams.get('orderId') || 'WA-9401';
+        const amount = queryParams.get('amount');
+        const sampleOrder = {
+          orderId,
+          totalAmount: amount ? parseFloat(amount) : 1450.00
+        };
+        const upi = deliveryDriverService ? deliveryDriverService.generateUpiPaymentDetails(sampleOrder) : { error: 'Driver service unavailable' };
+        return sendJson(200, { success: true, orderId, ...upi });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // Record Cash / UPI Payment Collection
+    if (reqPath === '/api/driver/collect-payment' && req.method === 'POST') {
+      try {
+        const body = await getBody();
+        const { orderId, paymentMethod, amount } = body;
+        const result = deliveryDriverService ? deliveryDriverService.recordPaymentCollection(orderId, paymentMethod, amount) : { error: 'Driver service unavailable' };
         return sendJson(200, result);
       } catch (e) {
         return sendJson(400, { success: false, error: e.message });

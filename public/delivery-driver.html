@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="ta" class="h-full bg-slate-950">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Store Delivery Driver Portal — Rani Hyper Market</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛵</text></svg>">
+
+  <!-- Tailwind CSS & FontAwesome -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Noto+Sans+Tamil:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'Noto Sans Tamil', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              900: '#1e3a8a',
+              950: '#0f172a'
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .font-mono-num {
+      font-variant-numeric: tabular-nums;
+    }
+    /* Smooth custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body class="h-full text-slate-100 flex flex-col font-sans antialiased overflow-x-hidden selection:bg-blue-600 selection:text-white">
+
+  <!-- TOP APP BAR -->
+  <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-4 py-3 shrink-0 flex items-center justify-between shadow-lg">
+    <div class="flex items-center gap-2.5">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-lg font-black shadow-md shadow-blue-900/40">
+        <i class="fa-solid fa-motorcycle"></i>
+      </div>
+      <div>
+        <div class="flex items-center gap-1.5">
+          <h1 class="text-sm font-black text-white tracking-tight">RANI HYPER MARKET</h1>
+          <span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            DRIVER APP
+          </span>
+        </div>
+        <p class="text-[11px] text-slate-400 font-medium">Bodinayakanur • Quick Dark Store Dispatch</p>
+      </div>
+    </div>
+
+    <!-- Active Shift Status Badge -->
+    <div class="flex items-center gap-2">
+      <button type="button" onclick="toggleDutyStatus()" id="duty-btn" class="px-2.5 py-1.5 rounded-xl bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 text-[11px] font-bold flex items-center gap-1.5 transition active:scale-95 cursor-pointer shadow-xs">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span id="duty-label">ON DUTY</span>
+      </button>
+      <button type="button" onclick="refreshDriverOrders()" class="w-8 h-8 rounded-xl bg-slate-800 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center text-xs transition active:scale-90 cursor-pointer">
+        <i class="fa-solid fa-arrows-rotate" id="refresh-icon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN SCROLLABLE CONTAINER -->
+  <main class="flex-1 overflow-y-auto px-3.5 py-3.5 space-y-3.5 max-w-lg mx-auto w-full">
+
+    <!-- RIDER PROFILE SELECTOR CARD -->
+    <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950 border border-slate-800 rounded-3xl p-3.5 shadow-xl space-y-3">
+      <div class="flex items-center justify-between gap-2">
+        <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 flex items-center gap-1">
+          <i class="fa-solid fa-id-card-clip text-blue-400"></i>
+          Active Driver Profile
+        </span>
+        <span id="rider-rating" class="text-[11px] font-black text-amber-400 flex items-center gap-1">
+          <i class="fa-solid fa-star text-xs"></i> 4.95 Rating
+        </span>
+      </div>
+
+      <!-- Driver Switch Dropdown -->
+      <div>
+        <select id="rider-select" onchange="switchRider(this.value)" class="w-full px-3 py-2.5 bg-slate-800 border border-slate-700 rounded-2xl text-xs font-bold text-white focus:ring-2 focus:ring-blue-500 cursor-pointer">
+          <option value="RIDER-02">🛵 M. Manikandan (Honda Activa 6G • Ward 3)</option>
+          <option value="RIDER-01">🛵 K. Selvam (TVS XL Heavy Duty • Ward 1)</option>
+          <option value="RIDER-03">🛵 P. Vignesh (Hero Splendor Plus • Ward 7)</option>
+          <option value="RIDER-04">⚡ R. Karthik (Ather 450X EV • Ward 12)</option>
+        </select>
+      </div>
+
+      <!-- Active Driver Stats Ribbon -->
+      <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-800/80 text-xs">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-xs shrink-0">
+            <i class="fa-solid fa-gauge-high"></i>
+          </div>
+          <div class="truncate">
+            <span class="text-[10px] text-slate-400 block">Vehicle</span>
+            <strong id="rider-vehicle" class="text-slate-200 block text-[11px] truncate">Honda Activa 6G</strong>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xs shrink-0">
+            <i class="fa-solid fa-map-location-dot"></i>
+          </div>
+          <div class="truncate">
+            <span class="text-[10px] text-slate-400 block">Assigned Corridor</span>
+            <strong id="rider-corridor" class="text-slate-200 block text-[11px] truncate">Ward 3 (Siva Nagar)</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHIFT KPI OVERVIEW CARDS (4-COL) -->
+    <div class="grid grid-cols-4 gap-2 text-center">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-2">
+        <span class="text-[9px] font-bold text-slate-400 uppercase block">Stops</span>
+        <strong id="kpi-total-stops" class="text-base font-black text-white font-mono-num">0</strong>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-2">
+        <span class="text-[9px] font-bold text-amber-400 uppercase block">Pending</span>
+        <strong id="kpi-pending-stops" class="text-base font-black text-amber-400 font-mono-num">0</strong>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-2">
+        <span class="text-[9px] font-bold text-emerald-400 uppercase block">Delivered</span>
+        <strong id="kpi-delivered-stops" class="text-base font-black text-emerald-400 font-mono-num">0</strong>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-2">
+        <span class="text-[9px] font-bold text-blue-400 uppercase block">COD Due</span>
+        <strong id="kpi-cod-due" class="text-xs font-black text-blue-300 font-mono-num block truncate">₹0</strong>
+      </div>
+    </div>
+
+    <!-- ACTIVE BATCH MANIFEST BANNER -->
+    <div class="flex items-center justify-between px-3 py-2 bg-blue-950/40 border border-blue-500/30 rounded-2xl text-xs text-blue-200">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+        <span>Batch Manifest: <strong id="manifest-id" class="text-white font-mono">MNF-BODI-001</strong></span>
+      </div>
+      <button type="button" onclick="openMultiStopGoogleMaps()" class="text-blue-400 hover:text-blue-300 font-bold text-[11px] flex items-center gap-1 cursor-pointer">
+        <i class="fa-solid fa-map"></i>
+        <span>Full Route</span>
+      </button>
+    </div>
+
+    <!-- ORDER CARDS CONTAINER (DRIVER QUEUE) -->
+    <div class="space-y-3" id="orders-container">
+      <div class="p-8 text-center text-slate-500 text-xs">
+        <i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-blue-500"></i>
+        <p>Loading assigned delivery queue...</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- BOTTOM DRIVER ACTION DOCK -->
+  <footer class="sticky bottom-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-4 py-2.5 shrink-0 flex items-center justify-between text-xs max-w-lg mx-auto w-full">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center text-slate-400 text-sm">
+        <i class="fa-solid fa-store"></i>
+      </div>
+      <div class="text-[11px]">
+        <span class="text-slate-400 block">Hub Center:</span>
+        <strong class="text-slate-200 font-semibold">Main Road, Bodinayakanur</strong>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <a href="/online-orders" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 border border-slate-700">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Store Portal</span>
+      </a>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- 💳 DYNAMIC PHONEPE / GPAY UPI QR & PAYMENT MODAL                          -->
+  <!-- ========================================================================= -->
+  <div id="upi-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-slate-900 rounded-3xl max-w-sm w-full p-5 shadow-2xl border border-blue-500/40 space-y-4 my-auto text-slate-100">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-base font-black border border-emerald-500/30">
+            <i class="fa-solid fa-qrcode"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-white text-sm">Collect UPI / Cash</h3>
+            <p class="text-[11px] text-slate-400">Dynamic GPay &amp; PhonePe Intent</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeUpiModal()" class="text-slate-400 hover:text-white text-2xl font-bold leading-none cursor-pointer">&times;</button>
+      </div>
+
+      <!-- Payment Amount Highlight -->
+      <div class="text-center p-3 bg-gradient-to-b from-slate-800 to-slate-900 border border-slate-700 rounded-2xl space-y-0.5">
+        <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">Amount to Collect (COD)</span>
+        <div class="text-3xl font-black text-emerald-400 font-mono-num" id="upi-amount-display">₹0.00</div>
+        <p class="text-[11px] text-slate-300 font-medium" id="upi-order-display">Order #WA-0000</p>
+      </div>
+
+      <!-- Dynamic QR Code Card -->
+      <div class="p-4 bg-white rounded-2xl border-2 border-emerald-500 shadow-xl flex flex-col items-center justify-center space-y-2">
+        <img id="upi-qr-image" src="" alt="Dynamic UPI QR Code" class="w-48 h-48 object-contain">
+        <div class="text-center">
+          <span class="text-[10px] font-black uppercase text-slate-900 tracking-wider block">Scan with any UPI App</span>
+          <span class="text-[9px] font-mono text-slate-600 block">saalimin21@oksbi • Rani Hyper Market</span>
+        </div>
+      </div>
+
+      <!-- UPI App Deep Link Chooser Buttons -->
+      <div class="space-y-1.5">
+        <div class="grid grid-cols-3 gap-1.5">
+          <button type="button" onclick="openUpiApp('phonepe')" class="py-2 px-1 rounded-xl bg-purple-950/80 hover:bg-purple-900 text-purple-200 border border-purple-600/50 text-[10px] font-black flex items-center justify-center gap-1 transition active:scale-95 cursor-pointer">
+            <i class="fa-solid fa-mobile-screen"></i> PhonePe
+          </button>
+          <button type="button" onclick="openUpiApp('gpay')" class="py-2 px-1 rounded-xl bg-blue-950/80 hover:bg-blue-900 text-blue-200 border border-blue-600/50 text-[10px] font-black flex items-center justify-center gap-1 transition active:scale-95 cursor-pointer">
+            <i class="fa-brands fa-google-pay text-xs"></i> GPay
+          </button>
+          <button type="button" onclick="openUpiApp('paytm')" class="py-2 px-1 rounded-xl bg-sky-950/80 hover:bg-sky-900 text-sky-200 border border-sky-600/50 text-[10px] font-black flex items-center justify-center gap-1 transition active:scale-95 cursor-pointer">
+            <i class="fa-solid fa-wallet text-xs"></i> Paytm
+          </button>
+        </div>
+
+        <button type="button" onclick="openUpiApp('generic')" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-[11px] rounded-xl border border-slate-700 flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          <span>Open Native UPI Intent (All Apps)</span>
+        </button>
+      </div>
+
+      <!-- Driver Payment Confirmation Buttons -->
+      <div class="pt-2 border-t border-slate-800 space-y-2">
+        <button type="button" onclick="confirmPaymentCollected('CASH')" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs shadow-md transition active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer">
+          <i class="fa-solid fa-money-bill-wave"></i>
+          <span>Confirm Physical Cash Received (₹<span id="cash-btn-amt">0</span>)</span>
+        </button>
+        <button type="button" onclick="confirmPaymentCollected('UPI')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/30 font-bold text-xs transition active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer">
+          <i class="fa-solid fa-circle-check"></i>
+          <span>Confirm UPI Online Transfer Verified</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 💬 WHATSAPP CUSTOMER UPDATE NOTIFICATION MODAL                            -->
+  <!-- ========================================================================= -->
+  <div id="whatsapp-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-slate-900 rounded-3xl max-w-sm w-full p-5 shadow-2xl border border-emerald-500/40 space-y-4 my-auto text-slate-100">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-base font-black border border-emerald-500/30">
+            <i class="fa-brands fa-whatsapp text-lg"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-white text-sm">Customer WhatsApp Update</h3>
+            <p class="text-[11px] text-slate-400" id="wa-order-num">Order #WA-0000</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeWhatsAppModal()" class="text-slate-400 hover:text-white text-2xl font-bold leading-none cursor-pointer">&times;</button>
+      </div>
+
+      <!-- 3 Lifecycle Event Tabs -->
+      <div class="grid grid-cols-3 gap-1 bg-slate-800/80 p-1 rounded-2xl border border-slate-700/80 text-[10px] font-bold">
+        <button type="button" id="tab-ev-packed" onclick="selectWhatsAppEventTab('PACKED')" class="py-1.5 rounded-xl text-center transition">
+          1. Packed
+        </button>
+        <button type="button" id="tab-ev-out" onclick="selectWhatsAppEventTab('OUT_FOR_DELIVERY')" class="py-1.5 rounded-xl text-center transition">
+          2. Out
+        </button>
+        <button type="button" id="tab-ev-del" onclick="selectWhatsAppEventTab('DELIVERED')" class="py-1.5 rounded-xl text-center transition">
+          3. Delivered
+        </button>
+      </div>
+
+      <!-- Preview Bubble (WhatsApp Chat Style) -->
+      <div class="p-3.5 bg-[#0b141a] rounded-2xl border border-[#202c33] space-y-2 text-xs">
+        <div class="bg-[#005c4b] p-3 rounded-2xl rounded-tl-none text-[#e9edef] space-y-2 shadow">
+          <p id="wa-preview-text" class="whitespace-pre-wrap font-sans leading-relaxed text-[11px]"></p>
+          <div class="text-[9px] text-emerald-200 pt-1 border-t border-emerald-600/40 flex justify-between">
+            <span>Rani Hypermarket • Bodinayakanur</span>
+            <span>✓✓ Sent</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer Contact Details -->
+      <div class="text-[11px] text-slate-400 flex items-center justify-between px-1">
+        <span>Recipient: <strong id="wa-cust-name" class="text-slate-200">Customer</strong></span>
+        <span id="wa-cust-phone" class="font-mono text-slate-300">+91 98*** **223</span>
+      </div>
+
+      <!-- Dispatch Button -->
+      <div class="pt-1">
+        <button type="button" onclick="sendActiveWhatsAppUpdate()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs shadow-md transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+          <i class="fa-brands fa-whatsapp text-sm"></i>
+          <span>Send Customer Update on WhatsApp</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 transform -translate-y-4 max-w-sm w-full px-4">
+    <div class="bg-slate-900/95 border border-slate-700 text-white px-4 py-3 rounded-2xl shadow-2xl text-xs font-bold flex items-center gap-2.5 backdrop-blur-md" id="toast-inner">
+      <i class="fa-solid fa-circle-check text-emerald-400 text-sm" id="toast-icon"></i>
+      <span id="toast-msg">Notification message</span>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 🛵 CLIENT JAVASCRIPT CONTROLLER                                            -->
+  <!-- ========================================================================= -->
+  <script>
+    // Application State
+    let currentRiderId = 'RIDER-02'; // Default: M. Manikandan
+    let currentRider = null;
+    let currentOrders = [];
+    let activeOrderForModal = null;
+    let activeWhatsAppEvent = 'OUT_FOR_DELIVERY';
+    let isDutyActive = true;
+
+    // Initialize Driver Portal
+    window.addEventListener('DOMContentLoaded', () => {
+      // Check query param for riderId
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramRider = urlParams.get('riderId');
+      if (paramRider) {
+        currentRiderId = paramRider;
+        const sel = document.getElementById('rider-select');
+        if (sel) sel.value = currentRiderId;
+      }
+      refreshDriverOrders();
+    });
+
+    // Switch Selected Driver Profile
+    function switchRider(newRiderId) {
+      currentRiderId = newRiderId;
+      refreshDriverOrders();
+    }
+
+    // Toggle Driver On Duty / Off Duty
+    function toggleDutyStatus() {
+      isDutyActive = !isDutyActive;
+      const dutyBtn = document.getElementById('duty-btn');
+      const dutyLabel = document.getElementById('duty-label');
+      if (isDutyActive) {
+        dutyBtn.className = 'px-2.5 py-1.5 rounded-xl bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 text-[11px] font-bold flex items-center gap-1.5 transition active:scale-95 cursor-pointer shadow-xs';
+        dutyBtn.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>ON DUTY</span>';
+        showToast('✓ Shift Status: ON DUTY (Receiving drops)');
+      } else {
+        dutyBtn.className = 'px-2.5 py-1.5 rounded-xl bg-red-950/80 text-red-300 border border-red-500/40 text-[11px] font-bold flex items-center gap-1.5 transition active:scale-95 cursor-pointer shadow-xs';
+        dutyBtn.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-400"></span><span>ON BREAK</span>';
+        showToast('Shift Status: ON BREAK', 'info');
+      }
+    }
+
+    // Fetch Assigned Orders & Metrics for Current Rider
+    async function refreshDriverOrders() {
+      const icon = document.getElementById('refresh-icon');
+      if (icon) icon.classList.add('fa-spin');
+
+      try {
+        const res = await fetch(`/api/driver/orders?riderId=${currentRiderId}`);
+        const data = await res.json();
+
+        if (data.success) {
+          currentRider = data.rider;
+          currentOrders = data.orders || [];
+
+          renderDriverProfile(data);
+          renderKpis(data);
+          renderOrdersQueue(currentOrders);
+        } else {
+          showToast('Failed to load orders: ' + (data.error || 'Unknown error'), 'error');
+        }
+      } catch (err) {
+        console.error('Driver orders fetch error:', err);
+        showToast('Network error loading queue', 'error');
+      } finally {
+        if (icon) icon.classList.remove('fa-spin');
+      }
+    }
+
+    // Render Driver Profile Card Header
+    function renderDriverProfile(data) {
+      const r = data.rider;
+      if (!r) return;
+      document.getElementById('rider-vehicle').innerText = r.vehicle;
+      document.getElementById('rider-corridor').innerText = r.primaryCluster || 'Bodinayakanur';
+      document.getElementById('rider-rating').innerHTML = `<i class="fa-solid fa-star text-xs"></i> ${r.rating} Rating`;
+      document.getElementById('manifest-id').innerText = data.manifestId || 'MNF-BODI-001';
+    }
+
+    // Render 4-Col Shift KPIs
+    function renderKpis(data) {
+      document.getElementById('kpi-total-stops').innerText = data.totalAssignedOrders || 0;
+      document.getElementById('kpi-pending-stops').innerText = data.pendingDeliveriesCount || 0;
+      document.getElementById('kpi-delivered-stops').innerText = data.completedDeliveriesCount || 0;
+      document.getElementById('kpi-cod-due').innerText = '₹' + Math.round(data.codCashPendingInr || 0);
+    }
+
+    // Render Delivery Orders Queue
+    function renderOrdersQueue(orders) {
+      const container = document.getElementById('orders-container');
+      if (!container) return;
+
+      if (!orders || orders.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center bg-slate-900 border border-slate-800 rounded-3xl space-y-2">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mx-auto">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h3 class="font-black text-white text-sm">All Deliveries Completed!</h3>
+            <p class="text-xs text-slate-400">No pending drops assigned to your shift right now.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = orders.map((o, idx) => {
+        const isDelivered = o.orderStatus === 'DELIVERED';
+        const isOut = o.orderStatus === 'OUT_FOR_DELIVERY';
+        const isPacked = o.orderStatus === 'PACKED';
+
+        // Payment status badge
+        let paymentBadge = '';
+        if (o.paymentStatus === 'CASH_COLLECTED') {
+          paymentBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">✓ CASH COLLECTED: ₹' + o.totalAmount + '</span>';
+        } else if (o.paymentStatus === 'UPI_COLLECTED') {
+          paymentBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">✓ UPI RECEIVED: ₹' + o.totalAmount + '</span>';
+        } else if (o.isCod) {
+          paymentBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/30">💵 COD DUE: ₹' + o.totalAmount + '</span>';
+        } else {
+          paymentBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">💳 PAID ONLINE</span>';
+        }
+
+        // Status badge
+        let statusBadge = '';
+        if (isDelivered) {
+          statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">✅ DELIVERED</span>';
+        } else if (isOut) {
+          statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-500/20 text-blue-300 border border-blue-500/40 animate-pulse">🛵 OUT FOR DELIVERY</span>';
+        } else {
+          statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-purple-500/20 text-purple-300 border border-purple-500/40">📦 PACKED AT STORE</span>';
+        }
+
+        return `
+          <div class="bg-slate-900 border ${isDelivered ? 'border-slate-800 opacity-75' : isOut ? 'border-blue-500/60 shadow-lg shadow-blue-950/50' : 'border-slate-800'} rounded-3xl p-4 space-y-3 transition">
+            
+            <!-- Stop Header -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center font-black text-xs font-mono">
+                  #${o.stopSequence || (idx + 1)}
+                </span>
+                <strong class="text-sm font-black text-white font-mono">#${o.orderId}</strong>
+                ${statusBadge}
+              </div>
+              <div>${paymentBadge}</div>
+            </div>
+
+            <!-- Customer & Address Info -->
+            <div class="space-y-1">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-black text-white">${o.customerName}</span>
+                <span class="text-[11px] font-mono text-slate-400 font-bold flex items-center gap-1">
+                  <i class="fa-solid fa-lock text-[10px] text-slate-500"></i> ${o.maskedPhone}
+                </span>
+              </div>
+              <p class="text-xs text-slate-300 leading-snug">
+                📍 <b>${o.deliveryAddress}</b>
+              </p>
+              ${o.landmark ? `<span class="inline-block text-[11px] text-blue-300 font-medium">Landmark: ${o.landmark}</span>` : ''}
+              <div class="text-[11px] text-slate-400 flex items-center gap-2 pt-0.5">
+                <span>⚡ <b>${o.distanceKm} km</b> from store</span>
+                <span>•</span>
+                <span>⏱️ ~${o.etaMinutes} mins ETA</span>
+              </div>
+            </div>
+
+            <!-- Items Summary Accordion -->
+            <div class="bg-slate-800/60 p-2.5 rounded-xl border border-slate-700/60 text-xs space-y-1">
+              <div class="flex items-center justify-between text-slate-400 text-[11px] font-semibold">
+                <span>Items (${o.itemsCount} products)</span>
+                <span class="font-mono text-slate-300 font-bold">Total: ₹${o.totalAmount}</span>
+              </div>
+              <p class="text-[11px] text-slate-300 truncate">${o.itemsSummary}</p>
+            </div>
+
+            <!-- PRIMARY DRIVER ACTION TOOLBAR -->
+            <div class="grid grid-cols-3 gap-2 pt-1">
+              <!-- 1. Google Maps Navigation -->
+              <a href="${o.googleMapsNavigationUrl}" target="_blank" class="py-2.5 px-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-[11px] flex items-center justify-center gap-1.5 shadow-md shadow-blue-900/30 transition active:scale-95 text-center">
+                <i class="fa-solid fa-location-arrow text-xs"></i>
+                <span>Navigate</span>
+              </a>
+
+              <!-- 2. Call Customer (Masked VoIP/Dialer) -->
+              <a href="${o.callLink}" class="py-2.5 px-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-[11px] flex items-center justify-center gap-1.5 transition active:scale-95 text-center">
+                <i class="fa-solid fa-phone text-xs text-emerald-400"></i>
+                <span>Call Cust</span>
+              </a>
+
+              <!-- 3. WhatsApp Notification Preview/Trigger -->
+              <button type="button" onclick="openWhatsAppModal('${o.orderId}')" class="py-2.5 px-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 font-bold text-[11px] flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer text-center">
+                <i class="fa-brands fa-whatsapp text-sm"></i>
+                <span>WhatsApp</span>
+              </button>
+            </div>
+
+            <!-- PAYMENT & STATUS PROGRESSION BAR -->
+            <div class="pt-2 border-t border-slate-800 flex items-center gap-2 flex-wrap">
+              ${o.isCod && o.paymentStatus === 'PENDING_CASH' ? `
+                <button type="button" onclick="openUpiModal('${o.orderId}')" class="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition active:scale-95 cursor-pointer">
+                  <i class="fa-solid fa-qrcode"></i>
+                  <span>Collect ₹${o.totalAmount} (QR / Cash)</span>
+                </button>
+              ` : `
+                <button type="button" onclick="openUpiModal('${o.orderId}')" class="py-1.5 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[11px] flex items-center gap-1 border border-slate-700 cursor-pointer">
+                  <i class="fa-solid fa-qrcode text-emerald-400"></i>
+                  <span>UPI QR</span>
+                </button>
+              `}
+
+              <!-- Status Action Step Button -->
+              ${!isDelivered ? `
+                <button type="button" onclick="quickAdvanceStatus('${o.orderId}', '${isPacked ? 'OUT_FOR_DELIVERY' : 'DELIVERED'}')" class="py-2 px-3 rounded-xl ${isPacked ? 'bg-indigo-600 hover:bg-indigo-500 text-white' : 'bg-emerald-600 hover:bg-emerald-500 text-white'} font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition active:scale-95 cursor-pointer">
+                  <i class="fa-solid ${isPacked ? 'fa-motorcycle' : 'fa-check'}"></i>
+                  <span>${isPacked ? 'Start Delivery Trip' : 'Mark Delivered'}</span>
+                </button>
+              ` : `
+                <span class="text-xs text-emerald-400 font-bold flex items-center gap-1 ml-auto">
+                  <i class="fa-solid fa-circle-check"></i> Completed
+                </span>
+              `}
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Open Multi-Stop Google Maps Route for Entire Batch Manifest
+    function openMultiStopGoogleMaps() {
+      if (!currentOrders || currentOrders.length === 0) {
+        showToast('No active orders to route', 'info');
+        return;
+      }
+      const coordsStops = currentOrders.filter(o => o.lat && o.lng).map(o => `${o.lat},${o.lng}`);
+      const storeCoord = '10.0104,77.3496';
+      const url = `https://www.google.com/maps/dir/${storeCoord}/${coordsStops.join('/')}/${storeCoord}`;
+      window.open(url, '_blank');
+      showToast('Opening full batch multi-stop navigation...');
+    }
+
+    // Quick Advance Status (Packed -> Out for Delivery -> Delivered)
+    async function quickAdvanceStatus(orderId, newStatus) {
+      try {
+        const res = await fetch('/api/driver/order/status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            orderId,
+            newStatus,
+            riderId: currentRiderId
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✓ Order #${orderId} marked as ${newStatus}!`, 'success');
+          // Offer to send WhatsApp
+          if (data.notification && data.notification.whatsappUrl) {
+            setTimeout(() => {
+              if (confirm(`Send customer automated WhatsApp update for [${newStatus}]?`)) {
+                window.open(data.notification.whatsappUrl, '_blank');
+              }
+            }, 300);
+          }
+          await refreshDriverOrders();
+        } else {
+          showToast('Failed to update status: ' + data.error, 'error');
+        }
+      } catch (err) {
+        console.error('Status update error:', err);
+        showToast('Network error updating status', 'error');
+      }
+    }
+
+    // =========================================================================
+    // 💳 UPI QR MODAL CONTROLLER
+    // =========================================================================
+    function openUpiModal(orderId) {
+      const order = currentOrders.find(o => o.orderId === orderId);
+      if (!order) return;
+      activeOrderForModal = order;
+
+      const upi = order.upiPayment;
+      document.getElementById('upi-amount-display').innerText = '₹' + order.totalAmount.toFixed(2);
+      document.getElementById('cash-btn-amt').innerText = Math.round(order.totalAmount);
+      document.getElementById('upi-order-display').innerText = `Order #${order.orderId} • ${order.customerName}`;
+      document.getElementById('upi-qr-image').src = upi.qrCodeUrl;
+
+      document.getElementById('upi-modal').classList.remove('hidden');
+    }
+
+    function closeUpiModal() {
+      document.getElementById('upi-modal').classList.add('hidden');
+      activeOrderForModal = null;
+    }
+
+    function openUpiApp(appType) {
+      if (!activeOrderForModal) return;
+      const upi = activeOrderForModal.upiPayment;
+      let targetUrl = upi.upiIntentUrl;
+      if (appType === 'phonepe') targetUrl = upi.phonePeIntentUrl;
+      if (appType === 'gpay') targetUrl = upi.gPayIntentUrl;
+      if (appType === 'paytm') targetUrl = upi.paytmIntentUrl;
+
+      window.location.href = targetUrl;
+      showToast(`Opening ${appType.toUpperCase()} on phone...`);
+    }
+
+    async function confirmPaymentCollected(method) {
+      if (!activeOrderForModal) return;
+      const orderId = activeOrderForModal.orderId;
+      try {
+        const res = await fetch('/api/driver/collect-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            orderId,
+            paymentMethod: method,
+            amount: activeOrderForModal.totalAmount
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✓ Payment recorded as ${method} COLLECTED!`, 'success');
+          closeUpiModal();
+          await refreshDriverOrders();
+        } else {
+          showToast('Payment record error: ' + data.error, 'error');
+        }
+      } catch (e) {
+        showToast('Network error recording payment', 'error');
+      }
+    }
+
+    // =========================================================================
+    // 💬 WHATSAPP CUSTOMER NOTIFICATION MODAL CONTROLLER
+    // =========================================================================
+    function openWhatsAppModal(orderId) {
+      const order = currentOrders.find(o => o.orderId === orderId);
+      if (!order) return;
+      activeOrderForModal = order;
+
+      // Select default tab based on current status
+      activeWhatsAppEvent = order.orderStatus === 'PACKED' ? 'PACKED' : order.orderStatus === 'DELIVERED' ? 'DELIVERED' : 'OUT_FOR_DELIVERY';
+
+      document.getElementById('wa-order-num').innerText = `Order #${order.orderId}`;
+      document.getElementById('wa-cust-name').innerText = order.customerName;
+      document.getElementById('wa-cust-phone').innerText = order.maskedPhone;
+
+      selectWhatsAppEventTab(activeWhatsAppEvent);
+      document.getElementById('whatsapp-modal').classList.remove('hidden');
+    }
+
+    function closeWhatsAppModal() {
+      document.getElementById('whatsapp-modal').classList.add('hidden');
+      activeOrderForModal = null;
+    }
+
+    function selectWhatsAppEventTab(event) {
+      activeWhatsAppEvent = event;
+      const tabs = ['PACKED', 'OUT_FOR_DELIVERY', 'DELIVERED'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-ev-${t === 'PACKED' ? 'packed' : t === 'OUT_FOR_DELIVERY' ? 'out' : 'del'}`);
+        if (btn) {
+          if (t === event) {
+            btn.className = 'py-1.5 rounded-xl text-center transition bg-emerald-600 text-white font-black shadow-xs';
+          } else {
+            btn.className = 'py-1.5 rounded-xl text-center transition text-slate-400 hover:text-white font-bold';
+          }
+        }
+      });
+
+      renderWhatsAppPreviewText();
+    }
+
+    function renderWhatsAppPreviewText() {
+      if (!activeOrderForModal || !currentRider) return;
+      const order = activeOrderForModal;
+      const rider = currentRider;
+      const orderId = order.orderId;
+      const riderName = rider.name;
+      const etaMinutes = order.etaMinutes || 12;
+
+      let msgEng = '';
+      let msgTam = '';
+
+      if (activeWhatsAppEvent === 'PACKED') {
+        msgEng = `Your Rani Hypermarket order #${orderId} is packed and leaving the store.`;
+        msgTam = `வணக்கம்! உங்கள் ராணி ஹைப்பர் மார்க்கெட் ஆர்டர் #${orderId} பேக் செய்யப்பட்டு கடையிலிருந்து புறப்பட தயாராக உள்ளது.`;
+      } else if (activeWhatsAppEvent === 'OUT_FOR_DELIVERY') {
+        msgEng = `${riderName} is on his way to your doorstep. Estimated arrival: ${etaMinutes} minutes.`;
+        msgTam = `வணக்கம்! ${riderName} உங்கள் வீட்டிற்கு டெலிவரி செய்ய புறப்பட்டுவிட்டார். வரும் நேரம்: ${etaMinutes} நிமிடங்கள்.`;
+      } else if (activeWhatsAppEvent === 'DELIVERED') {
+        msgEng = `Delivered! Thank you for supporting your local Bodinayakanur supermarket.`;
+        msgTam = `டெலிவரி செய்யப்பட்டது! உங்கள் உள்ளூர் போடிநாயக்கனூர் ராணி ஹைப்பர் மார்க்கெட்டை ஆதரித்ததற்கு மனமார்ந்த நன்றி.`;
+      }
+
+      const fullText = 
+`🛒 *RANI HYPER MARKET — BODINAYAKANUR*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${msgEng}
+
+${msgTam}
+
+📦 *Order ID:* #${orderId}
+🛵 *Delivery Boy:* ${riderName} (${rider.phone})
+${activeWhatsAppEvent === 'DELIVERED' ? '🧾 *E-Bill Link:* https://rani-hyper-market.vercel.app/orders.html?inv=' + orderId : '⏱️ *SLA:* 30-Minute Dark Store Express'}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+_Main Road, Bodinayakanur • 77088 34547_`;
+
+      document.getElementById('wa-preview-text').innerText = fullText;
+    }
+
+    function sendActiveWhatsAppUpdate() {
+      if (!activeOrderForModal) return;
+      const order = activeOrderForModal;
+      const fullText = document.getElementById('wa-preview-text').innerText;
+      const cleanPhone = (order.customerPhone || '').replace(/[^\d]/g, '');
+      const targetPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+      const url = `https://wa.me/${targetPhone}?text=${encodeURIComponent(fullText)}`;
+
+      window.open(url, '_blank');
+      showToast('✓ WhatsApp dispatch link generated!');
+      closeWhatsAppModal();
+    }
+
+    // Toast Notification Display Helper
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      const toastIcon = document.getElementById('toast-icon');
+      if (!toast || !toastMsg) return;
+
+      toastMsg.innerText = msg;
+      if (type === 'error') {
+        toastIcon.className = 'fa-solid fa-triangle-exclamation text-red-400 text-sm';
+      } else if (type === 'info') {
+        toastIcon.className = 'fa-solid fa-circle-info text-blue-400 text-sm';
+      } else {
+        toastIcon.className = 'fa-solid fa-circle-check text-emerald-400 text-sm';
+      }
+
+      toast.classList.remove('opacity-0', '-translate-y-4');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-4');
+      }, 3500);
+    }
+  </script>
+
+</body>
+</html>

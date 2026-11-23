@@ -138,6 +138,17 @@ try {
   }
 }
 
+let competitiveIntelligenceService = null;
+try {
+  competitiveIntelligenceService = require('./services/competitiveIntelligenceService');
+} catch (e) {
+  try {
+    competitiveIntelligenceService = require('../services/competitiveIntelligenceService');
+  } catch (e2) {
+    console.warn('competitiveIntelligenceService load notice:', e2.message);
+  }
+}
+
 // Cached JSON fallbacks for cloud environment
 function readLocalJson(filename, defaultValue = null) {
   const possiblePaths = [
@@ -1090,6 +1101,51 @@ module.exports = async (req, res) => {
         return sendJson(200, result);
       } catch (e) {
         return sendJson(400, { success: false, error: e.message });
+      }
+    }
+
+    // =========================================================================
+    // ⚡ QUICK-COMMERCE COMPETITIVE INTELLIGENCE & PRICE RADAR ENDPOINTS
+    // =========================================================================
+
+    // Regional Price Radar Sampling (50 Staples)
+    if (reqPath === '/api/competitive/radar' && req.method === 'GET') {
+      try {
+        const radar = competitiveIntelligenceService ? competitiveIntelligenceService.sampleCompetitorRadar() : { error: 'Competitive service unavailable' };
+        return sendJson(200, radar);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // Comparative Social Media Banners (Cheaper by >= 8%)
+    if (reqPath === '/api/competitive/banners' && req.method === 'GET') {
+      try {
+        const banners = competitiveIntelligenceService ? competitiveIntelligenceService.getComparativeSocialBanners() : { error: 'Competitive service unavailable' };
+        return sendJson(200, banners);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // Visual SVG Comparative Banner Image Generator
+    if (reqPath === '/api/competitive/banner-image' && req.method === 'GET') {
+      try {
+        const sku = queryParams.get('sku') || 'OIL-GOLD-1L';
+        const svg = competitiveIntelligenceService ? competitiveIntelligenceService.renderComparativeBannerSvg(sku) : '<svg><text>Service Unavailable</text></svg>';
+        return sendHtml(200, svg, { 'Content-Type': 'image/svg+xml', 'Cache-Control': 'public, max-age=3600' });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // Trigger Immediate Regional Quotes Resample
+    if (reqPath === '/api/competitive/refresh' && (req.method === 'POST' || req.method === 'GET')) {
+      try {
+        const radar = competitiveIntelligenceService ? competitiveIntelligenceService.sampleCompetitorRadar() : { error: 'Competitive service unavailable' };
+        return sendJson(200, { success: true, message: 'Price radar refreshed with latest regional quotes', ...radar });
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
       }
     }
 

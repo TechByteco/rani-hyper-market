@@ -72,6 +72,13 @@ try {
   console.warn('deliveryDriverService load notice:', e.message);
 }
 
+let competitiveIntelligenceService = null;
+try {
+  competitiveIntelligenceService = require('./services/competitiveIntelligenceService');
+} catch (e) {
+  console.warn('competitiveIntelligenceService load notice:', e.message);
+}
+
 const server = http.createServer((req, res) => {
   // CORS & Universal Web Security Headers (OWASP Top 10 Standards)
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -1192,6 +1199,43 @@ const server = http.createServer((req, res) => {
         res.end(JSON.stringify({ success: false, error: e.message }));
       }
     });
+    return;
+  }
+
+  // =========================================================================
+  // ⚡ QUICK-COMMERCE COMPETITIVE INTELLIGENCE & PRICE RADAR ENDPOINTS
+  // =========================================================================
+
+  // Regional Price Radar Sampling (50 Staples)
+  if (reqPath === '/api/competitive/radar' && req.method === 'GET') {
+    const radar = competitiveIntelligenceService ? competitiveIntelligenceService.sampleCompetitorRadar() : { error: 'Competitive service unavailable' };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(radar));
+    return;
+  }
+
+  // Comparative Social Media Banners (Cheaper by >= 8%)
+  if (reqPath === '/api/competitive/banners' && req.method === 'GET') {
+    const banners = competitiveIntelligenceService ? competitiveIntelligenceService.getComparativeSocialBanners() : { error: 'Competitive service unavailable' };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(banners));
+    return;
+  }
+
+  // Visual SVG Comparative Banner Image Generator
+  if (reqPath === '/api/competitive/banner-image' && req.method === 'GET') {
+    const sku = queryParams.get('sku') || 'OIL-GOLD-1L';
+    const svg = competitiveIntelligenceService ? competitiveIntelligenceService.renderComparativeBannerSvg(sku) : '<svg><text>Service Unavailable</text></svg>';
+    res.writeHead(200, { 'Content-Type': 'image/svg+xml', 'Cache-Control': 'public, max-age=3600' });
+    res.end(svg);
+    return;
+  }
+
+  // Trigger Immediate Regional Quotes Resample
+  if (reqPath === '/api/competitive/refresh' && (req.method === 'POST' || req.method === 'GET')) {
+    const radar = competitiveIntelligenceService ? competitiveIntelligenceService.sampleCompetitorRadar() : { error: 'Competitive service unavailable' };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ success: true, message: 'Price radar refreshed with latest regional quotes', ...radar }));
     return;
   }
 

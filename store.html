@@ -1538,7 +1538,99 @@
       </div>
     </section>
 
-    
+    <!-- ⚡ REGIONAL PRICE MONITORING RADAR: RANI HYPER MARKET VS QUICK-COMMERCE (ZEPTO / BLINKIT / INSTAMART) -->
+    <section class="max-w-7xl mx-auto w-full px-3 sm:px-6 mb-7" id="quick-commerce-radar-section">
+      <div class="bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 border border-blue-500/40 rounded-3xl p-4 sm:p-6 shadow-2xl text-white relative overflow-hidden">
+        
+        <!-- Header & Live Ticker -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5 shadow-xs">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Theni District Price Radar Active
+              </span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                ⚡ Zepto • Blinkit • Instamart Monitored
+              </span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                💰 14.2% Avg Basket Savings
+              </span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                🏆 48 / 50 Staples Cheaper
+              </span>
+            </div>
+            <h3 class="text-lg sm:text-xl font-black text-white flex items-center gap-2">
+              <i class="fa-solid fa-radar text-blue-400 text-xl"></i>
+              <span>Quick-Commerce Price Radar: 50 Daily Kitchen Staples</span>
+            </h3>
+            <p class="text-xs text-blue-200/80 max-w-3xl leading-relaxed">
+              "Why pay ₹145 on delivery apps when Bodinayakanur Rani Hyper Market delivers fresh at ₹128? Support your local retailer and save ₹17 per liter!"
+            </p>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="flex items-center gap-2 shrink-0">
+            <button type="button" onclick="refreshRadarQuotes()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+              <i class="fa-solid fa-arrows-rotate" id="radar-refresh-icon"></i>
+              <span>Refresh Quotes</span>
+            </button>
+            <button type="button" onclick="openComparativeBannerModal('OIL-GOLD-1L')" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold text-xs flex items-center gap-1.5 shadow-md shadow-blue-900/30 transition active:scale-95 cursor-pointer">
+              <i class="fa-solid fa-bullhorn"></i>
+              <span>Social Ad Banner</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Filter Tabs -->
+        <div class="flex items-center gap-1.5 overflow-x-auto py-3 no-scrollbar shrink-0 text-xs font-bold border-b border-slate-800/80">
+          <button type="button" onclick="filterRadarCategory('ALL')" id="rf-tab-all" class="px-3 py-1.5 rounded-xl bg-blue-600 text-white whitespace-nowrap transition cursor-pointer shadow-xs">
+            All 50 Staples
+          </button>
+          <button type="button" onclick="filterRadarCategory('Edible Oils & Ghee')" id="rf-tab-oils" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap transition cursor-pointer">
+            Edible Oils &amp; Ghee
+          </button>
+          <button type="button" onclick="filterRadarCategory('Atta, Rice & Grains')" id="rf-tab-grains" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap transition cursor-pointer">
+            Atta, Rice &amp; Grains
+          </button>
+          <button type="button" onclick="filterRadarCategory('Pulses & Dals')" id="rf-tab-dals" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap transition cursor-pointer">
+            Pulses, Dals &amp; Sugar
+          </button>
+          <button type="button" onclick="filterRadarCategory('Spices & Masalas')" id="rf-tab-spices" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap transition cursor-pointer">
+            Spices &amp; Masalas
+          </button>
+          <button type="button" onclick="filterRadarCategory('Beverages & Dairy')" id="rf-tab-bev" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap transition cursor-pointer">
+            Beverages, Dairy &amp; Snacks
+          </button>
+          <button type="button" onclick="filterRadarCategory('Home & Personal Care')" id="rf-tab-care" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap transition cursor-pointer">
+            Home &amp; Personal Care
+          </button>
+        </div>
+
+        <!-- Radar Commodities Grid (Populated via JS) -->
+        <div id="radar-commodities-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 pt-4">
+          <div class="col-span-full p-8 text-center text-slate-400 text-xs">
+            <i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-blue-400"></i>
+            <p>Loading Theni quick-commerce competitive price radar...</p>
+          </div>
+        </div>
+
+        <!-- Store Advantage Summary Footer -->
+        <div class="mt-4 pt-3 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span>Price Radar verified against regional dark store app catalogs in Theni District (2026).</span>
+          </div>
+          <div class="flex items-center gap-3 font-semibold text-slate-300">
+            <span>⚡ 30-Min Express Delivery</span>
+            <span>•</span>
+            <span>🛍️ No App Surcharges</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
     <!-- BRANDS YOU LOVE (LIVELY INFINITE MOVING MARQUEE - NATIONAL HYPER MART STYLE) -->
     <section class="max-w-7xl mx-auto w-full px-3 sm:px-6 mb-7" id="brands-section">
       <div class="glass p-5 sm:p-6 rounded-3xl shadow-xl border border-white/95">
@@ -7158,9 +7250,223 @@
       setInterval(tick, 1000);
     }
 
-    // Initialize fresh markdowns on page load
+    // ⚡ QUICK-COMMERCE PRICE RADAR CLIENT CONTROLLER
+    let radarCommodities = [];
+    let activeRadarCategory = 'ALL';
+    let currentBannerSku = 'OIL-GOLD-1L';
+
+    async function loadCompetitiveRadar() {
+      try {
+        const res = await fetch('/api/competitive/radar');
+        const data = await res.json();
+        if (data.success && data.items) {
+          radarCommodities = data.items;
+          renderRadarCommodities();
+        }
+      } catch (e) {
+        console.error('Radar loading error:', e);
+      }
+    }
+
+    async function refreshRadarQuotes() {
+      const icon = document.getElementById('radar-refresh-icon');
+      if (icon) icon.classList.add('fa-spin');
+      try {
+        const res = await fetch('/api/competitive/refresh', { method: 'POST' });
+        const data = await res.json();
+        if (data.success && data.items) {
+          radarCommodities = data.items;
+          renderRadarCommodities();
+          if (typeof showToast === 'function') {
+            showToast('✓ Price radar quotes refreshed with live Theni district rates!');
+          }
+        }
+      } catch (e) {
+        console.error('Refresh quotes error:', e);
+      } finally {
+        if (icon) icon.classList.remove('fa-spin');
+      }
+    }
+
+    function filterRadarCategory(category) {
+      activeRadarCategory = category;
+      const tabMap = {
+        'ALL': 'rf-tab-all',
+        'Edible Oils & Ghee': 'rf-tab-oils',
+        'Atta, Rice & Grains': 'rf-tab-grains',
+        'Pulses & Dals': 'rf-tab-dals',
+        'Spices & Masalas': 'rf-tab-spices',
+        'Beverages & Dairy': 'rf-tab-bev',
+        'Home & Personal Care': 'rf-tab-care'
+      };
+
+      Object.keys(tabMap).forEach(k => {
+        const btn = document.getElementById(tabMap[k]);
+        if (btn) {
+          if (k === category) {
+            btn.className = 'px-3 py-1.5 rounded-xl bg-blue-600 text-white whitespace-nowrap transition cursor-pointer shadow-xs';
+          } else {
+            btn.className = 'px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap transition cursor-pointer';
+          }
+        }
+      });
+
+      renderRadarCommodities();
+    }
+
+    function renderRadarCommodities() {
+      const container = document.getElementById('radar-commodities-grid');
+      if (!container) return;
+
+      const filtered = activeRadarCategory === 'ALL'
+        ? radarCommodities
+        : radarCommodities.filter(it => it.category === activeRadarCategory);
+
+      if (!filtered || filtered.length === 0) {
+        container.innerHTML = '<div class="col-span-full py-8 text-center text-slate-400 text-xs">No commodities found in this category.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(it => {
+        const is8Pct = it.isCheaperBy8Pct;
+        const diff = Math.round(it.savingsInr);
+        const rani = Math.round(it.raniPrice);
+        const comp = Math.round(it.competitorPrice);
+
+        return `
+          <div class="bg-slate-900 border ${is8Pct ? 'border-emerald-500/40 shadow-lg shadow-emerald-950/40' : 'border-slate-800'} rounded-2xl p-3.5 flex flex-col justify-between space-y-2.5 transition hover:border-blue-400/60">
+            
+            <!-- Top Tag & Category -->
+            <div class="flex items-center justify-between gap-1">
+              <span class="text-[9px] font-black uppercase tracking-wider text-slate-400 truncate">${it.category}</span>
+              ${is8Pct ? `
+                <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
+                  ⚡ Save ₹${diff} (${it.priceDeltaPct}%)
+                </span>
+              ` : `
+                <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-500/10 text-blue-300 shrink-0">
+                  Save ₹${diff}
+                </span>
+              `}
+            </div>
+
+            <!-- Title & Pack -->
+            <div>
+              <h4 class="font-black text-white text-xs line-clamp-1">${it.name}</h4>
+              <p class="text-[10px] text-slate-400 truncate">${it.tamilName} • ${it.unit}</p>
+            </div>
+
+            <!-- Price Comparison Arena -->
+            <div class="p-2 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1">
+              <div class="flex items-baseline justify-between">
+                <div>
+                  <span class="text-[9px] text-slate-400 block font-semibold">Delivery Apps</span>
+                  <span class="text-xs font-bold text-red-400 line-through">₹${comp}</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[9px] text-emerald-400 block font-black uppercase tracking-wider">Rani Hyper</span>
+                  <span class="text-base font-black text-emerald-400">₹${rani}</span>
+                </div>
+              </div>
+              <div class="text-[9px] text-slate-500 flex items-center justify-between border-t border-slate-800/80 pt-1">
+                <span>Z: ₹${Math.round(it.competitorBreakdown.zepto)}</span>
+                <span>B: ₹${Math.round(it.competitorBreakdown.blinkit)}</span>
+                <span>I: ₹${Math.round(it.competitorBreakdown.instamart)}</span>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-2 gap-1.5 pt-0.5">
+              <button type="button" onclick="addRadarItemToCart('${it.sku}')" class="py-2 px-2 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-[11px] rounded-xl flex items-center justify-center gap-1 shadow-xs transition active:scale-95 cursor-pointer">
+                <i class="fa-solid fa-cart-plus text-[10px]"></i>
+                <span>Add ₹${rani}</span>
+              </button>
+              ${is8Pct ? `
+                <button type="button" onclick="openComparativeBannerModal('${it.sku}')" class="py-2 px-2 bg-slate-800 hover:bg-slate-700 text-blue-300 font-bold text-[11px] rounded-xl border border-slate-700 flex items-center justify-center gap-1 transition active:scale-95 cursor-pointer">
+                  <i class="fa-solid fa-bullhorn text-[10px]"></i>
+                  <span>Ad Copy</span>
+                </button>
+              ` : `
+                <button type="button" onclick="openComparativeBannerModal('${it.sku}')" class="py-2 px-2 bg-slate-800 hover:bg-slate-700 text-slate-400 font-bold text-[11px] rounded-xl border border-slate-700 flex items-center justify-center gap-1 transition active:scale-95 cursor-pointer">
+                  <i class="fa-solid fa-share-nodes text-[10px]"></i>
+                  <span>Compare</span>
+                </button>
+              `}
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    function addRadarItemToCart(sku) {
+      const item = (radarCommodities || []).find(it => it.sku === sku);
+      if (!item) return;
+
+      const existing = cart.find(x => String(x.id) === String(item.sku));
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          id: item.sku,
+          title: item.name,
+          price: item.raniPrice,
+          mrp: item.competitorPrice || item.mrp,
+          quantity: 1,
+          unit: item.unit,
+          image_url: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=300&q=80',
+          is_radar_staple: true
+        });
+      }
+      if (typeof renderCart === 'function') renderCart();
+      if (typeof updateCartBadge === 'function') updateCartBadge();
+      if (typeof showToast === 'function') {
+        showToast(`⚡ Added ${item.name} at ₹${item.raniPrice}! (Saved ₹${Math.round(item.savingsInr)})`);
+      } else {
+        alert(`⚡ Added ${item.name} at ₹${item.raniPrice}! (Saved ₹${Math.round(item.savingsInr)})`);
+      }
+    }
+
+    function openComparativeBannerModal(sku) {
+      const item = (radarCommodities || []).find(it => it.sku === sku) || radarCommodities[0];
+      if (!item) return;
+      currentBannerSku = item.sku;
+
+      const comp = Math.round(item.competitorPrice);
+      const rani = Math.round(item.raniPrice);
+      const diff = Math.round(item.savingsInr);
+      const uLabel = item.unitLabel || 'unit';
+
+      const eng = item.comparativeSocialBanner?.englishText || `Why pay ₹${comp} on delivery apps when Bodinayakanur Rani Hyper Market delivers fresh at ₹${rani}? Support your local retailer and save ₹${diff} per ${uLabel}!`;
+      const tam = item.comparativeSocialBanner?.tamilText || `டெலிவரி ஆப்ஸில் ₹${comp} ஏன் கொடுக்க வேண்டும்? போடிநாயக்கனூர் ராணி ஹைப்பர் மார்க்கெட் வீட்டில் இருந்தபடியே ₹${rani}-க்கு தருகிறது! உங்கள் உள்ளூர் கடையை ஆதரித்து ${uLabel}-க்கு ₹${diff} மிச்சப்படுத்துங்கள்!`;
+
+      document.getElementById('comp-banner-img').src = `/api/competitive/banner-image?sku=${item.sku}`;
+      document.getElementById('comp-copy-eng').innerText = eng;
+      document.getElementById('comp-copy-tam').innerText = tam;
+
+      document.getElementById('comparative-banner-modal').classList.remove('hidden');
+    }
+
+    function closeComparativeBannerModal() {
+      document.getElementById('comparative-banner-modal').classList.add('hidden');
+    }
+
+    function shareComparativeBannerWhatsApp() {
+      const item = (radarCommodities || []).find(it => it.sku === currentBannerSku);
+      const eng = document.getElementById('comp-copy-eng').innerText;
+      const tam = document.getElementById('comp-copy-tam').innerText;
+      const msg = `🔥 *LOCAL SUPERMARKET SAVINGS ALERT!*\n\n${eng}\n\n${tam}\n\n🛒 Order Online: https://rani-hyper-market.vercel.app/store.html\n📍 Main Road, Bodinayakanur • 77088 34547`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function openComparativeBannerFull() {
+      window.open(`/api/competitive/banner-image?sku=${currentBannerSku}`, '_blank');
+    }
+
+    // Initialize fresh markdowns and price radar on page load
     document.addEventListener('DOMContentLoaded', function() {
       loadFreshMarkdowns();
+      loadCompetitiveRadar();
     });
 
 </script>
@@ -7221,6 +7527,56 @@
         </p>
       </div>
     </div>
+
+  <!-- 📢 COMPARATIVE SOCIAL MEDIA BANNER MODAL (>= 8% CHEAPER) -->
+  <div id="comparative-banner-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+    <div class="bg-slate-900 border border-blue-500/40 rounded-3xl p-5 sm:p-6 w-full max-w-lg shadow-2xl space-y-4 my-auto text-slate-100">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-base font-black border border-blue-500/30">
+            <i class="fa-solid fa-bullhorn"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-white text-sm">Comparative Social Media Banner</h3>
+            <p class="text-[11px] text-slate-400">Auto-drafted when Rani is &ge; 8% cheaper</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeComparativeBannerModal()" class="text-slate-400 hover:text-white text-2xl font-bold leading-none cursor-pointer">&times;</button>
+      </div>
+
+      <!-- Live SVG Poster Preview -->
+      <div class="rounded-2xl overflow-hidden border border-slate-700 bg-slate-950 flex items-center justify-center p-2 shadow-lg">
+        <img id="comp-banner-img" src="/api/competitive/banner-image?sku=OIL-GOLD-1L" alt="Comparative Banner" class="w-full h-auto max-h-[280px] object-contain rounded-xl">
+      </div>
+
+      <!-- English & Tamil Social Copy Box -->
+      <div class="p-3.5 bg-slate-800/80 rounded-2xl border border-slate-700 space-y-2 text-xs">
+        <div class="space-y-1">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400 block">Verified English Copy:</span>
+          <p id="comp-copy-eng" class="text-white font-medium leading-relaxed"></p>
+        </div>
+        <div class="space-y-1 pt-1.5 border-t border-slate-700">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 block">Tamil Dialect Copy (போடி வட்டாரம்):</span>
+          <p id="comp-copy-tam" class="text-slate-200 font-medium leading-relaxed"></p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <button type="button" onclick="shareComparativeBannerWhatsApp()" class="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition active:scale-95 cursor-pointer">
+          <i class="fa-brands fa-whatsapp text-sm"></i>
+          <span>Share on WhatsApp</span>
+        </button>
+        <button type="button" onclick="openComparativeBannerFull()" class="py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition active:scale-95 cursor-pointer">
+          <i class="fa-solid fa-download"></i>
+          <span>Download Graphic</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
 
 </body>
 </html>

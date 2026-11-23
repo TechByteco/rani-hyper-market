@@ -27,7 +27,8 @@ pairs = [
     ('catalog-search.worker.js', 'public/catalog-search.worker.js'),
     ('sw.js', 'public/sw.js'),
     ('audio/chime.mp3', 'public/audio/chime.mp3'),
-    ('store_upgrade_module.js', 'public/store_upgrade_module.js')
+    ('store_upgrade_module.js', 'public/store_upgrade_module.js'),
+    ('services/competitiveIntelligenceService.js', 'api/services/competitiveIntelligenceService.js')
 ]
 
 all_ok = True

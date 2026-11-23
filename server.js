@@ -100,6 +100,13 @@ try {
   console.warn('consortiumProcurementService load notice:', e.message);
 }
 
+let saasOnboardingService = null;
+try {
+  saasOnboardingService = require('./services/saasOnboardingService');
+} catch (e) {
+  console.warn('saasOnboardingService load notice:', e.message);
+}
+
 const server = http.createServer((req, res) => {
   // CORS & Universal Web Security Headers (OWASP Top 10 Standards)
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -1461,6 +1468,72 @@ const server = http.createServer((req, res) => {
   // 4. Net Profit Margin Improvement per Tenant Store
   if ((reqPath === '/api/consortium/margins' || reqPath === '/api/consortium/profit-improvement') && req.method === 'GET') {
     const data = consortiumService ? consortiumService.getTenantProfitMarginImprovements() : { error: 'Service unavailable' };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(data));
+    return;
+  }
+
+  // ============================================================
+  // SNS RETAIL OS SAAS: AUTOMATED SELF-SERVICE ONBOARDING ENGINE
+  // ============================================================
+
+  // 1. Onboarding Prerequisites & Available Configurations
+  if (reqPath === '/api/onboard/prerequisites' && req.method === 'GET') {
+    const data = saasOnboardingService ? saasOnboardingService.getOnboardingPrerequisites() : { error: 'Service unavailable' };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(data));
+    return;
+  }
+
+  // 2. Auto-Map Legacy POS Inventory Columns
+  if ((reqPath === '/api/onboard/map-columns' || reqPath === '/api/onboard/auto-map') && req.method === 'POST') {
+    let bodyData = '';
+    req.on('data', chunk => { bodyData += chunk; });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(bodyData || '{}');
+        const headers = payload.headers || ['Item Description', 'Barcode', 'MRP', 'Purchase Rate', 'Current Stock', 'Category'];
+        const sampleRows = payload.sampleRows || [];
+        const result = saasOnboardingService ? saasOnboardingService.autoMapLegacyPosColumns(headers, sampleRows) : { error: 'Service unavailable' };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // 3. Provision Autonomous Store Instance
+  if (reqPath === '/api/onboard/provision' && req.method === 'POST') {
+    let bodyData = '';
+    req.on('data', chunk => { bodyData += chunk; });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(bodyData || '{}');
+        const result = saasOnboardingService ? saasOnboardingService.provisionSaaSInstance(payload) : { error: 'Service unavailable' };
+        res.writeHead(result.success ? 201 : 400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // 4. List Provisioned SaaS Instances
+  if (reqPath === '/api/onboard/instances' && req.method === 'GET') {
+    const data = saasOnboardingService ? saasOnboardingService.getProvisionedInstances() : { error: 'Service unavailable' };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(data));
+    return;
+  }
+
+  // 5. Developer Webhook Specifications
+  if (reqPath === '/api/onboard/webhooks' && req.method === 'GET') {
+    const data = saasOnboardingService ? saasOnboardingService.getWebhookSpecifications() : { error: 'Service unavailable' };
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(data));
     return;

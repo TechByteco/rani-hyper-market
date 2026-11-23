@@ -182,6 +182,17 @@ try {
   }
 }
 
+let saasOnboardingService = null;
+try {
+  saasOnboardingService = require('./services/saasOnboardingService');
+} catch (e) {
+  try {
+    saasOnboardingService = require('../services/saasOnboardingService');
+  } catch (e2) {
+    console.warn('saasOnboardingService load notice:', e2.message);
+  }
+}
+
 // Cached JSON fallbacks for cloud environment
 function readLocalJson(filename, defaultValue = null) {
   const possiblePaths = [
@@ -1378,6 +1389,64 @@ module.exports = async (req, res) => {
     if ((reqPath === '/api/consortium/margins' || reqPath === '/api/consortium/profit-improvement') && req.method === 'GET') {
       try {
         const data = consortiumService ? consortiumService.getTenantProfitMarginImprovements() : { error: 'Service unavailable' };
+        return sendJson(200, data);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // ============================================================
+    // SNS RETAIL OS SAAS: AUTOMATED SELF-SERVICE ONBOARDING ENGINE
+    // ============================================================
+
+    // 1. Onboarding Prerequisites & Available Configurations
+    if (reqPath === '/api/onboard/prerequisites' && req.method === 'GET') {
+      try {
+        const data = saasOnboardingService ? saasOnboardingService.getOnboardingPrerequisites() : { error: 'Service unavailable' };
+        return sendJson(200, data);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // 2. Auto-Map Legacy POS Inventory Columns
+    if ((reqPath === '/api/onboard/map-columns' || reqPath === '/api/onboard/auto-map') && req.method === 'POST') {
+      try {
+        const payload = (typeof req.body === 'object' && req.body) ? req.body : {};
+        const headers = payload.headers || ['Item Description', 'Barcode', 'MRP', 'Purchase Rate', 'Current Stock', 'Category'];
+        const sampleRows = payload.sampleRows || [];
+        const result = saasOnboardingService ? saasOnboardingService.autoMapLegacyPosColumns(headers, sampleRows) : { error: 'Service unavailable' };
+        return sendJson(200, result);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // 3. Provision Autonomous Store Instance
+    if (reqPath === '/api/onboard/provision' && req.method === 'POST') {
+      try {
+        const payload = (typeof req.body === 'object' && req.body) ? req.body : {};
+        const result = saasOnboardingService ? saasOnboardingService.provisionSaaSInstance(payload) : { error: 'Service unavailable' };
+        return sendJson(result.success ? 201 : 400, result);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // 4. List Provisioned SaaS Instances
+    if (reqPath === '/api/onboard/instances' && req.method === 'GET') {
+      try {
+        const data = saasOnboardingService ? saasOnboardingService.getProvisionedInstances() : { error: 'Service unavailable' };
+        return sendJson(200, data);
+      } catch (e) {
+        return sendJson(500, { success: false, error: e.message });
+      }
+    }
+
+    // 5. Developer Webhook Specifications
+    if (reqPath === '/api/onboard/webhooks' && req.method === 'GET') {
+      try {
+        const data = saasOnboardingService ? saasOnboardingService.getWebhookSpecifications() : { error: 'Service unavailable' };
         return sendJson(200, data);
       } catch (e) {
         return sendJson(500, { success: false, error: e.message });

@@ -31,7 +31,9 @@ pairs = [
     ('services/competitiveIntelligenceService.js', 'api/services/competitiveIntelligenceService.js'),
     ('services/householdConsumptionService.js', 'api/services/householdConsumptionService.js'),
     ('services/multiTenantService.js', 'api/services/multiTenantService.js'),
-    ('services/consortiumProcurementService.js', 'api/services/consortiumProcurementService.js')
+    ('services/consortiumProcurementService.js', 'api/services/consortiumProcurementService.js'),
+    ('services/saasOnboardingService.js', 'api/services/saasOnboardingService.js'),
+    ('onboard.html', 'public/onboard.html')
 ]
 
 all_ok = True

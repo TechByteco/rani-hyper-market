@@ -141,6 +141,14 @@
     {
       "source": "/driver",
       "destination": "/delivery-driver.html"
+    },
+    {
+      "source": "/onboard",
+      "destination": "/onboard.html"
+    },
+    {
+      "source": "/setup",
+      "destination": "/onboard.html"
     }
   ],
   "functions": {

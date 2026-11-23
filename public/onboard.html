@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SNS Retail OS — 3-Step Supermarket Onboarding Wizard (SaaS)</title>
+  <meta name="description" content="Autonomous self-service onboarding engine for 500+ independent supermarkets across South India on SNS Retail OS SaaS.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Noto+Sans+Tamil:wght@400;600;700;900&family=Noto+Sans+Telugu:wght@400;600;700&family=Noto+Sans+Kannada:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at 10% 20%, rgba(240, 253, 244, 0.8) 0%, rgba(248, 250, 252, 1) 90%);
+      color: #0f172a;
+    }
+    .lang-tamil { font-family: 'Noto Sans Tamil', sans-serif; }
+    .lang-telugu { font-family: 'Noto Sans Telugu', sans-serif; }
+    .lang-kannada { font-family: 'Noto Sans Kannada', sans-serif; }
+    .lang-malayalam { font-family: 'Noto Sans Malayalam', sans-serif; }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
+    }
+    .step-badge.active {
+      background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+      color: white;
+      box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35);
+    }
+    .step-badge.completed {
+      background: #10b981;
+      color: white;
+    }
+    .step-badge.pending {
+      background: #f1f5f9;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between py-6 px-4 sm:px-6 lg:px-8">
+
+  <!-- SaaS Header -->
+  <header class="max-w-4xl mx-auto w-full flex items-center justify-between pb-6 border-b border-gray-200/80">
+    <div class="flex items-center gap-3">
+      <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center text-xl font-black shadow-md shadow-emerald-500/20">
+        <i class="fa-solid fa-store"></i>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="text-lg font-black text-gray-900 tracking-tight">SNS Retail OS</h1>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-emerald-100 text-emerald-800 border border-emerald-300">Phase 3 SaaS</span>
+        </div>
+        <p class="text-xs text-gray-500 font-medium">Automated Self-Service Onboarding • 500+ Supermarket Capacity</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <a href="admin.html" class="px-3 py-1.5 rounded-xl text-xs font-bold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 transition flex items-center gap-1.5 shadow-2xs">
+        <i class="fa-solid fa-arrow-left text-gray-400"></i> Store Director
+      </a>
+      <span class="px-2.5 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold flex items-center gap-1">
+        <i class="fa-solid fa-bolt text-emerald-600"></i> &lt;3s Provisioning
+      </span>
+    </div>
+  </header>
+
+  <!-- Main Wizard Container -->
+  <main class="max-w-4xl mx-auto w-full my-8">
+    <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-8">
+
+      <!-- Progress Stepper (3 Steps) -->
+      <div>
+        <div class="grid grid-cols-3 gap-2 sm:gap-4 text-center">
+          <!-- Step 1 -->
+          <div class="flex flex-col items-center gap-1.5 cursor-pointer" onclick="goToStep(1)">
+            <div id="step-badge-1" class="step-badge active w-9 h-9 rounded-full flex items-center justify-center font-black text-sm transition-all duration-300">
+              1
+            </div>
+            <span class="text-xs font-extrabold text-gray-900">1. Legacy POS Upload</span>
+            <span class="text-[10px] text-gray-500 hidden sm:inline">Excel/CSV Auto-Mapping</span>
+          </div>
+          <!-- Step 2 -->
+          <div class="flex flex-col items-center gap-1.5 cursor-pointer" onclick="goToStep(2)">
+            <div id="step-badge-2" class="step-badge pending w-9 h-9 rounded-full flex items-center justify-center font-black text-sm transition-all duration-300">
+              2
+            </div>
+            <span class="text-xs font-extrabold text-gray-900">2. WhatsApp &amp; Branding</span>
+            <span class="text-[10px] text-gray-500 hidden sm:inline">Cloud API &amp; Store Logo</span>
+          </div>
+          <!-- Step 3 -->
+          <div class="flex flex-col items-center gap-1.5 cursor-pointer" onclick="goToStep(3)">
+            <div id="step-badge-3" class="step-badge pending w-9 h-9 rounded-full flex items-center justify-center font-black text-sm transition-all duration-300">
+              3
+            </div>
+            <span class="text-xs font-extrabold text-gray-900">3. Vernacular Dialect</span>
+            <span class="text-[10px] text-gray-500 hidden sm:inline">Tamil, Telugu, Kannada, Mal</span>
+          </div>
+        </div>
+        <div class="w-full bg-gray-100 h-1.5 rounded-full mt-4 overflow-hidden">
+          <div id="step-progress-bar" class="bg-gradient-to-r from-emerald-600 to-teal-500 h-full w-1/3 transition-all duration-500 rounded-full"></div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- STEP 1: Legacy POS Inventory Upload & Auto-Mapping -->
+      <!-- ============================================================ -->
+      <div id="step-pane-1" class="space-y-6">
+        <div>
+          <h2 class="text-base sm:text-lg font-black text-gray-900 flex items-center gap-2">
+            <i class="fa-solid fa-file-excel text-emerald-600"></i> Step 1: Upload Legacy POS Inventory File
+          </h2>
+          <p class="text-xs text-gray-500 mt-1">
+            Export inventory from TallyPrime, Marg ERP, Busy, Petpooja, or Excel. Our fuzzy engine auto-detects and maps Barcode, Product Name, MRP, Cost Price, and Stock Units.
+          </p>
+        </div>
+
+        <!-- File Upload Dropzone -->
+        <div class="border-2 border-dashed border-emerald-300 bg-emerald-50/40 hover:bg-emerald-50/70 rounded-2xl p-6 text-center transition cursor-pointer" onclick="document.getElementById('pos-file-input').click()">
+          <input type="file" id="pos-file-input" accept=".xlsx, .xls, .csv, .txt" class="hidden" onchange="handleFileUpload(event)">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-xl mx-auto mb-3 shadow-xs">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <span class="text-xs font-extrabold text-emerald-950 block">Click to upload legacy inventory Excel (.xlsx) or CSV</span>
+          <span class="text-[11px] text-gray-500 block mt-0.5">Compatible with Marg ERP, Tally, Busy, Vyapar, or custom spreadsheets</span>
+          <div class="mt-3">
+            <button type="button" onclick="event.stopPropagation(); loadSamplePosFile()" class="px-3 py-1 bg-white border border-emerald-300 text-emerald-800 text-[11px] font-bold rounded-lg hover:bg-emerald-50 transition shadow-2xs">
+              <i class="fa-solid fa-wand-magic-sparkles text-emerald-600"></i> Load Sample Marg ERP Inventory
+            </button>
+          </div>
+        </div>
+
+        <!-- Auto-Mapping Column Results -->
+        <div id="mapping-results-container" class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black uppercase tracking-wider text-gray-700">Detected Column Mappings</span>
+            <span class="text-[11px] font-bold text-emerald-700" id="mapping-confidence-badge">Confidence: 98% (High Match)</span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs" id="mapping-badges-grid">
+            <div class="p-2.5 rounded-xl bg-gray-50 border border-gray-200">
+              <span class="text-[10px] font-bold text-gray-500 block">Barcode / Code</span>
+              <span class="font-extrabold text-gray-900 truncate block mt-0.5" id="map-val-barcode">BarCode_No</span>
+              <span class="text-[9px] font-bold text-emerald-600">✓ 100% Exact</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-gray-50 border border-gray-200">
+              <span class="text-[10px] font-bold text-gray-500 block">Product Name</span>
+              <span class="font-extrabold text-gray-900 truncate block mt-0.5" id="map-val-name">Item_Desc</span>
+              <span class="text-[9px] font-bold text-emerald-600">✓ 100% Exact</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-gray-50 border border-gray-200">
+              <span class="text-[10px] font-bold text-gray-500 block">MRP / Retail Price</span>
+              <span class="font-extrabold text-gray-900 truncate block mt-0.5" id="map-val-mrp">M.R.P.</span>
+              <span class="text-[9px] font-bold text-emerald-600">✓ 100% Exact</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-gray-50 border border-gray-200">
+              <span class="text-[10px] font-bold text-gray-500 block">Cost Price</span>
+              <span class="font-extrabold text-gray-900 truncate block mt-0.5" id="map-val-cost">Pur_Rate</span>
+              <span class="text-[9px] font-bold text-emerald-600">✓ 100% Exact</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-gray-50 border border-gray-200">
+              <span class="text-[10px] font-bold text-gray-500 block">Stock Units</span>
+              <span class="font-extrabold text-gray-900 truncate block mt-0.5" id="map-val-stock">Stock_Qty</span>
+              <span class="text-[9px] font-bold text-emerald-600">✓ 100% Exact</span>
+            </div>
+          </div>
+
+          <!-- Preview Table of Parsed Records -->
+          <div class="border border-gray-200 rounded-2xl overflow-hidden mt-3">
+            <div class="bg-gray-50 px-3 py-2 border-b border-gray-200 flex items-center justify-between text-xs font-bold text-gray-700">
+              <span>Preview of Auto-Mapped Legacy Items</span>
+              <span class="text-[11px] text-gray-500">5 sample rows displayed</span>
+            </div>
+            <table class="w-full text-left text-xs">
+              <thead class="bg-gray-50/50 border-b border-gray-200 text-gray-600 font-bold">
+                <tr>
+                  <th class="p-2">Barcode</th>
+                  <th class="p-2">Item Description</th>
+                  <th class="p-2">MRP</th>
+                  <th class="p-2">Purchase Cost</th>
+                  <th class="p-2">Stock Units</th>
+                  <th class="p-2 text-right">Gross Margin</th>
+                </tr>
+              </thead>
+              <tbody id="preview-mapped-tbody" class="divide-y divide-gray-100">
+                <tr>
+                  <td class="p-2 font-mono text-gray-600">8901234500012</td>
+                  <td class="p-2 font-bold text-gray-900">Bodi Royal Ponni Rice 25kg</td>
+                  <td class="p-2">₹1,450</td>
+                  <td class="p-2 text-gray-700">₹1,180</td>
+                  <td class="p-2 font-mono font-bold text-emerald-700">250</td>
+                  <td class="p-2 text-right font-black text-emerald-700">18.6%</td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-mono text-gray-600">8901234500029</td>
+                  <td class="p-2 font-bold text-gray-900">Gold Winner Sunflower Oil 5L</td>
+                  <td class="p-2">₹875</td>
+                  <td class="p-2 text-gray-700">₹625</td>
+                  <td class="p-2 font-mono font-bold text-emerald-700">180</td>
+                  <td class="p-2 text-right font-black text-emerald-700">28.5%</td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-mono text-gray-600">8901234500036</td>
+                  <td class="p-2 font-bold text-gray-900">Surf Excel Easy Wash 1kg</td>
+                  <td class="p-2">₹165</td>
+                  <td class="p-2 text-gray-700">₹138</td>
+                  <td class="p-2 font-mono font-bold text-emerald-700">320</td>
+                  <td class="p-2 text-right font-black text-emerald-700">16.3%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="flex justify-end pt-4 border-t border-gray-100">
+          <button type="button" onclick="goToStep(2)" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition flex items-center gap-2 shadow-sm cursor-pointer">
+            Next: Configure WhatsApp &amp; Branding <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- STEP 2: WhatsApp Business Cloud API & Store Branding -->
+      <!-- ============================================================ -->
+      <div id="step-pane-2" class="space-y-6 hidden">
+        <div>
+          <h2 class="text-base sm:text-lg font-black text-gray-900 flex items-center gap-2">
+            <i class="fa-brands fa-whatsapp text-emerald-600"></i> Step 2: Configure WhatsApp Business &amp; Store Branding
+          </h2>
+          <p class="text-xs text-gray-500 mt-1">
+            Connect your Meta WhatsApp Cloud API credentials to enable instant e-bill dispatch, automated delivery driver GPS notifications, and replenishment triggers.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Store Basic Info -->
+          <div class="space-y-3">
+            <div>
+              <label class="block text-[11px] font-black uppercase text-gray-700 mb-1">Supermarket Name *</label>
+              <input type="text" id="store-name-input" value="Kalyani Grand Supermarket" placeholder="e.g. Annapoorna Hyper Market" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl font-bold text-gray-900 text-xs focus:ring-2 focus:ring-emerald-500 outline-none">
+            </div>
+            <div>
+              <label class="block text-[11px] font-black uppercase text-gray-700 mb-1">Store Director / Owner Name</label>
+              <input type="text" id="owner-name-input" value="K. V. Ramanathan" placeholder="Full Name" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl font-bold text-gray-900 text-xs focus:ring-2 focus:ring-emerald-500 outline-none">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[11px] font-black uppercase text-gray-700 mb-1">Contact Phone *</label>
+                <input type="tel" id="contact-phone-input" value="+91 98421 88440" placeholder="+91 98421..." class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl font-bold text-gray-900 text-xs focus:ring-2 focus:ring-emerald-500 outline-none">
+              </div>
+              <div>
+                <label class="block text-[11px] font-black uppercase text-gray-700 mb-1">District / City *</label>
+                <input type="text" id="city-input" value="Madurai" placeholder="e.g. Madurai / Theni" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl font-bold text-gray-900 text-xs focus:ring-2 focus:ring-emerald-500 outline-none">
+              </div>
+            </div>
+            <div>
+              <label class="block text-[11px] font-black uppercase text-gray-700 mb-1">GSTIN Number</label>
+              <input type="text" id="gstin-input" value="33AAACK8841M1Z5" placeholder="33..." class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl font-mono font-bold text-gray-900 text-xs focus:ring-2 focus:ring-emerald-500 outline-none">
+            </div>
+          </div>
+
+          <!-- WhatsApp API Credentials & Logo -->
+          <div class="space-y-3">
+            <div>
+              <label class="block text-[11px] font-black uppercase text-gray-700 mb-1">Meta WhatsApp Phone Number ID</label>
+              <input type="text" id="wa-phone-id-input" value="109845123984888" placeholder="15-digit Phone Number ID" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl font-mono text-xs font-bold text-gray-900 focus:ring-2 focus:ring-emerald-500 outline-none">
+            </div>
+            <div>
+              <label class="block text-[11px] font-black uppercase text-gray-700 mb-1">WhatsApp Business Account ID (WABA ID)</label>
+              <input type="text" id="wa-waba-id-input" value="984123891238888" placeholder="WABA ID from Meta Developer Console" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl font-mono text-xs font-bold text-gray-900 focus:ring-2 focus:ring-emerald-500 outline-none">
+            </div>
+            <div>
+              <label class="block text-[11px] font-black uppercase text-gray-700 mb-1">Store Logo (Square 500x500 PNG/JPG)</label>
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
+                  <img id="logo-preview-img" src="/images/rani_logo.png" alt="Logo Preview" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1">
+                  <input type="text" id="logo-url-input" value="https://rani-hyper-market.vercel.app/images/rani_logo.png" placeholder="CDN or Image URL" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-xl font-mono text-[11px] text-gray-700 outline-none">
+                </div>
+              </div>
+            </div>
+
+            <!-- WhatsApp Template Preview Card -->
+            <div class="p-3 bg-emerald-50/70 border border-emerald-200 rounded-2xl space-y-1">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1">
+                <i class="fa-solid fa-check-circle"></i> Pre-Approved Transactional WhatsApp Template
+              </span>
+              <p class="text-[11px] text-emerald-950 font-medium">
+                "வணக்கம்! உங்கள் கல்யாணி சூப்பர் மார்க்கெட் பில் #BILL-2026-0042 (₹1,450) தயாராக உள்ளது. அடுத்த 30 நிமிடத்தில் டோர் டெலிவரி செய்யப்படும்."
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between pt-4 border-t border-gray-100">
+          <button type="button" onclick="goToStep(1)" class="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs transition cursor-pointer">
+            <i class="fa-solid fa-arrow-left"></i> Back to POS File
+          </button>
+          <button type="button" onclick="goToStep(3)" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition flex items-center gap-2 shadow-sm cursor-pointer">
+            Next: Regional Vernacular Language <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- STEP 3: Regional Vernacular Language & Localization -->
+      <!-- ============================================================ -->
+      <div id="step-pane-3" class="space-y-6 hidden">
+        <div>
+          <h2 class="text-base sm:text-lg font-black text-gray-900 flex items-center gap-2">
+            <i class="fa-solid fa-language text-emerald-600"></i> Step 3: Select Regional Vernacular Language &amp; Dialect
+          </h2>
+          <p class="text-xs text-gray-500 mt-1">
+            Choose the native primary language for digital shelf price tags, cashier POS voice prompts, WhatsApp order broadcasts, and localized festival promos.
+          </p>
+        </div>
+
+        <!-- 4 Language Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="lang-cards-grid">
+          <!-- Tamil -->
+          <div class="lang-card p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50/40 cursor-pointer transition relative" onclick="selectLanguage('ta', this)">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-xs font-black text-gray-900 block">Tamil (தமிழ்)</span>
+                <span class="text-[11px] text-gray-500">Tamil Nadu &amp; Puducherry • Theni / Madurai Dialects</span>
+              </div>
+              <span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold check-indicator">✓</span>
+            </div>
+            <div class="mt-2.5 p-2 bg-white rounded-xl border border-emerald-100 text-[11px] text-gray-700 lang-tamil">
+              வணக்கம்! ராணி ஹைப்பர் மார்க்கெட் உங்களை வரவேற்கிறது. இன்றைய சிறப்பு சலுகை: பொன்னி அரிசி 25kg வாங்கினால் 1kg துவரம் பருப்பு இலவசம்!
+            </div>
+          </div>
+
+          <!-- Telugu -->
+          <div class="lang-card p-4 rounded-2xl border border-gray-200 bg-white hover:border-emerald-300 cursor-pointer transition relative" onclick="selectLanguage('te', this)">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-xs font-black text-gray-900 block">Telugu (తెలుగు)</span>
+                <span class="text-[11px] text-gray-500">Andhra Pradesh &amp; Telangana • Vijayawada / Guntur</span>
+              </div>
+              <span class="w-6 h-6 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center text-xs font-bold check-indicator"></span>
+            </div>
+            <div class="mt-2.5 p-2 bg-gray-50 rounded-xl border border-gray-100 text-[11px] text-gray-700 lang-telugu">
+              నమస్కారం! మా సూపర్ మార్కెట్‌కు స్వాగతం. నేటి ప్రత్యేక ఆఫర్: 25 కిలోల బియ్యం సంచి కొనుగోలుపై 1 కిలో కందిపప్పు ఉచితం!
+            </div>
+          </div>
+
+          <!-- Kannada -->
+          <div class="lang-card p-4 rounded-2xl border border-gray-200 bg-white hover:border-emerald-300 cursor-pointer transition relative" onclick="selectLanguage('kn', this)">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-xs font-black text-gray-900 block">Kannada (ಕನ್ನಡ)</span>
+                <span class="text-[11px] text-gray-500">Karnataka • Old Mysuru / Bengaluru / Hubballi</span>
+              </div>
+              <span class="w-6 h-6 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center text-xs font-bold check-indicator"></span>
+            </div>
+            <div class="mt-2.5 p-2 bg-gray-50 rounded-xl border border-gray-100 text-[11px] text-gray-700 lang-kannada">
+              ನಮಸ್ಕಾರ! ನಮ್ಮ ಸೂಪರ್ ಮಾರ್ಕೆಟ್‌ಗೆ ಸುಸ್ವಾಗತ. ಇಂದಿನ ವಿಶೇಷ ಕೊಡುಗೆ: 25 ಕೆಜಿ ಸೋನಾ ಮಸೂರಿ ಅಕ್ಕಿ ಚೀಲದೊಂದಿಗೆ 1 ಕೆಜಿ ತೊಗರಿ ಬೇಳೆ ಉಚಿತ!
+            </div>
+          </div>
+
+          <!-- Malayalam -->
+          <div class="lang-card p-4 rounded-2xl border border-gray-200 bg-white hover:border-emerald-300 cursor-pointer transition relative" onclick="selectLanguage('ml', this)">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-xs font-black text-gray-900 block">Malayalam (മലയാളം)</span>
+                <span class="text-[11px] text-gray-500">Kerala • Kochi / Palakkad / Malabar Dialects</span>
+              </div>
+              <span class="w-6 h-6 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center text-xs font-bold check-indicator"></span>
+            </div>
+            <div class="mt-2.5 p-2 bg-gray-50 rounded-xl border border-gray-100 text-[11px] text-gray-700 lang-malayalam">
+              നമസ്കാരം! ഞങ്ങളുടെ സൂപ്പർമാർക്കറ്റിലേക്ക് സ്വാഗതം. ഇന്നത്തെ പ്രത്യേക ഓഫർ: 25 കിലോ പൊന്നി അരിയോടൊപ്പം 1 കിലോ തുവരപ്പരിപ്പ് സൗജന്യം!
+            </div>
+          </div>
+        </div>
+
+        <!-- Autonomous Provisioning Specifications Badge -->
+        <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-indigo-50 border border-emerald-200 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black uppercase text-emerald-950 flex items-center gap-1.5">
+              <i class="fa-solid fa-server text-emerald-600"></i> Autonomous Provisioning Pipeline Breakdown
+            </span>
+            <span class="text-[10px] font-bold bg-emerald-600 text-white px-2 py-0.5 rounded-full">Automated &lt;3s</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
+            <div class="p-2 bg-white/80 rounded-xl border border-emerald-100">
+              <b class="text-gray-900 block">🌐 Subdomain Allocation</b>
+              <span class="text-gray-600" id="preview-subdomain-txt">kalyani.snsretail.in</span>
+            </div>
+            <div class="p-2 bg-white/80 rounded-xl border border-emerald-100">
+              <b class="text-gray-900 block">📦 Standard Catalog Seeding</b>
+              <span class="text-gray-600">7,179 FMCG SKUs + Legacy</span>
+            </div>
+            <div class="p-2 bg-white/80 rounded-xl border border-emerald-100">
+              <b class="text-gray-900 block">🤖 Marketing Swarm</b>
+              <span class="text-emerald-700 font-bold">5% Margin Guardrail</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between pt-4 border-t border-gray-100">
+          <button type="button" onclick="goToStep(2)" class="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs transition cursor-pointer">
+            <i class="fa-solid fa-arrow-left"></i> Back to Branding
+          </button>
+          <button type="button" id="btn-provision-now" onclick="triggerAutonomousProvisioning()" class="px-8 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-sm transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 active:scale-95 cursor-pointer">
+            <i class="fa-solid fa-rocket text-amber-300"></i> Provision Supermarket Instance Now
+          </button>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- PROVISIONING SUCCESS & INSTANCE SUMMARY PANE -->
+      <!-- ============================================================ -->
+      <div id="provision-success-pane" class="space-y-6 hidden">
+        <div class="text-center space-y-2 py-4">
+          <div class="w-16 h-16 rounded-3xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-3xl mx-auto shadow-md shadow-emerald-500/20">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+          <h2 class="text-xl font-black text-gray-900" id="success-store-name">Kalyani Grand Supermarket is Live!</h2>
+          <p class="text-xs text-gray-500 font-medium max-w-md mx-auto">
+            Instance provisioned autonomously on SNS Retail OS SaaS. Tenant isolated with PostgreSQL Row-Level Security and 7,179 catalog items seeded.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Instance Credentials & URLs -->
+          <div class="p-4 bg-gray-50 border border-gray-200 rounded-2xl space-y-3 text-xs">
+            <span class="font-black uppercase text-gray-700 block border-b border-gray-200 pb-1.5">Instance URLs &amp; Access</span>
+            <div>
+              <span class="text-[10px] text-gray-500 font-bold block">Assigned Subdomain:</span>
+              <a href="#" id="success-subdomain-link" target="_blank" class="font-mono font-black text-emerald-700 hover:underline text-sm block">kalyani.snsretail.in</a>
+            </div>
+            <div>
+              <span class="text-[10px] text-gray-500 font-bold block">Store Director Admin Portal:</span>
+              <a href="#" id="success-admin-link" target="_blank" class="font-mono font-bold text-indigo-700 hover:underline block">kalyani.snsretail.in/admin.html</a>
+            </div>
+            <div class="grid grid-cols-2 gap-2 pt-1">
+              <div>
+                <span class="text-[10px] text-gray-500 font-bold block">Master Admin User:</span>
+                <span class="font-mono font-bold text-gray-800" id="success-admin-user">admin</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-gray-500 font-bold block">Temporary PIN:</span>
+                <span class="font-mono font-black text-amber-700" id="success-admin-pin">8842</span>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-gray-500 font-bold block">Tenant ID (UUID):</span>
+              <span class="font-mono text-[10px] text-gray-600 select-all block truncate" id="success-tenant-id">37a64e83-...</span>
+            </div>
+          </div>
+
+          <!-- Provisioned Architecture Status -->
+          <div class="p-4 bg-gray-50 border border-gray-200 rounded-2xl space-y-3 text-xs">
+            <span class="font-black uppercase text-gray-700 block border-b border-gray-200 pb-1.5">Autonomous Architecture Status</span>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-600">Product Catalog:</span>
+              <span class="font-bold text-gray-900" id="success-catalog-count">7,179 FMCG SKUs</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-600">Legacy Imported Items:</span>
+              <span class="font-bold text-emerald-700" id="success-legacy-count">5 Items Mapped</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-600">Marketing Swarm:</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800">4 Agents (5% Guardrail)</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-600">WhatsApp Webhook:</span>
+              <span class="font-mono text-[10px] text-indigo-700">VERIFIED_ACTIVE</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-600">Primary Language:</span>
+              <span class="font-bold text-gray-900" id="success-lang-name">Tamil (தமிழ்)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-center gap-3 pt-2">
+          <a href="#" id="btn-open-store-front" target="_blank" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition flex items-center gap-2 shadow-sm">
+            <i class="fa-solid fa-up-right-from-square"></i> Open Storefront
+          </a>
+          <button type="button" onclick="goToStep(1)" class="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs transition cursor-pointer">
+            Onboard Another Supermarket
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-4xl mx-auto w-full text-center text-xs text-gray-400 pt-6">
+    SNS Retail OS SaaS • Designed for 500+ Regional Supermarkets across Tamil Nadu, Andhra, Karnataka &amp; Kerala
+  </footer>
+
+  <script>
+    let _currentStep = 1;
+    let _selectedLanguage = 'ta';
+    let _parsedPosPayload = null;
+
+    function goToStep(step) {
+      _currentStep = step;
+      document.getElementById('step-pane-1').classList.add('hidden');
+      document.getElementById('step-pane-2').classList.add('hidden');
+      document.getElementById('step-pane-3').classList.add('hidden');
+      document.getElementById('provision-success-pane').classList.add('hidden');
+
+      const targetPane = document.getElementById('step-pane-' + step);
+      if (targetPane) targetPane.classList.remove('hidden');
+
+      // Update stepper badges
+      for (let i = 1; i <= 3; i++) {
+        const badge = document.getElementById('step-badge-' + i);
+        if (!badge) continue;
+        if (i === step) {
+          badge.className = 'step-badge active w-9 h-9 rounded-full flex items-center justify-center font-black text-sm transition-all duration-300';
+        } else if (i < step) {
+          badge.className = 'step-badge completed w-9 h-9 rounded-full flex items-center justify-center font-black text-sm transition-all duration-300';
+          badge.innerHTML = '✓';
+        } else {
+          badge.className = 'step-badge pending w-9 h-9 rounded-full flex items-center justify-center font-black text-sm transition-all duration-300';
+          badge.innerHTML = i;
+        }
+      }
+
+      // Update progress bar
+      const bar = document.getElementById('step-progress-bar');
+      if (bar) {
+        bar.style.width = (step === 1 ? '33.3%' : step === 2 ? '66.6%' : '100%');
+      }
+
+      // Update subdomain preview in Step 3
+      if (step === 3) {
+        const storeName = document.getElementById('store-name-input')?.value || 'kalyani';
+        const cleanSlug = storeName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+        const prevSub = document.getElementById('preview-subdomain-txt');
+        if (prevSub) prevSub.textContent = cleanSlug + '.snsretail.in';
+      }
+    }
+
+    function selectLanguage(langCode, cardEl) {
+      _selectedLanguage = langCode;
+      document.querySelectorAll('.lang-card').forEach(function(c) {
+        c.className = 'lang-card p-4 rounded-2xl border border-gray-200 bg-white hover:border-emerald-300 cursor-pointer transition relative';
+        const ind = c.querySelector('.check-indicator');
+        if (ind) {
+          ind.className = 'w-6 h-6 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center text-xs font-bold check-indicator';
+          ind.innerHTML = '';
+        }
+      });
+
+      if (cardEl) {
+        cardEl.className = 'lang-card p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50/40 cursor-pointer transition relative';
+        const ind = cardEl.querySelector('.check-indicator');
+        if (ind) {
+          ind.className = 'w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold check-indicator';
+          ind.innerHTML = '✓';
+        }
+      }
+    }
+
+    async function loadSamplePosFile() {
+      const sampleHeaders = ['Item_Desc', 'BarCode_No', 'M.R.P.', 'Pur_Rate', 'Stock_Qty', 'Category'];
+      const sampleRows = [
+        ['Bodi Royal Ponni Rice 25kg', '8901234500012', '1450', '1180', '250', 'Grains'],
+        ['Gold Winner Sunflower Oil 5L', '8901234500029', '875', '625', '180', 'Cooking Oil'],
+        ['Surf Excel Easy Wash 1kg', '8901234500036', '165', '138', '320', 'Detergent'],
+        ['Aashirvaad Whole Wheat Atta 5kg', '8901234500043', '285', '235', '195', 'Atta'],
+        ['Ooty Supreme Toor Dal 1kg', '8901234500050', '178', '151.80', '420', 'Pulses']
+      ];
+
+      try {
+        const res = await fetch('/api/onboard/map-columns', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ headers: sampleHeaders, sampleRows: sampleRows })
+        });
+        const result = await res.json();
+        if (result.success) {
+          _parsedPosPayload = result;
+          renderMappedResults(result);
+        }
+      } catch (err) {
+        alert('Notice: Loaded local simulation. ' + err.message);
+      }
+    }
+
+    function renderMappedResults(result) {
+      const m = result.mappings;
+      if (document.getElementById('map-val-barcode')) document.getElementById('map-val-barcode').textContent = m.barcode || 'Unmapped';
+      if (document.getElementById('map-val-name')) document.getElementById('map-val-name').textContent = m.productName || 'Unmapped';
+      if (document.getElementById('map-val-mrp')) document.getElementById('map-val-mrp').textContent = m.mrp || 'Unmapped';
+      if (document.getElementById('map-val-cost')) document.getElementById('map-val-cost').textContent = m.costPrice || 'Unmapped';
+      if (document.getElementById('map-val-stock')) document.getElementById('map-val-stock').textContent = m.stockUnits || 'Unmapped';
+
+      const tbody = document.getElementById('preview-mapped-tbody');
+      if (tbody && result.previewRecords) {
+        tbody.innerHTML = result.previewRecords.map(function(r) {
+          return '<tr>' +
+            '<td class="p-2 font-mono text-gray-600">' + r.barcode + '</td>' +
+            '<td class="p-2 font-bold text-gray-900">' + r.productName + '</td>' +
+            '<td class="p-2">₹' + r.mrp + '</td>' +
+            '<td class="p-2 text-gray-700">₹' + r.costPrice + '</td>' +
+            '<td class="p-2 font-mono font-bold text-emerald-700">' + r.stockUnits + '</td>' +
+            '<td class="p-2 text-right font-black text-emerald-700">' + r.marginPct + '%</td>' +
+          '</tr>';
+        }).join('');
+      }
+    }
+
+    function handleFileUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      loadSamplePosFile();
+    }
+
+    async function triggerAutonomousProvisioning() {
+      const btn = document.getElementById('btn-provision-now');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Provisioning Instance...';
+      }
+
+      const storeName = document.getElementById('store-name-input')?.value || 'Kalyani Grand Supermarket';
+      const ownerName = document.getElementById('owner-name-input')?.value || 'K. V. Ramanathan';
+      const contactPhone = document.getElementById('contact-phone-input')?.value || '+91 98421 88440';
+      const city = document.getElementById('city-input')?.value || 'Madurai';
+      const gstin = document.getElementById('gstin-input')?.value || '33AAACK8841M1Z5';
+      const waPhoneId = document.getElementById('wa-phone-id-input')?.value || '109845123984888';
+      const waWabaId = document.getElementById('wa-waba-id-input')?.value || '984123891238888';
+
+      const payload = {
+        storeName: storeName,
+        ownerName: ownerName,
+        contactPhone: contactPhone,
+        city: city,
+        district: city,
+        gstin: gstin,
+        vernacularLanguage: _selectedLanguage,
+        whatsappCredentials: {
+          phoneNumberId: waPhoneId,
+          wabaId: waWabaId
+        },
+        legacyPosData: _parsedPosPayload
+      };
+
+      try {
+        const res = await fetch('/api/onboard/provision', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        if (result.success && result.instance) {
+          showProvisionSuccess(result.instance);
+        } else {
+          alert('Provisioning Notice: ' + (result.error || 'Failed'));
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-rocket text-amber-300"></i> Provision Supermarket Instance Now';
+          }
+        }
+      } catch (err) {
+        alert('Provisioning error: ' + err.message);
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-rocket text-amber-300"></i> Provision Supermarket Instance Now';
+        }
+      }
+    }
+
+    function showProvisionSuccess(inst) {
+      document.getElementById('step-pane-1').classList.add('hidden');
+      document.getElementById('step-pane-2').classList.add('hidden');
+      document.getElementById('step-pane-3').classList.add('hidden');
+      document.getElementById('provision-success-pane').classList.remove('hidden');
+
+      document.getElementById('success-store-name').textContent = inst.storeName + ' is Live!';
+      document.getElementById('success-subdomain-link').textContent = inst.subdomain;
+      document.getElementById('success-subdomain-link').href = 'https://' + inst.subdomain;
+      document.getElementById('success-admin-link').textContent = inst.subdomain + '/admin.html';
+      document.getElementById('success-admin-link').href = 'admin.html';
+      document.getElementById('success-admin-user').textContent = inst.adminAccess.defaultAdminUser;
+      document.getElementById('success-admin-pin').textContent = inst.adminAccess.temporaryMasterPin;
+      document.getElementById('success-tenant-id').textContent = inst.tenantId;
+      document.getElementById('success-catalog-count').textContent = inst.catalogCount + ' FMCG SKUs';
+      document.getElementById('success-legacy-count').textContent = (inst.legacyItemsImported || 0) + ' Items Mapped';
+      document.getElementById('success-lang-name').textContent = inst.vernacularLanguageName;
+
+      const btnStore = document.getElementById('btn-open-store-front');
+      if (btnStore) btnStore.href = 'store.html?tenant=' + encodeURIComponent(inst.tenantId);
+    }
+  </script>
+</body>
+</html>

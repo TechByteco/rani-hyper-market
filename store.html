@@ -1387,6 +1387,9 @@
           <button type="button" onclick="openBarcodeScanner()" class="sm:hidden w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 active:scale-90 transition cursor-pointer" aria-label="Scan Barcode" title="Scan in-store product barcode">
             <i class="fa-solid fa-barcode text-sm"></i>
           </button>
+          <button type="button" onclick="togglePriceRadar()" class="sm:hidden w-9 h-9 rounded-xl bg-gradient-to-br from-slate-900 to-blue-950 border border-blue-500/40 flex items-center justify-center text-blue-400 active:scale-90 transition cursor-pointer shadow-xs" aria-label="Quick-Commerce Price Radar" title="Quick-Commerce Price Radar: 50 Daily Kitchen Staples">
+            <i class="fa-solid fa-radar text-sm animate-pulse text-blue-400"></i>
+          </button>
           <button type="button" onclick="toggleMobileSearch()" class="sm:hidden w-9 h-9 rounded-xl glass flex items-center justify-center text-gray-600 hover:text-emerald-700 border border-white/80 shadow-sm active:scale-90 transition cursor-pointer" aria-label="Search" title="Search products">
             <i class="fa-solid fa-magnifying-glass text-sm"></i>
           </button>
@@ -1401,6 +1404,12 @@
           <button type="button" onclick="openBarcodeScanner()" class="hidden sm:flex px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-xl text-xs font-black transition items-center gap-1.5 shadow-xs cursor-pointer active:scale-95" title="Scan In-Store Product Barcode (Camera)">
             <i class="fa-solid fa-barcode text-emerald-600 text-sm"></i>
             <span class="hidden lg:inline">Scan Barcode</span>
+          </button>
+          <!-- Quick-Commerce Price Radar: 50 Daily Kitchen Staples Navbar Button -->
+          <button type="button" onclick="togglePriceRadar()" id="btn-toggle-radar-nav" class="hidden sm:inline-flex px-3 py-2 bg-gradient-to-r from-blue-900/80 to-indigo-900/80 hover:from-blue-800 hover:to-indigo-800 text-blue-200 hover:text-white border border-blue-500/40 rounded-xl text-xs font-bold transition items-center gap-1.5 shadow-xs cursor-pointer active:scale-95" title="Quick-Commerce Price Radar: 50 Daily Kitchen Staples">
+            <i class="fa-solid fa-radar text-blue-400 animate-pulse text-sm"></i>
+            <span id="nav-toggle-radar-text" class="hidden lg:inline">Price Radar</span>
+            <span class="px-1.5 py-0.2 rounded-full bg-blue-500/30 text-[10px] text-blue-300 font-extrabold border border-blue-400/30">50 Staples</span>
           </button>
           <button type="button" onclick="toggleCustomerAiChat()" class="px-3.5 py-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-emerald-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl text-xs font-black transition flex items-center gap-1.5 shadow-md hover:shadow-lg transform active:scale-95 cursor-pointer">
             <i class="fa-solid fa-wand-magic-sparkles text-amber-300 animate-pulse"></i>
@@ -1538,8 +1547,45 @@
       </div>
     </section>
 
-    <!-- ⚡ REGIONAL PRICE MONITORING RADAR: RANI HYPER MARKET VS QUICK-COMMERCE (ZEPTO / BLINKIT / INSTAMART) -->
-    <section class="max-w-7xl mx-auto w-full px-3 sm:px-6 mb-7" id="quick-commerce-radar-section">
+    <!-- QUICK-COMMERCE PRICE RADAR TOGGLE / LAUNCHER CARD (CLICK TO SHOW RADAR) -->
+    <section class="max-w-7xl mx-auto w-full px-3 sm:px-6 mb-5" id="price-radar-launcher-section">
+      <div class="glass p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 border border-blue-500/40 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3.5 w-full md:w-auto">
+          <div class="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-400 text-xl shrink-0 shadow-inner">
+            <i class="fa-solid fa-radar animate-pulse"></i>
+          </div>
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5 shadow-xs">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Theni District Price Radar
+              </span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                ⚡ Zepto • Blinkit • Instamart Monitored
+              </span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                💰 14.2% Avg Basket Savings
+              </span>
+            </div>
+            <h3 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
+              <span>Quick-Commerce Price Radar: 50 Daily Kitchen Staples</span>
+            </h3>
+            <p class="text-xs text-blue-200/80 max-w-2xl leading-relaxed">
+              "Why pay ₹145 on delivery apps when Bodinayakanur Rani Hyper Market delivers fresh at ₹128? Support your local retailer and save ₹17 per liter!"
+            </p>
+          </div>
+        </div>
+
+        <!-- Interactive Launch Button -->
+        <button type="button" id="btn-toggle-price-radar" onclick="togglePriceRadar()" class="w-full md:w-auto shrink-0 px-5 py-3 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2.5 shadow-lg shadow-blue-900/50 transition transform hover:scale-[1.02] active:scale-95 cursor-pointer">
+          <i class="fa-solid fa-eye text-sm" id="toggle-radar-icon"></i>
+          <span id="toggle-radar-text">Show Quick-Commerce Price Radar (50 Staples)</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ⚡ REGIONAL PRICE MONITORING RADAR: RANI HYPER MARKET VS QUICK-COMMERCE (ZEPTO / BLINKIT / INSTAMART) (HIDDEN BY DEFAULT) -->
+    <section class="max-w-7xl mx-auto w-full px-3 sm:px-6 mb-7 hidden" id="quick-commerce-radar-section">
       <div class="bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 border border-blue-500/40 rounded-3xl p-4 sm:p-6 shadow-2xl text-white relative overflow-hidden">
         
         <!-- Header & Live Ticker -->
@@ -1578,6 +1624,11 @@
             <button type="button" onclick="openComparativeBannerModal('OIL-GOLD-1L')" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold text-xs flex items-center gap-1.5 shadow-md shadow-blue-900/30 transition active:scale-95 cursor-pointer">
               <i class="fa-solid fa-bullhorn"></i>
               <span>Social Ad Banner</span>
+            </button>
+            <!-- Close / Hide Radar Button -->
+            <button type="button" onclick="togglePriceRadar()" class="px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-red-500/20 text-slate-300 hover:text-red-400 border border-slate-700 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 cursor-pointer" title="Hide Price Radar">
+              <i class="fa-solid fa-xmark"></i>
+              <span class="hidden sm:inline">Hide Radar</span>
             </button>
           </div>
         </div>
@@ -7254,6 +7305,63 @@
     let radarCommodities = [];
     let activeRadarCategory = 'ALL';
     let currentBannerSku = 'OIL-GOLD-1L';
+
+    function togglePriceRadar() {
+      const radarSection = document.getElementById('quick-commerce-radar-section');
+      const btnText = document.getElementById('toggle-radar-text');
+      const btnIcon = document.getElementById('toggle-radar-icon');
+      const navBtnText = document.getElementById('nav-toggle-radar-text');
+      const navBtn = document.getElementById('btn-toggle-radar-nav');
+
+      if (!radarSection) return;
+
+      const isHidden = radarSection.classList.contains('hidden');
+
+      if (isHidden) {
+        // Show radar section
+        radarSection.classList.remove('hidden');
+        if (btnText) btnText.textContent = 'Hide Quick-Commerce Price Radar (50 Staples)';
+        if (btnIcon) {
+          btnIcon.classList.remove('fa-eye');
+          btnIcon.classList.add('fa-eye-slash');
+        }
+        if (navBtnText) navBtnText.textContent = 'Hide Radar';
+        if (navBtn) {
+          navBtn.classList.add('ring-2', 'ring-blue-400');
+        }
+
+        // Ensure data is loaded
+        if (!radarCommodities || radarCommodities.length === 0) {
+          loadCompetitiveRadar();
+        }
+
+        // Smooth scroll to the radar section
+        setTimeout(() => {
+          radarSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+
+        if (typeof showToast === 'function') {
+          showToast('⚡ Quick-Commerce Price Radar: 50 Daily Kitchen Staples live!', 'info');
+        }
+      } else {
+        // Hide radar section
+        radarSection.classList.add('hidden');
+        if (btnText) btnText.textContent = 'Show Quick-Commerce Price Radar (50 Staples)';
+        if (btnIcon) {
+          btnIcon.classList.remove('fa-eye-slash');
+          btnIcon.classList.add('fa-eye');
+        }
+        if (navBtnText) navBtnText.textContent = 'Price Radar';
+        if (navBtn) {
+          navBtn.classList.remove('ring-2', 'ring-blue-400');
+        }
+
+        const launcher = document.getElementById('price-radar-launcher-section');
+        if (launcher) {
+          launcher.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+    }
 
     async function loadCompetitiveRadar() {
       try {

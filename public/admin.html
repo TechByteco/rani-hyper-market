@@ -474,9 +474,38 @@
         <div class="flex items-center gap-3">
           <img src="/images/rani_logo.png" alt="Rani Hyper Market Official Logo" class="w-10 h-10 rounded-full object-cover shadow-md border border-emerald-600/30 bg-white">
           <div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
               <h1 class="text-base sm:text-lg font-black text-gray-900 leading-none tracking-tight" id="admin-store-heading">SNS Marketing — Rani Hyper Market Admin</h1>
-              <span class="px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 rounded-full border border-emerald-300">HQ Flagship</span>
+              <span class="px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 rounded-full border border-emerald-300" id="admin-store-badge">HQ Flagship</span>
+              <div class="hidden sm:inline-flex items-center gap-1.5 bg-emerald-50/80 border border-emerald-200/80 rounded-lg px-2 py-0.5 text-[11px]">
+                <i class="fa-solid fa-store text-emerald-700 text-xs"></i>
+                <select id="regional-store-selector" onchange="switchRegionalStore(this.value)" class="bg-transparent font-bold text-gray-800 outline-none cursor-pointer text-xs">
+                  <optgroup label="Theni District (7 Stores)">
+                    <option value="37a64e83-514d-4b00-b90a-9af172dacdd6" selected>🏢 Bodinayakanur (Flagship Hub)</option>
+                    <option value="37a64e83-0002-4b00-b90a-9af172dacdd6">🏬 Theni Main Bazaar</option>
+                    <option value="37a64e83-0003-4b00-b90a-9af172dacdd6">🏬 Periyakulam Branch</option>
+                    <option value="37a64e83-0004-4b00-b90a-9af172dacdd6">⚡ Chinnamanur Express</option>
+                    <option value="37a64e83-0005-4b00-b90a-9af172dacdd6">🏬 Cumbum Valley Hypermarket</option>
+                    <option value="37a64e83-0006-4b00-b90a-9af172dacdd6">🏬 Uthamapalayam Supermarket</option>
+                    <option value="37a64e83-0007-4b00-b90a-9af172dacdd6">⚡ Andipatti Mart</option>
+                  </optgroup>
+                  <optgroup label="Madurai District (4 Stores)">
+                    <option value="37a64e83-0009-4b00-b90a-9af172dacdd6">🚚 Madurai Mattuthavani (Secondary Hub)</option>
+                    <option value="37a64e83-0008-4b00-b90a-9af172dacdd6">🏬 Madurai Simmakkal Central</option>
+                    <option value="37a64e83-0010-4b00-b90a-9af172dacdd6">🏬 Madurai Anna Nagar Gourmet</option>
+                    <option value="37a64e83-0011-4b00-b90a-9af172dacdd6">🏬 Madurai Thirunagar Supermarket</option>
+                  </optgroup>
+                  <optgroup label="Dindigul District (4 Stores)">
+                    <option value="37a64e83-0012-4b00-b90a-9af172dacdd6">🏬 Dindigul Main Road</option>
+                    <option value="37a64e83-0013-4b00-b90a-9af172dacdd6">🏬 Palani Temple Town</option>
+                    <option value="37a64e83-0014-4b00-b90a-9af172dacdd6">🏬 Oddanchatram Agro Mart</option>
+                    <option value="37a64e83-0015-4b00-b90a-9af172dacdd6">⚡ Batlagundu Transit Mart</option>
+                  </optgroup>
+                </select>
+                <button type="button" onclick="openMultiTenantClusterModal()" class="text-emerald-700 hover:text-emerald-900 font-extrabold cursor-pointer" title="Open 15-Store Multi-Tenant Network Hub">
+                  <i class="fa-solid fa-up-right-from-square text-[10px]"></i>
+                </button>
+              </div>
             </div>
             <p class="text-[11px] text-gray-500 font-medium mt-0.5 flex items-center gap-2">
               <span class="font-bold text-gray-700">SNS Marketing Retail OS</span>
@@ -599,6 +628,9 @@
 
         <!-- Supermarket Tools Quick Launchers -->
         <div class="flex items-center gap-1.5 shrink-0">
+          <button type="button" onclick="openMultiTenantClusterModal()" class="px-2.5 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-200 text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer" title="Phase 2: 15-Store Regional Supermarket Cluster & Inter-Store Transfers">
+            <i class="fa-solid fa-network-wired text-indigo-600"></i> 🏬 15 Regional Stores
+          </button>
           <button type="button" onclick="switchAdminModule('orders')" class="px-2.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer" title="View Online Orders & Live Counter Dispatches inside Admin Portal">
             <i class="fa-solid fa-truck-fast text-blue-600"></i> 🛒 Online Orders
           </button>
@@ -12142,6 +12174,137 @@ ${notificationTamil}
       a.click();
     }
 
+    /* ===================================================
+       PHASE 2: MULTI-TENANT 15-STORE CLUSTER CONTROLLER
+       ===================================================*/
+    function switchRegionalStore(tenantId) {
+      if (!tenantId) return;
+      sessionStorage.setItem('nsn_tenant_id', tenantId);
+      const sel = document.getElementById('regional-store-selector');
+      if (sel) sel.value = tenantId;
+
+      const storeNames = {
+        '37a64e83-514d-4b00-b90a-9af172dacdd6': { name: 'Bodinayakanur (HQ Flagship Hub)', badge: 'HQ Flagship', isHub: true },
+        '37a64e83-0002-4b00-b90a-9af172dacdd6': { name: 'Theni Main Bazaar Branch', badge: 'Theni Branch', isHub: false },
+        '37a64e83-0003-4b00-b90a-9af172dacdd6': { name: 'Periyakulam Branch', badge: 'Theni Branch', isHub: false },
+        '37a64e83-0004-4b00-b90a-9af172dacdd6': { name: 'Chinnamanur Express Mart', badge: 'Theni Express', isHub: false },
+        '37a64e83-0005-4b00-b90a-9af172dacdd6': { name: 'Cumbum Valley Hypermarket', badge: 'Cumbum Branch', isHub: false },
+        '37a64e83-0006-4b00-b90a-9af172dacdd6': { name: 'Uthamapalayam Supermarket', badge: 'Theni Branch', isHub: false },
+        '37a64e83-0007-4b00-b90a-9af172dacdd6': { name: 'Andipatti Mart', badge: 'Theni Express', isHub: false },
+        '37a64e83-0009-4b00-b90a-9af172dacdd6': { name: 'Madurai Mattuthavani Hub', badge: 'Secondary Hub', isHub: true },
+        '37a64e83-0008-4b00-b90a-9af172dacdd6': { name: 'Madurai Simmakkal Central', badge: 'Madurai Branch', isHub: false },
+        '37a64e83-0010-4b00-b90a-9af172dacdd6': { name: 'Madurai Anna Nagar Gourmet', badge: 'Madurai Gourmet', isHub: false },
+        '37a64e83-0011-4b00-b90a-9af172dacdd6': { name: 'Madurai Thirunagar Supermarket', badge: 'Madurai Branch', isHub: false },
+        '37a64e83-0012-4b00-b90a-9af172dacdd6': { name: 'Dindigul Main Road Hypermarket', badge: 'Dindigul Branch', isHub: false },
+        '37a64e83-0013-4b00-b90a-9af172dacdd6': { name: 'Palani Temple Town Supermarket', badge: 'Palani Branch', isHub: false },
+        '37a64e83-0014-4b00-b90a-9af172dacdd6': { name: 'Oddanchatram Agro Mart', badge: 'Agro Branch', isHub: false },
+        '37a64e83-0015-4b00-b90a-9af172dacdd6': { name: 'Batlagundu Transit Mart', badge: 'Transit Branch', isHub: false }
+      };
+
+      const info = storeNames[tenantId] || { name: 'Regional Store', badge: 'Branch Store', isHub: false };
+      const badgeEl = document.getElementById('admin-store-badge');
+      if (badgeEl) {
+        badgeEl.textContent = info.badge;
+        badgeEl.className = info.isHub 
+          ? "px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 rounded-full border border-emerald-300"
+          : "px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider bg-blue-100 text-blue-800 rounded-full border border-blue-300";
+      }
+
+      if (typeof showToast === 'function') {
+        showToast('RLS Tenant Context switched to: ' + info.name, 'info');
+      }
+    }
+
+    function openMultiTenantClusterModal() {
+      const modal = document.getElementById('multi-tenant-cluster-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        loadMultiTenantTransfers();
+      }
+    }
+
+    function closeMultiTenantClusterModal() {
+      const modal = document.getElementById('multi-tenant-cluster-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function loadMultiTenantTransfers() {
+      try {
+        const res = await fetch('/api/transfers?tenantId=37a64e83-514d-4b00-b90a-9af172dacdd6');
+        if (!res.ok) return;
+        const data = await res.json();
+        const tbody = document.getElementById('cluster-transfers-tbody');
+        if (!tbody || !data.transfers) return;
+        
+        tbody.innerHTML = data.transfers.slice(0, 6).map(function(t) {
+          const isReceived = t.status === 'RECEIVED';
+          return '<tr>' +
+            '<td class="p-2 font-mono font-bold text-indigo-700">' + t.transferNumber + '</td>' +
+            '<td class="p-2">' + (t.sourceStoreName || 'Bodi Hub') + ' ➔ ' + (t.destinationStoreName || 'Branch') + '</td>' +
+            '<td class="p-2">' + (t.items || []).map(function(i) { return (i.productName || 'Item') + ' (' + (i.dispatchedQuantity || i.requestedQuantity) + ')'; }).join(', ') + '</td>' +
+            '<td class="p-2"><span class="px-2 py-0.5 text-[10px] font-bold ' + (isReceived ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800') + ' rounded-full">' + t.status + '</span></td>' +
+            '<td class="p-2 text-right">' + (isReceived ? '<span class="text-[10px] font-bold text-emerald-700">✓ Received</span>' : '<button type="button" onclick="confirmTransferReceipt(\'' + t.id + '\', this)" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[10px] cursor-pointer">Confirm Receipt</button>') + '</td>' +
+          '</tr>';
+        }).join('');
+      } catch (e) {
+        console.warn('Failed to load transfers:', e.message);
+      }
+    }
+
+    async function handleDispatchTransferSubmit(e) {
+      e.preventDefault();
+      const destTenantId = document.getElementById('trf-dest-store')?.value;
+      const skuId = document.getElementById('trf-sku')?.value;
+      const qty = Number(document.getElementById('trf-qty')?.value || 20);
+      const fb = document.getElementById('transfer-feedback');
+
+      try {
+        const payload = {
+          sourceTenantId: '37a64e83-514d-4b00-b90a-9af172dacdd6',
+          destinationTenantId: destTenantId,
+          vehicleNumber: 'TN-60-AZ-4512',
+          driverName: 'Murugesan K.',
+          notes: 'Standard replenishment from Mother Warehouse',
+          items: [{ globalSkuId: skuId, requestedQuantity: qty, unitCost: 1180 }]
+        };
+
+        const res = await fetch('/api/transfers/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        if (fb) {
+          fb.classList.remove('hidden');
+          fb.textContent = '✓ Dispatched Transfer ' + (result.transfer ? result.transfer.transferNumber : '') + ' (' + qty + ' units). Source stock decremented.';
+          setTimeout(function() { fb.classList.add('hidden'); }, 5000);
+        }
+        loadMultiTenantTransfers();
+      } catch (err) {
+        alert('Dispatch error: ' + err.message);
+      }
+    }
+
+    async function confirmTransferReceipt(transferId, btn) {
+      if (btn) btn.disabled = true;
+      try {
+        const res = await fetch('/api/transfers/receive', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ transferId: transferId, notes: 'Verified dock delivery' })
+        });
+        const result = await res.json();
+        if (result.success) {
+          loadMultiTenantTransfers();
+          if (typeof showToast === 'function') {
+            showToast('Transfer received! Destination inventory incremented.', 'success');
+          }
+        }
+      } catch (err) {
+        alert('Receive error: ' + err.message);
+      }
+    }
+
 </script>
 
   <!-- MOBILE BOTTOM COMMAND BAR (App-like ergonomics for smartphones) -->
@@ -12447,6 +12610,231 @@ ${notificationTamil}
                 <td class="p-1.5 font-bold">Kavitha R.</td>
                 <td class="p-1.5 text-emerald-700">PASSKEY</td>
                 <td class="p-1.5 text-right font-black text-emerald-800">382ms</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 🏬 15-STORE MULTI-TENANT REGIONAL EXPANSION & STOCK TRANSFER MODAL -->
+  <div id="multi-tenant-cluster-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-4xl w-full p-6 shadow-2xl border border-gray-100 space-y-5 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-800 flex items-center justify-center text-lg font-black">
+            <i class="fa-solid fa-network-wired"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-gray-900 text-base">Phase 2 Multi-Tenant Regional Network</h3>
+            <p class="text-xs text-gray-500 font-medium">15 Supermarkets • Theni, Madurai &amp; Dindigul Districts • Row-Level Security</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeMultiTenantClusterModal()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold cursor-pointer">&times;</button>
+      </div>
+
+      <!-- Network Summary KPI Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="p-3 bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 rounded-2xl">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600">Regional Footprint</span>
+          <p class="text-xl font-black text-indigo-950 mt-1">15 Stores</p>
+          <span class="text-[11px] text-indigo-700 font-medium">3 Districts • 125.3k sqft</span>
+        </div>
+        <div class="p-3 bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 rounded-2xl">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Daily Shopper Traffic</span>
+          <p class="text-xl font-black text-emerald-950 mt-1">17,130</p>
+          <span class="text-[11px] text-emerald-700 font-medium">Customers / Day</span>
+        </div>
+        <div class="p-3 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 rounded-2xl">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-amber-600">Global Master SKUs</span>
+          <p class="text-xl font-black text-amber-950 mt-1">50,000</p>
+          <span class="text-[11px] text-amber-700 font-medium">Standard FMCG Barcodes</span>
+        </div>
+        <div class="p-3 bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100 rounded-2xl">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600">Network Inventory Val</span>
+          <p class="text-xl font-black text-purple-950 mt-1">₹51.3 Lakhs</p>
+          <span class="text-[11px] text-purple-700 font-medium">13,872 Total Units</span>
+        </div>
+      </div>
+
+      <!-- District Cluster Tabs & Switcher -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-black uppercase tracking-wider text-gray-700">15 Regional Supermarket Clusters</span>
+          <span class="text-[11px] text-gray-500 font-medium">Click any store to switch active RLS tenant context</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <!-- Theni Cluster -->
+          <div class="p-3 rounded-2xl bg-gray-50 border border-gray-200 space-y-2">
+            <div class="flex items-center justify-between border-b border-gray-200 pb-1.5">
+              <span class="text-xs font-black text-emerald-800 flex items-center gap-1.5">
+                <i class="fa-solid fa-location-dot"></i> Theni District (7 Stores)
+              </span>
+              <span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded-full">Mother Hub</span>
+            </div>
+            <div class="space-y-1 text-xs">
+              <button type="button" onclick="switchRegionalStore('37a64e83-514d-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-emerald-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
+                <span>🏢 Bodinayakanur (Flagship Hub)</span>
+                <span class="text-[10px] text-gray-500 font-normal">18,500 sqft</span>
+              </button>
+              <button type="button" onclick="switchRegionalStore('37a64e83-0002-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-emerald-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
+                <span>🏬 Theni Main Bazaar</span>
+                <span class="text-[10px] text-gray-500 font-normal">6,500 sqft</span>
+              </button>
+              <button type="button" onclick="switchRegionalStore('37a64e83-0003-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-emerald-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
+                <span>🏬 Periyakulam Branch</span>
+                <span class="text-[10px] text-gray-500 font-normal">5,200 sqft</span>
+              </button>
+              <button type="button" onclick="switchRegionalStore('37a64e83-0004-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-emerald-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
+                <span>⚡ Chinnamanur Express</span>
+                <span class="text-[10px] text-gray-500 font-normal">3,800 sqft</span>
+              </button>
+              <button type="button" onclick="switchRegionalStore('37a64e83-0005-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-emerald-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
+                <span>🏬 Cumbum Valley Hypermarket</span>
+                <span class="text-[10px] text-gray-500 font-normal">8,200 sqft</span>
+              </button>
+              <button type="button" onclick="switchRegionalStore('37a64e83-0006-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-emerald-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
+                <span>🏬 Uthamapalayam Supermarket</span>
+                <span class="text-[10px] text-gray-500 font-normal">4,100 sqft</span>
+              </button>
+              <button type="button" onclick="switchRegionalStore('37a64e83-0007-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-emerald-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
+                <span>⚡ Andipatti Mart</span>
+                <span class="text-[10px] text-gray-500 font-normal">3,400 sqft</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Madurai Cluster -->
+          <div class="p-3 rounded-2xl bg-gray-50 border border-gray-200 space-y-2">
+            <div class="flex items-center justify-between border-b border-gray-200 pb-1.5">
+              <span class="text-xs font-black text-blue-800 flex items-center gap-1.5">
+                <i class="fa-solid fa-location-dot"></i> Madurai District (4 Stores)
+              </span>
+              <span class="text-[10px] font-bold bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full">Secondary Hub</span>
+            </div>
+            <div class="space-y-1 text-xs">
+              <button type="button" onclick="switchRegionalStore('37a64e83-0009-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-blue-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
+                <span>🚚 Mattuthavani Wholesale Hub</span>
+                <span class="text-[10px] text-gray-500 font-normal">22,000 sqft</span>
+              </button>
+              <button type="button" onclick="switchRegionalStore('37a64e83-0008-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-blue-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
+                <span>🏬 Simmakkal Central</span>
+                <span class="text-[10px] text-gray-500 font-normal">9,500 sqft</span>
+              </button>
+              <button type="button" onclick="switchRegionalStore('37a64e83-0010-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-blue-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
+                <span>🏬 Anna Nagar Gourmet Mart</span>
+                <span class="text-[10px] text-gray-500 font-normal">7,800 sqft</span>
+              </button>
+              <button type="button" onclick="switchRegionalStore('37a64e83-0011-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-blue-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
+                <span>🏬 Thirunagar Supermarket</span>
+                <span class="text-[10px] text-gray-500 font-normal">5,600 sqft</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Dindigul Cluster -->
+          <div class="p-3 rounded-2xl bg-gray-50 border border-gray-200 space-y-2">
+            <div class="flex items-center justify-between border-b border-gray-200 pb-1.5">
+              <span class="text-xs font-black text-amber-800 flex items-center gap-1.5">
+                <i class="fa-solid fa-location-dot"></i> Dindigul District (4 Stores)
+              </span>
+              <span class="text-[10px] font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded-full">NH-83 Corridor</span>
+            </div>
+            <div class="space-y-1 text-xs">
+              <button type="button" onclick="switchRegionalStore('37a64e83-0012-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-amber-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
+                <span>🏬 Dindigul Main Road</span>
+                <span class="text-[10px] text-gray-500 font-normal">11,000 sqft</span>
+              </button>
+              <button type="button" onclick="switchRegionalStore('37a64e83-0013-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-amber-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
+                <span>🏬 Palani Temple Town</span>
+                <span class="text-[10px] text-gray-500 font-normal">7,200 sqft</span>
+              </button>
+              <button type="button" onclick="switchRegionalStore('37a64e83-0014-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-amber-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
+                <span>🏬 Oddanchatram Agro Mart</span>
+                <span class="text-[10px] text-gray-500 font-normal">6,000 sqft</span>
+              </button>
+              <button type="button" onclick="switchRegionalStore('37a64e83-0015-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-amber-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
+                <span>⚡ Batlagundu Transit Mart</span>
+                <span class="text-[10px] text-gray-500 font-normal">4,500 sqft</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Inter-Store Inventory Transfer Dispatcher -->
+      <div class="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-200 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-black uppercase tracking-wider text-indigo-950 flex items-center gap-1.5">
+            <i class="fa-solid fa-truck-moving text-indigo-700"></i> Dispatch Inter-Store Stock Transfer (Mother Warehouse ➔ Branch)
+          </span>
+          <span class="text-[11px] font-bold text-indigo-700">Automated PostgreSQL State Machine</span>
+        </div>
+        <form onsubmit="handleDispatchTransferSubmit(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs">
+          <div>
+            <label class="block text-[10px] font-bold uppercase text-gray-600 mb-0.5">Destination Store</label>
+            <select id="trf-dest-store" class="w-full p-2 bg-white rounded-xl border border-gray-200 font-bold text-gray-800 text-xs">
+              <option value="37a64e83-0002-4b00-b90a-9af172dacdd6">🏬 Theni Main Bazaar</option>
+              <option value="37a64e83-0009-4b00-b90a-9af172dacdd6">🚚 Madurai Mattuthavani Hub</option>
+              <option value="37a64e83-0005-4b00-b90a-9af172dacdd6">🏬 Cumbum Valley Hypermarket</option>
+              <option value="37a64e83-0012-4b00-b90a-9af172dacdd6">🏬 Dindigul Main Road</option>
+              <option value="37a64e83-0013-4b00-b90a-9af172dacdd6">🏬 Palani Temple Town</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase text-gray-600 mb-0.5">Commodity SKU</label>
+            <select id="trf-sku" class="w-full p-2 bg-white rounded-xl border border-gray-200 font-bold text-gray-800 text-xs">
+              <option value="a0000001-0001-4000-8000-000000000001">🌾 Ponni Boiled Rice (25kg Sack)</option>
+              <option value="a0000001-0001-4000-8000-000000000002">🌻 Gold Winner Sunflower Oil (5L Can)</option>
+              <option value="a0000001-0001-4000-8000-000000000003">🧼 Surf Excel Detergent (1kg Pack)</option>
+              <option value="a0000001-0001-4000-8000-000000000004">🌾 Aashirvaad Whole Wheat Atta (5kg)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase text-gray-600 mb-0.5">Quantity (Units)</label>
+            <input type="number" id="trf-qty" min="1" max="500" value="20" class="w-full p-2 bg-white rounded-xl border border-gray-200 font-bold text-gray-800 text-xs">
+          </div>
+          <div class="flex items-end">
+            <button type="submit" id="btn-dispatch-trf" class="w-full p-2 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+              <i class="fa-solid fa-paper-plane"></i> Dispatch Transfer
+            </button>
+          </div>
+        </form>
+        <div id="transfer-feedback" class="text-xs font-bold text-emerald-800 hidden"></div>
+      </div>
+
+      <!-- Active Transfers Table (Bilateral RLS Tracking) -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-black uppercase tracking-wider text-gray-700">Active Inter-Store Transfers (Bilateral RLS Visibility)</span>
+          <button type="button" onclick="loadMultiTenantTransfers()" class="text-[11px] text-indigo-700 font-bold hover:underline cursor-pointer">
+            <i class="fa-solid fa-rotate"></i> Refresh Manifests
+          </button>
+        </div>
+        <div class="border border-gray-200 rounded-2xl overflow-hidden">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-50 border-b border-gray-200 font-black text-gray-600">
+              <tr>
+                <th class="p-2">Transfer #</th>
+                <th class="p-2">Route</th>
+                <th class="p-2">Items</th>
+                <th class="p-2">Status</th>
+                <th class="p-2 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="cluster-transfers-tbody" class="divide-y divide-gray-100 font-medium">
+              <tr>
+                <td class="p-2 font-mono font-bold text-indigo-700">TRF-2026-BODI-THN-001</td>
+                <td class="p-2">Bodi Hub ➔ Theni Bazaar</td>
+                <td class="p-2">Ponni Rice 25kg (40), Oil 5L (30)</td>
+                <td class="p-2"><span class="px-2 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-800 rounded-full">IN_TRANSIT</span></td>
+                <td class="p-2 text-right">
+                  <button type="button" onclick="confirmTransferReceipt('b0000001-0001-4000-8000-000000000001', this)" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[10px] cursor-pointer">
+                    Confirm Receipt
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>

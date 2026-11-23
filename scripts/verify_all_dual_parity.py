@@ -20,6 +20,7 @@ pairs = [
     ('reconciliation.html', 'public/reconciliation.html'),
     ('services/procurementService.js', 'api/services/procurementService.js'),
     ('procurement.html', 'public/procurement.html'),
+    ('services/rbacAuthService.js', 'api/services/rbacAuthService.js'),
     ('catalog-search.worker.js', 'public/catalog-search.worker.js'),
     ('sw.js', 'public/sw.js'),
     ('audio/chime.mp3', 'public/audio/chime.mp3'),

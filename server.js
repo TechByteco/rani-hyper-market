@@ -51,6 +51,13 @@ try {
   console.warn('procurementService load notice:', e.message);
 }
 
+let rbacAuthService = null;
+try {
+  rbacAuthService = require('./services/rbacAuthService').rbacAuthService;
+} catch (e) {
+  console.warn('rbacAuthService load notice:', e.message);
+}
+
 const server = http.createServer((req, res) => {
   // CORS & Universal Web Security Headers (OWASP Top 10 Standards)
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -72,6 +79,37 @@ const server = http.createServer((req, res) => {
   let reqPath = req.url.split('?')[0].split('#')[0];
   const queryStr = req.url.includes('?') ? req.url.split('?')[1] : '';
   const queryParams = new URLSearchParams(queryStr);
+
+  // RBAC Context Extraction (Authorization header, x-rhm-role, or query param)
+  let authRole = 'store_director';
+  let authUser = null;
+  const authHeader = req.headers['authorization'];
+  if (authHeader && rbacAuthService) {
+    const vRes = rbacAuthService.verifyJwtToken(authHeader);
+    if (vRes.valid) {
+      authUser = vRes.payload;
+      authRole = vRes.payload.role;
+    }
+  } else if (req.headers['x-rhm-role']) {
+    authRole = req.headers['x-rhm-role'];
+  } else if (queryParams.get('role')) {
+    authRole = queryParams.get('role');
+  }
+
+  // Enforce RBAC Permission Guardrail
+  if (rbacAuthService) {
+    const routeCheck = rbacAuthService.canAccessRoute(authRole, reqPath, req.method);
+    if (!routeCheck.allowed) {
+      res.writeHead(routeCheck.statusCode || 403, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        success: false,
+        error: routeCheck.error || 'Access Denied: Insufficient RBAC Permissions',
+        role: authRole,
+        path: reqPath
+      }));
+      return;
+    }
+  }
 
   // API Endpoints: Live Desktop POS Bridge
     // API Endpoints: System Diagnostics & Health Suite
@@ -686,6 +724,226 @@ const server = http.createServer((req, res) => {
       const result = procurementService ? procurementService.generateWhatsAppShare(poNumber) : { success: false };
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(result));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  // =========================================================================
+  // 🔐 RBAC & IAM AUTHENTICATION, PASSKEY & HANDOVER ENDPOINTS
+  // =========================================================================
+
+  // Staff Login (Username + Password/PIN -> JWT Token)
+  if (reqPath === '/api/auth/login' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const username = parsed.username || parsed.user;
+        const cred = parsed.password || parsed.pin || parsed.credential;
+        const result = rbacAuthService ? rbacAuthService.authenticateCredentials(username, cred) : { success: false, error: 'RBAC service unavailable' };
+        res.writeHead(result.success ? 200 : 401, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // Token Verification & Current User Info
+  if ((reqPath === '/api/auth/verify' || reqPath === '/api/auth/me') && (req.method === 'POST' || req.method === 'GET')) {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        let tokenToVerify = authHeader;
+        if (body) {
+          try {
+            const parsed = JSON.parse(body);
+            if (parsed.token) tokenToVerify = parsed.token;
+          } catch(e) {}
+        }
+        const verifyRes = rbacAuthService ? rbacAuthService.verifyJwtToken(tokenToVerify) : { valid: false };
+        if (verifyRes.valid) {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: true, valid: true, user: verifyRes.payload }));
+        } else {
+          res.writeHead(401, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: false, valid: false, error: verifyRes.error || 'Invalid or expired token' }));
+        }
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // WebAuthn Passkey Challenge Generator
+  if (reqPath === '/api/auth/passkey/challenge' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const username = parsed.username || 'cashier1';
+        const challenge = rbacAuthService ? rbacAuthService.generatePasskeyChallenge(username) : {};
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, challenge }));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // WebAuthn Passkey Assertion Verification
+  if (reqPath === '/api/auth/passkey/verify' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const result = rbacAuthService ? rbacAuthService.verifyPasskeyAssertion(parsed) : { success: false };
+        res.writeHead(result.success ? 200 : 401, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // Rapid Cashier Shift Handover (< 500ms)
+  if (reqPath === '/api/auth/handover' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const result = rbacAuthService ? rbacAuthService.handoverCashierShift(parsed) : { success: false, error: 'RBAC service unavailable' };
+        res.writeHead(result.success ? 200 : 400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // Shift Handovers Audit Journal
+  if (reqPath === '/api/auth/handovers' && req.method === 'GET') {
+    try {
+      const journal = rbacAuthService ? rbacAuthService.getHandoversJournal() : [];
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, total: journal.length, handovers: journal }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  // Roles Matrix Reference
+  if (reqPath === '/api/auth/roles' && req.method === 'GET') {
+    try {
+      const roles = rbacAuthService ? rbacAuthService.ROLES : {};
+      const staff = rbacAuthService ? rbacAuthService.STAFF_ACCOUNTS.map(s => ({
+        id: s.id, username: s.username, name: s.name, role: s.role, counter: s.counter, department: s.department
+      })) : [];
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, roles, staff }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  // Marketing 5.0% Margin Guardrail Validation
+  if (reqPath === '/api/campaigns/validate-discount' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const result = rbacAuthService ? rbacAuthService.validateMarginGuardrail(parsed) : { valid: false };
+        const statusCode = result.valid ? 200 : 422; // 422 Unprocessable Entity on margin breach
+        res.writeHead(statusCode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: result.valid, ...result }));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // Customer Phone Number & CRM Export (RBAC Protected: Store Director only)
+  if (reqPath === '/api/customers/export' && req.method === 'GET') {
+    try {
+      if (authRole === 'cashier' || authRole === 'inventory_supervisor') {
+        res.writeHead(403, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          success: false,
+          error: `Forbidden: Role "${authRole}" is strictly prohibited from exporting customer contact details or phone records.`
+        }));
+        return;
+      }
+
+      let customers = [];
+      const custPath = path.join(__dirname, 'rani_customers.json');
+      const pubCustPath = path.join(__dirname, 'public', 'rani_customers.json');
+      if (fs.existsSync(custPath)) {
+        try { customers = JSON.parse(fs.readFileSync(custPath, 'utf8')); } catch(e) {}
+      } else if (fs.existsSync(pubCustPath)) {
+        try { customers = JSON.parse(fs.readFileSync(pubCustPath, 'utf8')); } catch(e) {}
+      }
+      if (!Array.isArray(customers) && customers && Array.isArray(customers.value)) {
+        customers = customers.value;
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        success: true,
+        exportAuthor: authUser ? authUser.name : 'Store Director',
+        role: authRole,
+        totalCustomers: customers.length,
+        exportedAt: new Date().toISOString(),
+        customers
+      }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  // Masked Products Endpoint for POS / Cashier
+  if (reqPath === '/api/pos/products' && req.method === 'GET') {
+    try {
+      let catalog = [];
+      const catPath = path.join(__dirname, 'products_catalog.json');
+      if (fs.existsSync(catPath)) {
+        catalog = JSON.parse(fs.readFileSync(catPath, 'utf8'));
+      }
+      const masked = rbacAuthService ? catalog.map(p => rbacAuthService.maskProductForRole(p, authRole)) : catalog;
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        success: true,
+        role: authRole,
+        wholesaleCostMasked: authRole === 'cashier',
+        count: masked.length,
+        products: masked.slice(0, 100)
+      }));
     } catch (e) {
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ success: false, error: e.message }));
@@ -2527,7 +2785,10 @@ if (reqPath === '/api/pos/status') {
     '/online-orders': '/orders.html',
     '/display/overhead-promos': '/display/overhead-promos.html',
     '/overhead-promos': '/display/overhead-promos.html',
-    '/signage': '/display/overhead-promos.html'
+    '/signage': '/display/overhead-promos.html',
+    '/scanner': '/store.html',
+    '/procurement': '/procurement.html',
+    '/reconciliation': '/reconciliation.html'
   };
 
   if (ROUTE_ALIASES[reqPath]) {

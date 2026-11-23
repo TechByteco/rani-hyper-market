@@ -20,7 +20,10 @@ pairs = [
     ('reconciliation.html', 'public/reconciliation.html'),
     ('services/procurementService.js', 'api/services/procurementService.js'),
     ('procurement.html', 'public/procurement.html'),
-    ('catalog-search.worker.js', 'public/catalog-search.worker.js')
+    ('catalog-search.worker.js', 'public/catalog-search.worker.js'),
+    ('sw.js', 'public/sw.js'),
+    ('audio/chime.mp3', 'public/audio/chime.mp3'),
+    ('store_upgrade_module.js', 'public/store_upgrade_module.js')
 ]
 
 all_ok = True

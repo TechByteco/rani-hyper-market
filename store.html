@@ -1336,6 +1336,25 @@
     </div>
   </div>
 
+  <!-- ⚡ OFFLINE / AIRPLANE MODE STATUS BANNER -->
+  <div id="pwa-offline-banner" class="hidden bg-gradient-to-r from-amber-600 via-amber-700 to-amber-600 text-white py-2 px-4 text-xs font-black shadow-md relative z-40 flex items-center justify-between border-b border-amber-400/60">
+    <div class="flex items-center gap-2">
+      <span class="w-6 h-6 rounded-lg bg-black/25 flex items-center justify-center text-xs text-amber-200 animate-pulse">
+        <i class="fa-solid fa-plane-arrival"></i>
+      </span>
+      <span>⚡ Airplane Mode / Offline Active: Full 7,179 SKU catalog, in-store barcode scan &amp; offline checkout enabled.</span>
+    </div>
+    <div class="hidden sm:flex items-center gap-2 text-[10px] font-mono">
+      <span class="bg-black/35 px-2.5 py-0.5 rounded-md text-amber-200 border border-amber-300/30">IndexedDB &bull; 0 Error Modals</span>
+    </div>
+  </div>
+
+  <!-- 🌐 RECONNECTION TOAST -->
+  <div id="pwa-online-toast" class="hidden fixed top-4 right-4 z-[160] bg-emerald-800 text-white px-4 py-2.5 rounded-2xl shadow-2xl text-xs font-black flex items-center gap-2 border border-emerald-400 animate-slide-up">
+    <i class="fa-solid fa-wifi text-emerald-300"></i>
+    <span id="pwa-online-toast-text">🌐 Connection restored! Syncing offline orders...</span>
+  </div>
+
   <!-- ANNOUNCEMENT BANNER -->
   <div id="announcement-banner" class="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white text-center py-2 px-4 text-xs font-bold shadow-sm relative z-40 flex items-center justify-center gap-2">
     <i class="fa-solid fa-bullhorn text-amber-300"></i>
@@ -2596,6 +2615,14 @@
             <p id="bill-inv-id" class="font-mono font-black text-gray-900 text-xs mt-1">#NSN-INV-0000</p>
             <p id="bill-date" class="text-[10px] text-gray-400">Date: 01/09/2026</p>
           </div>
+        </div>
+
+        <!-- OFFLINE CONFIRMATION STATUS BADGE -->
+        <div id="bill-offline-status-banner" class="hidden bg-amber-50 border border-amber-300 rounded-xl p-2.5 text-center mb-1">
+          <span class="text-amber-900 font-extrabold text-xs flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-plane-arrival text-amber-700"></i> OFFLINE CHECKOUT CONFIRMED (INV: <span id="bill-offline-inv-id"></span>)
+          </span>
+          <p class="text-[10px] text-amber-800 mt-0.5">Recorded in device IndexedDB queue. Will auto-sync to store cloud upon reconnection.</p>
         </div>
 
         <div class="bg-gray-50 p-3 rounded-xl grid grid-cols-2 gap-2 text-[11px]">
@@ -5666,6 +5693,19 @@
         const totalSavings = typeof orderRecord.totalSavings === 'number' ? orderRecord.totalSavings : 0;
         const totalAmount = typeof orderRecord.totalAmount === 'number' ? orderRecord.totalAmount : 0;
 
+        const isOffline = !navigator.onLine;
+        if (isOffline) {
+          orderRecord.offline = true;
+          orderRecord.offlineCapturedAt = new Date().toISOString();
+        }
+
+        // Play Tier 1 Audio Chime
+        if (typeof playAudioChime === 'function') {
+          playAudioChime();
+        } else {
+          try { new Audio('/audio/chime.mp3').play().catch(() => {}); } catch(e) {}
+        }
+
         // Cache last order for WhatsApp sharing & local record
         window.lastCompletedOrder = orderRecord;
 
@@ -5686,7 +5726,15 @@
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(orderRecord)
-            }).catch(() => {});
+            }).then(r => r.json()).then(res => {
+              if (res && res.offline) {
+                console.log('⚡ [PWA Checkout] Order enqueued via Service Worker offline queue:', res.invId);
+              }
+            }).catch(() => {
+              if (window.RaniOfflineOrderQueue) {
+                window.RaniOfflineOrderQueue.syncPendingOrders().catch(() => {});
+              }
+            });
           }
           if (sb && typeof sb.from === 'function') {
             // Cloud sync committed directly via Direct Vercel Delta Pipeline (/api/orders & /api/sync/delta)
@@ -5701,6 +5749,17 @@
         // Populate official Tax Invoice modal
         const billInvEl = document.getElementById('bill-inv-id');
         if (billInvEl) billInvEl.innerText = invId;
+
+        const offlineBanner = document.getElementById('bill-offline-status-banner');
+        const offlineInvEl = document.getElementById('bill-offline-inv-id');
+        if (offlineBanner) {
+          if (isOffline || orderRecord.offline) {
+            if (offlineInvEl) offlineInvEl.innerText = invId;
+            offlineBanner.classList.remove('hidden');
+          } else {
+            offlineBanner.classList.add('hidden');
+          }
+        }
 
         const billDateEl = document.getElementById('bill-date');
         if (billDateEl) billDateEl.innerText = 'Date: ' + orderRecord.date + ' ' + orderRecord.time;
@@ -6990,7 +7049,8 @@
   </div>
 
   <!-- PWA, Barcode Scanner & IndexedDB Engine Module -->
-  <script src="/store_upgrade_module.js">
+  <script src="/store_upgrade_module.js"></script>
+  <script>
     // =====================================================================
     // ⚡ ZERO-WASTE FRESH MARKDOWN ENGINE & FLASH DEALS
     // =====================================================================

@@ -567,8 +567,136 @@ function dismissPWABanner() {
   } catch(e) {}
 }
 
+/* ════════════════════════════════════════════════════════════════
+   📱 4. PWA OFFLINE ARCHITECTURE, AUDIO CHIME & SYNCMANAGER
+   ════════════════════════════════════════════════════════════════ */
+function playAudioChime() {
+  try {
+    const audio = new Audio('/audio/chime.mp3');
+    audio.volume = 0.6;
+    audio.play().catch(() => {});
+  } catch(e) {}
+}
+window.playAudioChime = playAudioChime;
+
+const RaniOfflineOrderQueue = {
+  dbName: 'rani_offline_pwa_db',
+  storeName: 'offline_orders',
+  _openDB: function() {
+    return new Promise((resolve) => {
+      if (typeof window === 'undefined' || !window.indexedDB) return resolve(null);
+      try {
+        const req = indexedDB.open(this.dbName, 1);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(this.storeName)) {
+            db.createObjectStore(this.storeName, { keyPath: 'id' });
+          }
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => resolve(null);
+      } catch(e) { resolve(null); }
+    });
+  },
+  getPendingOrders: async function() {
+    try {
+      const db = await this._openDB();
+      if (!db) return [];
+      return new Promise((resolve) => {
+        const tx = db.transaction(this.storeName, 'readonly');
+        const store = tx.objectStore(this.storeName);
+        const req = store.getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => resolve([]);
+      });
+    } catch(e) { return []; }
+  },
+  syncPendingOrders: async function() {
+    try {
+      const pending = await this.getPendingOrders();
+      if (!pending || pending.length === 0) return;
+      console.log(`[PWA Client] Draining ${pending.length} offline orders from IndexedDB queue...`);
+      for (const order of pending) {
+        try {
+          const res = await fetch('/api/orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(order)
+          });
+          if (res.ok || res.status === 200 || res.status === 201) {
+            const db = await this._openDB();
+            if (db) {
+              const tx = db.transaction(this.storeName, 'readwrite');
+              tx.objectStore(this.storeName).delete(order.id);
+            }
+            console.log(`✨ [PWA Client] Successfully synced offline order: ${order.invId || order.id}`);
+          }
+        } catch(e) {}
+      }
+    } catch(e) {}
+  }
+};
+window.RaniOfflineOrderQueue = RaniOfflineOrderQueue;
+
+// ⚡ Online / Offline Network Status Detection & Visual Banner
+function updateNetworkStatusUI() {
+  const isOffline = !navigator.onLine;
+  const offlineBanner = document.getElementById('pwa-offline-banner');
+  const onlineToast = document.getElementById('pwa-online-toast');
+
+  if (offlineBanner) {
+    if (isOffline) {
+      offlineBanner.classList.remove('hidden');
+    } else {
+      offlineBanner.classList.add('hidden');
+    }
+  }
+
+  if (!isOffline) {
+    // Connection restored!
+    if (onlineToast) {
+      onlineToast.classList.remove('hidden');
+      setTimeout(() => {
+        onlineToast.classList.add('hidden');
+      }, 3500);
+    }
+    // Drain offline queue
+    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ action: 'TRIGGER_SYNC_ORDERS' });
+    }
+    RaniOfflineOrderQueue.syncPendingOrders();
+  }
+}
+
+window.addEventListener('online', updateNetworkStatusUI);
+window.addEventListener('offline', updateNetworkStatusUI);
+
+// Service Worker Registration & Message Handling
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
+    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+      .then((reg) => {
+        console.log('⚡ [PWA] Service Worker registered (Scope:', reg.scope, ')');
+        if ('sync' in reg) {
+          console.log('⚡ [PWA] SyncManager active for offline background order sync');
+        }
+      })
+      .catch((err) => console.warn('[PWA] SW registration failed:', err));
+
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      const { type, id, invId, order } = event.data || {};
+      if (type === 'OFFLINE_ORDER_QUEUED') {
+        console.log('⚡ [PWA SW Notification] Offline order queued in IndexedDB:', order?.invId);
+      } else if (type === 'ORDER_SYNC_COMPLETED') {
+        const toast = document.createElement('div');
+        toast.className = 'fixed top-4 left-4 z-[170] bg-emerald-800 text-white px-4 py-2.5 rounded-2xl text-xs font-bold shadow-2xl border border-emerald-400 flex items-center gap-2';
+        toast.innerHTML = `<i class="fa-solid fa-cloud-arrow-up text-emerald-300"></i> Offline Order <strong>${invId || id}</strong> synced to cloud!`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 4000);
+      }
+    });
   });
 }
+
+// Initial status check
+document.addEventListener('DOMContentLoaded', updateNetworkStatusUI);

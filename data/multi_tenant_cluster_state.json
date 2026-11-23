@@ -462,7 +462,7 @@
         "wholesaleLandedCost": 1174.5,
         "grossMarginPct": 10,
         "localShelfLocation": "Aisle 1, Bay A",
-        "currentStockUnits": 200,
+        "currentStockUnits": 175,
         "reorderThresholdUnits": 50,
         "maxShelfCapacity": 1000,
         "batchLotNumber": "BATCH-2026-RIC-10",
@@ -734,11 +734,11 @@
         "wholesaleLandedCost": 1178.02,
         "grossMarginPct": 12.6,
         "localShelfLocation": "Aisle 1, Bay A",
-        "currentStockUnits": 90,
+        "currentStockUnits": 115,
         "reorderThresholdUnits": 15,
         "maxShelfCapacity": 120,
         "batchLotNumber": "BATCH-2026-RIC-10",
-        "lastRestockedAt": "2026-11-23T01:53:41.706Z",
+        "lastRestockedAt": "2026-11-23T02:00:02.621Z",
         "isLowStock": false,
         "verifiedImageUrl": "https://5.imimg.com/data5/SELLER/Default/2021/6/YQ/ZB/VC/52481281/ponni-boiled-rice-500x500.jpg"
       },
@@ -4524,6 +4524,34 @@
     ]
   },
   "transfers": [
+    {
+      "id": "b0000001-0006-4000-8000-000000000000",
+      "transferNumber": "TRF-2026-BOD-THE-006",
+      "sourceTenantId": "37a64e83-514d-4b00-b90a-9af172dacdd6",
+      "destinationTenantId": "37a64e83-0002-4b00-b90a-9af172dacdd6",
+      "status": "RECEIVED",
+      "vehicleNumber": "TN-60-AZ-4512",
+      "driverName": "Murugan K.",
+      "driverPhone": "+91 94431 00000",
+      "eWayBillNumber": "EWB-3312-7570-2256",
+      "totalItemsCount": 1,
+      "totalTransferValue": 29500,
+      "notes": "Weekly replenishment of Ponni Rice & Sunflower Oil from Bodi Central Hub | Receipt Note: Verified all 25 sacks of Rice received in pristine condition at Theni Main Bazaar dock.",
+      "dispatchedAt": "2026-11-23T01:59:54.452Z",
+      "receivedAt": "2026-11-23T02:00:02.621Z",
+      "items": [
+        {
+          "globalSkuId": "a0000001-0001-4000-8000-000000000001",
+          "productName": "Bodi Royal Ponni Boiled Rice (25kg Sack)",
+          "requestedQuantity": 25,
+          "dispatchedQuantity": 25,
+          "receivedQuantity": 25,
+          "unitCost": 1180,
+          "batchNumber": "BATCH-2026-TRF-96",
+          "receivedCondition": "PERFECT"
+        }
+      ]
+    },
     {
       "id": "b0000001-0005-4000-8000-000000000000",
       "transferNumber": "TRF-2026-BOD-THE-005",

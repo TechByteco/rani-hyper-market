@@ -58,6 +58,13 @@ try {
   console.warn('rbacAuthService load notice:', e.message);
 }
 
+let deliveryDispatchService = null;
+try {
+  deliveryDispatchService = require('./services/deliveryDispatchService').deliveryDispatchService;
+} catch (e) {
+  console.warn('deliveryDispatchService load notice:', e.message);
+}
+
 const server = http.createServer((req, res) => {
   // CORS & Universal Web Security Headers (OWASP Top 10 Standards)
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -948,6 +955,144 @@ const server = http.createServer((req, res) => {
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ success: false, error: e.message }));
     }
+    return;
+  }
+
+  // =========================================================================
+  // 🛵 HYPER-LOCAL DISPATCH & DARK STORE ROUTER ENDPOINTS
+  // =========================================================================
+
+  // Geofencing Validation Endpoint (Turf.js)
+  if (reqPath === '/api/dispatch/geofence/validate') {
+    if (req.method === 'POST') {
+      let body = '';
+      req.on('data', c => body += c);
+      req.on('end', () => {
+        try {
+          const parsed = JSON.parse(body || '{}');
+          const input = parsed.address || parsed.coordinates || parsed.location || parsed;
+          const result = deliveryDispatchService ? deliveryDispatchService.validateDeliveryGeofence(input) : { error: 'Dispatch service unavailable' };
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(result));
+        } catch (e) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: false, error: e.message }));
+        }
+      });
+      return;
+    } else {
+      const address = queryParams.get('address') || queryParams.get('q');
+      const lat = queryParams.get('lat');
+      const lng = queryParams.get('lng') || queryParams.get('lon');
+      const input = (lat && lng) ? { lat: parseFloat(lat), lng: parseFloat(lng) } : (address || 'Bodinayakanur');
+      const result = deliveryDispatchService ? deliveryDispatchService.validateDeliveryGeofence(input) : { error: 'Dispatch service unavailable' };
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(result));
+      return;
+    }
+  }
+
+  // Delivery Fleet Roster Status
+  if (reqPath === '/api/dispatch/fleet' && req.method === 'GET') {
+    try {
+      const fleet = deliveryDispatchService ? deliveryDispatchService.getFleetStatus() : [];
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        success: true,
+        hub: deliveryDispatchService?.STORE_HUB?.name,
+        totalRiders: fleet.length,
+        availableCount: fleet.filter(r => r.status === 'AVAILABLE').length,
+        fleet
+      }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  // Auto-Cluster & Generate Optimized Delivery Manifests (Nearest-Neighbor, Max 4 Orders)
+  if (reqPath === '/api/dispatch/cluster-manifest' && (req.method === 'POST' || req.method === 'GET')) {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        let orders = null;
+        if (body) {
+          try {
+            const parsed = JSON.parse(body);
+            if (Array.isArray(parsed.orders)) orders = parsed.orders;
+          } catch(e) {}
+        }
+        const result = deliveryDispatchService ? deliveryDispatchService.clusterAndDispatchManifests(orders) : { success: false, error: 'Dispatch service unavailable' };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // Active Dispatch Manifests List
+  if (reqPath === '/api/dispatch/manifests' && req.method === 'GET') {
+    try {
+      const manifests = deliveryDispatchService ? deliveryDispatchService.getManifests() : [];
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, count: manifests.length, manifests }));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  // Condensed Kitchen / Store Packing Slip Data (3-Minute Picker SLA)
+  if (reqPath === '/api/dispatch/packing-slip' && req.method === 'GET') {
+    try {
+      const orderId = queryParams.get('orderId') || 'WA-9401';
+      const slip = deliveryDispatchService ? deliveryDispatchService.generatePickerPackingSlip(orderId) : { error: 'Dispatch service unavailable' };
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(slip));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: e.message }));
+    }
+    return;
+  }
+
+  // Printable HTML 80mm Kitchen / Store Packing Slip
+  if (reqPath === '/api/dispatch/packing-slip/print' && req.method === 'GET') {
+    try {
+      const orderId = queryParams.get('orderId') || 'WA-9401';
+      const html = deliveryDispatchService ? deliveryDispatchService.renderPackingSlipHtml(orderId) : '<h3>Dispatch service unavailable</h3>';
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(html);
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'text/plain' });
+      res.end(e.message);
+    }
+    return;
+  }
+
+  // Rider Status Update
+  if (reqPath === '/api/dispatch/rider/update-status' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        const riderId = parsed.riderId || parsed.id;
+        const newStatus = parsed.status || 'AVAILABLE';
+        const result = deliveryDispatchService ? deliveryDispatchService.updateRiderStatus(riderId, newStatus) : { success: false };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: e.message }));
+      }
+    });
     return;
   }
 

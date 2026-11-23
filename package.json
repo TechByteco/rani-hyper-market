@@ -12,6 +12,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@turf/turf": "^7.4.0",
     "mqtt": "^5.16.1",
     "sharp": "^0.35.5",
     "xlsx": "^0.18.5"

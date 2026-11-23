@@ -240,6 +240,49 @@
       </div>
     </div>
 
+    <!-- 🛵 HYPER-LOCAL LOGISTICS & DARK STORE DISPATCH ROUTER (Blinkit / Zepto Rival) -->
+    <div class="bg-gradient-to-r from-blue-950 via-indigo-950 to-slate-900 border border-blue-500/40 rounded-2xl p-4 sm:p-5 shadow-lg text-white flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div class="space-y-1.5">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-500/30 flex items-center gap-1.5 shadow-xs">
+            <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+            Turf.js Geofence Router Active
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+            ⚡ 30-Min Express (&le;6km)
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+            📦 Same-Day Delivery (6-12km)
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+            🛵 4 Store Riders Available
+          </span>
+        </div>
+        <h2 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-motorcycle text-blue-400 text-xl"></i>
+          <span>Hyper-Local Logistics &amp; Dark Store Delivery Router</span>
+        </h2>
+        <p class="text-xs text-blue-200/80 max-w-2xl leading-relaxed">
+          Competes directly with dark stores (Blinkit, Zepto) across Bodinayakanur municipal boundaries (Subramanya Siva Nagar, Periyandavar Puram, Bus Stand road, Paramasivan Temple area). Nearest-neighbor route clustering batches up to 4 orders per trip with 3-minute store picker packing slips.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2.5 flex-wrap shrink-0">
+        <button type="button" onclick="openClusterManifestModal()" class="px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold text-xs flex items-center gap-2 shadow-md shadow-blue-900/30 transition active:scale-95 cursor-pointer">
+          <i class="fa-solid fa-route"></i>
+          <span>Auto-Cluster Manifest (Max 4)</span>
+        </button>
+        <button type="button" onclick="openGeofenceValidatorModal()" class="px-3 py-2.5 rounded-xl bg-gray-800/90 hover:bg-gray-700 text-gray-200 border border-gray-700 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+          <i class="fa-solid fa-draw-polygon"></i>
+          <span>Turf.js Geofence</span>
+        </button>
+        <button type="button" onclick="openSamplePickerSlipModal()" class="px-3 py-2.5 rounded-xl bg-gray-800/90 hover:bg-gray-700 text-gray-200 border border-gray-700 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+          <i class="fa-solid fa-clipboard-list"></i>
+          <span>3-Min Picker Slip</span>
+        </button>
+      </div>
+    </div>
+
     <!-- KPI STATS SUMMARY CARDS -->
     <div id="kpi-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       
@@ -2220,6 +2263,210 @@
       }
     }
 
+    // =========================================================================
+    // 🛵 HYPER-LOCAL LOGISTICS, DISPATCH ROUTER & GEOFENCE CONTROLLER
+    // =========================================================================
+    let activeManifests = [];
+    let currentManifestIdx = 0;
+
+    async function openClusterManifestModal() {
+      const modal = document.getElementById('dispatch-manifest-modal');
+      if (modal) modal.classList.remove('hidden');
+      await refreshDispatchManifests();
+    }
+
+    function closeClusterManifestModal() {
+      const modal = document.getElementById('dispatch-manifest-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function refreshDispatchManifests() {
+      try {
+        const res = await fetch('/api/dispatch/cluster-manifest', { method: 'POST' });
+        const data = await res.json();
+        if (data.success && data.manifests && data.manifests.length > 0) {
+          activeManifests = data.manifests;
+          currentManifestIdx = 0;
+          renderManifestSelector();
+          renderActiveManifestDetails();
+          showToast(`⚡ Generated ${data.totalManifestsGenerated} optimized dispatch manifests!`, 'success');
+        } else {
+          showToast('No active orders found for clustering', 'info');
+        }
+      } catch (e) {
+        console.error('Cluster dispatch error:', e);
+        showToast('Error clustering manifests: ' + e.message, 'error');
+      }
+    }
+
+    function renderManifestSelector() {
+      const sel = document.getElementById('manifest-select');
+      if (!sel) return;
+      sel.innerHTML = activeManifests.map((m, idx) => `
+        <option value="${idx}">Manifest #${m.manifestId} — ${m.ward} (${m.rider?.name || 'Rider'}) • ${m.batchCount} Drops</option>
+      `).join('');
+    }
+
+    function handleManifestSelect(idx) {
+      currentManifestIdx = parseInt(idx, 10);
+      renderActiveManifestDetails();
+    }
+
+    function renderActiveManifestDetails() {
+      const m = activeManifests[currentManifestIdx];
+      if (!m) return;
+
+      document.getElementById('m-manifest-id').innerText = '#' + m.manifestId;
+      document.getElementById('m-rider-name').innerText = m.rider?.name + ' (' + m.rider?.phone + ')';
+      document.getElementById('m-rider-vehicle').innerText = m.rider?.vehicle || 'Two Wheeler';
+      document.getElementById('m-ward').innerText = m.ward;
+      document.getElementById('m-distance').innerText = m.totalDistanceKm + ' km';
+      document.getElementById('m-eta').innerText = '~' + m.estimatedMinutes + ' mins roundtrip';
+      document.getElementById('m-cod').innerText = '₹' + m.totalCodAmount.toFixed(2);
+      document.getElementById('m-total-val').innerText = '₹' + m.totalOrderValue.toFixed(2);
+      document.getElementById('m-drops-count').innerText = m.batchCount + ' Orders (Nearest Neighbor Optimized)';
+
+      const tbody = document.getElementById('m-stops-tbody');
+      if (tbody) {
+        tbody.innerHTML = (m.stops || []).map((s, idx) => `
+          <tr class="hover:bg-blue-50/40">
+            <td class="py-2.5 px-2 text-center font-black text-blue-700 font-mono">#${s.stopSequence || (idx + 1)}</td>
+            <td class="py-2.5 px-2 font-black text-gray-900">${s.orderId}</td>
+            <td class="py-2.5 px-2">
+              <strong class="text-gray-900 block">${s.customerName}</strong>
+              <span class="text-[10px] text-gray-500 font-mono">${s.customerPhone}</span>
+            </td>
+            <td class="py-2.5 px-2 text-gray-700 text-xs">${s.address}</td>
+            <td class="py-2.5 px-2 text-center font-bold text-gray-900">${s.itemsCount}</td>
+            <td class="py-2.5 px-2 text-right">
+              ${s.isCod ? `<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-black text-[10px]">COD: ₹${s.totalAmount}</span>` : `<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">PAID ONLINE</span>`}
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      const mapBtn = document.getElementById('btn-manifest-maps');
+      if (mapBtn) {
+        mapBtn.onclick = () => window.open(m.googleMapsUrl, '_blank');
+      }
+
+      const waBtn = document.getElementById('btn-manifest-whatsapp');
+      if (waBtn) {
+        waBtn.onclick = () => {
+          const riderPhone = (m.rider?.phone || '').replace(/\D/g, '');
+          const url = 'https://wa.me/' + riderPhone + '?text=' + encodeURIComponent(m.whatsappShareText);
+          window.open(url, '_blank');
+          showToast(`✓ Manifest shared with rider ${m.rider?.name} on WhatsApp!`, 'success');
+        };
+      }
+    }
+
+    // Geofencing Modal Controller
+    function openGeofenceValidatorModal() {
+      const modal = document.getElementById('geofence-validator-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        testGeofenceAddress('Subramanya Siva Nagar, Bodinayakanur');
+      }
+    }
+
+    function closeGeofenceValidatorModal() {
+      const modal = document.getElementById('geofence-validator-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function testGeofenceAddress(addressOrPreset) {
+      const addrInput = document.getElementById('geofence-input');
+      const address = addressOrPreset || addrInput?.value || 'Bodinayakanur';
+      if (addrInput) addrInput.value = address;
+
+      try {
+        const res = await fetch('/api/dispatch/geofence/validate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address })
+        });
+        const data = await res.json();
+        renderGeofenceResult(data);
+      } catch(e) {
+        console.error('Geofence test error:', e);
+      }
+    }
+
+    function renderGeofenceResult(data) {
+      const resContainer = document.getElementById('geofence-result-container');
+      if (!resContainer) return;
+      resContainer.classList.remove('hidden');
+
+      const isExpress = data.tier === '30_MIN_EXPRESS';
+      const badge = document.getElementById('gf-tier-badge');
+      if (badge) {
+        badge.className = isExpress 
+          ? 'px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-900 border border-emerald-300 flex items-center gap-1.5'
+          : 'px-3 py-1 rounded-full text-xs font-black bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1.5';
+        badge.innerHTML = isExpress ? '<i class="fa-solid fa-bolt text-amber-500"></i> 30-MINUTE EXPRESS DELIVERY' : '<i class="fa-solid fa-box text-amber-600"></i> SAME-DAY DELIVERY';
+      }
+
+      document.getElementById('gf-promise-text').innerText = data.promiseText;
+      document.getElementById('gf-promise-tamil').innerText = data.promiseTamil;
+      document.getElementById('gf-distance').innerText = data.distanceKm + ' km';
+      document.getElementById('gf-eta').innerText = data.etaMinutes + ' mins';
+      document.getElementById('gf-ward').innerText = data.closestWard || data.landmark || 'Bodi Central';
+      document.getElementById('gf-poly-status').innerText = data.insideMunicipalPolygon ? 'INSIDE BODI MUNICIPAL BOUNDARY (Turf.js)' : 'PERIPHERAL OUTER RADIUS';
+      document.getElementById('gf-fee').innerText = data.deliveryFeeInr === 0 ? 'FREE (Store Express Guarantee)' : '₹' + data.deliveryFeeInr;
+    }
+
+    // 3-Minute Store Picker Slip Helper
+    async function openSamplePickerSlipModal(orderId) {
+      const targetId = orderId || 'WA-9401';
+      try {
+        const res = await fetch('/api/dispatch/packing-slip?orderId=' + targetId);
+        const slip = await res.json();
+        if (slip && slip.success) {
+          renderEnhancedPickerSlip(slip);
+        } else {
+          openPickingSlipModal(targetId);
+        }
+      } catch(e) {
+        openPickingSlipModal(targetId);
+      }
+    }
+
+    function renderEnhancedPickerSlip(slip) {
+      document.getElementById('pick-inv-id').innerText = '#' + slip.orderId;
+      document.getElementById('pick-inv-date').innerText = 'Target SLA: ' + slip.pickerTargetTime + ' (3-Min Countdown)';
+      document.getElementById('pick-cust-name').innerText = slip.customerName + ' [' + slip.toteTag + ']';
+      document.getElementById('pick-cust-phone').innerText = slip.customerPhone;
+      document.getElementById('pick-cust-slot').innerText = '⚡ 3-Minute Dark Store Turnaround';
+      document.getElementById('pick-cust-addr').innerText = slip.deliveryAddress;
+      document.getElementById('pick-items-count').innerText = slip.items.length;
+      document.getElementById('pick-total-units').innerText = slip.totalItemsCount;
+
+      const tbody = document.getElementById('pick-items-tbody');
+      if (tbody) {
+        tbody.innerHTML = slip.items.map(it => `
+          <tr class="hover:bg-blue-50/50">
+            <td class="py-2 px-2 text-center">
+              <input type="checkbox" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer">
+            </td>
+            <td class="py-2 px-2">
+              <span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-black bg-blue-100 text-blue-900 border border-blue-200">[${it.shelfCode}]</span>
+              <strong class="text-gray-900 block text-xs mt-0.5">${it.name}</strong>
+              <span class="text-[10px] text-gray-500 font-semibold">${it.zone}</span>
+            </td>
+            <td class="py-2 px-2 text-center font-black text-gray-900 text-sm">
+              ${it.quantity}
+            </td>
+            <td class="py-2 px-2 text-right font-mono-num text-gray-700 font-bold">
+              ₹${it.totalPrice.toFixed(2)}
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      document.getElementById('picking-slip-modal').classList.remove('hidden');
+    }
+
 </script>
 
   <!-- ⚡ BANK UPI / GPAY WEBHOOK SIMULATOR MODAL -->
@@ -2455,6 +2702,212 @@
       <div class="pt-3 border-t border-gray-100 flex items-center justify-between shrink-0 text-xs text-gray-400">
         <span>Bodinayakanur Store Location: <b>10.0104° N, 77.3496° E</b></span>
         <button type="button" onclick="closeWhatsAppHubModal()" class="px-4 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl">Close</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 🛵 DISPATCH CLUSTER MANIFEST MODAL (Nearest-Neighbor Batches of Max 4) -->
+  <div id="dispatch-manifest-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-4xl w-full p-5 sm:p-6 shadow-2xl border border-gray-100 space-y-4 max-h-[92vh] flex flex-col my-auto">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-gray-100 pb-3 shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-lg font-black shadow-xs">
+            <i class="fa-solid fa-route"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-black text-gray-900 text-base">Hyper-Local Dispatch Manifest</h3>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-500/10 text-blue-700 border border-blue-500/20">
+                TSP Clustered (Max 4 Drops)
+              </span>
+            </div>
+            <p class="text-xs text-gray-500">Nearest-neighbor optimized route for Bodinayakanur delivery fleet</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeClusterManifestModal()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold leading-none cursor-pointer">&times;</button>
+      </div>
+
+      <!-- Manifest Selector & Refresh Toolbar -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 bg-gray-50 p-3 rounded-2xl border border-gray-200 shrink-0">
+        <div class="flex-1">
+          <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Select Active Batch Manifest</label>
+          <select id="manifest-select" onchange="handleManifestSelect(this.value)" class="w-full px-3 py-2 border border-gray-300 rounded-xl font-bold text-xs bg-white text-gray-800 focus:ring-2 focus:ring-blue-500">
+            <option value="0">Loading manifests...</option>
+          </select>
+        </div>
+        <div class="flex items-end">
+          <button type="button" onclick="refreshDispatchManifests()" class="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-xs transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-arrows-rotate"></i>
+            <span>Re-Optimize Clusters</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Manifest Info & KPIs Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 shrink-0 text-xs">
+        <div class="p-3 bg-blue-50/70 border border-blue-200/80 rounded-2xl space-y-1">
+          <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider block">Assigned Rider</span>
+          <strong id="m-rider-name" class="text-gray-900 block truncate font-black">--</strong>
+          <span id="m-rider-vehicle" class="text-[10px] text-gray-500 block truncate">Two Wheeler</span>
+        </div>
+        <div class="p-3 bg-purple-50/70 border border-purple-200/80 rounded-2xl space-y-1">
+          <span class="text-[10px] font-bold text-purple-600 uppercase tracking-wider block">Corridor &amp; Stops</span>
+          <strong id="m-ward" class="text-purple-900 block truncate font-black">--</strong>
+          <span id="m-drops-count" class="text-[10px] text-gray-500 block">0 Drops</span>
+        </div>
+        <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-2xl space-y-1">
+          <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider block">Route &amp; Roundtrip</span>
+          <strong id="m-distance" class="text-emerald-900 block font-mono-num font-black">0.0 km</strong>
+          <span id="m-eta" class="text-[10px] text-gray-500 block">~0 mins</span>
+        </div>
+        <div class="p-3 bg-amber-50/70 border border-amber-200/80 rounded-2xl space-y-1">
+          <span class="text-[10px] font-bold text-amber-600 uppercase tracking-wider block">COD Cash to Collect</span>
+          <strong id="m-cod" class="text-amber-900 block font-mono-num font-black">₹0.00</strong>
+          <span id="m-total-val" class="text-[10px] text-gray-500 block font-mono-num">Total: ₹0.00</span>
+        </div>
+      </div>
+
+      <!-- Multi-Stop Delivery Queue Table -->
+      <div class="border border-gray-200 rounded-2xl overflow-hidden flex-1 overflow-y-auto min-h-[160px]">
+        <table class="w-full text-xs text-left">
+          <thead class="bg-gray-100 text-gray-600 font-bold border-b border-gray-200 sticky top-0 z-10">
+            <tr>
+              <th class="py-2.5 px-3 text-center w-12">Seq</th>
+              <th class="py-2.5 px-3 w-28">Order ID</th>
+              <th class="py-2.5 px-3">Customer &amp; Phone</th>
+              <th class="py-2.5 px-3">Bodi Address / Landmark</th>
+              <th class="py-2.5 px-3 text-center w-16">Items</th>
+              <th class="py-2.5 px-3 text-right w-28">Collection</th>
+            </tr>
+          </thead>
+          <tbody id="m-stops-tbody" class="divide-y divide-gray-100">
+            <tr>
+              <td colspan="6" class="py-8 text-center text-gray-400">Loading clustered delivery drops...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Action Footer with Google Maps & WhatsApp Dispatch -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-gray-100 shrink-0">
+        <div class="text-xs text-gray-500 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>Manifest <strong id="m-manifest-id" class="text-gray-800">#RHM-MNF-0000</strong></span>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap w-full sm:w-auto justify-end">
+          <button type="button" id="btn-manifest-maps" class="px-3.5 py-2 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 border border-blue-200 cursor-pointer">
+            <i class="fa-solid fa-location-arrow text-blue-600"></i>
+            <span>Google Maps Turn-by-Turn</span>
+          </button>
+          <button type="button" id="btn-manifest-whatsapp" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs flex items-center gap-2 shadow-xs transition active:scale-95 cursor-pointer">
+            <i class="fa-brands fa-whatsapp text-sm"></i>
+            <span>Dispatch to Rider (WhatsApp)</span>
+          </button>
+          <button type="button" onclick="closeClusterManifestModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl cursor-pointer">
+            Close
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 📍 TURF.JS GEOFENCE VALIDATOR MODAL -->
+  <div id="geofence-validator-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-5 sm:p-6 shadow-2xl border border-gray-100 space-y-4 max-h-[92vh] flex flex-col my-auto">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-gray-100 pb-3 shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg font-black shadow-xs">
+            <i class="fa-solid fa-draw-polygon"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-gray-900 text-base">Turf.js Geofence &amp; SLA Validator</h3>
+            <p class="text-xs text-gray-500">Real-time point-in-polygon verification against Bodinayakanur boundary</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeGeofenceValidatorModal()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold leading-none cursor-pointer">&times;</button>
+      </div>
+
+      <!-- Address / Landmark Input -->
+      <div class="space-y-2 shrink-0">
+        <label class="block font-bold text-gray-700 text-xs">Customer Delivery Address or GPS Coordinates</label>
+        <div class="flex items-center gap-2">
+          <input type="text" id="geofence-input" placeholder="e.g. Subramanya Siva Nagar, Periyandavar Puram, Bus Stand road..." class="flex-1 px-3.5 py-2.5 border border-gray-300 rounded-xl font-bold text-xs focus:ring-2 focus:ring-emerald-500">
+          <button type="button" onclick="testGeofenceAddress()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs rounded-xl shadow-xs transition active:scale-95 flex items-center gap-1.5 shrink-0 cursor-pointer">
+            <i class="fa-solid fa-magnifying-glass-location"></i>
+            <span>Validate Geofence</span>
+          </button>
+        </div>
+
+        <!-- Quick Bodi Presets -->
+        <div class="space-y-1 pt-1">
+          <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Quick Presets (Bodinayakanur Wards):</span>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button type="button" onclick="testGeofenceAddress('Subramanya Siva Nagar, Bodinayakanur')" class="px-2.5 py-1 bg-gray-100 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-lg text-[11px] font-bold transition cursor-pointer">
+              📍 Subramanya Siva Nagar (0.8km)
+            </button>
+            <button type="button" onclick="testGeofenceAddress('Periyandavar Puram, Bodinayakanur')" class="px-2.5 py-1 bg-gray-100 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-lg text-[11px] font-bold transition cursor-pointer">
+              📍 Periyandavar Puram (1.2km)
+            </button>
+            <button type="button" onclick="testGeofenceAddress('Paramasivan Temple area, Bodinayakanur')" class="px-2.5 py-1 bg-gray-100 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-lg text-[11px] font-bold transition cursor-pointer">
+              📍 Paramasivan Temple (0.5km)
+            </button>
+            <button type="button" onclick="testGeofenceAddress('Bus Stand road, Bodinayakanur')" class="px-2.5 py-1 bg-gray-100 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-lg text-[11px] font-bold transition cursor-pointer">
+              📍 Bus Stand (0.7km)
+            </button>
+            <button type="button" onclick="testGeofenceAddress('Theni Bypass Road, Bodinayakanur')" class="px-2.5 py-1 bg-gray-100 hover:bg-amber-50 text-gray-700 hover:text-amber-800 rounded-lg text-[11px] font-bold transition cursor-pointer">
+              📍 Theni Bypass (6.6km)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Container -->
+      <div id="geofence-result-container" class="space-y-3 p-4 bg-gray-50 border border-gray-200 rounded-2xl flex-1 overflow-y-auto">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div id="gf-tier-badge" class="px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-900 border border-emerald-300 flex items-center gap-1.5">
+            <i class="fa-solid fa-bolt text-amber-500"></i>
+            <span>30-MINUTE EXPRESS DELIVERY</span>
+          </div>
+          <span id="gf-poly-status" class="text-[11px] font-mono font-bold text-gray-600 bg-white px-2.5 py-1 rounded-lg border border-gray-200">
+            INSIDE BODI MUNICIPAL BOUNDARY (Turf.js)
+          </span>
+        </div>
+
+        <div class="space-y-1">
+          <h4 id="gf-promise-text" class="text-sm font-black text-gray-900">Guaranteed 30-Minute Express Delivery</h4>
+          <p id="gf-promise-tamil" class="text-xs font-bold text-emerald-700">30 நிமிட விரைவு டெலிவரி உத்தரவாதம் (உங்கள் வீட்டிற்கே)</p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs pt-1">
+          <div class="bg-white p-2.5 rounded-xl border border-gray-200">
+            <span class="text-[10px] text-gray-400 font-bold block uppercase">Hub Distance</span>
+            <strong id="gf-distance" class="text-gray-900 font-mono-num font-black text-sm">0.8 km</strong>
+          </div>
+          <div class="bg-white p-2.5 rounded-xl border border-gray-200">
+            <span class="text-[10px] text-gray-400 font-bold block uppercase">Arrival ETA</span>
+            <strong id="gf-eta" class="text-emerald-700 font-black text-sm">15 mins</strong>
+          </div>
+          <div class="bg-white p-2.5 rounded-xl border border-gray-200">
+            <span class="text-[10px] text-gray-400 font-bold block uppercase">Target Ward</span>
+            <strong id="gf-ward" class="text-gray-900 font-black text-xs truncate block">Subramanya Siva Nagar</strong>
+          </div>
+          <div class="bg-white p-2.5 rounded-xl border border-gray-200">
+            <span class="text-[10px] text-gray-400 font-bold block uppercase">Delivery Fee</span>
+            <strong id="gf-fee" class="text-emerald-700 font-black text-xs truncate block">FREE</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pt-3 border-t border-gray-100 flex items-center justify-between shrink-0 text-xs text-gray-400">
+        <span>Store Center: <b>10.0104° N, 77.3496° E</b></span>
+        <button type="button" onclick="closeGeofenceValidatorModal()" class="px-4 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl cursor-pointer">Close</button>
       </div>
 
     </div>

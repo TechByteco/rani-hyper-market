@@ -43,7 +43,7 @@
   }
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Direct Vercel Delta Pipeline Active (100% Uptime, Zero 3rd-party latency) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -853,16 +853,6 @@
       sessionStorage.setItem('nsn_tenant_id', '37a64e83-514d-4b00-b90a-9af172dacdd6');
       injectRaniProfile();
       toast('Admin Rani authenticated! Entering Store Dashboard...', 'success');
-      setTimeout(() => goTo('admin.html'), 500);
-      return;
-    }
-
-        if (u === 'saali' && (p === 'saali@2008' || p === 'saali123')) {
-      saveRemember('admin', u, document.getElementById('ar').checked);
-      sessionStorage.setItem('nsn_admin_auth', 'true'); localStorage.setItem('nsn_admin_auth', 'true');
-      sessionStorage.setItem('nsn_admin_user', 'saali');
-      sessionStorage.setItem('nsn_tenant_id', '34a64e83-514d-4b00-b90a-9af172dacdd6');
-      toast('Admin Saali authenticated! Entering Store Dashboard...', 'success');
       setTimeout(() => goTo('admin.html'), 500);
       return;
     }

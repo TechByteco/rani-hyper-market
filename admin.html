@@ -43,7 +43,7 @@
   }
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Direct Vercel Delta Pipeline Active (100% Uptime, Zero 3rd-party latency) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -380,79 +380,26 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/images/rani_logo.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/rani_logo.png">
 <style>
-    /* RBAC Dynamic Masking Styles (Role-Based Access Control) */
-    /* 1. Cashier Role: Mask wholesale costs, supplier margins, profit cards, and customer export */
+    /* RBAC Dynamic Masking Styles */
     body[data-rhm-role="cashier"] .rbac-profit,
     body[data-rhm-role="cashier"] #sync-stat-profit,
     body[data-rhm-role="cashier"] #stat-margin-label,
     body[data-rhm-role="cashier"] .profit-figure,
-    body[data-rhm-role="cashier"] [data-financial="true"],
-    body[data-rhm-role="cashier"] .wholesale-cost,
-    body[data-rhm-role="cashier"] [data-cost="true"],
-    body[data-rhm-role="cashier"] .landing-cost,
-    body[data-rhm-role="cashier"] .purchase-price-field {
+    body[data-rhm-role="cashier"] [data-financial="true"] {
       filter: blur(5px) !important;
       user-select: none !important;
       pointer-events: none !important;
     }
-    body[data-rhm-role="cashier"] .btn-export-customers,
-    body[data-rhm-role="cashier"] #btn-customer-export,
-    body[data-rhm-role="cashier"] .customer-export-action {
-      display: none !important;
-    }
     body[data-rhm-role="cashier"] #admin-store-heading::after {
-      content: " • 💻 Counter Cashier Mode (Margins & Wholesale Costs Protected)";
+      content: " • Counter Cashier Mode (Margins Masked)";
       font-size: 11px;
       color: #047857;
       font-weight: 700;
     }
-
-    /* 2. Inventory Supervisor: Can view stock & cost, but cannot modify GST or send broadcasts */
     body[data-rhm-role="inventory"] .rbac-profit,
     body[data-rhm-role="inventory"] #sync-stat-profit,
-    body[data-rhm-role="inventory"] #stat-margin-label,
-    body[data-rhm-role="inventory"] .profit-figure {
+    body[data-rhm-role="inventory"] #stat-margin-label {
       display: none !important;
-    }
-    body[data-rhm-role="inventory"] .gst-admin-control,
-    body[data-rhm-role="inventory"] .gst-modify-btn,
-    body[data-rhm-role="inventory"] [data-gst-edit="true"],
-    body[data-rhm-role="inventory"] .broadcast-dispatch-btn,
-    body[data-rhm-role="inventory"] [data-broadcast="true"],
-    body[data-rhm-role="inventory"] .btn-export-customers,
-    body[data-rhm-role="inventory"] #btn-customer-export {
-      pointer-events: none !important;
-      opacity: 0.45 !important;
-      cursor: not-allowed !important;
-    }
-    body[data-rhm-role="inventory"] #admin-store-heading::after {
-      content: " • 📦 Floor & Inventory Mode (GST & Marketing Locked)";
-      font-size: 11px;
-      color: #2563eb;
-      font-weight: 700;
-    }
-
-    /* 3. Marketing Manager: Omnichannel campaigns active with 5.0% margin guardrail */
-    body[data-rhm-role="marketing"] .gst-admin-control,
-    body[data-rhm-role="marketing"] .gst-modify-btn,
-    body[data-rhm-role="marketing"] [data-gst-edit="true"] {
-      pointer-events: none !important;
-      opacity: 0.45 !important;
-    }
-    body[data-rhm-role="marketing"] #admin-store-heading::after {
-      content: " • 📣 Marketing Lead Mode (5.0% Margin Guardrail Active)";
-      font-size: 11px;
-      color: #9333ea;
-      font-weight: 700;
-    }
-
-    /* 4. Store Director (Super Admin): Unrestricted access */
-    body[data-rhm-role="owner"] #admin-store-heading::after,
-    body[data-rhm-role="store_director"] #admin-store-heading::after {
-      content: " • 👑 Store Director (Super Admin — Full Unrestricted Access)";
-      font-size: 11px;
-      color: #b45309;
-      font-weight: 700;
     }
 </style>
 </head>
@@ -474,38 +421,9 @@
         <div class="flex items-center gap-3">
           <img src="/images/rani_logo.png" alt="Rani Hyper Market Official Logo" class="w-10 h-10 rounded-full object-cover shadow-md border border-emerald-600/30 bg-white">
           <div>
-            <div class="flex items-center gap-2 flex-wrap">
+            <div class="flex items-center gap-2">
               <h1 class="text-base sm:text-lg font-black text-gray-900 leading-none tracking-tight" id="admin-store-heading">SNS Marketing — Rani Hyper Market Admin</h1>
-              <span class="px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 rounded-full border border-emerald-300" id="admin-store-badge">HQ Flagship</span>
-              <div class="hidden sm:inline-flex items-center gap-1.5 bg-emerald-50/80 border border-emerald-200/80 rounded-lg px-2 py-0.5 text-[11px]">
-                <i class="fa-solid fa-store text-emerald-700 text-xs"></i>
-                <select id="regional-store-selector" onchange="switchRegionalStore(this.value)" class="bg-transparent font-bold text-gray-800 outline-none cursor-pointer text-xs">
-                  <optgroup label="Theni District (7 Stores)">
-                    <option value="37a64e83-514d-4b00-b90a-9af172dacdd6" selected>🏢 Bodinayakanur (Flagship Hub)</option>
-                    <option value="37a64e83-0002-4b00-b90a-9af172dacdd6">🏬 Theni Main Bazaar</option>
-                    <option value="37a64e83-0003-4b00-b90a-9af172dacdd6">🏬 Periyakulam Branch</option>
-                    <option value="37a64e83-0004-4b00-b90a-9af172dacdd6">⚡ Chinnamanur Express</option>
-                    <option value="37a64e83-0005-4b00-b90a-9af172dacdd6">🏬 Cumbum Valley Hypermarket</option>
-                    <option value="37a64e83-0006-4b00-b90a-9af172dacdd6">🏬 Uthamapalayam Supermarket</option>
-                    <option value="37a64e83-0007-4b00-b90a-9af172dacdd6">⚡ Andipatti Mart</option>
-                  </optgroup>
-                  <optgroup label="Madurai District (4 Stores)">
-                    <option value="37a64e83-0009-4b00-b90a-9af172dacdd6">🚚 Madurai Mattuthavani (Secondary Hub)</option>
-                    <option value="37a64e83-0008-4b00-b90a-9af172dacdd6">🏬 Madurai Simmakkal Central</option>
-                    <option value="37a64e83-0010-4b00-b90a-9af172dacdd6">🏬 Madurai Anna Nagar Gourmet</option>
-                    <option value="37a64e83-0011-4b00-b90a-9af172dacdd6">🏬 Madurai Thirunagar Supermarket</option>
-                  </optgroup>
-                  <optgroup label="Dindigul District (4 Stores)">
-                    <option value="37a64e83-0012-4b00-b90a-9af172dacdd6">🏬 Dindigul Main Road</option>
-                    <option value="37a64e83-0013-4b00-b90a-9af172dacdd6">🏬 Palani Temple Town</option>
-                    <option value="37a64e83-0014-4b00-b90a-9af172dacdd6">🏬 Oddanchatram Agro Mart</option>
-                    <option value="37a64e83-0015-4b00-b90a-9af172dacdd6">⚡ Batlagundu Transit Mart</option>
-                  </optgroup>
-                </select>
-                <button type="button" onclick="openMultiTenantClusterModal()" class="text-emerald-700 hover:text-emerald-900 font-extrabold cursor-pointer" title="Open 15-Store Multi-Tenant Network Hub">
-                  <i class="fa-solid fa-up-right-from-square text-[10px]"></i>
-                </button>
-              </div>
+              <span class="px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 rounded-full border border-emerald-300">HQ Flagship</span>
             </div>
             <p class="text-[11px] text-gray-500 font-medium mt-0.5 flex items-center gap-2">
               <span class="font-bold text-gray-700">SNS Marketing Retail OS</span>
@@ -542,18 +460,11 @@
             <span class="hidden md:inline">5-Yr Stock Velocity</span>
           </button>
 
-          <div class="flex items-center bg-gray-100 p-1 rounded-xl border border-gray-200 text-xs font-bold" id="rbac-role-switcher" title="Role-Based Access Control (RBAC) Switcher">
-            <button type="button" onclick="switchRbacRole('owner')" id="role-btn-owner" class="px-2 py-1 rounded-lg text-emerald-900 bg-white shadow-2xs transition font-black">👑 Director</button>
-            <button type="button" onclick="switchRbacRole('inventory')" id="role-btn-inventory" class="px-2 py-1 rounded-lg text-gray-600 hover:text-gray-900 transition font-bold">📦 Inventory</button>
-            <button type="button" onclick="switchRbacRole('marketing')" id="role-btn-marketing" class="px-2 py-1 rounded-lg text-gray-600 hover:text-gray-900 transition font-bold">📣 Marketing</button>
-            <button type="button" onclick="switchRbacRole('cashier')" id="role-btn-cashier" class="px-2 py-1 rounded-lg text-gray-600 hover:text-gray-900 transition font-bold">💻 Cashier</button>
+          <div class="flex items-center bg-gray-100 p-1 rounded-xl border border-gray-200 text-xs font-bold" id="rbac-role-switcher" title="Switch Operating Role">
+            <button type="button" onclick="switchRbacRole('owner')" id="role-btn-owner" class="px-2.5 py-1 rounded-lg text-emerald-900 bg-white shadow-2xs transition font-black">👑 Owner</button>
+            <button type="button" onclick="switchRbacRole('cashier')" id="role-btn-cashier" class="px-2.5 py-1 rounded-lg text-gray-600 hover:text-gray-900 transition font-bold">💻 Cashier</button>
+            <button type="button" onclick="switchRbacRole('inventory')" id="role-btn-inventory" class="px-2.5 py-1 rounded-lg text-gray-600 hover:text-gray-900 transition font-bold">📦 Floor</button>
           </div>
-
-          <!-- ⚡ Rapid Cashier Handover Button -->
-          <button type="button" onclick="openHandoverModal()" id="btn-cashier-handover" class="px-3 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs font-black transition flex items-center gap-1.5 shadow-sm cursor-pointer" title="Rapid Cashier Shift Handover via WebAuthn Biometrics or 4-Digit PIN (<500ms)">
-            <i class="fa-solid fa-fingerprint text-emerald-200"></i>
-            <span class="hidden sm:inline">⚡ Handover</span>
-          </button>
 
           <!-- 💵 Shift Drawer & Z-Report Button -->
           <button type="button" onclick="openShiftDrawerModal()" class="px-3 py-2 bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-200 rounded-xl text-xs font-black transition flex items-center gap-1.5 shadow-2xs cursor-pointer" title="Shift Drawer & Z-Report Reconciliation">
@@ -575,12 +486,6 @@
           </button>
           <a href="product-images.html" class="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs" title="Product Photo Studio (Camera, Gallery, Link)">
             <i class="fa-solid fa-camera-retro text-[11px] text-emerald-600"></i> <span class="hidden sm:inline">Photo Studio</span>
-          </a>
-          <a href="reconciliation.html" class="px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs" title="End-of-Day 3-Way Reconciliation & Cash Drawer Audit">
-            <i class="fa-solid fa-cash-register text-[11px] text-amber-600"></i> <span class="hidden sm:inline">EOD Audit</span>
-          </a>
-          <a href="procurement.html" class="px-3 py-2 bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs" title="Wholesale Mandi Procurement & EOQ Optimizer">
-            <i class="fa-solid fa-truck-ramp-box text-[11px] text-teal-600"></i> <span class="hidden sm:inline">Mandi PO</span>
           </a>
           <a href="marketing.html" class="px-3 py-2 bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs" title="SNS AI Marketing Automation Platform">
             <i class="fa-solid fa-bullhorn text-[11px] text-purple-600"></i> <span class="hidden sm:inline">Marketing AI</span>
@@ -628,12 +533,6 @@
 
         <!-- Supermarket Tools Quick Launchers -->
         <div class="flex items-center gap-1.5 shrink-0">
-          <button type="button" onclick="openGroupBuyingConsortiumModal()" class="px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer" title="Centralized Group-Buying Consortium: Direct Mill Bidding (Tirunelveli, Thanjavur, AP) & Split BoLs">
-            <i class="fa-solid fa-handshake-angle text-amber-700"></i> 🌾 Group-Buying Consortium
-          </button>
-          <button type="button" onclick="openMultiTenantClusterModal()" class="px-2.5 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-200 text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer" title="Phase 2: 15-Store Regional Supermarket Cluster & Inter-Store Transfers">
-            <i class="fa-solid fa-network-wired text-indigo-600"></i> 🏬 15 Regional Stores
-          </button>
           <button type="button" onclick="switchAdminModule('orders')" class="px-2.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer" title="View Online Orders & Live Counter Dispatches inside Admin Portal">
             <i class="fa-solid fa-truck-fast text-blue-600"></i> 🛒 Online Orders
           </button>
@@ -680,7 +579,7 @@
                 <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span> Desktop App POS Live Connected
               </span>
               <span class="text-xs font-bold text-gray-500">Live Active DB: <b class="text-gray-800 font-mono text-[11px]" id="sync-db-source">C:\SKS Market\Data\database\...\9bcfb0b0...db</b></span>
-              <span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-sm" id="sync-cloud-tag"><i class="fa-solid fa-bolt text-emerald-600"></i> Direct Vercel Delta Pipeline Active (100% Uptime, 0 Pauses)</span>
+              <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-[10px] font-bold" id="sync-cloud-tag"><i class="fa-solid fa-cloud text-blue-600"></i> Supabase Cloud Synced</span>
             </div>
             <h2 class="text-lg font-black text-gray-900 flex items-center gap-2">
               <i class="fa-solid fa-desktop text-emerald-600"></i>
@@ -1775,221 +1674,6 @@
               <tbody id="crm-top10-tbody" class="divide-y divide-gray-100 font-medium">
                 <tr>
                   <td colspan="8" class="py-6 text-center text-gray-400">Loading top purchasing customers...</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- HOUSEHOLD CONSUMPTION PREDICTION & REORDER CONVERSION ENGINE -->
-        <div id="household-replenishment-section" class="glass p-6 sm:p-8 lg:p-9 rounded-3xl border border-teal-300 shadow-xl bg-gradient-to-br from-white/95 via-teal-50/40 to-emerald-50/60 mt-8 space-y-6">
-          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-teal-100 pb-4">
-            <div>
-              <div class="flex items-center gap-2 flex-wrap mb-1">
-                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-teal-600 text-white flex items-center gap-1 shadow-xs">
-                  <i class="fa-solid fa-brain"></i> Predictive Demand Model
-                </span>
-                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1">
-                  <i class="fa-solid fa-clock-rotate-left"></i> Real-time Checkout SKU Tracking
-                </span>
-                <span class="text-xs font-semibold text-gray-500">Bodinayakanur Municipal Ward Radar</span>
-              </div>
-              <h2 class="text-xl sm:text-2xl font-black text-gray-900 flex items-center gap-2">
-                <i class="fa-solid fa-arrows-rotate text-teal-600"></i>
-                <span>Household Consumption &amp; Reorder Conversion Engine</span>
-              </h2>
-              <p class="text-xs sm:text-sm text-gray-600 font-medium mt-0.5">
-                Forecasts grocery depletion cycles (25kg Rice Sacks in 28-32 days, 5L Cooking Oil in 22-26 days, 1kg Washing Powder in 14-18 days) to trigger proactive 30-minute delivery reminders and track conversion.
-              </p>
-            </div>
-
-            <div class="flex items-center gap-2 flex-wrap">
-              <button type="button" onclick="syncReplenishmentTrackerData()" class="px-3.5 py-2 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-300 text-xs font-bold transition flex items-center gap-1.5 shadow-2xs cursor-pointer">
-                <i class="fa-solid fa-rotate text-teal-600"></i> Sync Checkout History
-              </button>
-              <button type="button" onclick="batchDispatchAllDueReplenishments()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black transition flex items-center gap-1.5 shadow-md cursor-pointer active:scale-95">
-                <i class="fa-brands fa-whatsapp text-sm"></i> Batch Dispatch Due Alerts
-              </button>
-            </div>
-          </div>
-
-          <!-- EXECUTIVE CONVERSION METRICS STRIP (5 CARDS) -->
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-            <div class="bg-white/90 p-4 rounded-2xl border border-teal-200/80 shadow-2xs">
-              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Tracked Households</span>
-              <div class="flex items-baseline gap-1 mt-1">
-                <span id="rep-stat-households" class="text-2xl font-black text-gray-900">128</span>
-                <span class="text-[10px] text-teal-700 font-bold">Families</span>
-              </div>
-              <span class="text-[10px] text-gray-500 font-medium block mt-1">Bodinayakanur Wards</span>
-            </div>
-
-            <div class="bg-white/90 p-4 rounded-2xl border border-blue-200/80 shadow-2xs">
-              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Active Cycles</span>
-              <div class="flex items-baseline gap-1 mt-1">
-                <span id="rep-stat-cycles" class="text-2xl font-black text-blue-700">184</span>
-                <span class="text-[10px] text-blue-600 font-bold">Cycles</span>
-              </div>
-              <span class="text-[10px] text-gray-500 font-medium block mt-1">Consuming Staples</span>
-            </div>
-
-            <div class="bg-white/90 p-4 rounded-2xl border border-amber-200/80 shadow-2xs">
-              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Reminders Due / Sent</span>
-              <div class="flex items-baseline gap-1 mt-1">
-                <span id="rep-stat-due-sent" class="text-2xl font-black text-amber-600">8 / 112</span>
-              </div>
-              <span class="text-[10px] text-amber-700 font-medium block mt-1">At Trigger Threshold</span>
-            </div>
-
-            <div class="bg-white/90 p-4 rounded-2xl border border-emerald-300 shadow-2xs bg-gradient-to-br from-emerald-50/50 to-teal-50/30">
-              <span class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">Reorder Conversion Rate</span>
-              <div class="flex items-baseline gap-1 mt-1">
-                <span id="rep-stat-conversion-rate" class="text-2xl font-black text-emerald-700">27.7%</span>
-                <span class="px-1.5 py-0.5 rounded text-[9px] font-black bg-emerald-100 text-emerald-800">+18.4% LTV</span>
-              </div>
-              <span class="text-[10px] text-emerald-700 font-bold block mt-1"><span id="rep-stat-converted-count">31</span> of 112 Reminders</span>
-            </div>
-
-            <div class="bg-white/90 p-4 rounded-2xl border border-purple-200/80 shadow-2xs">
-              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Retained GMV (Rupees)</span>
-              <div class="flex items-baseline gap-1 mt-1">
-                <span class="rupee text-xl font-bold text-purple-700">₹</span>
-                <span id="rep-stat-gmv" class="text-2xl font-black text-purple-700">48,250</span>
-              </div>
-              <span class="text-[10px] text-purple-600 font-medium block mt-1">Local Supermarket GMV</span>
-            </div>
-          </div>
-
-          <!-- 3 CORE STAPLE CONSUMPTION MODELS & CONVERSION BARS -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <!-- 25kg Rice Sack Model -->
-            <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-xs space-y-3">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                  <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-black text-sm">🍚</span>
-                  <div>
-                    <h4 class="font-black text-gray-900 text-sm">25kg Rice Sack</h4>
-                    <p class="text-[11px] text-gray-500">Family of 4: 28 to 32 Days</p>
-                  </div>
-                </div>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Alert: Day 25</span>
-              </div>
-              <p class="text-xs text-gray-600 bg-gray-50 p-2.5 rounded-xl border border-gray-100 italic">
-                &ldquo;Time to refill your rice container? Get free 30-minute doorstep delivery in Bodinayakanur. Tap here to order.&rdquo;
-              </p>
-              <div class="space-y-1">
-                <div class="flex justify-between text-xs font-bold">
-                  <span class="text-gray-500">Reorder Conversion</span>
-                  <span id="rep-cat-rice-pct" class="text-emerald-700 font-black">33.3% (14 / 42)</span>
-                </div>
-                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div id="rep-cat-rice-bar" class="h-full bg-emerald-500 rounded-full" style="width: 33.3%"></div>
-                </div>
-                <div class="flex justify-between text-[11px] text-gray-500 font-medium pt-0.5">
-                  <span>Unit: ₹1,299 (Bodi Ponni)</span>
-                  <span class="text-gray-700 font-bold">Retained: ₹18,186</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- 5L Cooking Oil Can Model -->
-            <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-xs space-y-3">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                  <span class="w-8 h-8 rounded-xl bg-yellow-100 text-yellow-800 flex items-center justify-center font-black text-sm">🛢️</span>
-                  <div>
-                    <h4 class="font-black text-gray-900 text-sm">5L Cooking Oil Can</h4>
-                    <p class="text-[11px] text-gray-500">Family of 4: 22 to 26 Days</p>
-                  </div>
-                </div>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-100 text-yellow-800">Alert: Day 20</span>
-              </div>
-              <p class="text-xs text-gray-600 bg-gray-50 p-2.5 rounded-xl border border-gray-100 italic">
-                &ldquo;Cooking oil running low? Get your fresh 5L cooking oil can delivered in 30 minutes in Bodinayakanur. Tap here to refill.&rdquo;
-              </p>
-              <div class="space-y-1">
-                <div class="flex justify-between text-xs font-bold">
-                  <span class="text-gray-500">Reorder Conversion</span>
-                  <span id="rep-cat-oil-pct" class="text-emerald-700 font-black">26.3% (10 / 38)</span>
-                </div>
-                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div id="rep-cat-oil-bar" class="h-full bg-emerald-500 rounded-full" style="width: 26.3%"></div>
-                </div>
-                <div class="flex justify-between text-[11px] text-gray-500 font-medium pt-0.5">
-                  <span>Unit: ₹785 (Fortune 5L)</span>
-                  <span class="text-gray-700 font-bold">Retained: ₹7,850</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- 1kg Washing Powder Model -->
-            <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-xs space-y-3">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                  <span class="w-8 h-8 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-black text-sm">🧺</span>
-                  <div>
-                    <h4 class="font-black text-gray-900 text-sm">1kg Washing Powder</h4>
-                    <p class="text-[11px] text-gray-500">Family of 4: 14 to 18 Days</p>
-                  </div>
-                </div>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">Alert: Day 13</span>
-              </div>
-              <p class="text-xs text-gray-600 bg-gray-50 p-2.5 rounded-xl border border-gray-100 italic">
-                &ldquo;Running low on laundry detergent? Refill your 1kg washing powder with free Bodinayakanur doorstep delivery. Tap here to order.&rdquo;
-              </p>
-              <div class="space-y-1">
-                <div class="flex justify-between text-xs font-bold">
-                  <span class="text-gray-500">Reorder Conversion</span>
-                  <span id="rep-cat-powder-pct" class="text-emerald-700 font-black">21.9% (7 / 32)</span>
-                </div>
-                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div id="rep-cat-powder-bar" class="h-full bg-emerald-500 rounded-full" style="width: 21.9%"></div>
-                </div>
-                <div class="flex justify-between text-[11px] text-gray-500 font-medium pt-0.5">
-                  <span>Unit: ₹145 (Surf 1kg)</span>
-                  <span class="text-gray-700 font-bold">Retained: ₹1,575</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- LIVE HOUSEHOLD TRACKER FILTER & SEARCH BAR -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
-            <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-              <button onclick="filterReplenishmentCategory('all')" id="btn-rep-cat-all" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-teal-600 text-white shadow-2xs">All Staples</button>
-              <button onclick="filterReplenishmentCategory('rice')" id="btn-rep-cat-rice" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200">🍚 25kg Rice Sacks</button>
-              <button onclick="filterReplenishmentCategory('oil')" id="btn-rep-cat-oil" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200">🛢️ 5L Cooking Oil</button>
-              <button onclick="filterReplenishmentCategory('powder')" id="btn-rep-cat-powder" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200">🧺 1kg Washing Powder</button>
-              <button onclick="toggleReplenishmentDueOnly()" id="btn-rep-due-only" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-50 text-amber-800 border border-amber-300">⚡ Due for Reorder Only</button>
-            </div>
-
-            <div class="flex items-center gap-2">
-              <div class="relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-xs"></i>
-                <input type="text" id="rep-search-input" oninput="filterReplenishmentSearch()" placeholder="Search customer, phone, ward..." class="pl-8 pr-3 py-1.5 text-xs bg-white border border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none w-56">
-              </div>
-            </div>
-          </div>
-
-          <!-- HOUSEHOLD REPLENISHMENT TRACKER TABLE -->
-          <div class="overflow-x-auto rounded-2xl border border-gray-200 bg-white shadow-xs">
-            <table class="w-full text-left border-collapse text-xs">
-              <thead>
-                <tr class="border-b border-gray-200 bg-teal-50/80 text-teal-950 font-black">
-                  <th class="py-3 px-3.5">Customer &amp; Location</th>
-                  <th class="py-3 px-3">Staple Product &amp; Size</th>
-                  <th class="py-3 px-3 text-center">Last Purchase</th>
-                  <th class="py-3 px-3">Consumption Progress</th>
-                  <th class="py-3 px-3 text-center">Depletion Forecast</th>
-                  <th class="py-3 px-3 text-center">Status</th>
-                  <th class="py-3 px-3.5 text-right">Proactive Actions</th>
-                </tr>
-              </thead>
-              <tbody id="household-replenishment-tbody" class="divide-y divide-gray-100 font-medium">
-                <tr>
-                  <td colspan="7" class="py-8 text-center text-gray-400 font-medium">
-                    <i class="fa-solid fa-spinner fa-spin text-teal-600 text-lg mb-2 block"></i> Loading Household Consumption Records...
-                  </td>
                 </tr>
               </tbody>
             </table>
@@ -3570,9 +3254,10 @@
       Chart.defaults.font.family = "'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif";
     }
 
-    // Direct Vercel Delta Pipeline Engine (100% Serverless Edge Uptime, Zero Pauses)
-    const VERCEL_DELTA_URL = '/api/sync/delta';
-    let sb = null; // Retired: Migrated to Direct Vercel Delta Pipeline
+    const SB_URL = 'https://lofykatlypiywrziwtdp.supabase.co';
+    const SB_KEY = 'sb_publishable_8-vFFctJnZYUTZFCmV2rqg_LgHuYjrn';
+    let sb = null;
+    try { if (window.supabase && typeof window.supabase.createClient === 'function') sb = window.supabase.createClient(SB_URL, SB_KEY); } catch(e){ console.warn('Supabase offline mode'); }
 
     
     // EXECUTIVE MODULE NAVIGATOR
@@ -3830,11 +3515,11 @@ let allProducts = [];
           }
         } catch(e) {}
 
-        // Merge real-time orders from Direct Vercel Delta Pipeline
+        // Merge real-time Supabase web store orders (strictly online)
         try {
-          const deltaOrdersRes = await fetch('/api/orders?limit=100').then(r => r.json()).catch(() => null);
-          if (deltaOrdersRes && deltaOrdersRes.orders && Array.isArray(deltaOrdersRes.orders)) {
-            deltaOrdersRes.orders.forEach(o => {
+          const { data: sbOrders } = await sb.from('orders').select('*').order('created_at', { ascending: false });
+          if (sbOrders && sbOrders.length > 0) {
+            sbOrders.forEach(o => {
               if (isStrictOnlineStoreOrder(o)) rawOnlineOrders.push(o);
             });
           }
@@ -3908,10 +3593,11 @@ let allProducts = [];
     }, 30000);
 
     async function checkLicense() {
+      const { data: lic } = await sb.from('licenses').select('*').limit(1).single();
       const pill = document.getElementById('license-pill');
-      if (pill) {
-        pill.className = 'px-3 py-1 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm';
-        pill.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> License Active • Vercel Edge 2.0';
+      if (lic && (lic.status === 'suspended' || lic.status === 'expired')) {
+        pill.className = 'px-3 py-1 bg-red-100 text-red-800 border border-red-300 rounded-full text-xs font-bold flex items-center gap-1.5';
+        pill.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-500"></span> License Suspended';
       }
     }
 
@@ -5542,16 +5228,11 @@ let allProducts = [];
           localStorage.setItem('nsn_custom_added_products', JSON.stringify(customProds));
         } catch(e) {}
 
-        // Sync product to Direct Vercel Delta Pipeline
-        try {
-          await fetch('/api/sync/delta', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              batch: [{ type: 'PRODUCT_ADD', product: newProduct, counterId: 'Admin-Desk' }]
-            })
-          });
-        } catch(e) {}
+        // Also save to Supabase
+        await sb.from('products').insert({
+          tenant_id: tenantId,
+          title, price, stock_quantity, image_url, unit
+        });
 
         e.target.reset();
         clearCamWidget('add');
@@ -7273,16 +6954,16 @@ ${itemsText}
           if (typeof triggerManualSync === 'function') triggerManualSync();
         } catch(e) {}
 
-        // Persist to Direct Vercel Delta Pipeline
+        // Persist to Supabase if accessible
         try {
-          fetch('/api/sync/delta', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              batch: [newOrder],
-              counterId: 'POS-Counter-1'
-            })
-          }).catch(() => {});
+          const tenantId = sessionStorage.getItem('nsn_tenant_id') || '37a64e83-514d-4b00-b90a-9af172dacdd6';
+          await sb.from('orders').insert({
+            tenant_id: tenantId,
+            total_amount: netTotal,
+            payment_method: newOrder.payment_method,
+            shipping_address: newOrder.shipping_address,
+            status: 'delivered'
+          });
         } catch(e) {}
 
         playPosBeep();
@@ -10573,33 +10254,42 @@ ${itemsText}
       const dot = document.getElementById('cloud-sync-dot');
       const text = document.getElementById('cloud-sync-text');
       if (dot) dot.className = 'w-2 h-2 rounded-full bg-amber-500 animate-ping';
-      if (text) text.innerText = 'Syncing Delta...';
+      if (text) text.innerText = 'Syncing...';
 
       try {
-        // A. Flush pending offline bills queue to Direct Vercel Delta Pipeline
+        // A. Flush pending offline bills queue
         const pendingQueue = JSON.parse(localStorage.getItem('nsn_pending_sync_queue') || '[]');
         if (pendingQueue.length > 0) {
-          const deltaPushRes = await fetch('/api/sync/delta', {
+          const pushRes = await fetch('/api/sync/push', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ batch: pendingQueue, counterId: 'POS-Counter-1' })
+            body: JSON.stringify({ bills: pendingQueue })
           }).then(r => r.json()).catch(() => null);
 
-          if (deltaPushRes && deltaPushRes.success) {
+          if (pushRes && pushRes.success) {
             localStorage.removeItem('nsn_pending_sync_queue');
           }
         }
 
-        // B. Pull delta status, 5-year metrics & pending online orders
-        const deltaStatusRes = await fetch('/api/sync/delta').then(r => r.json()).catch(() => null);
-        const ordersRes = await fetch('/api/orders?limit=50').then(r => r.json()).catch(() => null);
-
-        if (ordersRes && ordersRes.orders && Array.isArray(ordersRes.orders)) {
+        // B. Pull remote online orders
+        const pullRes = await fetch('/api/sync/pull?limit=25').then(r => r.json()).catch(() => null);
+        if (pullRes && pullRes.success && Array.isArray(pullRes.orders)) {
           let newRemoteCount = 0;
-          ordersRes.orders.forEach(ro => {
-            const exists = allOrders.some(o => o.id === ro.id || o.invId === ro.invId || o.voucher_no === ro.voucher_no);
+          pullRes.orders.forEach(ro => {
+            const exists = allOrders.some(o => o.id === ro.id || (ro.shipping_address && o.shipping_address === ro.shipping_address && Math.abs(new Date(o.created_at) - new Date(ro.created_at)) < 5000));
             if (!exists) {
-              allOrders.unshift(ro);
+              allOrders.unshift({
+                id: ro.id,
+                voucher_no: 'ONL-' + (ro.id || '').substring(0, 6).toUpperCase(),
+                voucher_date: (ro.created_at || '').slice(0, 10),
+                customer_name: ro.shipping_address ? ro.shipping_address.split('|')[0].trim() : 'Online Customer',
+                customer_phone: (ro.shipping_address && ro.shipping_address.match(/\b\d{10}\b/)?.[0]) || '',
+                shipping_address: ro.shipping_address || 'Online Store Delivery',
+                total_amount: parseFloat(ro.total_amount || 0),
+                payment_method: ro.payment_method || 'ONLINE STORE',
+                status: ro.status || 'pending',
+                created_at: ro.created_at
+              });
               newRemoteCount++;
             }
           });
@@ -10607,15 +10297,14 @@ ${itemsText}
           if (newRemoteCount > 0) {
             if (typeof renderOrdersListTable === 'function') renderOrdersListTable();
             if (typeof renderLiveCounterDispatches === 'function') renderLiveCounterDispatches();
-            if (typeof updateOnlineOrdersCountPills === 'function') updateOnlineOrdersCountPills();
           }
         }
 
         if (dot) dot.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
-        if (text) text.innerText = 'Vercel Delta: Active';
+        if (text) text.innerText = 'Cloud: Synced';
       } catch (err) {
         if (dot) dot.className = 'w-2 h-2 rounded-full bg-red-500';
-        if (text) text.innerText = 'Sync: Offline Queue';
+        if (text) text.innerText = 'Sync: Offline';
       } finally {
         isDeltaSyncing = false;
       }
@@ -10971,7 +10660,7 @@ Please confirm delivery schedule to 77088 34547. Thank you!`;
       window.open(waUrl, '_blank');
     }
 
-    // 5. CUSTOMER REORDERS CRM ENGINE MODAL & HOUSEHOLD CONSUMPTION PREDICTION
+    // 5. CUSTOMER REORDERS CRM ENGINE MODAL
     let currentCustomerReorders = [];
 
     async function openCustomerReordersModal() {
@@ -11011,33 +10700,26 @@ Please confirm delivery schedule to 77088 34547. Thank you!`;
         return;
       }
 
-      container.innerHTML = reorders.map((c, idx) => {
-        const alertMsg = c.notification_english || 'Time to refill your grocery container? Get free 30-minute doorstep delivery in Bodinayakanur. Tap here to order.';
-        return `
-        <div class="bg-white rounded-2xl border border-teal-200 p-4 shadow-xs hover:shadow-md transition flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div class="space-y-1.5 flex-1">
-            <div class="flex items-center gap-2 flex-wrap">
+      container.innerHTML = reorders.map((c, idx) => `
+        <div class="bg-white rounded-2xl border border-gray-200 p-4 shadow-xs hover:shadow-md transition flex items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
               <h4 class="font-black text-gray-900 text-sm">${c.customer_name}</h4>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300 animate-pulse">Day ${c.last_order_days_ago} Post-Purchase (Due)</span>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200">Refill Alert</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-100 text-teal-800">Bought ${c.last_order_days_ago} days ago</span>
             </div>
             <p class="text-xs text-gray-500">Ph: <span class="font-mono font-bold text-gray-800">${c.customer_phone}</span> • Last Bill: ${c.last_order_date}</p>
             <div class="flex items-center gap-1.5 flex-wrap text-[11px] text-gray-700">
-              <span class="font-bold text-gray-500">Staple Product:</span>
-              ${c.staple_items.map(st => `<span class="bg-teal-50 text-teal-800 px-2 py-0.5 rounded-lg border border-teal-200 font-bold">${st}</span>`).join('')}
+              <span class="font-bold text-gray-500">Frequent Staples:</span>
+              ${c.staple_items.map(st => `<span class="bg-gray-100 px-2 py-0.5 rounded-lg border border-gray-200 font-medium">${st}</span>`).join('')}
             </div>
-            <p class="text-xs text-gray-600 bg-gray-50 p-2.5 rounded-xl border border-gray-100 italic">
-              &ldquo;${alertMsg}&rdquo;
-            </p>
           </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <button onclick="sendCustomerReorderWhatsApp(${idx})" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black flex items-center gap-1.5 transition shadow-xs cursor-pointer active:scale-95">
+          <div>
+            <button onclick="sendCustomerReorderWhatsApp(${idx})" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black flex items-center gap-1.5 transition shadow-xs cursor-pointer">
               <i class="fa-brands fa-whatsapp text-sm"></i> Remind on WhatsApp
             </button>
           </div>
         </div>
-        `;
-      }).join('');
+      `).join('');
     }
 
     function sendCustomerReorderWhatsApp(idx) {
@@ -11048,268 +10730,21 @@ Please confirm delivery schedule to 77088 34547. Thank you!`;
       const cleanPhone = String(c.customer_phone).replace(/[^0-9]/g, '');
       const fullPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
 
-      const notificationCopy = c.notification_english || `Time to refill your rice container? Get free 30-minute doorstep delivery in Bodinayakanur. Tap here to order.`;
-      const notificationTamil = c.notification_tamil || `உங்கள் அரிசி பாத்திரம் காலியாகும் நேரமா? போடிநாயக்கனூரில் இலவச 30 நிமிட டோர்ஸ்டெப் டெலிவரி பெறுங்கள். ஆர்டர் செய்ய இங்கே தட்டுங்கள்.`;
-
       const msg = 
-`🔔 *RANI HYPER MARKET — HOUSEHOLD REFILL ALERT* 🛒
-வணக்கம் ${c.customer_name}!
+`வணக்கம் ${c.customer_name}! 🛒
+*ராணி ஹைப்பர் மார்க்கெட்* போடிநாயக்கனூர்.
 
-${notificationCopy}
+உங்களுடைய மாதாந்திர மளிகைப் பொருட்கள் (${itemsList}) வாங்கி சுமார் *${c.last_order_days_ago} நாட்கள்* ஆகிறது.
 
-${notificationTamil}
+மீண்டும் தேவைப்படுகிறதா? 
+இப்போதே வாட்ஸ்அப் மூலமாகவோ அல்லது எங்கள் ஆன்லைன் ஸ்டோர் மூலமாகவோ ஆர்டர் செய்யுங்கள்:
+🔗 https://rani-hyper-market.vercel.app/store.html
 
-📦 *Staple Item:* ${itemsList}
-🚚 *Fastest Delivery:* 30-Minute Doorstep Express across Bodinayakanur
-📲 *Order Storefront:* https://rani-hyper-market.vercel.app/store.html
-📞 *Call / Store:* 77088 34547 • Main Road, Bodinayakanur`;
+🚚 *இலவச ஹோம் டெலிவரி உண்டு!*
+📞 தொடர்பு: 77088 34547`;
 
       const waUrl = `https://api.whatsapp.com/send?phone=${fullPhone}&text=${encodeURIComponent(msg)}`;
       window.open(waUrl, '_blank');
-
-      if (c.trackerId) {
-        fetch('/api/replenishment/dispatch', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ trackerId: c.trackerId })
-        }).then(() => loadReplenishmentDashboard()).catch(() => {});
-      }
-    }
-
-    // =========================================================================
-    // 🍚 HOUSEHOLD CONSUMPTION PREDICTION & REORDER ENGINE CONTROLLERS
-    // =========================================================================
-    let allReplenishmentRecords = [];
-    let filteredReplenishmentRecords = [];
-    let currentReplenishmentCategory = 'all';
-    let filterDueOnlyActive = false;
-
-    async function loadReplenishmentDashboard() {
-      try {
-        const res = await fetch('/api/replenishment/tracker').then(r => r.json());
-        if (res && res.success) {
-          allReplenishmentRecords = res.tracker || [];
-          updateReplenishmentSummaryKpis(res.summaryMetrics);
-          applyReplenishmentFilters();
-        }
-      } catch (err) {
-        console.error('Failed to load replenishment tracker:', err);
-      }
-    }
-
-    function updateReplenishmentSummaryKpis(metrics) {
-      if (!metrics) return;
-      const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
-      setEl('rep-stat-households', metrics.totalTrackedHouseholds);
-      setEl('rep-stat-cycles', metrics.activeReplenishmentCycles);
-      setEl('rep-stat-due-sent', `${metrics.totalDueNotifications} / ${metrics.totalDispatchedNotifications}`);
-      setEl('rep-stat-conversion-rate', `${metrics.overallConversionRatePct}%`);
-      setEl('rep-stat-converted-count', metrics.totalConvertedReorders);
-      setEl('rep-stat-gmv', Number(metrics.totalGmvRetainedInr).toLocaleString('en-IN'));
-
-      const cat = metrics.categoryBreakdown || {};
-      if (cat['Rice']) {
-        setEl('rep-cat-rice-pct', `${cat['Rice'].conversionRatePct}% (${cat['Rice'].converted} / ${cat['Rice'].dispatched})`);
-        const bar = document.getElementById('rep-cat-rice-bar');
-        if (bar) bar.style.width = `${Math.min(100, cat['Rice'].conversionRatePct)}%`;
-      }
-      if (cat['Cooking Oil']) {
-        setEl('rep-cat-oil-pct', `${cat['Cooking Oil'].conversionRatePct}% (${cat['Cooking Oil'].converted} / ${cat['Cooking Oil'].dispatched})`);
-        const bar = document.getElementById('rep-cat-oil-bar');
-        if (bar) bar.style.width = `${Math.min(100, cat['Cooking Oil'].conversionRatePct)}%`;
-      }
-      if (cat['Washing Powder']) {
-        setEl('rep-cat-powder-pct', `${cat['Washing Powder'].conversionRatePct}% (${cat['Washing Powder'].converted} / ${cat['Washing Powder'].dispatched})`);
-        const bar = document.getElementById('rep-cat-powder-bar');
-        if (bar) bar.style.width = `${Math.min(100, cat['Washing Powder'].conversionRatePct)}%`;
-      }
-    }
-
-    function filterReplenishmentCategory(cat) {
-      currentReplenishmentCategory = cat;
-      ['all', 'rice', 'oil', 'powder'].forEach(c => {
-        const btn = document.getElementById(`btn-rep-cat-${c}`);
-        if (btn) {
-          if (c === cat) {
-            btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-teal-600 text-white shadow-2xs';
-          } else {
-            btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200';
-          }
-        }
-      });
-      applyReplenishmentFilters();
-    }
-
-    function toggleReplenishmentDueOnly() {
-      filterDueOnlyActive = !filterDueOnlyActive;
-      const btn = document.getElementById('btn-rep-due-only');
-      if (btn) {
-        btn.className = filterDueOnlyActive
-          ? 'px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-600 text-white shadow-2xs'
-          : 'px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-50 text-amber-800 border border-amber-300';
-      }
-      applyReplenishmentFilters();
-    }
-
-    function filterReplenishmentSearch() {
-      applyReplenishmentFilters();
-    }
-
-    function applyReplenishmentFilters() {
-      const query = (document.getElementById('rep-search-input')?.value || '').toLowerCase().trim();
-      filteredReplenishmentRecords = allReplenishmentRecords.filter(r => {
-        if (currentReplenishmentCategory === 'rice' && !r.category.toLowerCase().includes('rice')) return false;
-        if (currentReplenishmentCategory === 'oil' && !r.category.toLowerCase().includes('oil')) return false;
-        if (currentReplenishmentCategory === 'powder' && !r.category.toLowerCase().includes('powder') && !r.category.toLowerCase().includes('wash')) return false;
-        if (filterDueOnlyActive && r.status !== 'DUE_FOR_REORDER' && !r.notification?.isDueNow) return false;
-        if (query) {
-          const matchName = (r.customerName || '').toLowerCase().includes(query);
-          const matchPhone = (r.customerPhone || '').includes(query);
-          const matchWard = (r.ward || '').toLowerCase().includes(query);
-          const matchItem = (r.productName || '').toLowerCase().includes(query);
-          if (!matchName && !matchPhone && !matchWard && !matchItem) return false;
-        }
-        return true;
-      });
-      renderReplenishmentTable();
-    }
-
-    function renderReplenishmentTable() {
-      const tbody = document.getElementById('household-replenishment-tbody');
-      if (!tbody) return;
-
-      if (!filteredReplenishmentRecords.length) {
-        tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-gray-400 font-medium"><i class="fa-solid fa-circle-info text-teal-600 text-lg mb-2 block"></i> No household consumption records matching filter criteria.</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = filteredReplenishmentRecords.map((r, idx) => {
-        const cycleTotal = r.meanConsumptionDays || 30;
-        const progressPct = Math.min(100, Math.round((r.daysElapsed / cycleTotal) * 100));
-
-        let statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">Consuming</span>';
-        if (r.status === 'DUE_FOR_REORDER' || r.notification?.isDueNow) {
-          statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300 animate-pulse">⚡ Due Today</span>';
-        } else if (r.status === 'NOTIFICATION_DISPATCHED') {
-          statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800">Alert Sent</span>';
-        } else if (r.status === 'CONVERTED') {
-          statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">✓ Reordered</span>';
-        }
-
-        const isDue = r.status === 'DUE_FOR_REORDER' || r.notification?.isDueNow;
-
-        return `
-          <tr class="hover:bg-teal-50/30 transition">
-            <td class="py-3 px-3.5">
-              <div class="font-black text-gray-900">${r.customerName}</div>
-              <div class="text-[11px] text-gray-500 font-mono">${r.customerPhone} &bull; ${r.ward}</div>
-            </td>
-            <td class="py-3 px-3">
-              <div class="font-bold text-gray-800">${r.productName}</div>
-              <div class="text-[11px] text-teal-700 font-bold">${r.packageSize} &bull; ₹${r.unitPrice}</div>
-            </td>
-            <td class="py-3 px-3 text-center">
-              <div class="font-bold text-gray-700">${r.lastPurchaseDate}</div>
-              <div class="text-[10px] text-gray-400 font-mono">Bill #${r.lastVoucherNo}</div>
-            </td>
-            <td class="py-3 px-3">
-              <div class="flex justify-between text-[11px] font-bold mb-1">
-                <span class="${r.daysElapsed >= r.triggerDay ? 'text-amber-700 font-black' : 'text-gray-600'}">Day ${r.daysElapsed} of ${cycleTotal}</span>
-                <span class="text-gray-400">${r.daysRemaining} days left</span>
-              </div>
-              <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div class="h-full ${r.daysElapsed >= r.triggerDay ? 'bg-amber-500' : 'bg-teal-500'} rounded-full" style="width: ${progressPct}%"></div>
-              </div>
-            </td>
-            <td class="py-3 px-3 text-center">
-              <div class="font-bold text-gray-800">${r.predictedDepletionDate}</div>
-              <div class="text-[10px] text-gray-400">Trigger: Day ${r.triggerDay}</div>
-            </td>
-            <td class="py-3 px-3 text-center">
-              ${statusBadge}
-            </td>
-            <td class="py-3 px-3.5 text-right space-x-1">
-              <button onclick="dispatchReplenishmentReminder('${r.trackerId}')" class="px-2.5 py-1.5 rounded-lg text-xs font-bold ${isDue ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs' : 'bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-200'} transition cursor-pointer" title="Send WhatsApp Reorder Alert">
-                <i class="fa-brands fa-whatsapp text-xs"></i> Alert
-              </button>
-              ${r.status !== 'CONVERTED' ? `
-                <button onclick="recordReplenishmentConversion('${r.trackerId}')" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-200 transition cursor-pointer" title="Record Reorder Conversion">
-                  <i class="fa-solid fa-check text-xs"></i> Reorder
-                </button>
-              ` : `
-                <span class="text-[10px] text-emerald-700 font-black">₹${r.unitPrice} GMV</span>
-              `}
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    async function dispatchReplenishmentReminder(trackerId) {
-      try {
-        const res = await fetch('/api/replenishment/dispatch', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ trackerId })
-        }).then(r => r.json());
-
-        if (res && res.success) {
-          if (res.whatsappUrl) {
-            window.open(res.whatsappUrl, '_blank');
-          }
-          loadReplenishmentDashboard();
-        } else {
-          alert(res.error || 'Failed to dispatch reminder');
-        }
-      } catch (e) {
-        alert('Error: ' + e.message);
-      }
-    }
-
-    async function batchDispatchAllDueReplenishments() {
-      if (!confirm('Batch dispatch automated WhatsApp refill reminders to all households whose staples are at or past the depletion trigger day?')) return;
-      try {
-        const res = await fetch('/api/replenishment/dispatch', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ allDue: true })
-        }).then(r => r.json());
-
-        if (res && res.success) {
-          alert(`Successfully dispatched ${res.dispatchedCount} replenishment reminders!`);
-          loadReplenishmentDashboard();
-        }
-      } catch (e) {
-        alert('Batch dispatch failed: ' + e.message);
-      }
-    }
-
-    async function recordReplenishmentConversion(trackerId) {
-      try {
-        const res = await fetch('/api/replenishment/convert', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ trackerId })
-        }).then(r => r.json());
-
-        if (res && res.success) {
-          loadReplenishmentDashboard();
-        }
-      } catch (e) {
-        alert('Error recording conversion: ' + e.message);
-      }
-    }
-
-    async function syncReplenishmentTrackerData() {
-      try {
-        const res = await fetch('/api/replenishment/sync', { method: 'POST' }).then(r => r.json());
-        if (res && res.success) {
-          loadReplenishmentDashboard();
-          alert('Replenishment tracker successfully synchronized with checkout history!');
-        }
-      } catch (e) {
-        alert('Sync error: ' + e.message);
-      }
     }
 
     function handleLogout() {
@@ -11625,223 +11060,42 @@ ${notificationTamil}
     });
   
     // =====================================================================
-    // 👑 RBAC ROLE SWITCHER & RECONCILIATION SUITE (4 Roles + Passkey Handover)
+    // 👑 RBAC ROLE SWITCHER & RECONCILIATION SUITE
     // =====================================================================
     function switchRbacRole(role) {
-      const normalizedRole = role === 'store_director' ? 'owner' : (role === 'inventory_supervisor' ? 'inventory' : (role === 'marketing_manager' ? 'marketing' : role));
-      document.body.dataset.rhmRole = normalizedRole;
-      localStorage.setItem('rhm_role', normalizedRole);
+      document.body.dataset.rhmRole = role;
+      localStorage.setItem('rhm_role', role);
 
       const btns = {
         owner: document.getElementById('role-btn-owner'),
-        inventory: document.getElementById('role-btn-inventory'),
-        marketing: document.getElementById('role-btn-marketing'),
-        cashier: document.getElementById('role-btn-cashier')
+        cashier: document.getElementById('role-btn-cashier'),
+        inventory: document.getElementById('role-btn-inventory')
       };
 
       Object.keys(btns).forEach(k => {
         if (!btns[k]) return;
-        if (k === normalizedRole) {
-          btns[k].className = 'px-2 py-1 rounded-lg text-emerald-900 bg-white shadow-2xs transition font-black';
+        if (k === role) {
+          btns[k].className = 'px-2.5 py-1 rounded-lg text-emerald-900 bg-white shadow-2xs transition font-black';
         } else {
-          btns[k].className = 'px-2 py-1 rounded-lg text-gray-600 hover:text-gray-900 transition font-bold';
+          btns[k].className = 'px-2.5 py-1 rounded-lg text-gray-600 hover:text-gray-900 transition font-bold';
         }
       });
 
-      if (normalizedRole === 'cashier') {
+      if (role === 'cashier') {
         if (typeof showToast === 'function') {
-          showToast('💻 Cashier Mode Activated: Wholesale costs & net margins are protected.', 'info');
-        }
-      } else if (normalizedRole === 'owner') {
-        if (typeof showToast === 'function') {
-          showToast('👑 Store Director Mode: Full financial & administrative transparency unlocked.', 'success');
-        }
-      } else if (normalizedRole === 'inventory') {
-        if (typeof showToast === 'function') {
-          showToast('📦 Floor & Inventory Mode: Stock counts active; GST & broadcasts locked.', 'info');
-        }
-      } else if (normalizedRole === 'marketing') {
-        if (typeof showToast === 'function') {
-          showToast('📣 Marketing Lead Mode: Omnichannel tools active with 5.0% margin guardrail.', 'info');
-        }
-      }
-    }
-
-    // =====================================================================
-    // ⚡ RAPID CASHIER SHIFT HANDOVER CONTROLLER (WebAuthn Passkey + 4-Digit PIN)
-    // =====================================================================
-    function openHandoverModal() {
-      const modal = document.getElementById('rapid-handover-modal');
-      if (modal) {
-        modal.classList.remove('hidden');
-        fetchHandoversJournal();
-      }
-    }
-
-    function closeHandoverModal() {
-      const modal = document.getElementById('rapid-handover-modal');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    async function executeBiometricPasskeyHandover() {
-      const incomingUser = document.getElementById('handover-incoming-user')?.value || 'cashier2';
-      const drawerFloat = document.getElementById('handover-drawer-float')?.value || '2500';
-      const t0 = performance.now();
-
-      try {
-        // Step 1: Request Challenge from Server
-        const chalRes = await fetch('/api/auth/passkey/challenge', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: incomingUser })
-        });
-        const chalData = await chalRes.json();
-        const challenge = chalData?.challenge?.challenge || 'simulated-passkey-challenge-2026';
-
-        // Step 2: WebAuthn Hardware Assertion (Touch ID / Face ID / Windows Hello)
-        let assertion = null;
-        if (window.PublicKeyCredential && navigator.credentials && location.protocol === 'https:') {
-          try {
-            const rawChal = Uint8Array.from(atob(challenge.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
-            assertion = await navigator.credentials.get({
-              publicKey: {
-                challenge: rawChal,
-                timeout: 30000,
-                userVerification: 'preferred',
-                rpId: window.location.hostname
-              }
-            });
-          } catch(credErr) {
-            console.warn('[WebAuthn Notice] Browser credential fallback:', credErr.message);
-          }
-        }
-
-        // Step 3: Send Handover Payload to Server (< 500ms SLA)
-        const handoverPayload = {
-          fromUser: localStorage.getItem('rhm_active_cashier') || 'Counter Cashier 1',
-          incomingUser: incomingUser,
-          drawerFloatInr: Number(drawerFloat),
-          credential: {
-            id: assertion ? assertion.id : 'cred-passkey-touchid-' + incomingUser,
-            signature: 'sig-' + Date.now(),
-            passkeyId: 'fido2-biometric-verified'
-          },
-          notes: 'Biometric shift transition authorized via Touch ID / Windows Hello'
-        };
-
-        const res = await fetch('/api/auth/handover', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(handoverPayload)
-        });
-        const data = await res.json();
-        const durationMs = Math.round(performance.now() - t0);
-
-        if (data.success) {
-          if (data.token) {
-            localStorage.setItem('rhm_jwt_token', data.token);
-            sessionStorage.setItem('rhm_jwt_token', data.token);
-          }
-          localStorage.setItem('rhm_active_cashier', data.user?.name || incomingUser);
-          const targetRole = data.user?.role || (incomingUser.startsWith('cashier') ? 'cashier' : 'owner');
-          switchRbacRole(targetRole);
-
-          if (typeof showToast === 'function') {
-            showToast(`⚡ Shift Handover to ${data.user?.name || incomingUser} verified in ${durationMs}ms!`, 'success');
-          } else {
-            alert(`⚡ Shift Handover to ${data.user?.name || incomingUser} verified in ${durationMs}ms!`);
-          }
-          closeHandoverModal();
+          showToast('💻 Cashier Mode Activated: Wholesale purchase costs & net margins are protected.', 'info');
         } else {
-          alert('Passkey verification failed: ' + (data.error || 'Unknown error'));
+          alert('💻 Cashier Mode Activated: Wholesale purchase costs & net margins are protected.');
         }
-      } catch (err) {
-        console.error('Passkey handover error:', err);
-        alert('Passkey handover error: ' + err.message);
-      }
-    }
-
-    async function executePinHandover() {
-      const incomingUser = document.getElementById('handover-incoming-user')?.value || 'cashier2';
-      const pin = document.getElementById('handover-pin-input')?.value?.trim();
-      const drawerFloat = document.getElementById('handover-drawer-float')?.value || '2500';
-
-      if (!pin) {
-        alert('Please enter 4-digit PIN');
-        return;
-      }
-
-      const t0 = performance.now();
-      try {
-        const res = await fetch('/api/auth/handover', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            fromUser: localStorage.getItem('rhm_active_cashier') || 'Counter Cashier',
-            incomingUser,
-            pin,
-            drawerFloatInr: Number(drawerFloat),
-            notes: '4-digit quick shift PIN fallback transition'
-          })
-        });
-        const data = await res.json();
-        const durationMs = Math.round(performance.now() - t0);
-
-        if (data.success) {
-          if (data.token) {
-            localStorage.setItem('rhm_jwt_token', data.token);
-            sessionStorage.setItem('rhm_jwt_token', data.token);
-          }
-          localStorage.setItem('rhm_active_cashier', data.user?.name || incomingUser);
-          const targetRole = data.user?.role || (incomingUser.startsWith('cashier') ? 'cashier' : 'owner');
-          switchRbacRole(targetRole);
-
-          if (typeof showToast === 'function') {
-            showToast(`⚡ Shift Handover to ${data.user?.name || incomingUser} confirmed in ${durationMs}ms!`, 'success');
-          } else {
-            alert(`⚡ Shift Handover to ${data.user?.name || incomingUser} confirmed in ${durationMs}ms!`);
-          }
-          document.getElementById('handover-pin-input').value = '';
-          closeHandoverModal();
-        } else {
-          alert('PIN Error: ' + (data.error || 'Incorrect PIN'));
+      } else if (role === 'owner') {
+        if (typeof showToast === 'function') {
+          showToast('👑 Owner Mode Active: Full financial transparency unlocked.', 'success');
         }
-      } catch (err) {
-        alert('Handover error: ' + err.message);
-      }
-    }
-
-    async function fetchHandoversJournal() {
-      try {
-        const res = await fetch('/api/auth/handovers');
-        const data = await res.json();
-        const tbody = document.getElementById('handover-audit-tbody');
-        if (tbody && data.handovers && Array.isArray(data.handovers)) {
-          tbody.innerHTML = data.handovers.slice(0, 5).map(h => `
-            <tr>
-              <td class="p-1.5 text-gray-500">${h.timestamp ? new Date(h.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '08:00 AM'}</td>
-              <td class="p-1.5 font-bold text-gray-900">${h.toUser}</td>
-              <td class="p-1.5 text-emerald-700 font-semibold">${h.method?.includes('PASSKEY') ? 'PASSKEY' : 'PIN'}</td>
-              <td class="p-1.5 text-right font-black text-emerald-800">${h.handoverDurationMs || 35}ms</td>
-            </tr>
-          `).join('');
+      } else if (role === 'inventory') {
+        if (typeof showToast === 'function') {
+          showToast('📦 Floor Mode: Stock counts & packing prioritized.', 'info');
         }
-      } catch (e) {}
-    }
-
-    // 5.0% Marketing Margin Guardrail Client Helper
-    function checkMarginGuardrail(sellingPrice, costPrice, discountPct) {
-      const sell = Number(sellingPrice);
-      const cost = Number(costPrice);
-      const disc = Number(discountPct) || 0;
-      const promoPrice = sell * (1 - disc / 100);
-      const grossMarginPct = ((promoPrice - cost) / promoPrice) * 100;
-      return {
-        valid: grossMarginPct >= 5.0,
-        grossMarginPct: Math.round(grossMarginPct * 10) / 10,
-        promoPrice: Math.round(promoPrice * 100) / 100,
-        error: grossMarginPct < 5.0 ? `Margin Guardrail Violation: Gross margin is ${grossMarginPct.toFixed(1)}% (minimum 5.0% required).` : null
-      };
+      }
     }
 
     // Initialize Role on Page Load
@@ -11849,7 +11103,6 @@ ${notificationTamil}
       const savedRole = localStorage.getItem('rhm_role') || 'owner';
       switchRbacRole(savedRole);
       initOfflineSyncDaemon();
-      loadReplenishmentDashboard();
     });
 
     // =====================================================================
@@ -12177,284 +11430,6 @@ ${notificationTamil}
       a.click();
     }
 
-    /* ===================================================
-       PHASE 2: MULTI-TENANT 15-STORE CLUSTER CONTROLLER
-       ===================================================*/
-    function switchRegionalStore(tenantId) {
-      if (!tenantId) return;
-      sessionStorage.setItem('nsn_tenant_id', tenantId);
-      const sel = document.getElementById('regional-store-selector');
-      if (sel) sel.value = tenantId;
-
-      const storeNames = {
-        '37a64e83-514d-4b00-b90a-9af172dacdd6': { name: 'Bodinayakanur (HQ Flagship Hub)', badge: 'HQ Flagship', isHub: true },
-        '37a64e83-0002-4b00-b90a-9af172dacdd6': { name: 'Theni Main Bazaar Branch', badge: 'Theni Branch', isHub: false },
-        '37a64e83-0003-4b00-b90a-9af172dacdd6': { name: 'Periyakulam Branch', badge: 'Theni Branch', isHub: false },
-        '37a64e83-0004-4b00-b90a-9af172dacdd6': { name: 'Chinnamanur Express Mart', badge: 'Theni Express', isHub: false },
-        '37a64e83-0005-4b00-b90a-9af172dacdd6': { name: 'Cumbum Valley Hypermarket', badge: 'Cumbum Branch', isHub: false },
-        '37a64e83-0006-4b00-b90a-9af172dacdd6': { name: 'Uthamapalayam Supermarket', badge: 'Theni Branch', isHub: false },
-        '37a64e83-0007-4b00-b90a-9af172dacdd6': { name: 'Andipatti Mart', badge: 'Theni Express', isHub: false },
-        '37a64e83-0009-4b00-b90a-9af172dacdd6': { name: 'Madurai Mattuthavani Hub', badge: 'Secondary Hub', isHub: true },
-        '37a64e83-0008-4b00-b90a-9af172dacdd6': { name: 'Madurai Simmakkal Central', badge: 'Madurai Branch', isHub: false },
-        '37a64e83-0010-4b00-b90a-9af172dacdd6': { name: 'Madurai Anna Nagar Gourmet', badge: 'Madurai Gourmet', isHub: false },
-        '37a64e83-0011-4b00-b90a-9af172dacdd6': { name: 'Madurai Thirunagar Supermarket', badge: 'Madurai Branch', isHub: false },
-        '37a64e83-0012-4b00-b90a-9af172dacdd6': { name: 'Dindigul Main Road Hypermarket', badge: 'Dindigul Branch', isHub: false },
-        '37a64e83-0013-4b00-b90a-9af172dacdd6': { name: 'Palani Temple Town Supermarket', badge: 'Palani Branch', isHub: false },
-        '37a64e83-0014-4b00-b90a-9af172dacdd6': { name: 'Oddanchatram Agro Mart', badge: 'Agro Branch', isHub: false },
-        '37a64e83-0015-4b00-b90a-9af172dacdd6': { name: 'Batlagundu Transit Mart', badge: 'Transit Branch', isHub: false }
-      };
-
-      const info = storeNames[tenantId] || { name: 'Regional Store', badge: 'Branch Store', isHub: false };
-      const badgeEl = document.getElementById('admin-store-badge');
-      if (badgeEl) {
-        badgeEl.textContent = info.badge;
-        badgeEl.className = info.isHub 
-          ? "px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 rounded-full border border-emerald-300"
-          : "px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider bg-blue-100 text-blue-800 rounded-full border border-blue-300";
-      }
-
-      if (typeof showToast === 'function') {
-        showToast('RLS Tenant Context switched to: ' + info.name, 'info');
-      }
-    }
-
-    function openMultiTenantClusterModal() {
-      const modal = document.getElementById('multi-tenant-cluster-modal');
-      if (modal) {
-        modal.classList.remove('hidden');
-        loadMultiTenantTransfers();
-      }
-    }
-
-    function closeMultiTenantClusterModal() {
-      const modal = document.getElementById('multi-tenant-cluster-modal');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    async function loadMultiTenantTransfers() {
-      try {
-        const res = await fetch('/api/transfers?tenantId=37a64e83-514d-4b00-b90a-9af172dacdd6');
-        if (!res.ok) return;
-        const data = await res.json();
-        const tbody = document.getElementById('cluster-transfers-tbody');
-        if (!tbody || !data.transfers) return;
-        
-        tbody.innerHTML = data.transfers.slice(0, 6).map(function(t) {
-          const isReceived = t.status === 'RECEIVED';
-          return '<tr>' +
-            '<td class="p-2 font-mono font-bold text-indigo-700">' + t.transferNumber + '</td>' +
-            '<td class="p-2">' + (t.sourceStoreName || 'Bodi Hub') + ' ➔ ' + (t.destinationStoreName || 'Branch') + '</td>' +
-            '<td class="p-2">' + (t.items || []).map(function(i) { return (i.productName || 'Item') + ' (' + (i.dispatchedQuantity || i.requestedQuantity) + ')'; }).join(', ') + '</td>' +
-            '<td class="p-2"><span class="px-2 py-0.5 text-[10px] font-bold ' + (isReceived ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800') + ' rounded-full">' + t.status + '</span></td>' +
-            '<td class="p-2 text-right">' + (isReceived ? '<span class="text-[10px] font-bold text-emerald-700">✓ Received</span>' : '<button type="button" onclick="confirmTransferReceipt(\'' + t.id + '\', this)" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[10px] cursor-pointer">Confirm Receipt</button>') + '</td>' +
-          '</tr>';
-        }).join('');
-      } catch (e) {
-        console.warn('Failed to load transfers:', e.message);
-      }
-    }
-
-    async function handleDispatchTransferSubmit(e) {
-      e.preventDefault();
-      const destTenantId = document.getElementById('trf-dest-store')?.value;
-      const skuId = document.getElementById('trf-sku')?.value;
-      const qty = Number(document.getElementById('trf-qty')?.value || 20);
-      const fb = document.getElementById('transfer-feedback');
-
-      try {
-        const payload = {
-          sourceTenantId: '37a64e83-514d-4b00-b90a-9af172dacdd6',
-          destinationTenantId: destTenantId,
-          vehicleNumber: 'TN-60-AZ-4512',
-          driverName: 'Murugesan K.',
-          notes: 'Standard replenishment from Mother Warehouse',
-          items: [{ globalSkuId: skuId, requestedQuantity: qty, unitCost: 1180 }]
-        };
-
-        const res = await fetch('/api/transfers/create', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const result = await res.json();
-        if (fb) {
-          fb.classList.remove('hidden');
-          fb.textContent = '✓ Dispatched Transfer ' + (result.transfer ? result.transfer.transferNumber : '') + ' (' + qty + ' units). Source stock decremented.';
-          setTimeout(function() { fb.classList.add('hidden'); }, 5000);
-        }
-        loadMultiTenantTransfers();
-      } catch (err) {
-        alert('Dispatch error: ' + err.message);
-      }
-    }
-
-    async function confirmTransferReceipt(transferId, btn) {
-      if (btn) btn.disabled = true;
-      try {
-        const res = await fetch('/api/transfers/receive', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ transferId: transferId, notes: 'Verified dock delivery' })
-        });
-        const result = await res.json();
-        if (result.success) {
-          loadMultiTenantTransfers();
-          if (typeof showToast === 'function') {
-            showToast('Transfer received! Destination inventory incremented.', 'success');
-          }
-        }
-      } catch (err) {
-        alert('Receive error: ' + err.message);
-      }
-    }
-
-    /* ===================================================
-       CENTRALIZED GROUP-BUYING CONSORTIUM PROCUREMENT UI
-       ===================================================*/
-    let _consortiumData = null;
-
-    function openGroupBuyingConsortiumModal() {
-      const modal = document.getElementById('group-buying-consortium-modal');
-      if (modal) {
-        modal.classList.remove('hidden');
-        loadConsortiumDashboard();
-      }
-    }
-
-    function closeGroupBuyingConsortiumModal() {
-      const modal = document.getElementById('group-buying-consortium-modal');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    function switchConsortiumTab(tabKey, btn) {
-      document.querySelectorAll('.consortium-subtab-pane').forEach(function(p) { p.classList.add('hidden'); });
-      document.querySelectorAll('.consortium-nav-btn').forEach(function(b) { 
-        b.classList.remove('active', 'bg-amber-600', 'text-white'); 
-        b.classList.add('text-gray-600', 'hover:bg-gray-100'); 
-      });
-
-      const pane = document.getElementById('consortium-pane-' + tabKey);
-      if (pane) pane.classList.remove('hidden');
-      if (btn) {
-        btn.classList.add('active', 'bg-amber-600', 'text-white');
-        btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
-      }
-    }
-
-    async function loadConsortiumDashboard() {
-      try {
-        const [resDemand, resRfp, resMargins] = await Promise.all([
-          fetch('/api/consortium/demand'),
-          fetch('/api/consortium/rfp'),
-          fetch('/api/consortium/margins')
-        ]);
-
-        const demand = await resDemand.json();
-        const rfp = await resRfp.json();
-        const margins = await resMargins.json();
-
-        // Populate Top KPIs
-        const elVol = document.getElementById('kpi-consortium-vol');
-        if (elVol) elVol.textContent = demand.totalConsortiumDemandMt + ' MT';
-        const elDisc = document.getElementById('kpi-consortium-disc');
-        if (elDisc) elDisc.textContent = demand.overallConsortiumDiscountPct + '% Avg';
-        const elSav14 = document.getElementById('kpi-consortium-sav14');
-        if (elSav14) elSav14.textContent = '₹' + Number(demand.total14DayConsortiumSavingsInr || 0).toLocaleString('en-IN');
-        const elSavAnn = document.getElementById('kpi-consortium-savann');
-        if (elSavAnn) elSavAnn.textContent = '₹' + Number(demand.annualizedProjectedSavingsInr || 0).toLocaleString('en-IN');
-
-        // Render Demand Aggregation Table
-        const tbodyDemand = document.getElementById('tbody-consortium-demand');
-        if (tbodyDemand && demand.commodities) {
-          tbodyDemand.innerHTML = demand.commodities.map(function(c) {
-            return '<tr>' +
-              '<td class="p-2.5 font-bold text-gray-900">' + c.commodityName + '<div class="text-[10px] text-gray-500 font-normal">' + c.tamilName + '</div></td>' +
-              '<td class="p-2.5 font-mono font-black text-amber-700">' + c.totalDemandMt + ' MT</td>' +
-              '<td class="p-2.5 text-gray-600 text-xs">₹' + c.distributorRatePerKg + '/kg</td>' +
-              '<td class="p-2.5 font-bold text-emerald-700 text-xs">₹' + c.bestQuotedMillRatePerKg + '/kg</td>' +
-              '<td class="p-2.5"><span class="px-2 py-0.5 text-[10px] font-black bg-emerald-100 text-emerald-800 rounded-full">-' + c.negotiatedDiscountPct + '%</span></td>' +
-              '<td class="p-2.5 font-mono font-black text-emerald-800 text-right">₹' + Number(c.totalSavingsInr).toLocaleString('en-IN') + '</td>' +
-            '</tr>';
-          }).join('');
-        }
-
-        // Render RFP Tenders
-        const tbodyRfp = document.getElementById('tbody-consortium-rfp');
-        if (tbodyRfp && rfp.rfpTenders) {
-          tbodyRfp.innerHTML = rfp.rfpTenders.map(function(t) {
-            return '<tr>' +
-              '<td class="p-2.5 font-mono font-bold text-indigo-700 text-xs">' + t.rfpNumber + '</td>' +
-              '<td class="p-2.5 font-bold text-gray-900">' + t.commodityName + '<div class="text-[10px] text-gray-500 font-normal">' + t.totalVolumeTenderedMt + ' MT Tendered</div></td>' +
-              '<td class="p-2.5 font-medium text-xs">' + t.awardedMillName + '<div class="text-[10px] text-indigo-700 font-bold">' + t.awardedMillOrigin + '</div></td>' +
-              '<td class="p-2.5"><span class="px-2 py-0.5 text-[10px] font-black bg-emerald-100 text-emerald-800 rounded-full">-' + t.negotiatedDiscountPct + '%</span></td>' +
-              '<td class="p-2.5 font-mono font-black text-emerald-800">₹' + Number(t.totalConsortiumSavingsInr).toLocaleString('en-IN') + '</td>' +
-              '<td class="p-2.5 text-right"><span class="px-2 py-0.5 text-[10px] font-bold bg-indigo-100 text-indigo-800 rounded-full">CONTRACTED</span></td>' +
-            '</tr>';
-          }).join('');
-        }
-
-        // Render Store Margins
-        const tbodyMargins = document.getElementById('tbody-consortium-margins');
-        if (tbodyMargins && margins.storeRankings) {
-          tbodyMargins.innerHTML = margins.storeRankings.map(function(s, idx) {
-            return '<tr>' +
-              '<td class="p-2.5 font-bold text-xs text-gray-800">#' + (idx + 1) + ' ' + s.storeName + '<div class="text-[10px] text-gray-500 font-normal">' + s.district + ' District • ' + s.city + '</div></td>' +
-              '<td class="p-2.5 font-mono text-xs text-gray-600">' + Number(s.total14DayDemandKg).toLocaleString('en-IN') + ' kg</td>' +
-              '<td class="p-2.5 font-mono text-xs text-gray-500">' + s.oldGrossMarginPct + '%</td>' +
-              '<td class="p-2.5 font-mono font-bold text-xs text-emerald-700">' + s.consortiumGrossMarginPct + '%</td>' +
-              '<td class="p-2.5 font-mono font-black text-xs text-emerald-800">+' + s.netMarginExpansionPct + '%</td>' +
-              '<td class="p-2.5 font-mono font-bold text-xs text-gray-900 text-right">₹' + Number(s.net14DaySavingsInr).toLocaleString('en-IN') + '</td>' +
-              '<td class="p-2.5 font-mono font-black text-xs text-emerald-800 text-right">₹' + Number(s.annualizedSavingsInr).toLocaleString('en-IN') + '</td>' +
-            '</tr>';
-          }).join('');
-        }
-
-        loadConsortiumBolSplit('COMM-TOOR-DAL-A');
-      } catch (err) {
-        console.warn('Consortium data load error:', err.message);
-      }
-    }
-
-    async function loadConsortiumBolSplit(commodityId) {
-      try {
-        const res = await fetch('/api/consortium/bol-split?commodityId=' + encodeURIComponent(commodityId));
-        const data = await res.json();
-        const container = document.getElementById('consortium-bol-trucks-container');
-        if (!container || !data.truckDispatches) return;
-
-        container.innerHTML = data.truckDispatches.map(function(truck) {
-          return '<div class="p-3.5 bg-gray-50 border border-gray-200 rounded-2xl space-y-2">' +
-            '<div class="flex items-center justify-between border-b border-gray-200 pb-2">' +
-              '<div>' +
-                '<span class="text-xs font-black text-gray-900">' + truck.routeName + '</span>' +
-                '<div class="text-[10px] text-gray-500">' + truck.truckType + ' • Reg: <b class="text-indigo-700 font-mono">' + truck.vehicleRegistrationNumber + '</b> (' + truck.driverName + ')</div>' +
-              '</div>' +
-              '<div class="text-right">' +
-                '<span class="text-xs font-black text-amber-700 font-mono">' + truck.totalTruckLoadMt + ' MT Load</span>' +
-                '<div class="text-[10px] text-emerald-700 font-bold font-mono">₹' + Number(truck.totalConsignmentValueInr).toLocaleString('en-IN') + '</div>' +
-              '</div>' +
-            '</div>' +
-            '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">' +
-              truck.multiDropSequence.map(function(drop) {
-                return '<div class="p-2 bg-white rounded-xl border border-gray-100 flex items-center justify-between">' +
-                  '<div>' +
-                    '<span class="font-bold text-gray-800">Drop ' + drop.dropSequence + ': ' + drop.storeName + '</span>' +
-                    '<div class="text-[10px] font-mono text-gray-500">' + drop.subBolNumber + ' • EWB: ' + drop.eWayBillNumber + '</div>' +
-                  '</div>' +
-                  '<div class="text-right font-mono">' +
-                    '<span class="font-black text-gray-900">' + drop.allocatedVolumeKg + ' kg</span>' +
-                    '<div class="text-[10px] text-emerald-700 font-bold">Save ₹' + Number(drop.storeDirectSavingsInr).toLocaleString('en-IN') + '</div>' +
-                  '</div>' +
-                '</div>';
-              }).join('') +
-            '</div>' +
-          '</div>';
-        }).join('');
-      } catch (e) {
-        console.warn('BoL load error:', e.message);
-      }
-    }
-
 </script>
 
   <!-- MOBILE BOTTOM COMMAND BAR (App-like ergonomics for smartphones) -->
@@ -12661,644 +11636,6 @@ ${notificationTamil}
           <button type="button" onclick="closeStockVelocityModal()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black">Done</button>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- ⚡ RAPID CASHIER SHIFT HANDOVER MODAL (WebAuthn Passkey & 4-Digit PIN) -->
-  <div id="rapid-handover-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-gray-100 space-y-4 max-h-[92vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-lg font-black">
-            <i class="fa-solid fa-fingerprint"></i>
-          </div>
-          <div>
-            <h3 class="font-black text-gray-900 text-base">Rapid Cashier Shift Handover</h3>
-            <p class="text-xs text-gray-500 font-medium">பணியாளர் மாற்றம் • WebAuthn Biometrics &lt;500ms</p>
-          </div>
-        </div>
-        <button type="button" onclick="closeHandoverModal()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
-      </div>
-
-      <!-- Outgoing & Counter Status -->
-      <div class="p-3.5 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200/70 text-xs flex items-center justify-between">
-        <div>
-          <span class="text-gray-500 block text-[11px]">Current Active Counter:</span>
-          <strong id="handover-counter-name" class="text-emerald-950 font-black text-sm">Counter #1 (Speed Checkout)</strong>
-        </div>
-        <div class="text-right">
-          <span class="text-gray-500 block text-[11px]">Active User:</span>
-          <span id="handover-current-user" class="font-bold text-gray-900">Kavitha R.</span>
-        </div>
-      </div>
-
-      <!-- Incoming Staff Selection -->
-      <div class="space-y-1.5 text-xs">
-        <label class="font-black text-gray-700 block">Select Incoming Staff Member:</label>
-        <select id="handover-incoming-user" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 font-bold text-gray-900 focus:ring-2 focus:ring-emerald-500">
-          <option value="cashier2" selected>Muthu P. — Counter 2 (Cashier)</option>
-          <option value="cashier1">Kavitha R. — Counter 1 (Cashier)</option>
-          <option value="inventory1">Saravanan S. — Floor / Inward Receiving (Inventory)</option>
-          <option value="marketing1">Priya K. — Growth & Campaigns (Marketing)</option>
-          <option value="director">S. Murugan — Store Director (Super Admin)</option>
-        </select>
-      </div>
-
-      <!-- Opening Drawer Float -->
-      <div class="space-y-1.5 text-xs">
-        <label class="font-black text-gray-700 block">Opening Cash Drawer Float (₹):</label>
-        <input type="number" id="handover-drawer-float" value="2500" class="w-full px-3.5 py-2 rounded-xl border border-gray-300 font-black text-emerald-900 text-sm">
-      </div>
-
-      <!-- Biometric Passkey Action -->
-      <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-3">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-black text-gray-900 flex items-center gap-1.5">
-            <i class="fa-solid fa-bolt text-amber-500"></i> Primary Method: Biometric Passkey
-          </span>
-          <span class="text-[10px] bg-emerald-100 text-emerald-800 font-black px-2 py-0.5 rounded-full">&lt; 500ms Latency</span>
-        </div>
-        <p class="text-[11px] text-gray-600">Scan Fingerprint (Touch ID / Windows Hello) or Face ID on this POS terminal for instantaneous shift authorization.</p>
-        <button type="button" onclick="executeBiometricPasskeyHandover()" id="btn-trigger-passkey" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs flex items-center justify-center gap-2 shadow-sm transition">
-          <i class="fa-solid fa-fingerprint text-base text-emerald-200"></i> Verify Biometric Passkey (Touch ID)
-        </button>
-      </div>
-
-      <!-- PIN Fallback -->
-      <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2">
-        <span class="text-xs font-black text-amber-950 flex items-center gap-1.5">
-          <i class="fa-solid fa-key text-amber-600"></i> Fallback: 4-Digit Shift PIN
-        </span>
-        <div class="flex items-center gap-2">
-          <input type="password" id="handover-pin-input" maxlength="4" placeholder="••••" class="w-32 px-3 py-1.5 rounded-xl border border-gray-300 text-center font-black text-base tracking-widest bg-white">
-          <button type="button" onclick="executePinHandover()" class="flex-1 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-2xs">
-            Confirm Handover with PIN
-          </button>
-        </div>
-        <p class="text-[10px] text-amber-800">Standard counter test PINs: Cashier 1: <code>1122</code> | Cashier 2: <code>1234</code> | Floor: <code>4321</code> | Director: <code>9999</code></p>
-      </div>
-
-      <!-- Recent Handovers Audit Log -->
-      <div class="border-t border-gray-100 pt-3 space-y-2">
-        <div class="flex items-center justify-between text-xs">
-          <span class="font-black text-gray-700">Recent Shift Handover Audit Log:</span>
-          <button type="button" onclick="fetchHandoversJournal()" class="text-emerald-700 hover:underline text-[11px] font-bold">Refresh</button>
-        </div>
-        <div class="max-h-36 overflow-y-auto rounded-xl border border-gray-200">
-          <table class="w-full text-left text-[11px]">
-            <thead class="bg-gray-50 border-b border-gray-200 font-black text-gray-600">
-              <tr>
-                <th class="p-1.5">Time</th>
-                <th class="p-1.5">Incoming</th>
-                <th class="p-1.5">Method</th>
-                <th class="p-1.5 text-right">Speed</th>
-              </tr>
-            </thead>
-            <tbody id="handover-audit-tbody" class="divide-y divide-gray-100 font-medium">
-              <tr>
-                <td class="p-1.5">08:00 AM</td>
-                <td class="p-1.5 font-bold">Kavitha R.</td>
-                <td class="p-1.5 text-emerald-700">PASSKEY</td>
-                <td class="p-1.5 text-right font-black text-emerald-800">382ms</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- 🌾 CENTRALIZED GROUP-BUYING CONSORTIUM PROCUREMENT MODAL (15 SUPERMARKETS) -->
-  <div id="group-buying-consortium-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-5xl w-full p-6 shadow-2xl border border-gray-100 space-y-5 max-h-[92vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-lg font-black">
-            <i class="fa-solid fa-handshake-angle"></i>
-          </div>
-          <div>
-            <h3 class="font-black text-gray-900 text-base">Centralized Group-Buying Procurement Consortium</h3>
-            <p class="text-xs text-gray-500 font-medium">15 Independent Supermarkets • Direct Mill Bidding vs Conglomerates • 6% to 9% Wholesale Discounts</p>
-          </div>
-        </div>
-        <button type="button" onclick="closeGroupBuyingConsortiumModal()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold cursor-pointer">&times;</button>
-      </div>
-
-      <!-- Consortium Executive KPI Cards -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div class="p-3 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 rounded-2xl">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-amber-600">14-Day Demand Pooled</span>
-          <p class="text-xl font-black text-amber-950 mt-1" id="kpi-consortium-vol">267 MT</p>
-          <span class="text-[11px] text-amber-700 font-medium">Incl. 42 MT Toor Dal</span>
-        </div>
-        <div class="p-3 bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 rounded-2xl">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Direct Mill Discount</span>
-          <p class="text-xl font-black text-emerald-950 mt-1" id="kpi-consortium-disc">7.9% Avg</p>
-          <span class="text-[11px] text-emerald-700 font-medium">6% to 9% Below Distributor</span>
-        </div>
-        <div class="p-3 bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 rounded-2xl">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600">14-Day Network Savings</span>
-          <p class="text-xl font-black text-indigo-950 mt-1" id="kpi-consortium-sav14">₹18.23 Lakhs</p>
-          <span class="text-[11px] text-indigo-700 font-medium">Retained Wholesale Profit</span>
-        </div>
-        <div class="p-3 bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100 rounded-2xl">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600">Annualized Collective Gain</span>
-          <p class="text-xl font-black text-purple-950 mt-1" id="kpi-consortium-savann">₹4.75 Crores</p>
-          <span class="text-[11px] text-purple-700 font-medium">15 Supermarket Total</span>
-        </div>
-      </div>
-
-      <!-- Navigation Sub-Tabs -->
-      <div class="flex items-center gap-1.5 border-b border-gray-100 pb-2 overflow-x-auto text-xs font-bold">
-        <button type="button" onclick="switchConsortiumTab('demand', this)" class="consortium-nav-btn active px-3.5 py-1.5 rounded-xl bg-amber-600 text-white cursor-pointer transition">
-          <i class="fa-solid fa-boxes-stacked"></i> 14-Day Demand Aggregation (42 MT Toor Dal)
-        </button>
-        <button type="button" onclick="switchConsortiumTab('rfp', this)" class="consortium-nav-btn px-3.5 py-1.5 rounded-xl text-gray-600 hover:bg-gray-100 cursor-pointer transition">
-          <i class="fa-solid fa-gavel"></i> Direct Mandi Bidding (Tirunelveli, Thanjavur, AP)
-        </button>
-        <button type="button" onclick="switchConsortiumTab('bol', this)" class="consortium-nav-btn px-3.5 py-1.5 rounded-xl text-gray-600 hover:bg-gray-100 cursor-pointer transition">
-          <i class="fa-solid fa-truck-ramp-box"></i> Split Bills of Lading &amp; Direct Trucks
-        </button>
-        <button type="button" onclick="switchConsortiumTab('margins', this)" class="consortium-nav-btn px-3.5 py-1.5 rounded-xl text-gray-600 hover:bg-gray-100 cursor-pointer transition">
-          <i class="fa-solid fa-chart-line"></i> Store Margin Improvement (+6.7% Net)
-        </button>
-      </div>
-
-      <!-- Tab 1: Demand Aggregation Pane -->
-      <div id="consortium-pane-demand" class="consortium-subtab-pane space-y-3">
-        <div class="flex items-center justify-between text-xs">
-          <span class="font-bold text-gray-700">Consolidated Demand across 15 Supermarkets (Theni, Madurai, Dindigul)</span>
-          <span class="text-gray-500">Benchmark: Single-Store Tier-3 Distributor vs Consortium Direct Mill</span>
-        </div>
-        <div class="border border-gray-200 rounded-2xl overflow-hidden">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-gray-50 border-b border-gray-200 font-black text-gray-600">
-              <tr>
-                <th class="p-2.5">Commodity &amp; Package</th>
-                <th class="p-2.5">Total Demand (14-Day)</th>
-                <th class="p-2.5">Distributor Rate</th>
-                <th class="p-2.5">Consortium Mill Bid</th>
-                <th class="p-2.5">Discount</th>
-                <th class="p-2.5 text-right">Consortium Savings</th>
-              </tr>
-            </thead>
-            <tbody id="tbody-consortium-demand" class="divide-y divide-gray-100">
-              <!-- Populated dynamically via JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Tab 2: Direct Mandi Bidding Pane -->
-      <div id="consortium-pane-rfp" class="consortium-subtab-pane hidden space-y-3">
-        <div class="flex items-center justify-between text-xs">
-          <span class="font-bold text-gray-700">Unified RFPs Issued to Origin Agricultural Mills &amp; Processing Mandis</span>
-          <span class="text-emerald-700 font-bold">All Bids Guaranteed 6% to 9% Below Distributor</span>
-        </div>
-        <div class="border border-gray-200 rounded-2xl overflow-hidden">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-gray-50 border-b border-gray-200 font-black text-gray-600">
-              <tr>
-                <th class="p-2.5">RFP Tender #</th>
-                <th class="p-2.5">Staple Commodity</th>
-                <th class="p-2.5">Awarded Mill &amp; Origin</th>
-                <th class="p-2.5">Negotiated Discount</th>
-                <th class="p-2.5">Consortium Savings</th>
-                <th class="p-2.5 text-right">Status</th>
-              </tr>
-            </thead>
-            <tbody id="tbody-consortium-rfp" class="divide-y divide-gray-100">
-              <!-- Populated dynamically via JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Tab 3: Split Bills of Lading Pane -->
-      <div id="consortium-pane-bol" class="consortium-subtab-pane hidden space-y-3">
-        <div class="flex items-center justify-between text-xs">
-          <span class="font-bold text-gray-700">Split Consignment Bills of Lading &amp; Multi-Drop Direct Truck Logistics</span>
-          <div class="flex items-center gap-2">
-            <label class="font-bold text-gray-600">Commodity:</label>
-            <select onchange="loadConsortiumBolSplit(this.value)" class="p-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-gray-800">
-              <option value="COMM-TOOR-DAL-A" selected>🌾 Toor Dal Grade-A (42 MT Consignment)</option>
-              <option value="COMM-PONNI-RICE-25KG">🍚 Ponni Boiled Rice (115 MT Consignment)</option>
-              <option value="COMM-OIL-SUNFLOWER-5L">🌻 Refined Sunflower Oil (32 KL Consignment)</option>
-              <option value="COMM-SUGAR-CRYSTAL-1KG">🍬 Crystal White Sugar (36 MT Consignment)</option>
-            </select>
-          </div>
-        </div>
-        <div id="consortium-bol-trucks-container" class="space-y-3">
-          <!-- Populated dynamically via JS -->
-        </div>
-      </div>
-
-      <!-- Tab 4: Per-Store Margins Pane -->
-      <div id="consortium-pane-margins" class="consortium-subtab-pane hidden space-y-3">
-        <div class="flex items-center justify-between text-xs">
-          <span class="font-bold text-gray-700">Profit Margin Expansion per Tenant Store (15 Independent Supermarkets)</span>
-          <span class="text-indigo-700 font-bold">Network Average Margin Expansion: +6.7%</span>
-        </div>
-        <div class="border border-gray-200 rounded-2xl overflow-hidden">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-gray-50 border-b border-gray-200 font-black text-gray-600">
-              <tr>
-                <th class="p-2.5">Supermarket &amp; Location</th>
-                <th class="p-2.5">14-Day Volume</th>
-                <th class="p-2.5">Baseline Margin</th>
-                <th class="p-2.5">Consortium Margin</th>
-                <th class="p-2.5">Margin Gain</th>
-                <th class="p-2.5 text-right">14-Day Savings</th>
-                <th class="p-2.5 text-right">Annual Gain</th>
-              </tr>
-            </thead>
-            <tbody id="tbody-consortium-margins" class="divide-y divide-gray-100">
-              <!-- Populated dynamically via JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- 🏬 15-STORE MULTI-TENANT REGIONAL EXPANSION & STOCK TRANSFER MODAL -->
-  <div id="multi-tenant-cluster-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-4xl w-full p-6 shadow-2xl border border-gray-100 space-y-5 max-h-[92vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-800 flex items-center justify-center text-lg font-black">
-            <i class="fa-solid fa-network-wired"></i>
-          </div>
-          <div>
-            <h3 class="font-black text-gray-900 text-base">Phase 2 Multi-Tenant Regional Network</h3>
-            <p class="text-xs text-gray-500 font-medium">15 Supermarkets • Theni, Madurai &amp; Dindigul Districts • Row-Level Security</p>
-          </div>
-        </div>
-        <button type="button" onclick="closeMultiTenantClusterModal()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold cursor-pointer">&times;</button>
-      </div>
-
-      <!-- Network Summary KPI Grid -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div class="p-3 bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 rounded-2xl">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600">Regional Footprint</span>
-          <p class="text-xl font-black text-indigo-950 mt-1">15 Stores</p>
-          <span class="text-[11px] text-indigo-700 font-medium">3 Districts • 125.3k sqft</span>
-        </div>
-        <div class="p-3 bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 rounded-2xl">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Daily Shopper Traffic</span>
-          <p class="text-xl font-black text-emerald-950 mt-1">17,130</p>
-          <span class="text-[11px] text-emerald-700 font-medium">Customers / Day</span>
-        </div>
-        <div class="p-3 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 rounded-2xl">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-amber-600">Global Master SKUs</span>
-          <p class="text-xl font-black text-amber-950 mt-1">50,000</p>
-          <span class="text-[11px] text-amber-700 font-medium">Standard FMCG Barcodes</span>
-        </div>
-        <div class="p-3 bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100 rounded-2xl">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600">Network Inventory Val</span>
-          <p class="text-xl font-black text-purple-950 mt-1">₹51.3 Lakhs</p>
-          <span class="text-[11px] text-purple-700 font-medium">13,872 Total Units</span>
-        </div>
-      </div>
-
-      <!-- District Cluster Tabs & Switcher -->
-      <div class="space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-black uppercase tracking-wider text-gray-700">15 Regional Supermarket Clusters</span>
-          <span class="text-[11px] text-gray-500 font-medium">Click any store to switch active RLS tenant context</span>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <!-- Theni Cluster -->
-          <div class="p-3 rounded-2xl bg-gray-50 border border-gray-200 space-y-2">
-            <div class="flex items-center justify-between border-b border-gray-200 pb-1.5">
-              <span class="text-xs font-black text-emerald-800 flex items-center gap-1.5">
-                <i class="fa-solid fa-location-dot"></i> Theni District (7 Stores)
-              </span>
-              <span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded-full">Mother Hub</span>
-            </div>
-            <div class="space-y-1 text-xs">
-              <button type="button" onclick="switchRegionalStore('37a64e83-514d-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-emerald-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
-                <span>🏢 Bodinayakanur (Flagship Hub)</span>
-                <span class="text-[10px] text-gray-500 font-normal">18,500 sqft</span>
-              </button>
-              <button type="button" onclick="switchRegionalStore('37a64e83-0002-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-emerald-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
-                <span>🏬 Theni Main Bazaar</span>
-                <span class="text-[10px] text-gray-500 font-normal">6,500 sqft</span>
-              </button>
-              <button type="button" onclick="switchRegionalStore('37a64e83-0003-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-emerald-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
-                <span>🏬 Periyakulam Branch</span>
-                <span class="text-[10px] text-gray-500 font-normal">5,200 sqft</span>
-              </button>
-              <button type="button" onclick="switchRegionalStore('37a64e83-0004-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-emerald-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
-                <span>⚡ Chinnamanur Express</span>
-                <span class="text-[10px] text-gray-500 font-normal">3,800 sqft</span>
-              </button>
-              <button type="button" onclick="switchRegionalStore('37a64e83-0005-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-emerald-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
-                <span>🏬 Cumbum Valley Hypermarket</span>
-                <span class="text-[10px] text-gray-500 font-normal">8,200 sqft</span>
-              </button>
-              <button type="button" onclick="switchRegionalStore('37a64e83-0006-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-emerald-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
-                <span>🏬 Uthamapalayam Supermarket</span>
-                <span class="text-[10px] text-gray-500 font-normal">4,100 sqft</span>
-              </button>
-              <button type="button" onclick="switchRegionalStore('37a64e83-0007-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-emerald-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
-                <span>⚡ Andipatti Mart</span>
-                <span class="text-[10px] text-gray-500 font-normal">3,400 sqft</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Madurai Cluster -->
-          <div class="p-3 rounded-2xl bg-gray-50 border border-gray-200 space-y-2">
-            <div class="flex items-center justify-between border-b border-gray-200 pb-1.5">
-              <span class="text-xs font-black text-blue-800 flex items-center gap-1.5">
-                <i class="fa-solid fa-location-dot"></i> Madurai District (4 Stores)
-              </span>
-              <span class="text-[10px] font-bold bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full">Secondary Hub</span>
-            </div>
-            <div class="space-y-1 text-xs">
-              <button type="button" onclick="switchRegionalStore('37a64e83-0009-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-blue-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
-                <span>🚚 Mattuthavani Wholesale Hub</span>
-                <span class="text-[10px] text-gray-500 font-normal">22,000 sqft</span>
-              </button>
-              <button type="button" onclick="switchRegionalStore('37a64e83-0008-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-blue-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
-                <span>🏬 Simmakkal Central</span>
-                <span class="text-[10px] text-gray-500 font-normal">9,500 sqft</span>
-              </button>
-              <button type="button" onclick="switchRegionalStore('37a64e83-0010-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-blue-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
-                <span>🏬 Anna Nagar Gourmet Mart</span>
-                <span class="text-[10px] text-gray-500 font-normal">7,800 sqft</span>
-              </button>
-              <button type="button" onclick="switchRegionalStore('37a64e83-0011-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-blue-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
-                <span>🏬 Thirunagar Supermarket</span>
-                <span class="text-[10px] text-gray-500 font-normal">5,600 sqft</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Dindigul Cluster -->
-          <div class="p-3 rounded-2xl bg-gray-50 border border-gray-200 space-y-2">
-            <div class="flex items-center justify-between border-b border-gray-200 pb-1.5">
-              <span class="text-xs font-black text-amber-800 flex items-center gap-1.5">
-                <i class="fa-solid fa-location-dot"></i> Dindigul District (4 Stores)
-              </span>
-              <span class="text-[10px] font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded-full">NH-83 Corridor</span>
-            </div>
-            <div class="space-y-1 text-xs">
-              <button type="button" onclick="switchRegionalStore('37a64e83-0012-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-amber-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
-                <span>🏬 Dindigul Main Road</span>
-                <span class="text-[10px] text-gray-500 font-normal">11,000 sqft</span>
-              </button>
-              <button type="button" onclick="switchRegionalStore('37a64e83-0013-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-amber-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
-                <span>🏬 Palani Temple Town</span>
-                <span class="text-[10px] text-gray-500 font-normal">7,200 sqft</span>
-              </button>
-              <button type="button" onclick="switchRegionalStore('37a64e83-0014-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-amber-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
-                <span>🏬 Oddanchatram Agro Mart</span>
-                <span class="text-[10px] text-gray-500 font-normal">6,000 sqft</span>
-              </button>
-              <button type="button" onclick="switchRegionalStore('37a64e83-0015-4b00-b90a-9af172dacdd6')" class="w-full text-left p-1.5 rounded-lg hover:bg-amber-100 font-bold text-gray-800 flex items-center justify-between cursor-pointer">
-                <span>⚡ Batlagundu Transit Mart</span>
-                <span class="text-[10px] text-gray-500 font-normal">4,500 sqft</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Inter-Store Inventory Transfer Dispatcher -->
-      <div class="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-200 space-y-3">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-black uppercase tracking-wider text-indigo-950 flex items-center gap-1.5">
-            <i class="fa-solid fa-truck-moving text-indigo-700"></i> Dispatch Inter-Store Stock Transfer (Mother Warehouse ➔ Branch)
-          </span>
-          <span class="text-[11px] font-bold text-indigo-700">Automated PostgreSQL State Machine</span>
-        </div>
-        <form onsubmit="handleDispatchTransferSubmit(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs">
-          <div>
-            <label class="block text-[10px] font-bold uppercase text-gray-600 mb-0.5">Destination Store</label>
-            <select id="trf-dest-store" class="w-full p-2 bg-white rounded-xl border border-gray-200 font-bold text-gray-800 text-xs">
-              <option value="37a64e83-0002-4b00-b90a-9af172dacdd6">🏬 Theni Main Bazaar</option>
-              <option value="37a64e83-0009-4b00-b90a-9af172dacdd6">🚚 Madurai Mattuthavani Hub</option>
-              <option value="37a64e83-0005-4b00-b90a-9af172dacdd6">🏬 Cumbum Valley Hypermarket</option>
-              <option value="37a64e83-0012-4b00-b90a-9af172dacdd6">🏬 Dindigul Main Road</option>
-              <option value="37a64e83-0013-4b00-b90a-9af172dacdd6">🏬 Palani Temple Town</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold uppercase text-gray-600 mb-0.5">Commodity SKU</label>
-            <select id="trf-sku" class="w-full p-2 bg-white rounded-xl border border-gray-200 font-bold text-gray-800 text-xs">
-              <option value="a0000001-0001-4000-8000-000000000001">🌾 Ponni Boiled Rice (25kg Sack)</option>
-              <option value="a0000001-0001-4000-8000-000000000002">🌻 Gold Winner Sunflower Oil (5L Can)</option>
-              <option value="a0000001-0001-4000-8000-000000000003">🧼 Surf Excel Detergent (1kg Pack)</option>
-              <option value="a0000001-0001-4000-8000-000000000004">🌾 Aashirvaad Whole Wheat Atta (5kg)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold uppercase text-gray-600 mb-0.5">Quantity (Units)</label>
-            <input type="number" id="trf-qty" min="1" max="500" value="20" class="w-full p-2 bg-white rounded-xl border border-gray-200 font-bold text-gray-800 text-xs">
-          </div>
-          <div class="flex items-end">
-            <button type="submit" id="btn-dispatch-trf" class="w-full p-2 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
-              <i class="fa-solid fa-paper-plane"></i> Dispatch Transfer
-            </button>
-          </div>
-        </form>
-        <div id="transfer-feedback" class="text-xs font-bold text-emerald-800 hidden"></div>
-      </div>
-
-      <!-- Active Transfers Table (Bilateral RLS Tracking) -->
-      <div class="space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-black uppercase tracking-wider text-gray-700">Active Inter-Store Transfers (Bilateral RLS Visibility)</span>
-          <button type="button" onclick="loadMultiTenantTransfers()" class="text-[11px] text-indigo-700 font-bold hover:underline cursor-pointer">
-            <i class="fa-solid fa-rotate"></i> Refresh Manifests
-          </button>
-        </div>
-        <div class="border border-gray-200 rounded-2xl overflow-hidden">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-gray-50 border-b border-gray-200 font-black text-gray-600">
-              <tr>
-                <th class="p-2">Transfer #</th>
-                <th class="p-2">Route</th>
-                <th class="p-2">Items</th>
-                <th class="p-2">Status</th>
-                <th class="p-2 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody id="cluster-transfers-tbody" class="divide-y divide-gray-100 font-medium">
-              <tr>
-                <td class="p-2 font-mono font-bold text-indigo-700">TRF-2026-BODI-THN-001</td>
-                <td class="p-2">Bodi Hub ➔ Theni Bazaar</td>
-                <td class="p-2">Ponni Rice 25kg (40), Oil 5L (30)</td>
-                <td class="p-2"><span class="px-2 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-800 rounded-full">IN_TRANSIT</span></td>
-                <td class="p-2 text-right">
-                  <button type="button" onclick="confirmTransferReceipt('b0000001-0001-4000-8000-000000000001', this)" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[10px] cursor-pointer">
-                    Confirm Receipt
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- 🌾 CENTRALIZED GROUP-BUYING CONSORTIUM PROCUREMENT MODAL (15 SUPERMARKETS) -->
-  <div id="group-buying-consortium-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-5xl w-full p-6 shadow-2xl border border-gray-100 space-y-5 max-h-[92vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-lg font-black">
-            <i class="fa-solid fa-handshake-angle"></i>
-          </div>
-          <div>
-            <h3 class="font-black text-gray-900 text-base">Centralized Group-Buying Procurement Consortium</h3>
-            <p class="text-xs text-gray-500 font-medium">15 Independent Supermarkets • Direct Mill Bidding vs Conglomerates • 6% to 9% Wholesale Discounts</p>
-          </div>
-        </div>
-        <button type="button" onclick="closeGroupBuyingConsortiumModal()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold cursor-pointer">&times;</button>
-      </div>
-
-      <!-- Consortium Executive KPI Cards -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div class="p-3 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 rounded-2xl">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-amber-600">14-Day Demand Pooled</span>
-          <p class="text-xl font-black text-amber-950 mt-1" id="kpi-consortium-vol">267 MT</p>
-          <span class="text-[11px] text-amber-700 font-medium">Incl. 42 MT Toor Dal</span>
-        </div>
-        <div class="p-3 bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 rounded-2xl">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Direct Mill Discount</span>
-          <p class="text-xl font-black text-emerald-950 mt-1" id="kpi-consortium-disc">7.9% Avg</p>
-          <span class="text-[11px] text-emerald-700 font-medium">6% to 9% Below Distributor</span>
-        </div>
-        <div class="p-3 bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 rounded-2xl">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600">14-Day Network Savings</span>
-          <p class="text-xl font-black text-indigo-950 mt-1" id="kpi-consortium-sav14">₹18.23 Lakhs</p>
-          <span class="text-[11px] text-indigo-700 font-medium">Retained Wholesale Profit</span>
-        </div>
-        <div class="p-3 bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100 rounded-2xl">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600">Annualized Collective Gain</span>
-          <p class="text-xl font-black text-purple-950 mt-1" id="kpi-consortium-savann">₹4.75 Crores</p>
-          <span class="text-[11px] text-purple-700 font-medium">15 Supermarket Total</span>
-        </div>
-      </div>
-
-      <!-- Navigation Sub-Tabs -->
-      <div class="flex items-center gap-1.5 border-b border-gray-100 pb-2 overflow-x-auto text-xs font-bold">
-        <button type="button" onclick="switchConsortiumTab('demand', this)" class="consortium-nav-btn active px-3.5 py-1.5 rounded-xl bg-amber-600 text-white cursor-pointer transition">
-          <i class="fa-solid fa-boxes-stacked"></i> 14-Day Demand Aggregation (42 MT Toor Dal)
-        </button>
-        <button type="button" onclick="switchConsortiumTab('rfp', this)" class="consortium-nav-btn px-3.5 py-1.5 rounded-xl text-gray-600 hover:bg-gray-100 cursor-pointer transition">
-          <i class="fa-solid fa-gavel"></i> Direct Mandi Bidding (Tirunelveli, Thanjavur, AP)
-        </button>
-        <button type="button" onclick="switchConsortiumTab('bol', this)" class="consortium-nav-btn px-3.5 py-1.5 rounded-xl text-gray-600 hover:bg-gray-100 cursor-pointer transition">
-          <i class="fa-solid fa-truck-ramp-box"></i> Split Bills of Lading &amp; Direct Trucks
-        </button>
-        <button type="button" onclick="switchConsortiumTab('margins', this)" class="consortium-nav-btn px-3.5 py-1.5 rounded-xl text-gray-600 hover:bg-gray-100 cursor-pointer transition">
-          <i class="fa-solid fa-chart-line"></i> Store Margin Improvement (+6.7% Net)
-        </button>
-      </div>
-
-      <!-- Tab 1: Demand Aggregation Pane -->
-      <div id="consortium-pane-demand" class="consortium-subtab-pane space-y-3">
-        <div class="flex items-center justify-between text-xs">
-          <span class="font-bold text-gray-700">Consolidated Demand across 15 Supermarkets (Theni, Madurai, Dindigul)</span>
-          <span class="text-gray-500">Benchmark: Single-Store Tier-3 Distributor vs Consortium Direct Mill</span>
-        </div>
-        <div class="border border-gray-200 rounded-2xl overflow-hidden">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-gray-50 border-b border-gray-200 font-black text-gray-600">
-              <tr>
-                <th class="p-2.5">Commodity &amp; Package</th>
-                <th class="p-2.5">Total Demand (14-Day)</th>
-                <th class="p-2.5">Distributor Rate</th>
-                <th class="p-2.5">Consortium Mill Bid</th>
-                <th class="p-2.5">Discount</th>
-                <th class="p-2.5 text-right">Consortium Savings</th>
-              </tr>
-            </thead>
-            <tbody id="tbody-consortium-demand" class="divide-y divide-gray-100">
-              <!-- Populated dynamically via JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Tab 2: Direct Mandi Bidding Pane -->
-      <div id="consortium-pane-rfp" class="consortium-subtab-pane hidden space-y-3">
-        <div class="flex items-center justify-between text-xs">
-          <span class="font-bold text-gray-700">Unified RFPs Issued to Origin Agricultural Mills &amp; Processing Mandis</span>
-          <span class="text-emerald-700 font-bold">All Bids Guaranteed 6% to 9% Below Distributor</span>
-        </div>
-        <div class="border border-gray-200 rounded-2xl overflow-hidden">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-gray-50 border-b border-gray-200 font-black text-gray-600">
-              <tr>
-                <th class="p-2.5">RFP Tender #</th>
-                <th class="p-2.5">Staple Commodity</th>
-                <th class="p-2.5">Awarded Mill &amp; Origin</th>
-                <th class="p-2.5">Negotiated Discount</th>
-                <th class="p-2.5">Consortium Savings</th>
-                <th class="p-2.5 text-right">Status</th>
-              </tr>
-            </thead>
-            <tbody id="tbody-consortium-rfp" class="divide-y divide-gray-100">
-              <!-- Populated dynamically via JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Tab 3: Split Bills of Lading Pane -->
-      <div id="consortium-pane-bol" class="consortium-subtab-pane hidden space-y-3">
-        <div class="flex items-center justify-between text-xs">
-          <span class="font-bold text-gray-700">Split Consignment Bills of Lading &amp; Multi-Drop Direct Truck Logistics</span>
-          <div class="flex items-center gap-2">
-            <label class="font-bold text-gray-600">Commodity:</label>
-            <select onchange="loadConsortiumBolSplit(this.value)" class="p-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-gray-800">
-              <option value="COMM-TOOR-DAL-A" selected>🌾 Toor Dal Grade-A (42 MT Consignment)</option>
-              <option value="COMM-PONNI-RICE-25KG">🍚 Ponni Boiled Rice (115 MT Consignment)</option>
-              <option value="COMM-OIL-SUNFLOWER-5L">🌻 Refined Sunflower Oil (32 KL Consignment)</option>
-              <option value="COMM-SUGAR-CRYSTAL-1KG">🍬 Crystal White Sugar (36 MT Consignment)</option>
-            </select>
-          </div>
-        </div>
-        <div id="consortium-bol-trucks-container" class="space-y-3">
-          <!-- Populated dynamically via JS -->
-        </div>
-      </div>
-
-      <!-- Tab 4: Per-Store Margins Pane -->
-      <div id="consortium-pane-margins" class="consortium-subtab-pane hidden space-y-3">
-        <div class="flex items-center justify-between text-xs">
-          <span class="font-bold text-gray-700">Profit Margin Expansion per Tenant Store (15 Independent Supermarkets)</span>
-          <span class="text-indigo-700 font-bold">Network Average Margin Expansion: +6.7%</span>
-        </div>
-        <div class="border border-gray-200 rounded-2xl overflow-hidden">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-gray-50 border-b border-gray-200 font-black text-gray-600">
-              <tr>
-                <th class="p-2.5">Supermarket &amp; Location</th>
-                <th class="p-2.5">14-Day Volume</th>
-                <th class="p-2.5">Baseline Margin</th>
-                <th class="p-2.5">Consortium Margin</th>
-                <th class="p-2.5">Margin Gain</th>
-                <th class="p-2.5 text-right">14-Day Savings</th>
-                <th class="p-2.5 text-right">Annual Gain</th>
-              </tr>
-            </thead>
-            <tbody id="tbody-consortium-margins" class="divide-y divide-gray-100">
-              <!-- Populated dynamically via JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
     </div>
   </div>
 

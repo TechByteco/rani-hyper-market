@@ -11,22 +11,10 @@ node_modules/
 *.log
 
 # Local SQLite databases & backups
-data/*.db
-data/*/*.db
-data_rani/
+data/
 data - 25-26/
+data_rani/
 *.db
-
-# Allow tracking of essential JSON datasets for Vercel Serverless
-!data/online_orders.json
-!data/tenants.json
-!data/store_admins.json
-!data/supabase_dump/
-!data/supabase_dump/*
-!data/inventory_5yr_reconciled.json
-!data/delta_sync_log.json
-!api/data/
-!api/data/*
 
 # Desktop apps & local browser cache
 app/

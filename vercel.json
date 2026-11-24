@@ -109,61 +109,17 @@
     {
       "source": "/deck",
       "destination": "/presentation.html"
-    },
-    {
-      "source": "/display/overhead-promos",
-      "destination": "/display/overhead-promos.html"
-    },
-    {
-      "source": "/overhead-promos",
-      "destination": "/display/overhead-promos.html"
-    },
-    {
-      "source": "/signage",
-      "destination": "/display/overhead-promos.html"
-    },
-    {
-      "source": "/reconciliation",
-      "destination": "/reconciliation.html"
-    },
-    {
-      "source": "/procurement",
-      "destination": "/procurement.html"
-    },
-    {
-      "source": "/mandi",
-      "destination": "/procurement.html"
-    },
-    {
-      "source": "/delivery-driver",
-      "destination": "/delivery-driver.html"
-    },
-    {
-      "source": "/driver",
-      "destination": "/delivery-driver.html"
-    },
-    {
-      "source": "/onboard",
-      "destination": "/onboard.html"
-    },
-    {
-      "source": "/setup",
-      "destination": "/onboard.html"
     }
   ],
   "functions": {
     "api/**/*.js": {
-      "includeFiles": "{public/**,data/**,services/**,api/services/**,*.json,posEnhancementService.js,analyticsService.js,generativeAiAdvisor.js,aiProductImageEngine.js,festivalMasterData.js,hypermarketBackend.js}"
+      "includeFiles": "{public/**,data/**,*.json,posEnhancementService.js,analyticsService.js,generativeAiAdvisor.js,aiProductImageEngine.js,festivalMasterData.js,hypermarketBackend.js}"
     }
   },
   "crons": [
     {
       "path": "/api/supabase/keepalive",
       "schedule": "0 5 * * *"
-    },
-    {
-      "path": "/api/cron/merchant-feed",
-      "schedule": "30 20 * * *"
     }
   ],
   "headers": [

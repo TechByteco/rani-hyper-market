@@ -133,7 +133,15 @@ const SQLITE_EXE = 'C:/SKS Market/sqlite3.exe';
 const SUPABASE_URL = 'https://lofykatlypiywrziwtdp.supabase.co';
 const SUPABASE_SECRET = process.env.SUPABASE_SECRET || '';
 
+const _jsonFallbackCache = new Map();
+const _queryDbCache = new Map();
+const ANALYTICS_CACHE_TTL_MS = 60 * 1000;
+
 function loadJsonFallback(filename, defaultValue = null) {
+  const cached = _jsonFallbackCache.get(filename);
+  if (cached && (Date.now() - cached.ts) < ANALYTICS_CACHE_TTL_MS) {
+    return cached.data;
+  }
   const possiblePaths = [
     path.join(__dirname, 'public', filename),
     path.join(__dirname, filename),
@@ -143,7 +151,9 @@ function loadJsonFallback(filename, defaultValue = null) {
   for (const p of possiblePaths) {
     try {
       if (fs.existsSync(p)) {
-        return JSON.parse(fs.readFileSync(p, 'utf8'));
+        const parsed = JSON.parse(fs.readFileSync(p, 'utf8'));
+        _jsonFallbackCache.set(filename, { ts: Date.now(), data: parsed });
+        return parsed;
       }
     } catch (e) {}
   }
@@ -159,12 +169,18 @@ function queryDb(sql) {
   if (!isWindows || !fs.existsSync(SQLITE_EXE) || !fs.existsSync(DB_PATH)) {
     return [];
   }
+  const cached = _queryDbCache.get(sql);
+  if (cached && (Date.now() - cached.ts) < ANALYTICS_CACHE_TTL_MS) {
+    return cached.data;
+  }
   try {
     const out = execFileSync(SQLITE_EXE, [DB_PATH, '-json', sql], {
       encoding: 'utf8',
       maxBuffer: 25 * 1024 * 1024
     });
-    return JSON.parse(out.trim() || '[]');
+    const parsed = JSON.parse(out.trim() || '[]');
+    _queryDbCache.set(sql, { ts: Date.now(), data: parsed });
+    return parsed;
   } catch (err) {
     console.warn('SQL Warning (fallback active):', err.message);
     return [];

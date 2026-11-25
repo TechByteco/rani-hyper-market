@@ -1245,9 +1245,10 @@ if (reqPath === '/api/pos/status') {
   // 5. Predictive Customer Reorder Scanner
   if (reqPath === '/api/reorders/predict') {
     try {
-      const sales = analytics.getSalesAnalytics();
-      const recentOrders = (sales && sales.recentTransactions) ? sales.recentTransactions : [];
-      const predictions = posEnhancement.predictCustomerReorders(recentOrders, 25);
+      const posOrders = typeof analytics.getLivePosOrders === 'function' ? analytics.getLivePosOrders(500) : [];
+      const onlineOrders = typeof posEnhancement.getOnlineOrders === 'function' ? posEnhancement.getOnlineOrders(500) : [];
+      const combinedOrders = [...(Array.isArray(onlineOrders) ? onlineOrders : []), ...(Array.isArray(posOrders) ? posOrders : [])];
+      const predictions = posEnhancement.predictCustomerReorders(combinedOrders, 25);
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ success: true, reorder_candidates: predictions, count: predictions.length }));
     } catch (err) {

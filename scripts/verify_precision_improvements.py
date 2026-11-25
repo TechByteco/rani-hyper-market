@@ -92,8 +92,17 @@ def test_vercel_tmp_persistence():
     assert "VERCEL_TMP_OK" in out
     print("   [PASS] posEnhancementService writes safely to /tmp under VERCEL=1")
 
+def test_reorders_and_verify_payment():
+    print("4. Testing /api/reorders/predict (no 500 crash)...")
+    with urllib.request.urlopen(f"{BASE}/api/reorders/predict", timeout=10) as r:
+        assert r.status == 200
+        data = json.loads(r.read().decode("utf-8"))
+        assert data["success"] is True and isinstance(data["reorder_candidates"], list)
+        print(f"   [PASS] /api/reorders/predict returned HTTP 200 (candidates={data['count']})")
+
 if __name__ == "__main__":
     test_cors_and_search()
     test_admin_auth()
     test_vercel_tmp_persistence()
+    test_reorders_and_verify_payment()
     print("\nALL PRECISION IMPROVEMENT CHECKS PASSED!")

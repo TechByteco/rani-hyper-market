@@ -1440,30 +1440,16 @@ if (reqPath === '/api/pos/status') {
 
     if (reqPath === '/api/orders/verify-payment' && req.method === 'POST') {
       try {
-        const { orderId, cashierNotes } = req.body || {};
-        const isVercel = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
-        const runtimeDir = isVercel ? path.join(os.tmpdir(), 'rani_market_data') : path.join(process.cwd(), 'data');
-        const onlineOrdersFile = path.join(runtimeDir, 'online_orders.json');
-        const seedOrdersFile = path.join(process.cwd(), 'data', 'online_orders.json');
-        let orders = [];
-        if (fs.existsSync(onlineOrdersFile)) {
-          orders = JSON.parse(fs.readFileSync(onlineOrdersFile, 'utf8') || '[]');
-        } else if (fs.existsSync(seedOrdersFile)) {
-          orders = JSON.parse(fs.readFileSync(seedOrdersFile, 'utf8') || '[]');
+        const body = await getBody();
+        const { orderId, cashierNotes } = body || {};
+        if (!orderId) {
+          return sendJson(400, { success: false, error: 'orderId is required' });
         }
-        const target = orders.find(o => o.id === orderId || o.invId === orderId);
-        if (target) {
-          target.payment_status = 'PAID (Verified by Cashier)';
-          target.verified_by_cashier = true;
-          target.cashier_notes = cashierNotes || 'Verified in GPay App';
-          target.verified_at = new Date().toISOString();
-          try {
-            fs.mkdirSync(runtimeDir, { recursive: true });
-            fs.writeFileSync(onlineOrdersFile, JSON.stringify(orders, null, 2), 'utf8');
-          } catch {}
-          return sendJson(200, { success: true, order: target });
+        if (posEnhancement && typeof posEnhancement.verifyOnlineOrderPayment === 'function') {
+          const result = await posEnhancement.verifyOnlineOrderPayment(orderId, cashierNotes);
+          return sendJson(result.success ? 200 : 404, result);
         }
-        return sendJson(200, { success: true, message: 'Payment verification recorded' });
+        return sendJson(500, { success: false, error: 'Payment verification service unavailable' });
       } catch (err) {
         return sendJson(400, { success: false, error: err.message });
       }
@@ -1570,11 +1556,11 @@ if (reqPath === '/api/pos/status') {
     // 5. Predictive Customer Reorder Scanner
     if (reqPath === '/api/reorders/predict') {
       try {
-        let recentOrders = [];
-        if (analyticsService && typeof analyticsService.getSalesAnalytics === 'function') {
-          const sales = analyticsService.getSalesAnalytics();
-          recentOrders = (sales && sales.recentTransactions) ? sales.recentTransactions : [];
-        }
+        const posOrders = (analyticsService && typeof analyticsService.getLivePosOrders === 'function')
+          ? analyticsService.getLivePosOrders(500) : [];
+        const onlineOrders = (posEnhancement && typeof posEnhancement.getOnlineOrders === 'function')
+          ? posEnhancement.getOnlineOrders(500) : [];
+        let recentOrders = [...(Array.isArray(onlineOrders) ? onlineOrders : []), ...(Array.isArray(posOrders) ? posOrders : [])];
         if (!recentOrders.length) {
           const fallData = readLocalJson('rani_analytics.json', {});
           recentOrders = fallData.recentTransactions || [];

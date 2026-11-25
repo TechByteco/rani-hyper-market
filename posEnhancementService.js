@@ -12,11 +12,46 @@
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
+
+const IS_VERCEL = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+const RUNTIME_DATA_DIR = IS_VERCEL
+  ? path.join(os.tmpdir(), 'rani_market_data')
+  : path.join(process.cwd(), 'data');
+
+function readRuntimeJson(filename, fallback) {
+  const candidates = [
+    path.join(RUNTIME_DATA_DIR, filename),
+    path.join(process.cwd(), 'data', filename)
+  ];
+  for (const fp of candidates) {
+    try {
+      if (fs.existsSync(fp)) {
+        return JSON.parse(fs.readFileSync(fp, 'utf8') || JSON.stringify(fallback));
+      }
+    } catch (e) {}
+  }
+  return fallback;
+}
+
+function writeRuntimeJson(filename, data) {
+  try {
+    fs.mkdirSync(RUNTIME_DATA_DIR, { recursive: true });
+    fs.writeFileSync(path.join(RUNTIME_DATA_DIR, filename), JSON.stringify(data, null, 2), 'utf8');
+    return true;
+  } catch (e) {
+    console.error('[posEnhancementService] writeRuntimeJson error:', filename, e.message);
+    return false;
+  }
+}
+
+try { fs.mkdirSync(RUNTIME_DATA_DIR, { recursive: true }); } catch (e) {}
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://lofykatlypiywrziwtdp.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY || 'sb_publishable_8-vFFctJnZYUTZFCmV2rqg_LgHuYjrn';
 
 const ONLINE_ORDERS_FILES = [
+  path.join(RUNTIME_DATA_DIR, 'online_orders.json'),
   path.join(__dirname, 'data', 'online_orders.json'),
   path.join(__dirname, 'public', 'online_orders.json'),
   path.join(process.cwd(), 'data', 'online_orders.json')
@@ -47,7 +82,7 @@ function decrementInventoryForOrder(order) {
 
   const deductions = [];
   const nowStr = new Date().toISOString();
-  const journalPath = path.join(__dirname, 'data', 'stock_decrement_journal.json');
+  const journalPath = path.join(RUNTIME_DATA_DIR, 'stock_decrement_journal.json');
   let journal = [];
   try {
     if (fs.existsSync(journalPath)) {
@@ -732,11 +767,11 @@ function generatePredictiveVendorPOs(allProducts, recentOrders = [], festivalSur
 // 5. Continuous 2-Way Delta Sync Daemon
 // =====================================================================
 
-const WEBHOOK_AUDIT_FILE = path.join(process.cwd(), 'data', 'upi_webhook_audit.json');
-const SHIFTS_FILE = path.join(process.cwd(), 'data', 'active_shifts.json');
-const SHIFT_HISTORY_FILE = path.join(process.cwd(), 'data', 'shift_history_z_reports.json');
-const WHATSAPP_LOG_FILE = path.join(process.cwd(), 'data', 'whatsapp_ebills_log.json');
-const DELTA_SYNC_LOG_FILE = path.join(process.cwd(), 'data', 'delta_sync_log.json');
+const WEBHOOK_AUDIT_FILE = path.join(RUNTIME_DATA_DIR, 'upi_webhook_audit.json');
+const SHIFTS_FILE = path.join(RUNTIME_DATA_DIR, 'active_shifts.json');
+const SHIFT_HISTORY_FILE = path.join(RUNTIME_DATA_DIR, 'shift_history_z_reports.json');
+const WHATSAPP_LOG_FILE = path.join(RUNTIME_DATA_DIR, 'whatsapp_ebills_log.json');
+const DELTA_SYNC_LOG_FILE = path.join(RUNTIME_DATA_DIR, 'delta_sync_log.json');
 
 // 1. AUTOMATED UPI & GPAY BANK WEBHOOK RECONCILIATION
 function reconcileUpiWebhook(payload = {}) {

@@ -231,7 +231,7 @@
       <!-- Card 3: Online Paid (Razorpay + UPI) -->
       <div class="stat-card">
         <div class="flex items-center justify-between text-gray-500 text-xs font-bold mb-1">
-          <span>Online Paid (Razorpay / UPI)</span>
+          <span>Online Paid (GPay / UPI)</span>
           <span class="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center text-sm">
             <i class="fa-solid fa-credit-card"></i>
           </span>
@@ -273,7 +273,7 @@
           <div id="stat-bar-cod" class="bg-gradient-to-r from-amber-400 to-amber-500 h-full transition-all duration-500" style="width: 0%"></div>
         </div>
         <div class="flex items-center justify-between text-[11px] font-semibold text-gray-500 mt-2">
-          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-purple-600 inline-block"></span> Online (UPI / Razorpay): <strong id="stat-online-pct-lbl" class="text-purple-800 font-mono-num">₹0.00</strong></span>
+          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-purple-600 inline-block"></span> Online (GPay / UPI): <strong id="stat-online-pct-lbl" class="text-purple-800 font-mono-num">₹0.00</strong></span>
           <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span> COD Pending: <strong id="stat-cod-pct-lbl" class="text-amber-800 font-mono-num">₹0.00</strong></span>
         </div>
       </div>
@@ -368,9 +368,10 @@
       <div>
         <select id="filter-payment-method" onchange="handleFiltersChange()" class="glass-input w-full text-xs font-bold text-gray-700">
           <option value="all">💳 All Payment Methods</option>
-          <option value="razorpay">Razorpay Online Gateway</option>
-          <option value="upi">Instant UPI (GPay/PhonePe/Paytm)</option>
+          <option value="gpay">Google Pay (Direct UPI)</option>
+          <option value="upi">Instant UPI (PhonePe/Paytm/BHIM)</option>
           <option value="cod">Cash on Delivery (COD)</option>
+          <option value="razorpay">Cards / Netbanking</option>
         </select>
       </div>
 
@@ -378,7 +379,7 @@
       <div>
         <select id="filter-payment-status" onchange="handleFiltersChange()" class="glass-input w-full text-xs font-bold text-gray-700">
           <option value="all">💰 All Payment Statuses</option>
-          <option value="paid">🟢 Paid Online (Razorpay / UPI)</option>
+          <option value="paid">🟢 Paid Online (GPay / UPI)</option>
           <option value="unpaid">🟡 Unpaid / COD Pending</option>
         </select>
       </div>
@@ -1048,11 +1049,12 @@
 
         // Determine Payment Classification
         const method = o.paymentMethod || o.payment_method || 'Cash on Delivery';
+        let isGpay = method.toLowerCase().includes('gpay') || method.toLowerCase().includes('google pay');
         let isRazorpay = method.toLowerCase().includes('razorpay');
-        let isUpi = method.toLowerCase().includes('upi') || method.toLowerCase().includes('gpay') || method.toLowerCase().includes('phonepe');
+        let isUpi = method.toLowerCase().includes('upi') || method.toLowerCase().includes('phonepe') || method.toLowerCase().includes('paytm');
         let isCod = method.toLowerCase().includes('cash') || method.toLowerCase().includes('cod');
 
-        let payCategory = isRazorpay ? 'razorpay' : isUpi ? 'upi' : 'cod';
+        let payCategory = isGpay ? 'gpay' : isRazorpay ? 'razorpay' : isUpi ? 'upi' : 'cod';
         let payStatus = (o.paymentStatus || (isCod ? 'UNPAID (Collect at Doorstep)' : 'PAID'));
 
         return {
@@ -1180,8 +1182,9 @@
 
         // Payment Method filter
         if (payMethod !== 'all') {
+          if (payMethod === 'gpay' && o.payCategory !== 'gpay') return false;
           if (payMethod === 'razorpay' && o.payCategory !== 'razorpay') return false;
-          if (payMethod === 'upi' && o.payCategory !== 'upi') return false;
+          if (payMethod === 'upi' && o.payCategory !== 'upi' && o.payCategory !== 'gpay') return false;
           if (payMethod === 'cod' && o.payCategory !== 'cod') return false;
         }
 
@@ -1216,8 +1219,8 @@
       const totalOrders = filteredOrders.length;
       const totalRev = filteredOrders.reduce((sum, o) => sum + o.totalAmount, 0);
       const totalGross = filteredOrders.reduce((sum, o) => sum + o.grossMrp, 0);
-      const onlineRev = filteredOrders.filter(o => o.payCategory === 'razorpay' || o.payCategory === 'upi').reduce((sum, o) => sum + o.totalAmount, 0);
-      const onlineCount = filteredOrders.filter(o => o.payCategory === 'razorpay' || o.payCategory === 'upi').length;
+      const onlineRev = filteredOrders.filter(o => o.payCategory === 'gpay' || o.payCategory === 'razorpay' || o.payCategory === 'upi').reduce((sum, o) => sum + o.totalAmount, 0);
+      const onlineCount = filteredOrders.filter(o => o.payCategory === 'gpay' || o.payCategory === 'razorpay' || o.payCategory === 'upi').length;
       const codRev = filteredOrders.filter(o => o.payCategory === 'cod').reduce((sum, o) => sum + o.totalAmount, 0);
       const codCount = filteredOrders.filter(o => o.payCategory === 'cod').length;
 
@@ -1351,7 +1354,7 @@
         });
 
         const dayTotal = dayOrders.reduce((sum, o) => sum + o.totalAmount, 0);
-        const dayOnline = dayOrders.filter(o => o.payCategory === 'razorpay' || o.payCategory === 'upi').reduce((sum, o) => sum + o.totalAmount, 0);
+        const dayOnline = dayOrders.filter(o => o.payCategory === 'gpay' || o.payCategory === 'razorpay' || o.payCategory === 'upi').reduce((sum, o) => sum + o.totalAmount, 0);
         const dayCod = dayOrders.filter(o => o.payCategory === 'cod').reduce((sum, o) => sum + o.totalAmount, 0);
 
         const isToday = isSameDay(dayDate, new Date());
@@ -1407,10 +1410,31 @@
     function renderOrderCardHtml(order, orderIdx, totalDayOrders) {
       // Payment badge styling
       let payBadge = '';
-      if (order.payCategory === 'razorpay') {
+      if (order.payCategory === 'gpay' || (order.payment_method && order.payment_method.toLowerCase().includes('gpay')) || (order.payment_method && order.payment_method.toLowerCase().includes('upi'))) {
+        const isVerified = order.verified_by_cashier || (order.payment_status && order.payment_status.includes('Verified'));
+        const utrText = order.upiReference || order.transactionId || 'Pending';
+        if (isVerified) {
+          payBadge = `
+            <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-300 flex items-center gap-1 shadow-xs">
+              <i class="fa-solid fa-circle-check text-emerald-600"></i> GPay Bank Verified (UTR: ${utrText})
+            </span>
+          `;
+        } else {
+          payBadge = `
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-amber-50 text-amber-800 border border-amber-300 flex items-center gap-1">
+                <i class="fa-solid fa-triangle-exclamation text-amber-600 animate-pulse"></i> Awaiting Bank Check (UTR: ${utrText})
+              </span>
+              <button type="button" onclick="verifyOrderPayment('${order.id}')" class="px-2.5 py-1 rounded-lg text-[11px] font-black bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs transition active:scale-95 flex items-center gap-1 cursor-pointer">
+                <i class="fa-solid fa-check"></i> Verify GPay Received
+              </button>
+            </div>
+          `;
+        }
+      } else if (order.payCategory === 'razorpay') {
         payBadge = `
           <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
-            <i class="fa-solid fa-shield-halved text-blue-600"></i> Razorpay Online (PAID)
+            <i class="fa-solid fa-shield-halved text-blue-600"></i> Online (PAID)
           </span>
         `;
       } else if (order.payCategory === 'upi') {
@@ -1768,8 +1792,10 @@
       const txnRow = document.getElementById('modal-txn-row');
       const txnId = document.getElementById('modal-txn-id');
 
-      if (order.payCategory === 'razorpay') {
-        payEl.innerHTML = `<span class="text-blue-700 font-black">Online via Razorpay (PAID)</span>`;
+      if (order.payCategory === 'gpay') {
+        payEl.innerHTML = `<span class="text-blue-700 font-black flex items-center gap-1"><i class="fa-brands fa-google-pay text-lg text-blue-600"></i> Google Pay (PAID)</span>`;
+      } else if (order.payCategory === 'razorpay') {
+        payEl.innerHTML = `<span class="text-blue-700 font-black">Online Payment (PAID)</span>`;
       } else if (order.payCategory === 'upi') {
         payEl.innerHTML = `<span class="text-purple-700 font-black">Instant UPI (PAID)</span>`;
       } else {

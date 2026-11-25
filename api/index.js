@@ -1,5 +1,13 @@
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
+
+let secHelper = null;
+try {
+  secHelper = require('../securityAndCatalogHelper');
+} catch (e) {
+  try { secHelper = require('./securityAndCatalogHelper'); } catch (e2) {}
+}
 
 // Safe imports with fallbacks
 let analyticsService = null;
@@ -69,16 +77,15 @@ function readLocalJson(filename, defaultValue = null) {
 }
 
 module.exports = async (req, res) => {
-  // CORS & Universal Web Security Headers (OWASP Top 10 Standards)
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-key, Authorization');
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
-  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  res.setHeader('Permissions-Policy', 'camera=(self), microphone=(self), payment=(self "https://pay.google.com")');
-  res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+  // CORS & Universal Web Security Headers (Strict Origin Allowlist + OWASP Top 10)
+  if (secHelper && typeof secHelper.applySecurityAndCorsHeaders === 'function') {
+    secHelper.applySecurityAndCorsHeaders(req, res);
+  } else {
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-key, Authorization');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  }
 
   if (req.method === 'OPTIONS') {
     res.writeHead ? res.writeHead(204) : res.status(204);
@@ -324,6 +331,15 @@ if (reqPath === '/api/pos/status') {
       return sendJson(200, rawOrders.slice(0, limit));
     }
 
+    // Paginated & Indexed Product Catalog Search API
+    if (reqPath === '/api/products/search' && req.method === 'GET') {
+      if (secHelper && typeof secHelper.getPaginatedCatalog === 'function') {
+        res.setHeader('Cache-Control', 'public, max-age=60');
+        return sendJson(200, secHelper.getPaginatedCatalog(queryParams));
+      }
+      return sendJson(500, { success: false, error: 'Catalog search helper unavailable' });
+    }
+
     // 3. POS Products Catalog
         // ----------------------------------------------------
     // Dedicated Product Image Updating API (Vercel Serverless)
@@ -332,11 +348,12 @@ if (reqPath === '/api/pos/status') {
       const body = await getBody();
       const { authUser, authPass, productId, barcode, imageUrl, imageBase64, category } = body;
 
-      // Security check for updating images
-      const isValidAdmin = (authUser && authUser.toLowerCase() === 'admin' && authPass === 'admin123') ||
-                          (req.headers['x-admin-key'] === 'admin123');
+      // Security check for updating images (timing-safe env key check)
+      const isValidAdmin = secHelper && typeof secHelper.isAuthorizedAdmin === 'function'
+        ? secHelper.isAuthorizedAdmin(req, (authUser && authUser.toLowerCase() === 'admin') ? authPass : '')
+        : false;
       if (!isValidAdmin) {
-        return sendJson(401, { error: 'Unauthorized: Administrator authentication required (admin / admin123)' });
+        return sendJson(401, { error: 'Unauthorized: Administrator authentication required' });
       }
 
       if (!productId && !barcode) {
@@ -1424,10 +1441,15 @@ if (reqPath === '/api/pos/status') {
     if (reqPath === '/api/orders/verify-payment' && req.method === 'POST') {
       try {
         const { orderId, cashierNotes } = req.body || {};
-        const onlineOrdersFile = path.join(process.cwd(), 'data', 'online_orders.json');
+        const isVercel = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+        const runtimeDir = isVercel ? path.join(os.tmpdir(), 'rani_market_data') : path.join(process.cwd(), 'data');
+        const onlineOrdersFile = path.join(runtimeDir, 'online_orders.json');
+        const seedOrdersFile = path.join(process.cwd(), 'data', 'online_orders.json');
         let orders = [];
         if (fs.existsSync(onlineOrdersFile)) {
           orders = JSON.parse(fs.readFileSync(onlineOrdersFile, 'utf8') || '[]');
+        } else if (fs.existsSync(seedOrdersFile)) {
+          orders = JSON.parse(fs.readFileSync(seedOrdersFile, 'utf8') || '[]');
         }
         const target = orders.find(o => o.id === orderId || o.invId === orderId);
         if (target) {
@@ -1435,7 +1457,10 @@ if (reqPath === '/api/pos/status') {
           target.verified_by_cashier = true;
           target.cashier_notes = cashierNotes || 'Verified in GPay App';
           target.verified_at = new Date().toISOString();
-          try { fs.writeFileSync(onlineOrdersFile, JSON.stringify(orders, null, 2), 'utf8'); } catch {}
+          try {
+            fs.mkdirSync(runtimeDir, { recursive: true });
+            fs.writeFileSync(onlineOrdersFile, JSON.stringify(orders, null, 2), 'utf8');
+          } catch {}
           return sendJson(200, { success: true, order: target });
         }
         return sendJson(200, { success: true, message: 'Payment verification recorded' });

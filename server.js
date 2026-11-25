@@ -15,18 +15,11 @@ const MIME = {
 
 const analytics = require('./analyticsService');
 const hypermarketBackend = require('./hypermarketBackend');
+const { applySecurityAndCorsHeaders, isAuthorizedAdmin, getPaginatedCatalog } = require('./securityAndCatalogHelper');
 
 const server = http.createServer((req, res) => {
-  // CORS & Universal Web Security Headers (OWASP Top 10 Standards)
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-key, Authorization');
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
-  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  res.setHeader('Permissions-Policy', 'camera=(self), microphone=(self), payment=(self "https://pay.google.com")');
-  res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+  // CORS & Universal Web Security Headers (Strict Origin Allowlist + OWASP Top 10)
+  applySecurityAndCorsHeaders(req, res);
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
@@ -193,6 +186,16 @@ if (reqPath === '/api/pos/status') {
     // ----------------------------------------------------
   // Dedicated Product Image Updating API
   // ----------------------------------------------------
+  // Paginated & Indexed Product Catalog Search API
+  // ----------------------------------------------------
+  if (reqPath === '/api/products/search' && req.method === 'GET') {
+    const result = getPaginatedCatalog(queryParams);
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=60' });
+    res.end(JSON.stringify(result));
+    return;
+  }
+
+  // ----------------------------------------------------
   if ((reqPath === '/api/products/update-image' || reqPath === '/api/products/update-category') && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => body += chunk);
@@ -201,12 +204,11 @@ if (reqPath === '/api/pos/status') {
         const parsed = JSON.parse(body || '{}');
         const { authUser, authPass, productId, barcode, imageUrl, imageBase64, category } = parsed;
 
-        // Security check for updating images / category
-        const isValidAdmin = (authUser && authUser.toLowerCase() === 'admin' && authPass === 'admin123') ||
-                            (req.headers['x-admin-key'] === 'admin123');
+        // Security check for updating images / category (timing-safe env key check)
+        const isValidAdmin = isAuthorizedAdmin(req, (authUser && authUser.toLowerCase() === 'admin') ? authPass : '');
         if (!isValidAdmin) {
           res.writeHead(401, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ error: 'Unauthorized: Administrator authentication required (admin / admin123)' }));
+          res.end(JSON.stringify({ error: 'Unauthorized: Administrator authentication required' }));
           return;
         }
 

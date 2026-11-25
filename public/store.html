@@ -3402,18 +3402,19 @@
         }
       } catch(e) {}
 
-      // Multi-source resilient catalog fetch with absolute paths
+      // Multi-source resilient catalog fetch with cacheable versioned paths
+      const CATALOG_VERSION = '20261125';
       const sources = [
-        '/products_catalog.json?v=' + Date.now(),
-        'products_catalog.json?v=' + Date.now(),
-        '/rani_products.json?v=' + Date.now(),
-        'rani_products.json?v=' + Date.now(),
+        '/products_catalog.json?v=' + CATALOG_VERSION,
+        'products_catalog.json?v=' + CATALOG_VERSION,
+        '/rani_products.json?v=' + CATALOG_VERSION,
+        'rani_products.json?v=' + CATALOG_VERSION,
         '/api/pos/products?limit=1000'
       ];
 
       for (const src of sources) {
         try {
-          const res = await fetch(src, { cache: 'no-cache' });
+          const res = await fetch(src);
           if (res.ok) {
             const data = await res.json();
             if (Array.isArray(data) && data.length > 0) {
@@ -4223,7 +4224,7 @@
             <div class="nhm-card-body flex-1">
               <!-- THUMBNAIL BOX (NATIONAL HYPER MART STYLE) -->
               <div class="nhm-thumb-box" onclick="openProductQuickView('${p.id}')">
-                <img src="${finalImg}" alt="${p.title}" loading="lazy" onerror="this.onerror=null;this.src='https://images.openfoodfacts.org/images/products/890/103/053/5895/front_en.3.400.jpg';" class="nhm-thumb-img">
+                <img src="${finalImg}" alt="${p.title}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://images.openfoodfacts.org/images/products/890/103/053/5895/front_en.3.400.jpg';" class="nhm-thumb-img">
 
                 <!-- DOUBLE-SIDED BACK IMAGE (fades in on hover, NHM style) -->
                 ${(() => { const backImg = getDoubleSidedBack(p.title); return backImg ? `<span class="nhm-second-img" style="background-image:url('${backImg}')"></span><span class="nhm-double-badge">↕ See Other Side</span>` : ''; })()}

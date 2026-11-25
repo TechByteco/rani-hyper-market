@@ -5,7 +5,7 @@
   "main": "patch_admin.js",
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "python scripts/verify_all_dual_parity.py && python scripts/check_all_html_scripts.py && python scripts/test_api_index_routes.py && python scripts/verify_precision_improvements.py",
     "start": "node server.js"
   },
   "keywords": [],

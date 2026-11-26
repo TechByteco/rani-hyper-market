@@ -1,15 +1,29 @@
 {
-  "name": "sns-market",
+  "name": "sns-retail-marketing-agent",
   "version": "1.0.0",
-  "description": "",
-  "main": "patch_admin.js",
+  "description": "SNS Retail Marketing Agent — Autonomous AI Retail Operating System & Marketing Swarm for Supermarkets & Department Stores",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TechByteco/sns-retail-marketing-agent.git"
+  },
+  "homepage": "https://rani-hyper-market.vercel.app/",
   "devDependencies": {},
   "scripts": {
     "test": "python scripts/verify_all_dual_parity.py && python scripts/check_all_html_scripts.py && python scripts/test_api_index_routes.py && python scripts/verify_precision_improvements.py",
     "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "retail-os",
+    "ai-agent",
+    "marketing-automation",
+    "gemini-ai",
+    "supermarket",
+    "pos-system",
+    "whatsapp-commerce",
+    "demand-forecasting"
+  ],
+  "author": "TechByte",
   "license": "ISC",
   "type": "commonjs"
 }
